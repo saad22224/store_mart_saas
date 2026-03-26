@@ -51,7 +51,7 @@ class HomeController extends Controller
             $themes = Theme::where('vendor_id', $admindata->id)->orderBy('reorder_id')->get();
             $app_settings = AppSettings::where('vendor_id', $admindata->id)->first();
             $funfacts = FunFact::where('vendor_id', $admindata->id)->orderByDesc('id')->get();
-            return view('landing.index', compact('features', 'planlist', 'testimonials', 'blogs', 'settingdata', 'workdata', 'themes', 'app_settings', 'funfacts'));
+            return view('landing2.index', compact('features', 'planlist', 'testimonials', 'blogs', 'settingdata', 'workdata', 'themes', 'app_settings', 'funfacts'));
         }
         // if the current host doesn't contain the website domain (meaning, custom domain)
         else {

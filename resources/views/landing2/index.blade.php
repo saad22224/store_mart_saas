@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="scroll-smooth" dir="rtl" lang="ar">
+<html class="scroll-smooth" dir="{{ $lang == 'ar' ? 'rtl' : 'ltr' }}" lang="{{ $lang }}">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Matjar Hub - منصة التجارة الإلكترونية المتكاملة</title>
+    <title>{{ @$translations['meta']['page_title'] ?? 'Matjar Hub' }}</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
     {{-- AOS - Animate On Scroll --}}
@@ -1043,6 +1043,22 @@
             right: -40px;
         }
 
+        .lang-option {
+            display: block;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: #0F172A;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .lang-option:hover {
+            background: #F1F5F9;
+        }
+        .lang-option.active {
+            background: rgba(21, 172, 130, 0.1);
+            color: #15AC82;
+        }
+
         /* ===== AOS overrides for performance ===== */
         [data-aos] {
             will-change: transform, opacity;
@@ -1062,15 +1078,52 @@
             </div>
 
             <div class="nav-links hidden md:flex">
-                <a href="#" class="active">الرئيسية</a>
-                <a href="#who-we-are">من نحن</a>
-                <a href="#why-us">لماذا نحن</a>
-                <a href="#faq">الأسئلة</a>
-                <a href="#contact">اتصل بنا</a>
+                <a href="#" class="active">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
+                <a href="#who-we-are">{{ @$translations['nav']['who_we_are'] ?? 'من نحن' }}</a>
+                <a href="#why-us">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
+                <a href="#faq">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
+                <a href="#contact">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
             </div>
 
             <div style="display:flex;align-items:center;gap:1rem;">
-                <button class="btn-primary">ابدأ الآن</button>
+                {{-- Language Switcher --}}
+                <div class="lang-switcher" style="position:relative;">
+                    <button type="button" class="lang-btn" onclick="toggleLangMenu()" style="
+                        background: rgba(21, 172, 130, 0.1);
+                        border: 1px solid rgba(21, 172, 130, 0.3);
+                        border-radius: 9999px;
+                        padding: 0.5rem 1rem;
+                        font-weight: 700;
+                        color: #15AC82;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        font-family: 'Cairo', sans-serif;
+                    ">
+                        <span class="material-symbols-outlined" style="font-size: 1.2rem;">language</span>
+                        <span>{{ $lang == 'ar' ? 'العربية' : 'English' }}</span>
+                        <span class="material-symbols-outlined" style="font-size: 1rem;">expand_more</span>
+                    </button>
+                    <div id="langMenu" class="lang-menu" style="
+                        display: none;
+                        position: absolute;
+                        top: 100%;
+                        {{ $lang == 'ar' ? 'left: 0;' : 'right: 0;' }}
+                        margin-top: 0.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+                        min-width: 140px;
+                        overflow: hidden;
+                        z-index: 100;
+                    ">
+                        <a href="?lang=ar" class="lang-option {{ $lang == 'ar' ? 'active' : '' }}">🇸🇦 العربية</a>
+                        <a href="?lang=en" class="lang-option {{ $lang == 'en' ? 'active' : '' }}">🇬🇧 English</a>
+                    </div>
+                </div>
+                
+                <button class="btn-primary">{{ @$translations['nav']['start_now'] ?? 'ابدأ الآن' }}</button>
                 <span class="material-symbols-outlined nav-hamburger">menu</span>
             </div>
         </nav>
@@ -1084,22 +1137,21 @@
         <div class="hero-inner">
             <div class="hero-badge" data-aos="fade-down" data-aos-duration="600">
                 <span class="hero-badge-dot"></span>
-                أكثر من 50,000 تاجر يثقون بنا
+                {{ @$translations['hero']['badge'] ?? 'أكثر من 50,000 تاجر يثقون بنا' }}
             </div>
 
             <h1 class="hero-title" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
-                أنشئ متجر أحلامك <br />
-                <span class="gradient-text">في ثوانٍ معدودة</span>
+                {{ @$translations['hero']['title_line1'] ?? 'أنشئ متجر أحلامك' }} <br />
+                <span class="gradient-text">{{ @$translations['hero']['title_highlight'] ?? 'في ثوانٍ معدودة' }}</span>
             </h1>
 
             <p class="hero-desc" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
-                منصة متكاملة تمنحك كل ما تحتاجه لإطلاق تجارتك الإلكترونية، من التصميم الاحترافي إلى إدارة المدفوعات
-                والشحن، دون الحاجة لخبرة برمجية.
+                {{ @$translations['hero']['description'] ?? 'منصة متكاملة تمنحك كل ما تحتاجه لإطلاق تجارتك الإلكترونية، من التصميم الاحترافي إلى إدارة المدفوعات والشحن، دون الحاجة لخبرة برمجية.' }}
             </p>
 
             <div class="hero-actions" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
-                <button class="btn-hero-primary">ابدأ مجاناً الآن</button>
-                <button class="btn-hero-secondary">شاهد العرض التجريبي</button>
+                <button class="btn-hero-primary">{{ @$translations['hero']['btn_primary'] ?? 'ابدأ مجاناً الآن' }}</button>
+                <button class="btn-hero-secondary">{{ @$translations['hero']['btn_secondary'] ?? 'شاهد العرض التجريبي' }}</button>
             </div>
         </div>
     </section>
@@ -1108,20 +1160,20 @@
     <section class="stats-section">
         <div class="stats-inner">
             <div class="stat-item" data-aos="fade-up" data-aos-duration="600">
-                <div class="stat-number">99.9%</div>
-                <div class="stat-label">استمرارية الخدمة</div>
+                <div class="stat-number">{{ @$translations['stats']['stat1_number'] ?? '99.9%' }}</div>
+                <div class="stat-label">{{ @$translations['stats']['stat1_label'] ?? 'استمرارية الخدمة' }}</div>
             </div>
             <div class="stat-item" data-aos="fade-up" data-aos-duration="600" data-aos-delay="80">
-                <div class="stat-number">50k+</div>
-                <div class="stat-label">متجر نشط</div>
+                <div class="stat-number">{{ @$translations['stats']['stat2_number'] ?? '50k+' }}</div>
+                <div class="stat-label">{{ @$translations['stats']['stat2_label'] ?? 'متجر نشط' }}</div>
             </div>
             <div class="stat-item" data-aos="fade-up" data-aos-duration="600" data-aos-delay="160">
-                <div class="stat-number">120M+</div>
-                <div class="stat-label">مبيعات سنوية</div>
+                <div class="stat-number">{{ @$translations['stats']['stat3_number'] ?? '120M+' }}</div>
+                <div class="stat-label">{{ @$translations['stats']['stat3_label'] ?? 'مبيعات سنوية' }}</div>
             </div>
             <div class="stat-item" data-aos="fade-up" data-aos-duration="600" data-aos-delay="240">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">دعم فني مباشر</div>
+                <div class="stat-number">{{ @$translations['stats']['stat4_number'] ?? '24/7' }}</div>
+                <div class="stat-label">{{ @$translations['stats']['stat4_label'] ?? 'دعم فني مباشر' }}</div>
             </div>
         </div>
     </section>
@@ -1136,45 +1188,43 @@
             <div class="who-content" data-aos="fade-left" data-aos-duration="700">
                 <div class="section-tag">
                     <span class="material-symbols-outlined" style="font-size:1rem;">groups</span>
-                    تعرّف علينا
+                    {{ @$translations['who_we_are']['tag'] ?? 'تعرّف علينا' }}
                 </div>
-                <h2>نحن فريق شغوف بـ<br /><span class="gradient-text">تمكين التجارة الرقمية</span></h2>
+                <h2>{{ @$translations['who_we_are']['title_line1'] ?? 'نحن فريق شغوف بـ' }}<br /><span class="gradient-text">{{ @$translations['who_we_are']['title_highlight'] ?? 'تمكين التجارة الرقمية' }}</span></h2>
                 <p>
-                    Matjar Hub منصة سعودية نشأت من رحم التحديات التي يواجهها التجار العرب يومياً.
-                    هدفنا الأول هو إزالة العقبات التقنية وتسليم التاجر مفاتيح متجره الاحترافي في أقل من دقيقة.
+                    {{ @$translations['who_we_are']['description1'] ?? 'Matjar Hub منصة سعودية نشأت من رحم التحديات التي يواجهها التجار العرب يومياً. هدفنا الأول هو إزالة العقبات التقنية وتسليم التاجر مفاتيح متجره الاحترافي في أقل من دقيقة.' }}
                 </p>
                 <p>
-                    نُؤمن بأن كل فكرة تستحق أن تُبنى، وكل تاجر يستحق أدوات عالمية المستوى بسعر في متناول الجميع.
-                    لذلك بنينا Matjar Hub على ثلاثة مبادئ: السرعة، البساطة، والموثوقية.
+                    {{ @$translations['who_we_are']['description2'] ?? 'نُؤمن بأن كل فكرة تستحق أن تُبنى، وكل تاجر يستحق أدوات عالمية المستوى بسعر في متناول الجميع. لذلك بنينا Matjar Hub على ثلاثة مبادئ: السرعة، البساطة، والموثوقية.' }}
                 </p>
 
                 <div class="who-stats">
                     <div class="who-stat-box" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100">
-                        <div class="num">2019</div>
-                        <div class="lbl">سنة التأسيس</div>
+                        <div class="num">{{ @$translations['who_we_are']['stat1_number'] ?? '2019' }}</div>
+                        <div class="lbl">{{ @$translations['who_we_are']['stat1_label'] ?? 'سنة التأسيس' }}</div>
                     </div>
                     <div class="who-stat-box" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200">
-                        <div class="num">+50</div>
-                        <div class="lbl">موظف متخصص</div>
+                        <div class="num">{{ @$translations['who_we_are']['stat2_number'] ?? '+50' }}</div>
+                        <div class="lbl">{{ @$translations['who_we_are']['stat2_label'] ?? 'موظف متخصص' }}</div>
                     </div>
                     <div class="who-stat-box" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="300">
-                        <div class="num">15+</div>
-                        <div class="lbl">دولة عربية</div>
+                        <div class="num">{{ @$translations['who_we_are']['stat3_number'] ?? '15+' }}</div>
+                        <div class="lbl">{{ @$translations['who_we_are']['stat3_label'] ?? 'دولة عربية' }}</div>
                     </div>
                 </div>
             </div>
 
             {{-- Left: Image --}}
             <div class="who-image-wrap" data-aos="fade-right" data-aos-duration="700" data-aos-delay="150">
-                <img src="{{ asset('public/images/about.jpeg') }}" alt="فريق Matjar Hub" />
+                <img src="{{ asset('public/images/about.jpeg') }}" alt="{{ $lang == 'ar' ? 'فريق Matjar Hub' : 'Matjar Hub Team' }}" />
                 <div class="who-badge-float">
                     <div class="icon-wrap">
                         <span class="material-symbols-outlined"
                             style="font-size:1.3rem;font-variation-settings:'FILL' 1;">verified</span>
                     </div>
                     <div class="badge-text">
-                        <strong>موثّق ومعتمد</strong>
-                        <span>شريك تقني معتمد في المنطقة</span>
+                        <strong>{{ @$translations['who_we_are']['float_badge_title'] ?? 'موثّق ومعتمد' }}</strong>
+                        <span>{{ @$translations['who_we_are']['float_badge_subtitle'] ?? 'شريك تقني معتمد في المنطقة' }}</span>
                     </div>
                 </div>
             </div>
@@ -1186,9 +1236,8 @@
     <section class="why-us-section" id="why-us">
         <div class="why-us-inner">
             <div class="section-header" data-aos="fade-up" data-aos-duration="700">
-                <h2>لماذا تختار <span class="gradient-text">Matjar Hub؟</span></h2>
-                <p>نحن نوفر لك كل الأدوات التي تحتاجها للنجاح في عالم التجارة الإلكترونية، مع التركيز على البساطة والقوة
-                    في وقت واحد.</p>
+                <h2>{{ @$translations['why_us']['title'] ?? 'لماذا تختار' }} <span class="gradient-text">{{ @$translations['why_us']['title_highlight'] ?? 'Matjar Hub؟' }}</span></h2>
+                <p>{{ @$translations['why_us']['subtitle'] ?? 'نحن نوفر لك كل الأدوات التي تحتاجها للنجاح في عالم التجارة الإلكترونية، مع التركيز على البساطة والقوة في وقت واحد.' }}</p>
             </div>
 
             <div class="why-us-grid">
@@ -1196,24 +1245,24 @@
                     <div class="why-card-icon" style="background:rgba(21,172,130,0.1);color:#15AC82;">
                         <span class="material-symbols-outlined">speed</span>
                     </div>
-                    <h3>سرعة خارقة</h3>
-                    <p>متاجرك تعمل على أحدث التقنيات السحابية لضمان سرعة تحميل لا تضاهى عالمياً.</p>
+                    <h3>{{ @$translations['why_us']['card1_title'] ?? 'سرعة خارقة' }}</h3>
+                    <p>{{ @$translations['why_us']['card1_desc'] ?? 'متاجرك تعمل على أحدث التقنيات السحابية لضمان سرعة تحميل لا تضاهى عالمياً.' }}</p>
                 </div>
 
                 <div class="why-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
                     <div class="why-card-icon" style="background:rgba(13,141,107,0.1);color:#0D8D6B;">
                         <span class="material-symbols-outlined">support_agent</span>
                     </div>
-                    <h3>دعم فني 24/7</h3>
-                    <p>فريقنا متواجد دائماً لمساعدتك في كل خطوة، عبر الواتساب، الهاتف، أو البريد.</p>
+                    <h3>{{ @$translations['why_us']['card2_title'] ?? 'دعم فني 24/7' }}</h3>
+                    <p>{{ @$translations['why_us']['card2_desc'] ?? 'فريقنا متواجد دائماً لمساعدتك في كل خطوة، عبر الواتساب، الهاتف، أو البريد.' }}</p>
                 </div>
 
                 <div class="why-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
                     <div class="why-card-icon" style="background:rgba(250,204,21,0.12);color:#ca8a04;">
                         <span class="material-symbols-outlined">integration_instructions</span>
                     </div>
-                    <h3>تكامل شامل</h3>
-                    <p>اربط متجرك مع كافة خدمات الشحن والدفع والتسويق بضغطة زر واحدة.</p>
+                    <h3>{{ @$translations['why_us']['card3_title'] ?? 'تكامل شامل' }}</h3>
+                    <p>{{ @$translations['why_us']['card3_desc'] ?? 'اربط متجرك مع كافة خدمات الشحن والدفع والتسويق بضغطة زر واحدة.' }}</p>
                 </div>
             </div>
         </div>
@@ -1223,32 +1272,31 @@
     <section class="about-section" id="about">
         <div class="about-inner">
             <div class="about-content" data-aos="fade-left" data-aos-duration="700">
-                <div class="about-badge">رسالتنا وقيمنا</div>
-                <h2>نمكّن التجار في <br /><span class="gradient-text">العالم العربي</span> للوصول للعالمية</h2>
+                <div class="about-badge">{{ @$translations['value']['badge'] ?? 'رسالتنا وقيمنا' }}</div>
+                <h2>{{ @$translations['value']['title_line1'] ?? 'نمكّن التجار في' }} <br /><span class="gradient-text">{{ @$translations['value']['title_highlight'] ?? 'العالم العربي' }}</span> {{ @$translations['value']['title_line2'] ?? 'للوصول للعالمية' }}</h2>
                 <p>
-                    انطلقت منصة Matjar Hub لتكون الشريك الأول لكل طموح يريد البدء في تجارته الخاصة. نحن نؤمن أن
-                    التكنولوجيا لا يجب أن تكون عائقاً أمام الإبداع، لذلك عملنا على تبسيط كل العمليات المعقدة.
+                    {{ @$translations['value']['description'] ?? 'انطلقت منصة Matjar Hub لتكون الشريك الأول لكل طموح يريد البدء في تجارته الخاصة. نحن نؤمن أن التكنولوجيا لا يجب أن تكون عائقاً أمام الإبداع، لذلك عملنا على تبسيط كل العمليات المعقدة.' }}
                 </p>
                 <div class="about-checkmarks">
                     <div class="about-check">
                         <span class="material-symbols-outlined"
                             style="font-variation-settings:'FILL' 1;">check_circle</span>
-                        <span>سهولة الاستخدام</span>
+                        <span>{{ @$translations['value']['check1'] ?? 'سهولة الاستخدام' }}</span>
                     </div>
                     <div class="about-check">
                         <span class="material-symbols-outlined"
                             style="font-variation-settings:'FILL' 1;">check_circle</span>
-                        <span>أمان عالي</span>
+                        <span>{{ @$translations['value']['check2'] ?? 'أمان عالي' }}</span>
                     </div>
                     <div class="about-check">
                         <span class="material-symbols-outlined"
                             style="font-variation-settings:'FILL' 1;">check_circle</span>
-                        <span>تطوير مستمر</span>
+                        <span>{{ @$translations['value']['check3'] ?? 'تطوير مستمر' }}</span>
                     </div>
                     <div class="about-check">
                         <span class="material-symbols-outlined"
                             style="font-variation-settings:'FILL' 1;">check_circle</span>
-                        <span>شفافية تامة</span>
+                        <span>{{ @$translations['value']['check4'] ?? 'شفافية تامة' }}</span>
                     </div>
                 </div>
             </div>
@@ -1272,41 +1320,38 @@
     <section class="faq-section" id="faq">
         <div class="faq-inner">
             <div class="section-header" data-aos="fade-up" data-aos-duration="700">
-                <h2>الأسئلة الشائعة</h2>
-                <p>كل ما تود معرفته عن المنصة وكيفية البدء</p>
+                <h2>{{ @$translations['faq']['title'] ?? 'الأسئلة الشائعة' }}</h2>
+                <p>{{ @$translations['faq']['subtitle'] ?? 'كل ما تود معرفته عن المنصة وكيفية البدء' }}</p>
             </div>
 
             <div class="faq-list">
                 <details class="faq-item" data-aos="fade-up" data-aos-duration="500" open>
                     <summary>
-                        <span>هل أحتاج لخبرة في البرمجة لإنشاء متجري على Matjar Hub؟</span>
+                        <span>{{ @$translations['faq']['q1'] ?? 'هل أحتاج لخبرة في البرمجة لإنشاء متجري على Matjar Hub؟' }}</span>
                         <span class="material-symbols-outlined">expand_more</span>
                     </summary>
                     <div class="faq-body">
-                        بالتأكيد لا! لقد صممنا المنصة لتكون سهلة الاستخدام للجميع. يمكنك اختيار قالب جاهز وتخصيصه بسهولة
-                        باستخدام واجهة السحب والإفلات البسيطة.
+                        {{ @$translations['faq']['a1'] ?? 'بالتأكيد لا! لقد صممنا المنصة لتكون سهلة الاستخدام للجميع. يمكنك اختيار قالب جاهز وتخصيصه بسهولة باستخدام واجهة السحب والإفلات البسيطة.' }}
                     </div>
                 </details>
 
                 <details class="faq-item" data-aos="fade-up" data-aos-duration="500" data-aos-delay="80">
                     <summary>
-                        <span>ما هي تكلفة البدء مع Matjar Hub؟</span>
+                        <span>{{ @$translations['faq']['q2'] ?? 'ما هي تكلفة البدء مع Matjar Hub؟' }}</span>
                         <span class="material-symbols-outlined">expand_more</span>
                     </summary>
                     <div class="faq-body">
-                        نوفر خطة مجانية للبدء، مع خطط مدفوعة مرنة تبدأ من أسعار مناسبة للمشاريع الصغيرة وحتى الاحترافية
-                        الكبيرة. يمكنك الاطلاع على صفحة الأسعار للمزيد.
+                        {{ @$translations['faq']['a2'] ?? 'نوفر خطة مجانية للبدء، مع خطط مدفوعة مرنة تبدأ من أسعار مناسبة للمشاريع الصغيرة وحتى الاحترافية الكبيرة. يمكنك الاطلاع على صفحة الأسعار للمزيد.' }}
                     </div>
                 </details>
 
                 <details class="faq-item" data-aos="fade-up" data-aos-duration="500" data-aos-delay="160">
                     <summary>
-                        <span>هل يمكنني استخدام نطاق (Domain) خاص بي؟</span>
+                        <span>{{ @$translations['faq']['q3'] ?? 'هل يمكنني استخدام نطاق (Domain) خاص بي؟' }}</span>
                         <span class="material-symbols-outlined">expand_more</span>
                     </summary>
                     <div class="faq-body">
-                        نعم، يمكنك ربط نطاقك الخاص بمتجرك بسهولة تامة في الخطط المدفوعة، أو استخدام نطاق فرعي مجاني
-                        نقدمه لك عند البدء.
+                        {{ @$translations['faq']['a3'] ?? 'نعم، يمكنك ربط نطاقك الخاص بمتجرك بسهولة تامة في الخطط المدفوعة، أو استخدام نطاق فرعي مجاني نقدمه لك عند البدء.' }}
                     </div>
                 </details>
             </div>
@@ -1318,10 +1363,8 @@
         <div class="contact-inner">
             {{-- Info --}}
             <div data-aos="fade-left" data-aos-duration="700">
-                <h2 class="contact-info-title">دعنا نساعدك في <br /><span class="gradient-text">تحويل فكرتك إلى
-                        واقع</span></h2>
-                <p class="contact-info-desc">فريق الخبراء لدينا جاهز للرد على استفساراتك ومساعدتك في اختيار الخطة
-                    الأنسب لمشروعك.</p>
+                <h2 class="contact-info-title">{{ @$translations['contact']['title_line1'] ?? 'دعنا نساعدك في' }} <br /><span class="gradient-text">{{ @$translations['contact']['title_highlight'] ?? 'تحويل فكرتك إلى واقع' }}</span></h2>
+                <p class="contact-info-desc">{{ @$translations['contact']['description'] ?? 'فريق الخبراء لدينا جاهز للرد على استفساراتك ومساعدتك في اختيار الخطة الأنسب لمشروعك.' }}</p>
 
                 <div class="contact-items">
                     <div class="contact-item">
@@ -1330,8 +1373,8 @@
                                 style="font-variation-settings:'FILL' 1;">call</span>
                         </div>
                         <div>
-                            <div class="contact-item-label">الهاتف الموحد</div>
-                            <div class="contact-item-value">+966 800 123 4567</div>
+                            <div class="contact-item-label">{{ @$translations['contact']['phone_label'] ?? 'الهاتف الموحد' }}</div>
+                            <div class="contact-item-value">{{ @$translations['contact']['phone_value'] ?? '+966 800 123 4567' }}</div>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1340,8 +1383,8 @@
                                 style="font-variation-settings:'FILL' 1;">chat</span>
                         </div>
                         <div>
-                            <div class="contact-item-label">واتساب مباشر</div>
-                            <div class="contact-item-value">+966 50 123 4567</div>
+                            <div class="contact-item-label">{{ @$translations['contact']['whatsapp_label'] ?? 'واتساب مباشر' }}</div>
+                            <div class="contact-item-value">{{ @$translations['contact']['whatsapp_value'] ?? '+966 50 123 4567' }}</div>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1350,8 +1393,8 @@
                                 style="font-variation-settings:'FILL' 1;">mail</span>
                         </div>
                         <div>
-                            <div class="contact-item-label">البريد الإلكتروني</div>
-                            <div class="contact-item-value">hello@smartstore.sa</div>
+                            <div class="contact-item-label">{{ @$translations['contact']['email_label'] ?? 'البريد الإلكتروني' }}</div>
+                            <div class="contact-item-value">{{ @$translations['contact']['email_value'] ?? 'hello@smartstore.sa' }}</div>
                         </div>
                     </div>
                 </div>
@@ -1362,31 +1405,31 @@
                 <form>
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom:0;">
-                            <label>الاسم الكامل</label>
-                            <input type="text" placeholder="أدخل اسمك" />
+                            <label>{{ @$translations['contact']['form_name'] ?? 'الاسم الكامل' }}</label>
+                            <input type="text" placeholder="{{ @$translations['contact']['form_name_placeholder'] ?? 'أدخل اسمك' }}" />
                         </div>
                         <div class="form-group" style="margin-bottom:0;">
-                            <label>البريد الإلكتروني</label>
+                            <label>{{ @$translations['contact']['form_email'] ?? 'البريد الإلكتروني' }}</label>
                             <input type="email" placeholder="example@mail.com" dir="ltr" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>نوع الاستفسار</label>
+                        <label>{{ @$translations['contact']['form_inquiry_type'] ?? 'نوع الاستفسار' }}</label>
                         <select>
-                            <option>دعم فني</option>
-                            <option>استفسار مبيعات</option>
-                            <option>شراكات</option>
-                            <option>أخرى</option>
+                            <option>{{ @$translations['contact']['form_inquiry_support'] ?? 'دعم فني' }}</option>
+                            <option>{{ @$translations['contact']['form_inquiry_sales'] ?? 'استفسار مبيعات' }}</option>
+                            <option>{{ @$translations['contact']['form_inquiry_partners'] ?? 'شراكات' }}</option>
+                            <option>{{ @$translations['contact']['form_inquiry_other'] ?? 'أخرى' }}</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>الرسالة</label>
-                        <textarea rows="4" placeholder="كيف يمكننا مساعدتك؟"></textarea>
+                        <label>{{ @$translations['contact']['form_message'] ?? 'الرسالة' }}</label>
+                        <textarea rows="4" placeholder="{{ @$translations['contact']['form_message_placeholder'] ?? 'كيف يمكننا مساعدتك؟' }}"></textarea>
                     </div>
 
-                    <button type="submit" class="btn-submit">إرسال الرسالة</button>
+                    <button type="submit" class="btn-submit">{{ @$translations['contact']['form_submit'] ?? 'إرسال الرسالة' }}</button>
                 </form>
             </div>
         </div>
@@ -1397,14 +1440,14 @@
         <div class="footer-inner">
             <div style="text-align:center;">
                 <div class="footer-brand-name">Matjar Hub</div>
-                <div class="footer-brand-desc">المنصة الرائدة في تمكين التجار في العالم العربي</div>
+                <div class="footer-brand-desc">{{ @$translations['footer']['brand_desc'] ?? 'المنصة الرائدة في تمكين التجار في العالم العربي' }}</div>
             </div>
 
             <div class="footer-links">
-                <a href="#">الرئيسية</a>
+                <a href="#">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
             </div>
 
-            <div class="footer-copy">© 2026 Matjar Hub. جميع الحقوق محفوظة.</div>
+            <div class="footer-copy">{{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}</div>
         </div>
     </footer>
 
@@ -1412,9 +1455,28 @@
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
         AOS.init({
-            once: true, // تشغيل الأنيميشن مرة واحدة فقط
-            offset: 80, // المسافة قبل التفعيل
+            once: true,
+            offset: 80,
             easing: 'ease-out-quad',
+        });
+
+        // Language menu toggle
+        function toggleLangMenu() {
+            const menu = document.getElementById('langMenu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        // Close language menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const langSwitcher = document.querySelector('.lang-switcher');
+            const menu = document.getElementById('langMenu');
+            if (langSwitcher && !langSwitcher.contains(event.target)) {
+                menu.style.display = 'none';
+            }
         });
     </script>
 

@@ -9,7 +9,8 @@ use App\Models\AppSettings;
 use App\Models\Transaction;
 use App\Helpers\helper;
 use App\Models\SocialLinks;
-use App\Models\LandingSettings;
+use App\Models\Landing2Settings;
+use App\Models\Landing2Translation;
 use App\Models\Footerfeatures;
 use App\Models\FunFact;
 use App\Models\OtherSettings;
@@ -97,7 +98,7 @@ class WebSettingsController extends Controller
 
                 $settingdata->darklogo = $darklogo_name;
             }
-            
+
             if ($request->hasfile('favicon')) {
 
                 $validator = Validator::make($request->all(), [
@@ -590,6 +591,35 @@ class WebSettingsController extends Controller
         }
         $othersettingsdata->tips_settings = isset($request->tips_settings) ? 1 : 2;
         $othersettingsdata->save();
+        return redirect()->back()->with('success', trans('messages.success'));
+    }
+
+    public function landing2_settings()
+    {
+        $translations = [];
+        $allTranslations = Landing2Translation::all();
+        
+        foreach ($allTranslations as $translation) {
+            $translations[$translation->section][$translation->field][$translation->lang] = [
+                'value' => $translation->value
+            ];
+        }
+        
+        return view('admin.landing2.index', compact('translations'));
+    }
+
+    public function landing2_settings_update(Request $request)
+    {
+        $sections = $request->input('translations', []);
+        
+        foreach ($sections as $section => $fields) {
+            foreach ($fields as $field => $translations) {
+                foreach ($translations as $lang => $value) {
+                    Landing2Translation::set($section, $field, $lang, $value);
+                }
+            }
+        }
+
         return redirect()->back()->with('success', trans('messages.success'));
     }
 }

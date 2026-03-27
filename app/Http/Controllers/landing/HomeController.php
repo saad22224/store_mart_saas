@@ -30,6 +30,8 @@ use App\Models\Theme;
 use App\Helpers\helper;
 use App\Models\HowWorks;
 use App\Models\FunFact;
+use App\Models\Landing2Settings;
+use App\Models\Landing2Translation;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Lunaweb\RecaptchaV3\Facades\RecaptchaV3;
@@ -51,7 +53,15 @@ class HomeController extends Controller
             $themes = Theme::where('vendor_id', $admindata->id)->orderBy('reorder_id')->get();
             $app_settings = AppSettings::where('vendor_id', $admindata->id)->first();
             $funfacts = FunFact::where('vendor_id', $admindata->id)->orderByDesc('id')->get();
-            return view('landing2.index', compact('features', 'planlist', 'testimonials', 'blogs', 'settingdata', 'workdata', 'themes', 'app_settings', 'funfacts'));
+            
+            // Get current language from request or default to 'ar'
+            $lang = $request->get('lang', session('landing2_lang', 'ar'));
+            session(['landing2_lang' => $lang]);
+            
+            // Get all translations for the current language
+            $translations = Landing2Translation::getAll($lang);
+            
+            return view('landing2.index', compact('features', 'planlist', 'testimonials', 'blogs', 'settingdata', 'workdata', 'themes', 'app_settings', 'funfacts', 'translations', 'lang'));
         }
         // if the current host doesn't contain the website domain (meaning, custom domain)
         else {

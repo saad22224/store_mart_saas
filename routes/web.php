@@ -104,7 +104,7 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
             Route::get('/', [PaymentController::class, 'index']);
             Route::post('update', [PaymentController::class, 'update']);
             Route::post('/reorder_payment', [PaymentController::class, 'reorder_payment']);
-        }); 
+        });
 
         // inquiries
         Route::get('/inquiries', [OtherPagesController::class, 'inquiries']);
@@ -165,7 +165,6 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
             Route::get('delete-{id}', [TaxController::class, 'delete']);
             Route::post('reorder_tax', [TaxController::class, 'reorder_tax']);
             Route::get('bulk_delete', [TaxController::class, 'bulk_delete']);
-
         });
 
         Route::post('social_links/update', [WebSettingsController::class, 'social_links_update']);
@@ -283,6 +282,10 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
 
             Route::post('/fun_fact/update', [WebSettingsController::class, 'fun_fact_update']);
             Route::get('/fun_fact/delete-{id}', [WebSettingsController::class, 'fun_fact_delete']);
+
+            // Landing2 Routes
+            Route::get('/landing2', [WebSettingsController::class, 'landing2_settings']);
+            Route::post('/landing2/update', [WebSettingsController::class, 'landing2_settings_update']);
         });
         Route::middleware('VendorMiddleware')->group(function () {
             // OTHERS
@@ -317,7 +320,6 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
                 Route::get('delete-{slug}', [CategoryController::class, 'delete_category']);
                 Route::post('/reorder_category', [CategoryController::class, 'reorder_category']);
                 Route::get('bulk_delete', [CategoryController::class, 'bulk_delete_category']);
-
             });
 
             // PRODUCTS
@@ -341,7 +343,6 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
                 Route::get('/variants/edit/{product_id}', [ProductController::class, 'productVariantsEdit']);
                 Route::post('/reorder_image-{item_id}', [ProductController::class, 'reorder_image']);
                 Route::get('bulk_delete', [ProductController::class, 'bulk_delete_product']);
-
             });
 
             // Media
@@ -432,9 +433,8 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
             Route::get('settings/delete-feature-{id}', [WebSettingsController::class, 'delete_feature']);
 
             Route::post('tips_settings/update', [WebSettingsController::class, 'tips_settings']);
-            
         });
-        
+
         // currency-setting
         Route::group(['prefix' => 'currency-settings'], function () {
             Route::get('/', [CurrencyController::class, 'index']);

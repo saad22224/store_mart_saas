@@ -727,6 +727,14 @@
             </a>
         </li>
         <li
+            class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_basic_settings') == 1 ? 'd-block' : 'd-none'); ?>">
+            <a class="nav-link d-flex rounded <?php echo e(request()->is('admin/landing2*') ? 'active' : ''); ?>"
+                aria-current="page" href="<?php echo e(URL::to('/admin/landing2')); ?>">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Landing Page 2</span>
+            </a>
+        </li>
+        <li
             class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_how_it_works') == 1 ? 'd-block' : 'd-none'); ?>">
             <a class="nav-link d-flex rounded <?php echo e(request()->is('admin/how_it_works*') ? 'active' : ''); ?>"
                 aria-current="page" href="<?php echo e(URL::to('/admin/how_it_works')); ?>">

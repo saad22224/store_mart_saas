@@ -1127,10 +1127,48 @@
                     </div>
                 </div>
                 
-                <button class="btn-primary"><?php echo e(@$translations['nav']['start_now'] ?? 'ابدأ الآن'); ?></button>
-                <span class="material-symbols-outlined nav-hamburger">menu</span>
+                <button class="btn-primary hidden md:block"><?php echo e(@$translations['nav']['start_now'] ?? 'ابدأ الآن'); ?></button>
+                <span class="material-symbols-outlined nav-hamburger" onclick="toggleMobileMenu()">menu</span>
             </div>
         </nav>
+        
+        
+        <div id="mobileMenu" class="mobile-menu" style="
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
+            background: #ffffff !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            z-index: 9999;
+            padding: 6rem 2rem 2rem;
+            box-sizing: border-box;
+        ">
+            <div style="display:flex;flex-direction:column;gap:2rem;align-items:center;">
+                <a href="#" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['home'] ?? 'الرئيسية'); ?></a>
+                <a href="#who-we-are" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['who_we_are'] ?? 'من نحن'); ?></a>
+                <a href="#why-us" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['why_us'] ?? 'لماذا نحن'); ?></a>
+                <a href="#faq" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['faq'] ?? 'الأسئلة'); ?></a>
+                <a href="#contact" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['contact'] ?? 'اتصل بنا'); ?></a>
+            </div>
+            <button onclick="closeMobileMenu()" style="
+                position: absolute;
+                top: 1.5rem;
+                <?php echo e($lang == 'ar' ? 'left' : 'right'); ?>: 1.5rem;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0.5rem;
+            ">
+                <span class="material-symbols-outlined" style="font-size: 2rem;color:#0F172A;">close</span>
+            </button>
+        </div>
     </header>
 
     
@@ -1452,9 +1490,9 @@
                 <div class="footer-brand-desc"><?php echo e(@$translations['footer']['brand_desc'] ?? 'المنصة الرائدة في تمكين التجار في العالم العربي'); ?></div>
             </div>
 
-            <div class="footer-links">
+            <!-- <div class="footer-links">
                 <a href="#"><?php echo e(@$translations['nav']['home'] ?? 'الرئيسية'); ?></a>
-            </div>
+            </div> -->
 
             <div class="footer-copy"><?php echo e(@$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.'); ?></div>
         </div>
@@ -1477,6 +1515,24 @@
             } else {
                 menu.style.display = 'none';
             }
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = 'none';
+            document.body.style.overflow = '';
         }
 
         // Close language menu when clicking outside

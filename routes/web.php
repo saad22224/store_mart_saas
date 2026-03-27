@@ -283,7 +283,7 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
             Route::post('/fun_fact/update', [WebSettingsController::class, 'fun_fact_update']);
             Route::get('/fun_fact/delete-{id}', [WebSettingsController::class, 'fun_fact_delete']);
 
-            // Landing2 Routes
+            // Landing2 Admin Routes
             Route::get('/landing2', [WebSettingsController::class, 'landing2_settings']);
             Route::post('/landing2/update', [WebSettingsController::class, 'landing2_settings_update']);
         });
@@ -453,6 +453,7 @@ Route::group(['namespace' => '', 'middleware' => 'landingMiddleware'], function 
     }
     Route::post('/emailsubscribe', [LandingHomeController::class, 'emailsubscribe']);
     Route::post('/inquiry', [LandingHomeController::class, 'inquiry']);
+    Route::post('/landing2/contact', [WebSettingsController::class, 'landing2_contact'])->name('landing2.contact');
     Route::get('/aboutus', [LandingHomeController::class, 'aboutus']);
     Route::get('/privacypolicy', [LandingHomeController::class, 'privacypolicy']);
     Route::get('/refund_policy', [LandingHomeController::class, 'refund_policy']);

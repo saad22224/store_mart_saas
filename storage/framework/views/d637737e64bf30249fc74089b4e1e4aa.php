@@ -3,33 +3,35 @@
         <div class="container">
             <div class="d-lg-block d-none">
                 <div class="row align-items-center justify-content-center">
-                    @foreach (helper::footer_features(@$storeinfo->id) as $feature)
+                    <?php $__currentLoopData = helper::footer_features(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex p-3 justify-content-center">
                             <div class="fs-4 free-icon icon-color">
-                                {!! $feature->icon !!}
+                                <?php echo $feature->icon; ?>
+
                             </div>
                             <div class="free-content px-3 col-10">
-                                <h6 class="fw-500 color-changer m-0">{{ $feature->title }}</h6>
-                                <p class="fs-7 text-muted fw-normal line-2">{{ $feature->description }}</p>
+                                <h6 class="fw-500 color-changer m-0"><?php echo e($feature->title); ?></h6>
+                                <p class="fs-7 text-muted fw-normal line-2"><?php echo e($feature->description); ?></p>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
             <div class="footer-fiechar-slider owl-carousel owl-theme d-lg-none">
-                @foreach (helper::footer_features(@$storeinfo->id) as $feature)
+                <?php $__currentLoopData = helper::footer_features(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="item">
                         <div class="col d-flex p-3 justify-content-center">
                             <div class="fs-4 free-icon icon-color">
-                                {!! $feature->icon !!}
+                                <?php echo $feature->icon; ?>
+
                             </div>
                             <div class="free-content px-3 col-10">
-                                <h6 class="fw-500 color-changer m-0">{{ $feature->title }}</h6>
-                                <p class="fs-7 text-muted fw-normal line-2">{{ $feature->description }}</p>
+                                <h6 class="fw-500 color-changer m-0"><?php echo e($feature->title); ?></h6>
+                                <p class="fs-7 text-muted fw-normal line-2"><?php echo e($feature->description); ?></p>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </div>
@@ -42,37 +44,37 @@
             <script>
                 document.addEventListener("DOMContentLoaded", function(event) {
                     if (localStorage.getItem('theme') === 'dark') {
-                        var logo = "{{ helper::image_path(helper::appdata($storeinfo->id)->darklogo) }}";
+                        var logo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->darklogo)); ?>";
                     } else {
-                        var logo = "{{ helper::image_path(helper::appdata($storeinfo->id)->logo) }}";
+                        var logo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->logo)); ?>";
                     }
                     $('#footerlogoimage').attr('src', logo);
                 });
             </script>
-            <a href="{{ URL::to($storeinfo->slug) }}">
+            <a href="<?php echo e(URL::to($storeinfo->slug)); ?>">
                 <img src="" id="footerlogoimage" alt="logo" class="object-fit-cover my-2 logo-h-55-px "></a>
         </div>
         <ul class="footer-menu mb-4 color-changer">
-            <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
-                    class="color-changer text-dark">{{ trans('labels.privacy_policy') }}</a>
+            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/privacypolicy')); ?>"
+                    class="color-changer text-dark"><?php echo e(trans('labels.privacy_policy')); ?></a>
             </li>|
-            <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
-                    class="color-changer text-dark">{{ trans('labels.about_us') }}</a>
+            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/aboutus')); ?>"
+                    class="color-changer text-dark"><?php echo e(trans('labels.about_us')); ?></a>
             </li>|
-            <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/terms_condition') }}"
-                    class="color-changer text-dark">{{ trans('labels.terms_condition') }}</a>
+            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/terms_condition')); ?>"
+                    class="color-changer text-dark"><?php echo e(trans('labels.terms_condition')); ?></a>
             </li>|
-            <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
-                    class="color-changer text-dark">{{ trans('labels.refund_policy') }}</a>
+            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/refund_policy')); ?>"
+                    class="color-changer text-dark"><?php echo e(trans('labels.refund_policy')); ?></a>
             </li>|
             <li class="px-2 cursor-pointer"><a data-bs-toggle="modal"
-                    data-bs-target="#infomodal">{{ trans('labels.store_information') }}</a>
+                    data-bs-target="#infomodal"><?php echo e(trans('labels.store_information')); ?></a>
             </li>
         </ul>
         <div class="hstack justify-content-center gap-3">
-            @if (@helper::checkaddons('subscription'))
-                @if (@helper::checkaddons('user_app'))
-                    @php
+            <?php if(@helper::checkaddons('subscription')): ?>
+                <?php if(@helper::checkaddons('user_app')): ?>
+                    <?php
                         $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
                             ->orderByDesc('id')
                             ->first();
@@ -82,44 +84,44 @@
                         } else {
                             $user_app = @$checkplan->customer_app;
                         }
-                    @endphp
-                    @if ($user_app == 1)
+                    ?>
+                    <?php if($user_app == 1): ?>
                         <!-- Google play store button -->
-                        @if (
+                        <?php if(
                             @helper::getappsetting($storeinfo->id)->android_link != null &&
-                                @helper::getappsetting($storeinfo->id)->android_link != '')
-                            <a href="{{ @helper::getappsetting($storeinfo->id)->android_link }}"> <img
-                                    src="{{ url(env('ASSETPATHURL') . 'front/images/google-play.svg') }}"
+                                @helper::getappsetting($storeinfo->id)->android_link != ''): ?>
+                            <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->android_link); ?>"> <img
+                                    src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>"
                                     class="app-btn" alt=""> </a>
-                        @endif
-                        @if (@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != '')
+                        <?php endif; ?>
+                        <?php if(@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != ''): ?>
                             <!-- App store button -->
-                            <a href="{{ @helper::getappsetting($storeinfo->id)->ios_link }}"> <img
-                                    src="{{ url(env('ASSETPATHURL') . 'front/images/app-store.svg') }}" class="app-btn"
+                            <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->ios_link); ?>"> <img
+                                    src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>" class="app-btn"
                                     alt=""> </a>
-                        @endif
-                    @endif
+                        <?php endif; ?>
+                    <?php endif; ?>
 
 
-                @endif
-            @else
-                @if (@helper::checkaddons('user_app'))
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if(@helper::checkaddons('user_app')): ?>
                     <!-- Google play store button -->
-                    @if (
+                    <?php if(
                         @helper::getappsetting($storeinfo->id)->android_link != null &&
-                            @helper::getappsetting($storeinfo->id)->android_link != '')
-                        <a href="{{ @helper::getappsetting($storeinfo->id)->android_link }}"> <img
-                                src="{{ url(env('ASSETPATHURL') . 'front/images/google-play.svg') }}" class="app-btn"
+                            @helper::getappsetting($storeinfo->id)->android_link != ''): ?>
+                        <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->android_link); ?>"> <img
+                                src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>" class="app-btn"
                                 alt=""> </a>
-                    @endif
-                    @if (@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != '')
+                    <?php endif; ?>
+                    <?php if(@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != ''): ?>
                         <!-- App store button -->
-                        <a href="{{ @helper::getappsetting($storeinfo->id)->ios_link }}"> <img
-                                src="{{ url(env('ASSETPATHURL') . 'front/images/app-store.svg') }}" class="app-btn"
+                        <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->ios_link); ?>"> <img
+                                src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>" class="app-btn"
                                 alt=""> </a>
-                    @endif
-                @endif
-            @endif
+                    <?php endif; ?>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
     </div>
 </footer>
@@ -129,17 +131,17 @@
 <div class="copy-right-sec bg-changer py-3 d-none d-lg-block">
     <div class="container">
         <div
-            class="d-md-flex {{ helper::appdata($storeinfo->id)->online_order == 1 && helper::getallpayment($storeinfo->id)->count() > 0 ? 'justify-content-between' : 'justify-content-center' }}">
-            <p class="mb-md-0">{{ helper::appdata($storeinfo->id)->copyright }}</p>
-            @if (helper::appdata($storeinfo->id)->online_order == 1 && helper::getallpayment($storeinfo->id)->count() > 0)
+            class="d-md-flex <?php echo e(helper::appdata($storeinfo->id)->online_order == 1 && helper::getallpayment($storeinfo->id)->count() > 0 ? 'justify-content-between' : 'justify-content-center'); ?>">
+            <p class="mb-md-0"><?php echo e(helper::appdata($storeinfo->id)->copyright); ?></p>
+            <?php if(helper::appdata($storeinfo->id)->online_order == 1 && helper::getallpayment($storeinfo->id)->count() > 0): ?>
                 <ul class="footer_acceped_card d-flex justify-content-center gap-3 p-0 m-0">
-                    @foreach (helper::getallpayment($storeinfo->id) as $item)
+                    <?php $__currentLoopData = helper::getallpayment($storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li>
-                            <img src="{{ helper::image_path($item->image) }}" class="w-20px">
+                            <img src="<?php echo e(helper::image_path($item->image)); ?>" class="w-20px">
                         </li>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -161,7 +163,8 @@
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <h5 class="modal-title color-changer" id="exampleModalLabel">
-                    {{ trans('labels.working_hours') }}
+                    <?php echo e(trans('labels.working_hours')); ?>
+
                 </h5>
                 <button type="button" class="bg-transparent border-0 m-0" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fa-regular fa-xmark fs-4 color-changer"></i>
@@ -171,61 +174,63 @@
                 <div class="business-sec">
                     <div class="working-hours">
                         <ul class="list-group border-0 bg-none p-0">
-                            @if (is_array(@helper::timings($storeinfo->id)) || is_object(@helper::timings($storeinfo->id)))
-                                @foreach (@helper::timings($storeinfo->id) as $time)
+                            <?php if(is_array(@helper::timings($storeinfo->id)) || is_object(@helper::timings($storeinfo->id))): ?>
+                                <?php $__currentLoopData = @helper::timings($storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $time): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li class="list-group-item bg-transparent d-flex border-0 default-color">
                                         <p class="fw-semibold col-6 color-changer">
                                             <i class="fa-solid fa-calendar-days"></i>
-                                            <span class="px-2">{{ trans('labels.' . strtolower($time->day)) }}</span>
+                                            <span class="px-2"><?php echo e(trans('labels.' . strtolower($time->day))); ?></span>
                                         </p>
                                         <div class="col-6 d-flex justify-content-center">
                                             <p class="text-center color-changer">
-                                                @if ($time->is_always_close == 1)
-                                                    <span class="text-danger">{{ trans('labels.closed') }}</span>
-                                                @else
+                                                <?php if($time->is_always_close == 1): ?>
+                                                    <span class="text-danger"><?php echo e(trans('labels.closed')); ?></span>
+                                                <?php else: ?>
                                                     <span
-                                                        class="color-changer">{{ $time->open_time . ' ' . trans('labels.to') . ' ' . $time->close_time }}</span>
-                                                @endif
+                                                        class="color-changer"><?php echo e($time->open_time . ' ' . trans('labels.to') . ' ' . $time->close_time); ?></span>
+                                                <?php endif; ?>
 
                                             </p>
                                         </div>
                                     </li>
-                                @endforeach
-                            @endif
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
                         </ul>
                     </div>
 
                     <div class="my-3 d-lg-none">
                         <h5 class="color-changer">
-                            {{ trans('labels.social_links') }}
+                            <?php echo e(trans('labels.social_links')); ?>
+
                         </h5>
                         <div class="social-media">
                             <ul class="d-flex gap-2 m-0 p-0 flex-wrap">
-                                @foreach (@helper::getsociallinks($storeinfo->id) as $links)
-                                    <li><a href="{{ $links->link }}" target="_blank"
-                                            class="social-rounded fb p-0">{!! $links->icon !!}</a>
+                                <?php $__currentLoopData = @helper::getsociallinks($storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><a href="<?php echo e($links->link); ?>" target="_blank"
+                                            class="social-rounded fb p-0"><?php echo $links->icon; ?></a>
                                     </li>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
                     </div>
 
                     <div class="my-3 d-lg-none">
                         <h5 class="color-changer">
-                            {{ trans('labels.payment_methods') }}
+                            <?php echo e(trans('labels.payment_methods')); ?>
+
                         </h5>
-                        @php
+                        <?php
                             $payment = helper::getallpayment($storeinfo->id);
-                        @endphp
+                        ?>
 
                         <ul class="footer_acceped_card d-flex flex-wrap gap-3 p-0 m-0">
-                            @foreach (helper::getallpayment($storeinfo->id) as $item)
+                            <?php $__currentLoopData = helper::getallpayment($storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
                                     <a href="#">
-                                        <img src="{{ helper::image_path($item->image) }}" class="w-20px">
+                                        <img src="<?php echo e(helper::image_path($item->image)); ?>" class="w-20px">
                                     </a>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
                 </div>
@@ -249,7 +254,7 @@
             </div>
             <div class="modal-body p-0 extra-variation-modal">
                 <ul
-                    class="list-group list-group-flush p-0 {{ session()->get('direction') == 2 ? 'text-right' : 'text-left' }}">
+                    class="list-group list-group-flush p-0 <?php echo e(session()->get('direction') == 2 ? 'text-right' : 'text-left'); ?>">
                 </ul>
 
                 <!-- Variants -->
@@ -259,7 +264,8 @@
                     </div>
                     <!-- Extras -->
                     <div id="item-extras" class="mt-3">
-                        <h5 class="fw-normal color-changer m-0 d-none" id="extras_title">{{ trans('labels.extras') }}
+                        <h5 class="fw-normal color-changer m-0 d-none" id="extras_title"><?php echo e(trans('labels.extras')); ?>
+
                         </h5>
                         <ul class="m-0 ps-2">
                         </ul>
@@ -273,7 +279,7 @@
 </div>
 <!-- MODAL_SELECTED_ADDONS--END -->
 
-<input type="hidden" name="currency" id="currency" value="{{ helper::appdata($storeinfo->id)->currency }}">
+<input type="hidden" name="currency" id="currency" value="<?php echo e(helper::appdata($storeinfo->id)->currency); ?>">
 
 <!-- Modal NewsModal -->
 <div class="modal" id="NewsModal" tabindex="-1" aria-labelledby="NewsModalLabel" aria-hidden="true">
@@ -281,35 +287,37 @@
         <div class="modal-content rounded-4 overflow-hidden">
             <div class="modal-body p-0 position-relative">
                 <button type="button"
-                    class="bg-transparent border-0 m-0 subsciption_button {{ session()->get('direction') == '2' ? 'rtl' : '' }}"
+                    class="bg-transparent border-0 m-0 subsciption_button <?php echo e(session()->get('direction') == '2' ? 'rtl' : ''); ?>"
                     data-bs-dismiss="modal" aria-label="Close">
                     <i class="fa-regular fa-xmark fs-4 color-changer"></i>
                 </button>
                 <div class="row g-0 p-lg-3 align-items-center justify-content-between">
                     <div class="col-6 d-none d-lg-block">
-                        <img src="{{ helper::image_path(helper::appdata(@$storeinfo->id)->subscribe_image) }}"
+                        <img src="<?php echo e(helper::image_path(helper::appdata(@$storeinfo->id)->subscribe_image)); ?>"
                             alt="" class="w-100 object-fit-cover newslatter-img">
                     </div>
                     <div class="col-lg-6 col-12">
 
                         <div class="py-5 px-sm-5 px-4">
-                            <span class="fs-7 fs-500 color-changer">{{ trans('labels.newslatter') }}</span>
-                            <h2 class="subscribe-title color-changer">{{ trans('labels.subscribe_now') }}
+                            <span class="fs-7 fs-500 color-changer"><?php echo e(trans('labels.newslatter')); ?></span>
+                            <h2 class="subscribe-title color-changer"><?php echo e(trans('labels.subscribe_now')); ?>
+
                             </h2>
                             <p class="text-dark color-changer fw-500 fs-7 mb-3">
-                                {{ trans('labels.newslatter_subtitle') }}
+                                <?php echo e(trans('labels.newslatter_subtitle')); ?>
+
                             </p>
-                            <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post">
-                                @csrf
+                            <form action="<?php echo e(URL::to(@$storeinfo->slug . '/subscribe')); ?>" method="post">
+                                <?php echo csrf_field(); ?>
                                 <label
-                                    class="text-black form-label fs-7 mb-1">{{ trans('labels.email_address') }}</label>
+                                    class="text-black form-label fs-7 mb-1"><?php echo e(trans('labels.email_address')); ?></label>
                                 <div class="input-group mb-4">
                                     <input type="text" class="form-control border text-dark fw-500 bg-light"
-                                        name="subscribe_email" placeholder="{{ trans('labels.email') }}"
+                                        name="subscribe_email" placeholder="<?php echo e(trans('labels.email')); ?>"
                                         required="">
                                 </div>
                                 <button type="submit" class="btn btn-store w-100 py-2"
-                                    id="basic-addon2">{{ trans('labels.subscribe') }}</button>
+                                    id="basic-addon2"><?php echo e(trans('labels.subscribe')); ?></button>
                             </form>
                         </div>
                     </div>
@@ -327,15 +335,15 @@
                 <div class="row justify-content-between">
                     <div class="col-md-12 col-lg-7">
                         <h3 class="promocodemodellable-titel m-0 color-changer text-start" id="promocodemodellable">
-                            {{ trans('labels.proceed_as_guest_or_login') }}</h3>
+                            <?php echo e(trans('labels.proceed_as_guest_or_login')); ?></h3>
                         <p class="mb-3 promocodemodellable-subtitel color-changer">
-                            {{ trans('labels.dont_have_account_guest') }}</p>
+                            <?php echo e(trans('labels.dont_have_account_guest')); ?></p>
                     </div>
                     <div class="col-md-12 col-lg-4 col-xl-3">
                         <a onclick="login()"
-                            class="btn btn-store-outline mb-3">{{ trans('labels.login_with_your_account') }}</a>
+                            class="btn btn-store-outline mb-3"><?php echo e(trans('labels.login_with_your_account')); ?></a>
                         <a onclick="productcheckout()"
-                            class="btn btn-store">{{ trans('labels.continue_as_guest') }}</a>
+                            class="btn btn-store"><?php echo e(trans('labels.continue_as_guest')); ?></a>
                     </div>
                 </div>
             </div>
@@ -344,15 +352,15 @@
 </div>
 <!-- User Type Model End -->
 
-@if (@helper::checkaddons('sales_notification'))
-    @include('front.sales_notification')
-@endif
+<?php if(@helper::checkaddons('sales_notification')): ?>
+    <?php echo $__env->make('front.sales_notification', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php endif; ?>
 
 
 <!------ whatsapp_icon ------>
-@if (@helper::checkaddons('subscription'))
-    @if (@helper::checkaddons('whatsapp_message'))
-        @php
+<?php if(@helper::checkaddons('subscription')): ?>
+    <?php if(@helper::checkaddons('whatsapp_message')): ?>
+        <?php
             $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)->orderByDesc('id')->first();
             $user = App\Models\User::where('id', $storeinfo->id)->first();
             if (@$user->allow_without_subscription == 1) {
@@ -361,100 +369,102 @@
                 $whatsapp_message = @$checkplan->whatsapp_message;
             }
 
-        @endphp
-        @if ($whatsapp_message == 1 && @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_chat_on_off == 1)
-            @include('front.whatsapp_chat')
-        @endif
-    @endif
-@else
-    @if (@helper::checkaddons('whatsapp_message'))
-        @if (@whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_chat_on_off == 1)
-            @include('front.whatsapp_chat')
-        @endif
-    @endif
-@endif
+        ?>
+        <?php if($whatsapp_message == 1 && @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_chat_on_off == 1): ?>
+            <?php echo $__env->make('front.whatsapp_chat', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php else: ?>
+    <?php if(@helper::checkaddons('whatsapp_message')): ?>
+        <?php if(@whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_chat_on_off == 1): ?>
+            <?php echo $__env->make('front.whatsapp_chat', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>
 
-@if (@helper::checkaddons('tawk_addons'))
-    @if (helper::appdata($storeinfo->id)->tawk_on_off == 1)
-        {!! @helper::appdata($storeinfo->id)->tawk_widget_id !!}
-    @endif
-@endif
+<?php if(@helper::checkaddons('tawk_addons')): ?>
+    <?php if(helper::appdata($storeinfo->id)->tawk_on_off == 1): ?>
+        <?php echo @helper::appdata($storeinfo->id)->tawk_widget_id; ?>
 
-@if (@helper::checkaddons('wizz_chat'))
-    @if (helper::appdata($storeinfo->id)->wizz_chat_on_off == 1)
+    <?php endif; ?>
+<?php endif; ?>
+
+<?php if(@helper::checkaddons('wizz_chat')): ?>
+    <?php if(helper::appdata($storeinfo->id)->wizz_chat_on_off == 1): ?>
         <!-- Wizz Chat -->
-        {!! helper::appdata($storeinfo->id)->wizz_chat_settings !!}
-    @endif
-@endif
+        <?php echo helper::appdata($storeinfo->id)->wizz_chat_settings; ?>
+
+    <?php endif; ?>
+<?php endif; ?>
 
 
 
 <!-- Quick call -->
-@if (@helper::checkaddons('quick_call'))
-    @if (@helper::appdata($storeinfo->id)->quick_call == 1)
+<?php if(@helper::checkaddons('quick_call')): ?>
+    <?php if(@helper::appdata($storeinfo->id)->quick_call == 1): ?>
         <div
-            class="{{ helper::appdata($storeinfo->id)->quick_call_mobile_view_on_off == 1 ? 'd-block' : 'd-lg-block d-none' }}">
-            @include('front.quick_call')
+            class="<?php echo e(helper::appdata($storeinfo->id)->quick_call_mobile_view_on_off == 1 ? 'd-block' : 'd-lg-block d-none'); ?>">
+            <?php echo $__env->make('front.quick_call', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
-    @endif
-@endif
+    <?php endif; ?>
+<?php endif; ?>
 
 <!-- jquery -->
-<script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/jquery/jquery.min.js') }}"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/js/jquery/jquery.min.js')); ?>"></script>
 <!-- bootstrap js -->
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/bootstrap.bundle.js') }}"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/bootstrap.bundle.js')); ?>"></script>
 <!-- owl.carousel js -->
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/owl.carousel.min.js') }}"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/owl.carousel.min.js')); ?>"></script>
 <!-- owl.swiper js -->
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/swiper-bundle.min.js') }}"></script>
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/smoothproducts.js') }}"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/swiper-bundle.min.js')); ?>"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/smoothproducts.js')); ?>"></script>
 <!-- slick slider js -->
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/slick.min.js') }}"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/slick.min.js')); ?>"></script>
 <!-- lazyload js -->
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/lazyload.js') }}"></script>
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/jquery.number.min.js') }}"></script>
-@if (@helper::checkaddons('age_verification'))
-    @if (@helper::getagedetails($storeinfo->id)->age_verification_on_off == 1)
-        <script src="{{ url('resources/js/age.js') }}"></script>
-    @endif
-@endif
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/lazyload.js')); ?>"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/jquery.number.min.js')); ?>"></script>
+<?php if(@helper::checkaddons('age_verification')): ?>
+    <?php if(@helper::getagedetails($storeinfo->id)->age_verification_on_off == 1): ?>
+        <script src="<?php echo e(url('resources/js/age.js')); ?>"></script>
+    <?php endif; ?>
+<?php endif; ?>
 <!-- fontawesome js-->
-<script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/toastr/toastr.min.js') }}"></script><!-- Toastr JS -->
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/js/toastr/toastr.min.js')); ?>"></script><!-- Toastr JS -->
 <!-- custom js -->
 <script>
     // top deals parameter
-    var start_date = "{{ @helper::top_deals($storeinfo->id)->start_date }}";
-    var start_time = "{{ @helper::top_deals($storeinfo->id)->start_time }}";
-    var end_date = "{{ @helper::top_deals($storeinfo->id)->end_date }}";
-    var end_time = "{{ @helper::top_deals($storeinfo->id)->end_time }}";
-    var topdeals = "{{ !empty(helper::topdalsitemlist($storeinfo->id)) ? 1 : 0 }}";
-    var time_zone = "{{ helper::appdata($storeinfo->id)->timezone }}";
-    var current_date = "{{ \Carbon\Carbon::now()->toDateString() }}";
-    var deal_type = "{{ @helper::top_deals($storeinfo->id)->deal_type }}";
+    var start_date = "<?php echo e(@helper::top_deals($storeinfo->id)->start_date); ?>";
+    var start_time = "<?php echo e(@helper::top_deals($storeinfo->id)->start_time); ?>";
+    var end_date = "<?php echo e(@helper::top_deals($storeinfo->id)->end_date); ?>";
+    var end_time = "<?php echo e(@helper::top_deals($storeinfo->id)->end_time); ?>";
+    var topdeals = "<?php echo e(!empty(helper::topdalsitemlist($storeinfo->id)) ? 1 : 0); ?>";
+    var time_zone = "<?php echo e(helper::appdata($storeinfo->id)->timezone); ?>";
+    var current_date = "<?php echo e(\Carbon\Carbon::now()->toDateString()); ?>";
+    var deal_type = "<?php echo e(@helper::top_deals($storeinfo->id)->deal_type); ?>";
     // top deals parametervvv
 
-    var are_you_sure = "{{ trans('messages.are_you_sure') }}";
-    var yes = "{{ trans('messages.yes') }}";
-    var no = "{{ trans('messages.no') }}";
-    var wrong = "{{ trans('messages.wrong') }}";
-    var formate = "{{ helper::appdata($storeinfo->id)->currency_formate }}";
-    var login_title = "{{ trans('labels.login') }}";
-    var register_title = "{{ trans('labels.register') }}";
-    var forgot_password_title = "{{ trans('labels.forgot_password') }}";
-    var current_url = "{{ Request()->url() }}";
-    var home_url = "{{ url('/' . $storeinfo->slug) }}";
-    var is_logedin = "{{ @Auth::user()->type == 3 ? 1 : 2 }}";
-    var loginurl = "{{ URL::to($storeinfo->slug . '/login') }}";
-    var out_of_stock = "{{ trans('labels.out_of_stock') }}";
-    var rtl = "{{ session()->get('direction') }}";
+    var are_you_sure = "<?php echo e(trans('messages.are_you_sure')); ?>";
+    var yes = "<?php echo e(trans('messages.yes')); ?>";
+    var no = "<?php echo e(trans('messages.no')); ?>";
+    var wrong = "<?php echo e(trans('messages.wrong')); ?>";
+    var formate = "<?php echo e(helper::appdata($storeinfo->id)->currency_formate); ?>";
+    var login_title = "<?php echo e(trans('labels.login')); ?>";
+    var register_title = "<?php echo e(trans('labels.register')); ?>";
+    var forgot_password_title = "<?php echo e(trans('labels.forgot_password')); ?>";
+    var current_url = "<?php echo e(Request()->url()); ?>";
+    var home_url = "<?php echo e(url('/' . $storeinfo->slug)); ?>";
+    var is_logedin = "<?php echo e(@Auth::user()->type == 3 ? 1 : 2); ?>";
+    var loginurl = "<?php echo e(URL::to($storeinfo->slug . '/login')); ?>";
+    var out_of_stock = "<?php echo e(trans('labels.out_of_stock')); ?>";
+    var rtl = "<?php echo e(session()->get('direction')); ?>";
 </script>
 <script>
-    var darklogo = "{{ helper::image_path(helper::appdata($storeinfo->id)->darklogo) }}";
-    var lightlogo = "{{ helper::image_path(helper::appdata($storeinfo->id)->logo) }}";
+    var darklogo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->darklogo)); ?>";
+    var lightlogo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->logo)); ?>";
 </script>
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/custom.js') }}"></script>
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/top_deals.js') }}"></script>
-<script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/sweetalert/sweetalert2.min.js') }}"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/custom.js')); ?>"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/top_deals.js')); ?>"></script>
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/js/sweetalert/sweetalert2.min.js')); ?>"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
 
@@ -464,8 +474,8 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
-<script src="{{ url(env('ASSETPATHURL') . 'front/js/wallet.js') }}"></script>
-@yield('script')
+<script src="<?php echo e(url(env('ASSETPATHURL') . 'front/js/wallet.js')); ?>"></script>
+<?php echo $__env->yieldContent('script'); ?>
 <!-- loaded js -->
 
 <script>
@@ -477,7 +487,7 @@
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            url: "{{ URL::to($storeinfo->slug . '/rattingmodal') }}",
+            url: "<?php echo e(URL::to($storeinfo->slug . '/rattingmodal')); ?>",
             type: "post",
             dataType: "json",
             data: {
@@ -521,16 +531,16 @@
     }
 </script>
 
-@if (@helper::checkaddons('customer_login'))
+<?php if(@helper::checkaddons('customer_login')): ?>
     <input type="hidden" name="login_required" id="login_required"
-        value="{{ @helper::appdata($storeinfo->id)->checkout_login_required }}">
-    <input type="hidden" name="checklogin" id="checklogin" value="{{ @Auth::user() && Auth::user()->type == 3 }}">
+        value="<?php echo e(@helper::appdata($storeinfo->id)->checkout_login_required); ?>">
+    <input type="hidden" name="checklogin" id="checklogin" value="<?php echo e(@Auth::user() && Auth::user()->type == 3); ?>">
     <input type="hidden" name="customer_login" id="customer_login"
-        value="{{ @helper::checkaddons('customer_login') }}">
-@endif
+        value="<?php echo e(@helper::checkaddons('customer_login')); ?>">
+<?php endif; ?>
 
 <input type="hidden" name="request_url" id="request_url"
-    value="{{ @request()->segments()[1] ? @request()->segments()[1] : @request()->segments()[0] }}">
+    value="<?php echo e(@request()->segments()[1] ? @request()->segments()[1] : @request()->segments()[0]); ?>">
 
 
 <script type="text/javascript">
@@ -583,26 +593,26 @@
         "closeButton": true,
         "positionClass": "toast-top-right",
     }
-    @if (Session::has('success'))
-        toastr.success("{{ session('success') }}");
-    @endif
-    @if (Session::has('error'))
-        toastr.error("{{ session('error') }}");
-    @endif
-    var ratting = "{{ number_format(0, 1) }}";
-    if ("{{ helper::appdata($storeinfo->id)->product_ratting_switch == 1 }}") {
+    <?php if(Session::has('success')): ?>
+        toastr.success("<?php echo e(session('success')); ?>");
+    <?php endif; ?>
+    <?php if(Session::has('error')): ?>
+        toastr.error("<?php echo e(session('error')); ?>");
+    <?php endif; ?>
+    var ratting = "<?php echo e(number_format(0, 1)); ?>";
+    if ("<?php echo e(helper::appdata($storeinfo->id)->product_ratting_switch == 1); ?>") {
         reviewshow = 1;
     }
-    var whatsappnumber = "{{ helper::appdata($storeinfo->id)->whatsapp_number }}";
+    var whatsappnumber = "<?php echo e(helper::appdata($storeinfo->id)->whatsapp_number); ?>";
 
     function currency_formate(price) {
-        var formate = {{ @helper::currencyinfo($vendordata->id)->decimal_digit ?? 2 }};
-        var price = parseFloat(price) * {{ @helper::currencyinfo($vendordata->id)->exchange_rate }};
+        var formate = <?php echo e(@helper::currencyinfo($vendordata->id)->decimal_digit ?? 2); ?>;
+        var price = parseFloat(price) * <?php echo e(@helper::currencyinfo($vendordata->id)->exchange_rate); ?>;
 
-        var currency = "{{ @helper::currencyinfo($storeinfo->id)->currency }}";
-        var position = "{{ @helper::currencyinfo($storeinfo->id)->currency_position }}";
-        var space = "{{ @helper::currencyinfo($storeinfo->id)->currency_space }}";
-        var decimal_sep = "{{ @helper::currencyinfo($storeinfo->id)->decimal_separator }}";
+        var currency = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency); ?>";
+        var position = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency_position); ?>";
+        var space = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency_space); ?>";
+        var decimal_sep = "<?php echo e(@helper::currencyinfo($storeinfo->id)->decimal_separator); ?>";
 
         var oldprice = decimal_sep == 1 ? $.number(price, formate) : $.number(price, formate, ',', '.');
         var newprice = '';
@@ -627,10 +637,10 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "{{ URL::to('product-details/details') }}",
+            url: "<?php echo e(URL::to('product-details/details')); ?>",
             data: {
                 slug: slug,
-                vendor: "{{ $storeinfo->slug }}",
+                vendor: "<?php echo e($storeinfo->slug); ?>",
             },
             method: 'POST', //Post method,
             dataType: 'json',
@@ -638,16 +648,16 @@
                 if (id != null && id != "") {
                     $('#' + id).prop("disabled", false);
                     if (id.includes('icon')) {
-                        if ("{{ helper::appdata($storeinfo->id)->online_order }}" == 1) {
+                        if ("<?php echo e(helper::appdata($storeinfo->id)->online_order); ?>" == 1) {
                             $('#' + id).html('<i class="fa-regular fa-cart-shopping"></i>');
                         } else {
                             $('#' + id).html('<i class="fa-regular fa-eye"></i>');
                         }
                     } else {
-                        if ("{{ helper::appdata($storeinfo->id)->online_order }}" == 1) {
-                            $('#' + id).html("{{ trans('labels.add_to_cart') }}");
+                        if ("<?php echo e(helper::appdata($storeinfo->id)->online_order); ?>" == 1) {
+                            $('#' + id).html("<?php echo e(trans('labels.add_to_cart')); ?>");
                         } else {
-                            $('#' + id).html("{{ trans('labels.view') }}");
+                            $('#' + id).html("<?php echo e(trans('labels.view')); ?>");
                         }
                     }
                 }
@@ -658,19 +668,19 @@
             error: function(error) {
                 $('#' + id).prop("disabled", false);
                 if (id.includes('icon')) {
-                    if ("{{ helper::appdata($storeinfo->id)->online_order }}" == 1) {
+                    if ("<?php echo e(helper::appdata($storeinfo->id)->online_order); ?>" == 1) {
                         $('#' + id).html('<i class="fa-regular fa-cart-shopping"></i>');
                     } else {
                         $('#' + id).html('<i class="fa-regular fa-eye"></i>');
                     }
                 } else {
-                    if ("{{ helper::appdata($storeinfo->id)->online_order }}" == 1) {
-                        $('#' + id).html("{{ trans('labels.add_to_cart') }}");
+                    if ("<?php echo e(helper::appdata($storeinfo->id)->online_order); ?>" == 1) {
+                        $('#' + id).html("<?php echo e(trans('labels.add_to_cart')); ?>");
                     } else {
-                        $('#' + id).html("{{ trans('labels.view') }}");
+                        $('#' + id).html("<?php echo e(trans('labels.view')); ?>");
                     }
                 }
-                toastr.error("{{ trans('messages.wrong') }}");
+                toastr.error("<?php echo e(trans('messages.wrong')); ?>");
             }
         })
     }
@@ -735,7 +745,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "{{ URL::to('/add-to-cart') }}",
+            url: "<?php echo e(URL::to('/add-to-cart')); ?>",
             data: {
                 vendor_id: vendor,
                 item_id: item_id,
@@ -760,52 +770,52 @@
                 if (response.status == 1) {
                     if (buynow == 0) {
                         if ($('#viewproduct-over').is(':visible')) {
-                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 2) {
+                            if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 2) {
                                 location.reload();
                             } else {
                                 $('#viewproduct-over').modal('hide');
                                 $('#cartcnt').text(response.cartcnt);
                                 $('#cartcnt').removeClass('d-none');
-                                $('.addtocart').html("{{ trans('labels.add_to_cart') }}");
+                                $('.addtocart').html("<?php echo e(trans('labels.add_to_cart')); ?>");
                                 $('.addtocart').prop("disabled", false);
                             }
                         } else {
                             location.reload();
                         }
-                        toastr.success("{{ trans('messages.success') }}");
+                        toastr.success("<?php echo e(trans('messages.success')); ?>");
                     } else {
                         if (customer_login != "" && customer_login.activated == 1) {
                             if (checklogin) {
-                                location.href = "{{ URL::to($storeinfo->slug . '/checkout?buy_now=') }}" +
+                                location.href = "<?php echo e(URL::to($storeinfo->slug . '/checkout?buy_now=')); ?>" +
                                     buynow;
                             } else if (login_required == 1) {
                                 if ($('#viewproduct-over').is(':visible')) {
                                     $('#viewproduct-over').modal('hide');
                                 }
-                                $('.buynow').html("{{ trans('labels.buy_now') }}");
+                                $('.buynow').html("<?php echo e(trans('labels.buy_now')); ?>");
                                 $('.buynow').prop("disabled", false);
                                 $('#loginmodel').modal('show');
                             } else {
-                                location.href = "{{ URL::to($storeinfo->slug . '/checkout?buy_now=') }}" +
+                                location.href = "<?php echo e(URL::to($storeinfo->slug . '/checkout?buy_now=')); ?>" +
                                     buynow;
                             }
                         } else {
-                            location.href = "{{ URL::to($storeinfo->slug . '/checkout?buy_now=') }}" +
+                            location.href = "<?php echo e(URL::to($storeinfo->slug . '/checkout?buy_now=')); ?>" +
                                 buynow;
                         }
                     }
                 } else {
-                    $('.addtocart').html("{{ trans('labels.add_to_cart') }}");
+                    $('.addtocart').html("<?php echo e(trans('labels.add_to_cart')); ?>");
                     $('.addtocart').prop("disabled", false);
-                    $('.buynow').html("{{ trans('labels.buy_now') }}");
+                    $('.buynow').html("<?php echo e(trans('labels.buy_now')); ?>");
                     $('.buynow').prop("disabled", false);
                     toastr.error(response.message);
                 }
             },
             error: function() {
-                $('.addtocart').html("{{ trans('labels.add_to_cart') }}");
+                $('.addtocart').html("<?php echo e(trans('labels.add_to_cart')); ?>");
                 $('.addtocart').prop("disabled", false);
-                $('.buynow').html("{{ trans('labels.buy_now') }}");
+                $('.buynow').html("<?php echo e(trans('labels.buy_now')); ?>");
                 $('.buynow').prop("disabled", false);
                 toastr.error(wrong);
             }
@@ -876,7 +886,7 @@
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            url: "{{ URL::to('/add-to-cart') }}",
+            url: "<?php echo e(URL::to('/add-to-cart')); ?>",
             data: {
                 vendor_id: vendor,
                 item_id: item_id,
@@ -900,7 +910,7 @@
             dataType: "json",
             success: function(response) {
                 if (response.status == 1) {
-                    toastr.success("{{ trans('messages.success') }}");
+                    toastr.success("<?php echo e(trans('messages.success')); ?>");
                     location.reload();
 
                     $(".cart-count").html(response.total_cart_count);
@@ -926,9 +936,9 @@
     function productcheckout() {
         var request_url = $('#request_url').val();
         if (request_url == 'cart') {
-            location.href = "{{ URL::to($storeinfo->slug . '/checkout?buy_now=0') }}";
+            location.href = "<?php echo e(URL::to($storeinfo->slug . '/checkout?buy_now=0')); ?>";
         } else {
-            location.href = "{{ URL::to($storeinfo->slug . '/checkout?buy_now=1') }}";
+            location.href = "<?php echo e(URL::to($storeinfo->slug . '/checkout?buy_now=1')); ?>";
         }
     }
 
@@ -1001,12 +1011,12 @@
         })
         swalWithBootstrapButtons.fire({
             icon: 'warning',
-            title: "{{ trans('messages.are_you_sure') }}",
+            title: "<?php echo e(trans('messages.are_you_sure')); ?>",
             showCancelButton: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
-            confirmButtonText: "{{ trans('messages.yes') }}",
-            cancelButtonText: "{{ trans('messages.no') }}",
+            confirmButtonText: "<?php echo e(trans('messages.yes')); ?>",
+            cancelButtonText: "<?php echo e(trans('messages.no')); ?>",
             reverseButtons: true,
             showLoaderOnConfirm: true,
             preConfirm: function() {
@@ -1015,7 +1025,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: "{{ URL::to('/cart/deletecartitem') }}",
+                        url: "<?php echo e(URL::to('/cart/deletecartitem')); ?>",
                         data: {
                             cart_id: cart_id,
                             vendor_id: vendor_id,
@@ -1026,12 +1036,12 @@
                                 $('.shopping-cart #cartcnt').text(response.cartcnt);
                                 location.reload();
                             } else {
-                                swal("Cancelled", "{{ trans('messages.wrong') }} :(",
+                                swal("Cancelled", "<?php echo e(trans('messages.wrong')); ?> :(",
                                     "error");
                             }
                         },
                         error: function(e) {
-                            swal("Cancelled", "{{ trans('messages.wrong') }} :(",
+                            swal("Cancelled", "<?php echo e(trans('messages.wrong')); ?> :(",
                                 "error");
                         }
                     });
@@ -1062,7 +1072,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ URL::to('/cart/qtyupdate') }}",
+                url: "<?php echo e(URL::to('/cart/qtyupdate')); ?>",
                 data: {
                     cart_id: cart_id,
                     item_id: item_id,
@@ -1111,12 +1121,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ URL::to('/changeqty') }}",
+                url: "<?php echo e(URL::to('/changeqty')); ?>",
                 data: {
                     item_id: item_id,
                     type: type,
                     qty: qty,
-                    vendor_id: "{{ $storeinfo->id }}",
+                    vendor_id: "<?php echo e($storeinfo->id); ?>",
                     variants_name: variants_name,
                     stock_management: stock_management,
                 },
@@ -1145,8 +1155,8 @@
     function showaddons(id, item_name, attribute, extra_name, extra_price, variation_name, variation_price) {
         $('#selected_addons_Label').html(item_name);
         $('#variation_title').html(attribute);
-        var variation_title = "{{ trans('labels.variants') }}";
-        var extra_title = "{{ trans('labels.extras') }}";
+        var variation_title = "<?php echo e(trans('labels.variants')); ?>";
+        var extra_title = "<?php echo e(trans('labels.extras')); ?>";
 
         var extras = extra_name.split("|");
         var variations = variation_name.split(',');
@@ -1178,7 +1188,7 @@
     }
 </script>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ helper::appdata(1)->tracking_id }}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo e(helper::appdata(1)->tracking_id); ?>"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -1186,12 +1196,12 @@
         dataLayer.push(arguments);
     }
     gtag('js', new Date());
-    gtag('config', '{{ helper::appdata(1)->tracking_id }}');
+    gtag('config', '<?php echo e(helper::appdata(1)->tracking_id); ?>');
 </script>
 
-@if (@helper::checkaddons('subscription'))
-    @if (@helper::checkaddons('pwa'))
-        @php
+<?php if(@helper::checkaddons('subscription')): ?>
+    <?php if(@helper::checkaddons('pwa')): ?>
+        <?php
             $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)->orderByDesc('id')->first();
             $user = App\Models\User::where('id', $storeinfo->id)->first();
             if ($user->allow_without_subscription == 1) {
@@ -1199,35 +1209,35 @@
             } else {
                 $pwa = @$checkplan->pwa;
             }
-        @endphp
-        @if ($pwa == 1)
-            <script src="{{ url('storage/app/public/sw.js') }}"></script>
+        ?>
+        <?php if($pwa == 1): ?>
+            <script src="<?php echo e(url('storage/app/public/sw.js')); ?>"></script>
             <script>
                 if (!navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.register("{{ url('storage/app/public/sw.js') }}").then(function(reg) {
+                    navigator.serviceWorker.register("<?php echo e(url('storage/app/public/sw.js')); ?>").then(function(reg) {
                         console.log("Service worker has been registered for scope: " + reg.scope);
                     });
                 }
             </script>
-        @endif
-    @endif
-@else
-    @if (@helper::checkaddons('pwa'))
-        <script src="{{ url('storage/app/public/sw.js') }}"></script>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php else: ?>
+    <?php if(@helper::checkaddons('pwa')): ?>
+        <script src="<?php echo e(url('storage/app/public/sw.js')); ?>"></script>
         <script>
             if (!navigator.serviceWorker.controller) {
-                navigator.serviceWorker.register("{{ url('storage/app/public/sw.js') }}").then(function(reg) {
+                navigator.serviceWorker.register("<?php echo e(url('storage/app/public/sw.js')); ?>").then(function(reg) {
                     console.log("Service worker has been registered for scope: " + reg.scope);
                 });
             }
         </script>
-    @endif
-@endif
+    <?php endif; ?>
+<?php endif; ?>
 
 <script>
-    var in_stock = "{{ trans('labels.in_stock') }}";
-    var out_stock = "{{ trans('labels.out_of_stock') }}";
-    var not_available = "{{ trans('labels.not_available') }}";
+    var in_stock = "<?php echo e(trans('labels.in_stock')); ?>";
+    var out_stock = "<?php echo e(trans('labels.out_of_stock')); ?>";
+    var not_available = "<?php echo e(trans('labels.not_available')); ?>";
 
     function myFunction() {
         "use strict";
@@ -1311,11 +1321,11 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "{{ URL::to('get-products-variant-quantity') }}",
+            url: "<?php echo e(URL::to('get-products-variant-quantity')); ?>",
             data: {
                 name: variants,
                 item_id: $('#overview_item_id').val(),
-                vendor_id: "{{ $storeinfo->id }}",
+                vendor_id: "<?php echo e($storeinfo->id); ?>",
             },
             success: function(data) {
                 if (data.status == 1) {
@@ -1331,7 +1341,7 @@
                     $('#offer').removeClass('d-none');
                     if (parseFloat(data.original_price) > parseFloat(data.price)) {
                         $('.detail_original_price').text(currency_formate(parseFloat(data.original_price)));
-                        $('#offer').text($.number(off, 1) + '% {{ trans('labels.off') }}');
+                        $('#offer').text($.number(off, 1) + '% <?php echo e(trans('labels.off')); ?>');
                     } else {
                         $('.detail_original_price').text('');
                         $('#offer').text('');
@@ -1396,7 +1406,7 @@
                 '<span class="loader"></span>');
         }, 50);
         setTimeout(function() {
-            $('#track_here').html("{{ trans('labels.track_here') }}");
+            $('#track_here').html("<?php echo e(trans('labels.track_here')); ?>");
             $('#track_here').prop("disabled", false);
         }, 3000);
     });
@@ -1408,7 +1418,7 @@
                 '<span class="loader"></span>');
         }, 50);
         setTimeout(function() {
-            $('#btnsubmit').html("{{ trans('labels.submit') }}");
+            $('#btnsubmit').html("<?php echo e(trans('labels.submit')); ?>");
             $('#btnsubmit').prop("disabled", false);
         }, 3000);
     });
@@ -1421,7 +1431,7 @@
                     '<span class="loader"></span>');
             }, 50);
             setTimeout(function() {
-                $('#btnsubscribe').html("{{ trans('labels.subscribe') }}");
+                $('#btnsubscribe').html("<?php echo e(trans('labels.subscribe')); ?>");
                 $('#btnsubscribe').prop("disabled", false);
             }, 3000);
         }
@@ -1433,7 +1443,7 @@
                 '<span class="loader"></span>');
         }, 50);
         setTimeout(function() {
-            $('#btnsearch').html("{{ trans('labels.search') }}");
+            $('#btnsearch').html("<?php echo e(trans('labels.search')); ?>");
             $('#btnsearch').prop("disabled", false);
         }, 3000);
     });
@@ -1444,7 +1454,7 @@
                 '<span class="loader"></span>');
         }, 50);
         setTimeout(function() {
-            $('#btnsignin').html("{{ trans('labels.login') }}");
+            $('#btnsignin').html("<?php echo e(trans('labels.login')); ?>");
             $('#btnsignin').prop("disabled", false);
         }, 3000);
     });
@@ -1455,7 +1465,7 @@
                 '<span class="loader"></span>');
         }, 50);
         setTimeout(function() {
-            $('#btnsignup').html("{{ trans('labels.sign_in') }}");
+            $('#btnsignup').html("<?php echo e(trans('labels.sign_in')); ?>");
             $('#btnsignup').prop("disabled", false);
         }, 3000);
     });
@@ -1472,10 +1482,10 @@
     });
 </script>
 
-@if (@helper::checkaddons('sales_notification'))
-    @if (helper::appdata($storeinfo->id)->fake_sales_notification == 1)
+<?php if(@helper::checkaddons('sales_notification')): ?>
+    <?php if(helper::appdata($storeinfo->id)->fake_sales_notification == 1): ?>
         <script>
-            if ("{{ @helper::appdata($storeinfo->id)->fake_sales_notification }}" == "1") {
+            if ("<?php echo e(@helper::appdata($storeinfo->id)->fake_sales_notification); ?>" == "1") {
                 // Select the element with the ID 'sales-booster-popup'
                 const popup = document.getElementById('sales-booster-popup');
 
@@ -1491,7 +1501,7 @@
                                     popup.classList.remove('loaded');
                                 }
                             },
-                            "{{ helper::appdata($storeinfo->id)->notification_display_time }}"
+                            "<?php echo e(helper::appdata($storeinfo->id)->notification_display_time); ?>"
                         ); // 4000 milliseconds = 4 seconds for demo purposes
                     };
 
@@ -1514,12 +1524,12 @@
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
-                                url: "{{ URL::to('get_notification_data') }}",
+                                url: "<?php echo e(URL::to('get_notification_data')); ?>",
 
                                 type: "post",
                                 dataType: "json",
                                 data: {
-                                    vendor_id: "{{ $storeinfo->id }}",
+                                    vendor_id: "<?php echo e($storeinfo->id); ?>",
                                 },
                                 success: function(response) {
                                     toggleLoadedClass();
@@ -1528,7 +1538,7 @@
                                 },
                             });
                         },
-                        "{{ helper::appdata($storeinfo->id)->notification_display_time + helper::appdata($storeinfo->id)->next_time_popup }}"
+                        "<?php echo e(helper::appdata($storeinfo->id)->notification_display_time + helper::appdata($storeinfo->id)->next_time_popup); ?>"
                     ); // 8000 milliseconds = 8 seconds
 
                     // Add mouseover and mouseout event listeners to the popup
@@ -1548,9 +1558,10 @@
                 }
             }
         </script>
-    @endif
-@endif
+    <?php endif; ?>
+<?php endif; ?>
 
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/theme/footer.blade.php ENDPATH**/ ?>

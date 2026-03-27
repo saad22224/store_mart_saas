@@ -11,6 +11,9 @@
     {{-- AOS - Animate On Scroll --}}
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 
+    {{-- Toastify - Toast Notifications --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
@@ -1402,31 +1405,32 @@
 
             {{-- Form --}}
             <div class="contact-form-box" data-aos="fade-right" data-aos-duration="700" data-aos-delay="150">
-                <form>
+                <form action="{{ route('landing2.contact') }}" method="POST">
+                    @csrf
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom:0;">
                             <label>{{ @$translations['contact']['form_name'] ?? 'الاسم الكامل' }}</label>
-                            <input type="text" placeholder="{{ @$translations['contact']['form_name_placeholder'] ?? 'أدخل اسمك' }}" />
+                            <input type="text" name="name" required placeholder="{{ @$translations['contact']['form_name_placeholder'] ?? 'أدخل اسمك' }}" />
                         </div>
                         <div class="form-group" style="margin-bottom:0;">
                             <label>{{ @$translations['contact']['form_email'] ?? 'البريد الإلكتروني' }}</label>
-                            <input type="email" placeholder="example@mail.com" dir="ltr" />
+                            <input type="email" name="email" required placeholder="example@mail.com" dir="ltr" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>{{ @$translations['contact']['form_inquiry_type'] ?? 'نوع الاستفسار' }}</label>
-                        <select>
-                            <option>{{ @$translations['contact']['form_inquiry_support'] ?? 'دعم فني' }}</option>
-                            <option>{{ @$translations['contact']['form_inquiry_sales'] ?? 'استفسار مبيعات' }}</option>
-                            <option>{{ @$translations['contact']['form_inquiry_partners'] ?? 'شراكات' }}</option>
-                            <option>{{ @$translations['contact']['form_inquiry_other'] ?? 'أخرى' }}</option>
+                        <select name="inquiry_type" required>
+                            <option value="دعم فني">{{ @$translations['contact']['form_inquiry_support'] ?? 'دعم فني' }}</option>
+                            <option value="استفسار مبيعات">{{ @$translations['contact']['form_inquiry_sales'] ?? 'استفسار مبيعات' }}</option>
+                            <option value="شراكات">{{ @$translations['contact']['form_inquiry_partners'] ?? 'شراكات' }}</option>
+                            <option value="أخرى">{{ @$translations['contact']['form_inquiry_other'] ?? 'أخرى' }}</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>{{ @$translations['contact']['form_message'] ?? 'الرسالة' }}</label>
-                        <textarea rows="4" placeholder="{{ @$translations['contact']['form_message_placeholder'] ?? 'كيف يمكننا مساعدتك؟' }}"></textarea>
+                        <textarea name="message" rows="4" required placeholder="{{ @$translations['contact']['form_message_placeholder'] ?? 'كيف يمكننا مساعدتك؟' }}"></textarea>
                     </div>
 
                     <button type="submit" class="btn-submit">{{ @$translations['contact']['form_submit'] ?? 'إرسال الرسالة' }}</button>
@@ -1479,6 +1483,52 @@
             }
         });
     </script>
+
+    {{-- Toastify JS --}}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    {{-- Toastify Notifications --}}
+    @if(session('contact_success'))
+        <script>
+            Toastify({
+                text: "{{ session('contact_success') }}",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(135deg, #15AC82 0%, #0D8D6B 100%)",
+                    color: "#fff",
+                    fontFamily: "'Cairo', sans-serif",
+                    fontWeight: "700",
+                    borderRadius: "12px",
+                    boxShadow: "0 8px 30px rgba(21, 172, 130, 0.4)",
+                    padding: "16px 24px"
+                },
+                close: true
+            }).showToast();
+        </script>
+    @endif
+
+    @if(session('contact_error'))
+        <script>
+            Toastify({
+                text: "{{ session('contact_error') }}",
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(135deg, #dc3545 0%, #c82333 100%)",
+                    color: "#fff",
+                    fontFamily: "'Cairo', sans-serif",
+                    fontWeight: "700",
+                    borderRadius: "12px",
+                    boxShadow: "0 8px 30px rgba(220, 53, 69, 0.4)",
+                    padding: "16px 24px"
+                },
+                close: true
+            }).showToast();
+        </script>
+    @endif
 
 </body>
 

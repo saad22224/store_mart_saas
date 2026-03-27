@@ -16,7 +16,8 @@ use App\Models\FunFact;
 use App\Models\OtherSettings;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
+use App\Models\LandingSettings;
 class WebSettingsController extends Controller
 {
     public function basic_settings()
@@ -621,5 +622,28 @@ class WebSettingsController extends Controller
         }
 
         return redirect()->back()->with('success', trans('messages.success'));
+    }
+
+    public function landing2_contact(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'inquiry_type' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        try {
+            // إيميل المستلم - مؤقتاً هيبعت للـ admin أو تقدر تغيره
+            $toEmail = env('CONTACT_EMAIL', 'test@example.com');
+            
+            Mail::to($toEmail)->send(new \App\Mail\Landing2ContactMail($validated));
+            
+            return redirect()->back()->with('contact_success', 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('contact_error', 'حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.' . $e->getMessage());
+        }
+
+    // dd($request->all());
     }
 }

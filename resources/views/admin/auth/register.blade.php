@@ -172,7 +172,7 @@
                                 </div>
                             </div>
 
-                            @include('landing.layout.recaptcha')
+                            {{-- @include('landing.layout.recaptcha') --}}
 
                             <div class="d-flex gap-2">
                                 <a href ="{{ URL::to('/admin') }}"

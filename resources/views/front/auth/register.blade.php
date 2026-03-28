@@ -68,7 +68,7 @@
                                             </div>
                                         </div>
 
-                                        @include('landing.layout.recaptcha')
+                                        {{-- @include('landing.layout.recaptcha') --}}
                                         <button class="btn btn-primary w-100 mt-3" type="submit">{{ trans('labels.register') }}</button>
                                         <p class="fs-7 text-center mb-3">{{ trans('labels.already_have_an_account') }}
                                             <a href="{{ URL::to($slug.'/login') }}"

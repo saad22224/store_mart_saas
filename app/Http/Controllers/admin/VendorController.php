@@ -281,25 +281,25 @@ class VendorController extends Controller
         }
 
 
-        if (@Auth::user()->type != 1) {
-            if (@helper::checkaddons('google_recaptcha')) {
+        // if (@Auth::user()->type != 1) {
+        //     if (@helper::checkaddons('google_recaptcha')) {
 
-                if (helper::appdata('')->recaptcha_version == 'v2') {
-                    $request->validate([
-                        'g-recaptcha-response' => 'required'
-                    ], [
-                        'g-recaptcha-response.required' => 'The g-recaptcha-response field is required.'
-                    ]);
-                }
+        //         if (helper::appdata('')->recaptcha_version == 'v2') {
+        //             $request->validate([
+        //                 'g-recaptcha-response' => 'required'
+        //             ], [
+        //                 'g-recaptcha-response.required' => 'The g-recaptcha-response field is required.'
+        //             ]);
+        //         }
 
-                if (helper::appdata('')->recaptcha_version == 'v3') {
-                    $score = RecaptchaV3::verify($request->get('g-recaptcha-response'), 'contact');
-                    if ($score <= helper::appdata('')->score_threshold) {
-                        return redirect()->back()->with('error', 'You are most likely a bot');
-                    }
-                }
-            }
-        }
+        //         if (helper::appdata('')->recaptcha_version == 'v3') {
+        //             $score = RecaptchaV3::verify($request->get('g-recaptcha-response'), 'contact');
+        //             if ($score <= helper::appdata('')->score_threshold) {
+        //                 return redirect()->back()->with('error', 'You are most likely a bot');
+        //             }
+        //         }
+        //     }
+        // }
 
         $data = helper::vendor_register($request->name, $request->email, $request->mobile, hash::make($request->password), '', $request->slug, '', '', $request->country, $request->city, $request->store, $request->product_type);
         if (@Auth::user()->type == 1) {

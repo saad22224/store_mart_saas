@@ -191,61 +191,86 @@
                             </div>
 
 
+                            <div class="card mb-4 card-shadow bg-light">
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <h5 class="customer-title color-changer border-bottom pb-2 mb-4  <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
+                                            <i class="fa-light fa-user"></i><span class="px-2 checkoutform-title">معلومات التواصل</span>
+                                        </h5>
+                                    </div>
+                                    <form>
+                                        <div class="row g-3 <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
+                                            <div class="col-md-6">
+                                                <label for="first_name" class="form-label d-flex justify-content-start fw-semibold">الاسم الأول <span class="text-danger"> *</span></label>
+                                                <input type="text" placeholder="الاسم الأول" class="form-control rounded-2 p-3" name="first_name" id="first_name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="father_name" class="form-label d-flex justify-content-start fw-semibold">اسم الأب <span class="text-danger"> *</span></label>
+                                                <input type="text" class="form-control rounded-2 p-3" placeholder="اسم الأب" name="father_name" id="father_name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="last_name" class="form-label d-flex justify-content-start fw-semibold">الكنية <span class="text-danger"> *</span></label>
+                                                <input type="text" class="form-control rounded-2 p-3" placeholder="الكنية" name="last_name" id="last_name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="customer_mobile" class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.mobile')); ?> <span class="text-danger"> *</span></label>
+                                                <input type="text" class="form-control rounded-2 p-3" placeholder="<?php echo e(trans('labels.mobile')); ?>" name="customer_mobile" <?php if(env('Environment') == 'sendbox'): ?> value="937-267-4384" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->mobile : ''); ?>" <?php endif; ?> id="customer_mobile" onkeypress="return isNumber(event)">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="vendor" name="vendor" value="<?php echo e(helper::storeinfo($storeinfo->slug)->id); ?>" />
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="card mb-4 card-shadow bg-light" id="open">
                                 <div class="card-body">
                                     <div class="mb-2">
-                                        <h5
-                                            class="customer-title color-changer border-bottom pb-2 mb-4  <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
-                                            <i class="fa-light fa-truck-fast"></i><span
-                                                class="px-2 checkoutform-title"><?php echo e(trans('labels.delivery_info')); ?></span>
+                                        <h5 class="customer-title color-changer border-bottom pb-2 mb-4  <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
+                                            <i class="fa-light fa-truck-fast"></i><span class="px-2 checkoutform-title">مكان التوصيل</span>
                                         </h5>
                                     </div>
-                                    <div
-                                        class="row g-3 delivery-sec <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
-                                        <div class="col-md-6">
-                                            <label for="address"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.address')); ?>
-
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="text" class="form-control rounded-2 p-3"
-                                                placeholder="<?php echo e(trans('labels.address')); ?>"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="1112 4th Ave" <?php else: ?> value="<?php echo e(old('address')); ?>" <?php endif; ?>
-                                                name="address" id="address" required="">
+                                    <div class="row g-3 delivery-sec <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
+                                        <div class="col-md-12">
+                                            <label for="address" class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.address')); ?> <span class="text-danger"> *</span></label>
+                                            <input type="text" class="form-control rounded-2 p-3" placeholder="<?php echo e(trans('labels.address')); ?>" name="address" id="address" required="">
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="building"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.building')); ?>
+                                        <?php if(@helper::checkaddons('shipping_area')): ?>
+                                            <?php if(helper::appdata($storeinfo->id)->shipping_area == 1): ?>
+                                                <?php if(count($getshippingarealist) > 0): ?>
+                                                    <div class="col-md-12" id="shippinginfodiv">
+                                                        <label for="shipping_area" class="form-label d-flex justify-content-start fw-semibold">مكان التوصيل <span class="text-danger"> *</span></label>
+                                                        <select name="shipping_area" id="shipping_area" class="form-select rounded-2 p-3">
+                                                            <option value="" selected disabled><?php echo e(trans('labels.select')); ?></option>
+                                                            <?php $__currentLoopData = $getshippingarealist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $shippingarea): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option value="<?php echo e($shippingarea->id); ?>" data-delivery-charge="<?php echo e($shippingarea->delivery_charge); ?>" data-area-name="<?php echo e($shippingarea->area_name); ?>">
+                                                                    <?php echo e($shippingarea->area_name); ?>
 
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="text" class="form-control rounded-2 p-3"
-                                                placeholder="<?php echo e(trans('labels.building')); ?>" name="building"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="Seattle" <?php else: ?> value="<?php echo e(old('building')); ?>" <?php endif; ?>
-                                                id="building" required="">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="landmark"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.landmark')); ?>
-
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="text" class="form-control rounded-2 p-3"
-                                                placeholder="<?php echo e(trans('labels.landmark')); ?>" name="landmark"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="Washington" <?php else: ?> value="<?php echo e(old('landmark')); ?>" <?php endif; ?>
-                                                id="landmark" required="">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="postal_code"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.pincode')); ?>
-
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="text" class="form-control rounded-2 p-3"
-                                                placeholder="<?php echo e(trans('labels.pincode')); ?>" id="postal_code"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="98101" <?php else: ?> value="<?php echo e(old('pincode')); ?>" <?php endif; ?>
-                                                name="postal_code" required="">
-                                        </div>
+                                                                    <?php if(helper::appdata($storeinfo->id)->min_order_amount_for_free_shipping > $sub_total): ?>
+                                                                        <?php if($shippingarea->delivery_charge > 0): ?>
+                                                                            (<?php echo e(helper::currency_formate($shippingarea->delivery_charge, @$storeinfo->id)); ?>)
+                                                                        <?php endif; ?>
+                                                                    <?php endif; ?>
+                                                                </option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        <input type="hidden" id="building" name="building" value=" " />
+                                        <input type="hidden" id="landmark" name="landmark" value=" " />
+                                        <input type="hidden" id="postal_code" name="postal_code" value="0000" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4 card-shadow bg-light">
+                                <div class="card-body">
+                                    <h5 class="customer-title color-changer border-bottom pb-2 mb-4">
+                                        <i class="fa-light fa-comment-dots"></i><span class="px-2 checkoutform-title">أضف ملاحظاتك على الطلب</span>
+                                    </h5>
+                                    <div class="mb-3">
+                                        <textarea id="notes" name="notes" placeholder="<?php echo e(trans('labels.enter_order_note')); ?>" class="form-control rounded-2 p-3"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -273,56 +298,7 @@
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <div class="card mb-4 card-shadow bg-light">
-                            <div class="card-body">
-                                <div class="mb-2">
-                                    <h5
-                                        class="customer-title color-changer border-bottom pb-2 mb-4  <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
-                                        <i class="fa-light fa-user"></i><span
-                                            class="px-2 checkoutform-title"><?php echo e(trans('labels.customer')); ?></span>
-                                    </h5>
-                                </div>
-                                <form>
-                                    <div class="row g-3 <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
-                                        <div class="col-md-6">
-                                            <label for="customer_name"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.name')); ?>
-
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="text" placeholder="<?php echo e(trans('labels.name')); ?>"
-                                                class="form-control rounded-2 p-3" name="customer_name"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="Etha Jaskolski" <?php else: ?> value ="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->name : ''); ?>" <?php endif; ?>
-                                                id="customer_name">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="customer_mobile"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.mobile')); ?>
-
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="text" class="form-control rounded-2 p-3"
-                                                placeholder="<?php echo e(trans('labels.mobile')); ?>" name="customer_mobile"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="937-267-4384" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->mobile : ''); ?>" <?php endif; ?>
-                                                id="customer_mobile" onkeypress="return isNumber(event)">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="customer_email"
-                                                class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.email')); ?>
-
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input type="email" class="form-control rounded-2 p-3"
-                                                placeholder="<?php echo e(trans('labels.email')); ?>" name="customer_email"
-                                                <?php if(env('Environment') == 'sendbox'): ?> value="etha@gmail.com" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->email : ''); ?>" <?php endif; ?>
-                                                id="customer_email">
-                                        </div>
-                                    </div>
-                                    <input type="hidden" id="vendor" name="vendor"
-                                        value="<?php echo e(helper::storeinfo($storeinfo->slug)->id); ?>" />
-                                </form>
-                            </div>
-                        </div>
+                        <!-- Replaced by new customer info top block -->
                         <?php if(@helper::checkaddons('vendor_tip')): ?>
                             <?php if(@helper::otherappdata($storeinfo->id)->tips_settings == 1): ?>
                                 <div class="card mb-4 card-shadow bg-light">
@@ -507,48 +483,7 @@
                                 </div>
                             <?php endif; ?>
                         <?php endif; ?>
-                        <?php if(@helper::checkaddons('shipping_area')): ?>
-                            <?php if(helper::appdata($storeinfo->id)->shipping_area == 1): ?>
-                                <?php if(count($getshippingarealist) > 0): ?>
-                                    <div class="payment-sec my-3 card bg-light border-0" id="shippinginfodiv">
-                                        <div class="mb-2">
-                                            <h3
-                                                class="payment-title color-changer border-bottom <?php echo e(session()->get('direction') == '2' ? 'text-right' : ''); ?>">
-                                                <i class="fa-light fa-truck-fast"></i>
-                                                <span
-                                                    class="px-2 checkoutform-title"><?php echo e(trans('labels.shipping_area')); ?></span>
-                                            </h3>
-                                        </div>
-
-                                        <select name="shipping_area" id="shipping_area" class="form-select input-h">
-                                            <option value="" selected disabled><?php echo e(trans('labels.select')); ?>
-
-                                            </option>
-                                            <?php $__currentLoopData = $getshippingarealist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $shippingarea): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($shippingarea->id); ?>"
-                                                    data-delivery-charge="<?php echo e($shippingarea->delivery_charge); ?>"
-                                                    data-area-name="<?php echo e($shippingarea->area_name); ?>">
-                                                    <?php echo e($shippingarea->area_name); ?>
-
-                                                    <?php if(helper::appdata($storeinfo->id)->min_order_amount_for_free_shipping > $sub_total): ?>
-                                                        <?php if($shippingarea->delivery_charge > 0): ?>
-                                                            <?php echo e(trans('labels.delivery_charge')); ?>
-
-                                                            :
-                                                            <?php echo e(helper::currency_formate($shippingarea->delivery_charge, @$storeinfo->id)); ?>
-
-                                                        <?php endif; ?>
-                                                    <?php else: ?>
-                                                        <?php echo e(trans('labels.free_delivery')); ?>
-
-                                                    <?php endif; ?>
-                                                </option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        <?php endif; ?>
+                        <!-- Original shipping info block is disabled here and moved to col-lg-8 -->
                         <div class="payment-sec my-3 bg-light card border-0">
                             <div class="mb-2">
                                 <h3
@@ -718,20 +653,7 @@
                         </div>
                     </div>
 
-                    <div class="card mb-4 card-shadow bg-light">
-                        <div class="card-body">
-                            <h5 class="customer-title color-changer border-bottom pb-2 mb-4">
-                                <i class="fa-light fa-comment-dots"></i><span
-                                    class="px-2 checkoutform-title"><?php echo e(trans('labels.product_notes')); ?></span>
-                            </h5>
-                            <div class="mb-3">
-                                <label for="notes"
-                                    class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.note')); ?></label>
-                                <textarea id="notes" name="notes" placeholder="<?php echo e(trans('labels.enter_order_note')); ?>"
-                                    class="form-control rounded-2 p-3"></textarea>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Removed note text block -->
                     <?php echo $__env->make('front.service-trusted', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 </div>
             </div>
@@ -1088,9 +1010,12 @@ unset($__errorArgs, $__bag); ?>" required>
         var building = $('#building').val();
         var landmark = $('#landmark').val();
         var notes = $('#notes').val();
-        var customer_name = $('#customer_name').val();
-        var customer_email = $('#customer_email').val();
+        var first_name = $('#first_name').val();
+        var father_name = $('#father_name').val();
+        var last_name = $('#last_name').val();
         var customer_mobile = $('#customer_mobile').val();
+        var customer_name = first_name + ' ' + father_name + ' ' + last_name;
+        var customer_email = "noemail@example.com";
 
         var payment_type = $('input[name="payment"]:checked').attr("data-payment_type");
         var flutterwavekey = $('#flutterwavekey').val();
@@ -1114,23 +1039,17 @@ unset($__errorArgs, $__bag); ?>" required>
             } else if (landmark == "") {
                 toastr.error($('#landmark_required').val());
                 return false;
-            } else if (building == "") {
-                toastr.error($('#no_required').val());
+            } else if (first_name == "") {
+                toastr.error('الاسم الأول مطلوب');
                 return false;
-            } else if (postal_code == "") {
-                toastr.error($('#pincode_required').val());
+            } else if (father_name == "") {
+                toastr.error('اسم الأب مطلوب');
                 return false;
-            } else if (customer_name == "") {
-                toastr.error($('#customer_name_required').val());
+            } else if (last_name == "") {
+                toastr.error('الكنية مطلوبة');
                 return false;
             } else if (customer_mobile == "") {
                 toastr.error($('#customer_mobile_required').val());
-                return false;
-            } else if (customer_email == "") {
-                toastr.error($('#customer_email_required').val());
-                return false;
-            } else if (!validateEmail(customer_email)) {
-                toastr.error($('#valid_email').val());
                 return false;
             } else if ($("#shipping_area").find(":selected").val() == "") {
                 toastr.error($('#delivery_area_required').val());

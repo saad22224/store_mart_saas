@@ -688,6 +688,33 @@
                     </div>
                 </div>
 
+                
+                <div class="col-auto d-lg-none">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <?php $__currentLoopData = @helper::getsociallinks(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e($links->link); ?>" target="_blank" 
+                               style="
+                                   width: 24px;
+                                   height: 24px;
+                                   border-radius: 50%;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   background: var(--bs-primary);
+                                   color: #fff;
+                                   font-size: 11px;
+                                   text-decoration: none;
+                                   transition: all 0.3s ease;
+                               "
+                               onmouseover="this.style.transform='scale(1.1)';this.style.opacity='0.9'"
+                               onmouseout="this.style.transform='scale(1)';this.style.opacity='1'">
+                                <?php echo $links->icon; ?>
+
+                            </a>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
+
                 <!-- mobile lag button -->
                 <div class="col-xxl-4 col-xl-5">
 

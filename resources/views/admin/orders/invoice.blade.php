@@ -197,7 +197,7 @@
 
                                             <li
                                                 class="list-group-item px-0 fs-7 fw-500 d-flex justify-content-between align-items-center">
-                                                <p class="color-changer">{{ trans('labels.name') }}</p>
+                                                <p class="color-changer">الاسم الكامل</p>
                                                 <p class="text-muted"> {{ $getorderdata->customer_name }}</p>
                                             </li>
 
@@ -205,13 +205,6 @@
                                                 <li class="list-group-item px-0 fs-7 fw-500 d-flex justify-content-between">
                                                     <p class="color-changer">{{ trans('labels.mobile') }}</p>
                                                     <p class="text-muted">{{ $getorderdata->mobile }}</p>
-                                                </li>
-                                            @endif
-
-                                            @if ($getorderdata->customer_email != null)
-                                                <li class="list-group-item px-0 fs-7 fw-500 d-flex justify-content-between">
-                                                    <p class="color-changer">{{ trans('labels.email') }}</p>
-                                                    <p class="text-muted">{{ $getorderdata->customer_email }}</p>
                                                 </li>
                                             @endif
                                         </ul>
@@ -554,7 +547,7 @@
                         <input type="hidden" name="edit_type" id="edit_type" class="form-control" value="">
                         <div id="customer_info">
                             <div class="form-group col-md-12">
-                                <label class="form-label" for="customer_name"> {{ trans('labels.customer_name') }}
+                                <label class="form-label" for="customer_name"> الاسم الكامل
                                 </label>
                                 <div class="controls">
                                     <input type="text" name="customer_name" id="customer_name" class="form-control"
@@ -568,7 +561,7 @@
                                         class="form-control" required>
                                 </div>
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-12" style="display:none;">
                                 <label class="form-label" for="customer_email"> {{ trans('labels.email') }} </label>
                                 <div class="controls">
                                     <input type="text" name="customer_email" id="customer_email" class="form-control"

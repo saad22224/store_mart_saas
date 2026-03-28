@@ -683,6 +683,32 @@
                     </div>
                 </div>
 
+                {{-- Mobile Social Links - Centered --}}
+                <div class="col-auto d-lg-none">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        @foreach (@helper::getsociallinks(@$storeinfo->id) as $links)
+                            <a href="{{ $links->link }}" target="_blank" 
+                               style="
+                                   width: 24px;
+                                   height: 24px;
+                                   border-radius: 50%;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   background: var(--bs-primary);
+                                   color: #fff;
+                                   font-size: 11px;
+                                   text-decoration: none;
+                                   transition: all 0.3s ease;
+                               "
+                               onmouseover="this.style.transform='scale(1.1)';this.style.opacity='0.9'"
+                               onmouseout="this.style.transform='scale(1)';this.style.opacity='1'">
+                                {!! $links->icon !!}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
                 <!-- mobile lag button -->
                 <div class="col-xxl-4 col-xl-5">
 

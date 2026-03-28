@@ -35,12 +35,19 @@ class OrderController extends Controller
         if ($request->payment_type == "") {
             return response()->json(["status" => 0, "message" => trans('messages.payment_type_required')], 200);
         }
-        if ($request->customer_name == "") {
-            return response()->json(["status" => 0, "message" => trans('messages.customer_name_required')], 200);
+        if ($request->first_name == "") {
+            return response()->json(["status" => 0, "message" => "الاسم الأول مطلوب"], 200);
         }
-        if ($request->customer_email == "") {
-            return response()->json(["status" => 0, "message" => trans('messages.customer_email_required')], 200);
+        if ($request->father_name == "") {
+            return response()->json(["status" => 0, "message" => "اسم الأب مطلوب"], 200);
         }
+        if ($request->last_name == "") {
+            return response()->json(["status" => 0, "message" => "الكنية مطلوبة"], 200);
+        }
+        $request->merge([
+            'customer_name' => $request->first_name . ' ' . $request->father_name . ' ' . $request->last_name,
+            'customer_email' => 'noemail@example.com'
+        ]);
         if ($request->customer_mobile == "") {
             return response()->json(["status" => 0, "message" => trans('messages.customer_mobile_required')], 200);
         }
@@ -55,14 +62,8 @@ class OrderController extends Controller
             if ($request->address == "") {
                 return response()->json(["status" => 0, "message" => trans('messages.address_required')], 200);
             }
-            if ($request->building == "") {
-                return response()->json(["status" => 0, "message" => trans('messages.building_required')], 200);
-            }
-            if ($request->landmark == "") {
-                return response()->json(["status" => 0, "message" => trans('messages.landmark_required')], 200);
-            }
-            if ($request->postal_code == "") {
-                return response()->json(["status" => 0, "message" => trans('messages.postal_code_required')], 200);
+            if ($request->delivery_area == "") {
+                return response()->json(["status" => 0, "message" => trans('messages.delivery_area_required')], 200);
             }
             if ($request->delivery_area == "") {
                 return response()->json(["status" => 0, "message" => trans('messages.delivery_area_required')], 200);
@@ -119,6 +120,13 @@ class OrderController extends Controller
         if ($orderresponse == "") {
             return response()->json(["status" => 0, "message" => trans('messages.cart_empty')], 200);
         } else {
+            $orderObj = Order::where('order_number', $orderresponse)->first();
+            if($orderObj) {
+                $orderObj->first_name = $request->first_name;
+                $orderObj->father_name = $request->father_name;
+                $orderObj->last_name = $request->last_name;
+                $orderObj->save();
+            }
             $whmessage = "";
             if (@helper::checkaddons('whatsapp_message')) {
                 if (@whatsapp_helper::whatsapp_message_config($vendordata->id)->order_created == 1) {

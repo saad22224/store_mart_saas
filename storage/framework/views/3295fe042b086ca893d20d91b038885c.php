@@ -205,16 +205,38 @@
                                                 <input type="text" placeholder="الاسم الأول" class="form-control rounded-2 p-3" name="first_name" id="first_name">
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="father_name" class="form-label d-flex justify-content-start fw-semibold">اسم الأب <span class="text-danger"> *</span></label>
-                                                <input type="text" class="form-control rounded-2 p-3" placeholder="اسم الأب" name="father_name" id="father_name">
-                                            </div>
-                                            <div class="col-md-6">
                                                 <label for="last_name" class="form-label d-flex justify-content-start fw-semibold">الكنية <span class="text-danger"> *</span></label>
                                                 <input type="text" class="form-control rounded-2 p-3" placeholder="الكنية" name="last_name" id="last_name">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <label for="customer_mobile" class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.mobile')); ?> <span class="text-danger"> *</span></label>
-                                                <input type="text" class="form-control rounded-2 p-3" placeholder="<?php echo e(trans('labels.mobile')); ?>" name="customer_mobile" <?php if(env('Environment') == 'sendbox'): ?> value="937-267-4384" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->mobile : ''); ?>" <?php endif; ?> id="customer_mobile" onkeypress="return isNumber(event)">
+                                                <div class="d-flex gap-2">
+                                                    <select class="form-select rounded-2 p-3" name="country_code" id="country_code" style="width: 140px; direction: ltr;">
+                                                        <option value="+963" selected>+963 🇸🇾</option>
+                                                        <option value="+966">+966 🇸🇦</option>
+                                                        <option value="+971">+971 🇦🇪</option>
+                                                        <option value="+20">+20 🇪🇬</option>
+                                                        <option value="+962">+962 🇯🇴</option>
+                                                        <option value="+961">+961 🇱🇧</option>
+                                                        <option value="+968">+968 🇴🇲</option>
+                                                        <option value="+974">+974 🇶🇦</option>
+                                                        <option value="+965">+965 🇰🇼</option>
+                                                        <option value="+973">+973 🇧🇭</option>
+                                                        <option value="+964">+964 🇮🇶</option>
+                                                        <option value="+970">+970 🇵🇸</option>
+                                                        <option value="+967">+967 🇾🇪</option>
+                                                        <option value="+249">+249 🇸🇩</option>
+                                                        <option value="+212">+212 🇲🇦</option>
+                                                        <option value="+213">+213 🇩🇿</option>
+                                                        <option value="+216">+216 🇹🇳</option>
+                                                        <option value="+218">+218 🇱🇾</option>
+                                                        <option value="+222">+222 🇲🇷</option>
+                                                        <option value="+269">+269 🇰🇲</option>
+                                                        <option value="+253">+253 🇩🇯</option>
+                                                        <option value="+252">+252 🇸🇴</option>
+                                                    </select>
+                                                    <input type="text" class="form-control rounded-2 p-3 w-100" placeholder="<?php echo e(trans('labels.mobile')); ?>" name="customer_mobile" <?php if(env('Environment') == 'sendbox'): ?> value="937-267-4384" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->mobile : ''); ?>" <?php endif; ?> id="customer_mobile" onkeypress="return isNumber(event)">
+                                                </div>
                                             </div>
                                         </div>
                                         <input type="hidden" id="vendor" name="vendor" value="<?php echo e(helper::storeinfo($storeinfo->slug)->id); ?>" />
@@ -1011,10 +1033,11 @@ unset($__errorArgs, $__bag); ?>" required>
         var landmark = $('#landmark').val();
         var notes = $('#notes').val();
         var first_name = $('#first_name').val();
-        var father_name = $('#father_name').val();
         var last_name = $('#last_name').val();
-        var customer_mobile = $('#customer_mobile').val();
-        var customer_name = first_name + ' ' + father_name + ' ' + last_name;
+        var country_code = $('#country_code').val();
+        var mobile_input = $('#customer_mobile').val();
+        var customer_mobile = mobile_input ? country_code + mobile_input : "";
+        var customer_name = first_name + ' ' + last_name;
         var customer_email = "noemail@example.com";
 
         var payment_type = $('input[name="payment"]:checked').attr("data-payment_type");
@@ -1041,9 +1064,6 @@ unset($__errorArgs, $__bag); ?>" required>
                 return false;
             } else if (first_name == "") {
                 toastr.error('الاسم الأول مطلوب');
-                return false;
-            } else if (father_name == "") {
-                toastr.error('اسم الأب مطلوب');
                 return false;
             } else if (last_name == "") {
                 toastr.error('الكنية مطلوبة');

@@ -100,7 +100,7 @@ class whatsapp_helper
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS => '{
                     "messaging_product": "whatsapp",
-                    "to": "917016428845",
+                    "to": "' . $getorder->mobile . '",
                     "text": {
                         "body" : "' . $whmessage . '"
                     }

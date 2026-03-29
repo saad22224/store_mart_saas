@@ -635,7 +635,7 @@ class WebSettingsController extends Controller
 
         try {
             // إيميل المستلم - مؤقتاً هيبعت للـ admin أو تقدر تغيره
-            $toEmail = env('CONTACT_EMAIL', 'test@example.com');
+            $toEmail = env('CONTACT_EMAIL', 'Velithasan0@gmail.com');
             
             Mail::to($toEmail)->send(new \App\Mail\Landing2ContactMail($validated));
             

@@ -822,7 +822,7 @@ class helper
                 }
             }
             $rec = Settings::where('vendor_id', '1')->first();
-            date_default_timezone_set($rec->timezone);
+            date_default_timezone_set(@$rec->timezone ?? 'Asia/Kolkata');
             $logintype = "normal";
             if ($google_id != "") {
                 $logintype = "google";
@@ -904,34 +904,34 @@ class helper
             $whatsappdata = WhatsappMessage::where('vendor_id', 1)->first();
             $whatsapp = new WhatsappMessage();
             $whatsapp->vendor_id = $vendor_id;
-            $whatsapp->item_message = $whatsappdata->item_message;
-            $whatsapp->order_whatsapp_message = $whatsappdata->order_whatsapp_message;
-            $whatsapp->order_status_message = $whatsappdata->order_status_message;
-            $whatsapp->whatsapp_number = $whatsappdata->whatsapp_number;
-            $whatsapp->whatsapp_phone_number_id = $whatsappdata->whatsapp_phone_number_id;
-            $whatsapp->whatsapp_access_token = $whatsappdata->whatsapp_access_token;
-            $whatsapp->whatsapp_chat_on_off = $whatsappdata->whatsapp_chat_on_off;
-            $whatsapp->whatsapp_mobile_view_on_off = $whatsappdata->whatsapp_mobile_view_on_off;
-            $whatsapp->whatsapp_chat_position = $whatsappdata->whatsapp_chat_position;
-            $whatsapp->order_created = $whatsappdata->order_created;
-            $whatsapp->status_change = $whatsappdata->status_change;
-            $whatsapp->message_type = $whatsappdata->message_type;
+            $whatsapp->item_message = @$whatsappdata->item_message ?? '';
+            $whatsapp->order_whatsapp_message = @$whatsappdata->order_whatsapp_message ?? '';
+            $whatsapp->order_status_message = @$whatsappdata->order_status_message ?? '';
+            $whatsapp->whatsapp_number = @$whatsappdata->whatsapp_number ?? '';
+            $whatsapp->whatsapp_phone_number_id = @$whatsappdata->whatsapp_phone_number_id ?? '';
+            $whatsapp->whatsapp_access_token = @$whatsappdata->whatsapp_access_token ?? '';
+            $whatsapp->whatsapp_chat_on_off = @$whatsappdata->whatsapp_chat_on_off ?? 1;
+            $whatsapp->whatsapp_mobile_view_on_off = @$whatsappdata->whatsapp_mobile_view_on_off ?? 1;
+            $whatsapp->whatsapp_chat_position = @$whatsappdata->whatsapp_chat_position ?? 1;
+            $whatsapp->order_created = @$whatsappdata->order_created ?? 1;
+            $whatsapp->status_change = @$whatsappdata->status_change ?? 1;
+            $whatsapp->message_type = @$whatsappdata->message_type ?? 1;
             $whatsapp->save();
 
             $telegramdata = TelegramMessage::where('vendor_id', 1)->first();
             $telegram = new TelegramMessage();
             $telegram->vendor_id = $vendor_id;
-            $telegram->item_message = $telegramdata->item_message;
-            $telegram->telegram_message = $telegramdata->telegram_message;
-            $telegram->order_created = $telegramdata->order_created;
-            $telegram->telegram_access_token = $telegramdata->telegram_access_token;
-            $telegram->telegram_chat_id = $telegramdata->telegram_chat_id;
+            $telegram->item_message = @$telegramdata->item_message ?? '';
+            $telegram->telegram_message = @$telegramdata->telegram_message ?? '';
+            $telegram->order_created = @$telegramdata->order_created ?? 1;
+            $telegram->telegram_access_token = @$telegramdata->telegram_access_token ?? '';
+            $telegram->telegram_chat_id = @$telegramdata->telegram_chat_id ?? '';
             $telegram->save();
 
             $data = new Settings;
             $data->vendor_id = $vendor_id;
             $data->currencies = 'usd';
-            $data->default_currency = $rec->default_currency;
+            $data->default_currency = @$rec->default_currency ?? 'USD';
 
             // logo===================================================
             $data->logo = "default.png";
@@ -942,27 +942,27 @@ class helper
             // og_image
             $data->og_image = "default.png";
 
-            $data->timezone = $rec->timezone;
-            $data->copyright = $rec->copyright;
+            $data->timezone = @$rec->timezone ?? 'Asia/Kolkata';
+            $data->copyright = @$rec->copyright ?? 'Copyright';
             $data->contact = '-';
 
-            $data->time_format = $rec->time_format;
-            $data->date_format = $rec->date_format;
+            $data->time_format = @$rec->time_format ?? '1';
+            $data->date_format = @$rec->date_format ?? 'Y-m-d';
             $data->order_prefix = 'PITS';
             $data->order_number_start = 1001;
             $data->firebase = '-';
-            $data->primary_color = $landingsettings->primary_color;
-            $data->secondary_color = $landingsettings->secondary_color;
-            $data->contact_email_message = $rec->contact_email_message;
-            $data->new_order_invoice_email_message = $rec->new_order_invoice_email_message;
-            $data->vendor_new_order_email_message = $rec->vendor_new_order_email_message;
-            $data->order_status_email_message = $rec->order_status_email_message;
+            $data->primary_color = @$landingsettings->primary_color ?? '#000000';
+            $data->secondary_color = @$landingsettings->secondary_color ?? '#000000';
+            $data->contact_email_message = @$rec->contact_email_message ?? '';
+            $data->new_order_invoice_email_message = @$rec->new_order_invoice_email_message ?? '';
+            $data->vendor_new_order_email_message = @$rec->vendor_new_order_email_message ?? '';
+            $data->order_status_email_message = @$rec->order_status_email_message ?? '';
 
 
-            $data->description = $rec->description;
-            $data->website_title = $rec->website_title;
-            $data->meta_title = $rec->meta_title;
-            $data->meta_description = $rec->meta_description;
+            $data->description = @$rec->description ?? '';
+            $data->website_title = @$rec->website_title ?? '';
+            $data->meta_title = @$rec->meta_title ?? '';
+            $data->meta_description = @$rec->meta_description ?? '';
             $data->delivery_type = 'delivery';
             $data->interval_time = 1;
             $data->interval_type = 2;
@@ -974,9 +974,9 @@ class helper
             $otherdata = OtherSettings::where('vendor_id', '1')->first();
             $other = new OtherSettings();
             $other->vendor_id = $vendor_id;
-            $other->maintenance_on_off = $otherdata->maintenance_on_off;
-            $other->maintenance_title = $otherdata->maintenance_title;
-            $other->maintenance_description = $otherdata->maintenance_description;
+            $other->maintenance_on_off = @$otherdata->maintenance_on_off ?? 2;
+            $other->maintenance_title = @$otherdata->maintenance_title ?? '';
+            $other->maintenance_description = @$otherdata->maintenance_description ?? '';
             $other->save();
 
             $emaildata = helper::emailconfigration(helper::adminappdata()->id);

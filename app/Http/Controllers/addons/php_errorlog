@@ -1,0 +1,4 @@
+[26-Jul-2025 02:37:08 UTC] PHP Fatal error:  Uncaught Error: Class "App\Http\Controllers\Controller" not found in /home/customer/www/store-mart.paponapps.co.in/public_html/app/Http/Controllers/addons/POSController.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/store-mart.paponapps.co.in/public_html/app/Http/Controllers/addons/POSController.php on line 22

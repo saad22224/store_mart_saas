@@ -173,7 +173,7 @@
                                 </div>
                             </div>
 
-                            <?php echo $__env->make('landing.layout.recaptcha', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            
 
                             <div class="d-flex gap-2">
                                 <a href ="<?php echo e(URL::to('/admin')); ?>"

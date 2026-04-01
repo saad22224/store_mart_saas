@@ -1076,7 +1076,7 @@
         <nav class="site-nav">
             <div class="nav-logo">
                 <a href="{{ url('/') }}">
-                <img style="width:100px;height:100px;" src="{{ asset('public/images/matjarhub.jpeg') }}"></img>
+                <img style="width:100px;height:100px;" src="{{ asset('public/images/matjarhub.png') }}"></img>
                 </a>
             </div>
 

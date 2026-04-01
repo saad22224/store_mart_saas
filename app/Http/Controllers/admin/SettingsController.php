@@ -286,4 +286,21 @@ class SettingsController extends Controller
         $settingsdata->save();
         return redirect()->back()->with('success', trans('messages.success'));
     }
+    public function recent_view_product(Request $request)
+    {
+        if (Auth::user()->type == 4) {
+            $vendor_id = Auth::user()->vendor_id;
+        } else {
+            $vendor_id = Auth::user()->id;
+        }
+
+        $othersettingsdata = OtherSettings::where('vendor_id', $vendor_id)->first();
+        if (empty($othersettingdata)) {
+            $othersettingdata = new OtherSettings();
+            $othersettingdata->vendor_id = $vendor_id;
+        }
+        $othersettingsdata->recent_view_product = isset($request->recent_view_product) ? 1 : 2;
+        $othersettingsdata->save();
+        return redirect()->back()->with('success', trans('messages.success'));
+    }
 }

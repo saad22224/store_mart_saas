@@ -220,12 +220,32 @@ class HomeController extends Controller
             ->where('items.is_deleted', '2')
             ->orderBy('items.reorder_id')->get();
 
+        // recent view product module start
+        $product = Item::with(['variation', 'extras', 'product_image', 'multi_image'])->where('id', @$getitem->id)->firstOrFail();
+        $recent = session()->get('recently_viewed', []);
+        $recent = array_filter($recent, function ($id) use ($product) {
+            return $id != $product->id;
+        });
+        array_unshift($recent, $product->id);
+        $recent = array_slice($recent, 0, 6);
+        session(['recently_viewed' => $recent]);
+        $recentProductsOrdered = Item::with(['variation', 'extras', 'product_image', 'multi_image'])
+            ->whereIn('id', $recent)
+            ->where('vendor_id',@$storeinfo->id)
+            ->where('id', '!=', $product->id)
+            ->get()
+            ->keyBy('id');
+        $recentProducts  = collect($recent)
+            ->map(fn($id) => $recentProductsOrdered->get($id))
+            ->filter();
+        // recent view product module end
+
         if ($request->ajax()) {
             App::setLocale(session()->get('locale'));
             $html = view('front.productdetail', compact('getitem', 'storeinfo', 'item_check'))->render();
             return response()->json(['status' => 1, 'output' => $html], 200);
         } else {
-            return view('front.detail', compact('getitem', 'relateditem', 'storeinfo', 'item_check', 'question_answer', 'frequently_bought_items'));
+            return view('front.detail', compact('getitem', 'relateditem', 'recentProducts','storeinfo', 'item_check', 'question_answer', 'frequently_bought_items'));
         }
     }
 
@@ -826,6 +846,7 @@ class HomeController extends Controller
         } else {
             $session_id = session()->getId();
         }
+
         $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_name', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.variants_name', 'carts.variants_price', 'carts.variants_price', DB::raw("GROUP_CONCAT(tax.name) as name"))
             ->leftjoin("tax", DB::raw("FIND_IN_SET(tax.id,carts.tax)"), ">", DB::raw("'0'"))
             ->where('carts.vendor_id', $vendor_id);
@@ -1087,7 +1108,7 @@ class HomeController extends Controller
                     if (helper::appdata($request->vendor_id)->interval_type == 1) {
                         $minute = helper::appdata($request->vendor_id)->interval_time;
                     }
-                    $firsthalf = new CarbonPeriod(date("H:i", strtotime($time->open_time)), $minute . ' minutes', date("H:i", strtotime($time->break_start))); // for create use 24 hours format later change format 
+                    $firsthalf = new CarbonPeriod(date("H:i", strtotime($time->open_time)), $minute . ' minutes', date("H:i", strtotime($time->break_start))); // for create use 24 hours format later change format
                     $secondhalf =  new CarbonPeriod(date("H:i", strtotime($time->break_end)), $minute . ' minutes', date("H:i", strtotime($time->close_time)));
 
                     foreach ($firsthalf as $item) {

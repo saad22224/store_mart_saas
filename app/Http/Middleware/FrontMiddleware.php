@@ -26,7 +26,8 @@ class FrontMiddleware
             $user = User::where('slug', $request->vendor)->first();
             if (empty($user)) {
                     abort(404);
-                }
+            }
+
             helper::language($user->id);
           
             if ($request->vendor != "" || $request->vendor != null) {

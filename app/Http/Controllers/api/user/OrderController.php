@@ -24,14 +24,11 @@ use DateTime;
 use Config;
 use DateInterval;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
     public function placeorder(Request $request)
     {
-            Log::info(helper::checkaddons('whatsapp_message'));
-
         if ($request->vendor_id == "") {
             return response()->json(["status" => 0, "message" => trans('messages.vendor_id_required')], 200);
         }
@@ -122,18 +119,16 @@ class OrderController extends Controller
 
         if ($orderresponse == "") {
             return response()->json(["status" => 0, "message" => trans('messages.cart_empty')], 200);
-        } 
-        // else {
-        //     $orderObj = Order::where('order_number', $orderresponse)->first();
-        //     if($orderObj) {
-        //         $orderObj->first_name = $request->first_name;
-        //         $orderObj->father_name = $request->father_name;
-        //         $orderObj->last_name = $request->last_name;
-        //         $orderObj->save();
-        //     }
+        } else {
+            $orderObj = Order::where('order_number', $orderresponse)->first();
+            if($orderObj) {
+                $orderObj->first_name = $request->first_name;
+                $orderObj->father_name = $request->father_name;
+                $orderObj->last_name = $request->last_name;
+                $orderObj->save();
+            }
             $whmessage = "";
             if (@helper::checkaddons('whatsapp_message')) {
-
                 if (@whatsapp_helper::whatsapp_message_config($vendordata->id)->order_created == 1) {
                     if (whatsapp_helper::whatsapp_message_config($vendordata->id)->message_type == 1) {
                         whatsapp_helper::whatsappmessage($orderresponse, $vendordata->id, $vendordata);

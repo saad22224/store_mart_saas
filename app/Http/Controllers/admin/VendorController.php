@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Lunaweb\RecaptchaV3\Facades\RecaptchaV3;
@@ -302,6 +303,12 @@ class VendorController extends Controller
         // }
 
         $data = helper::vendor_register($request->name, $request->email, $request->mobile, hash::make($request->password), '', $request->slug, '', '', $request->country, $request->city, $request->store, $request->product_type);
+
+        if ($data instanceof \Throwable) {
+            // return redirect()->back()->with('error', 'Registration Error: ' . $data->getMessage() . ' at ' . $data->getFile() . ':' . $data->getLine());
+            Log::info('Registration Error: ' . $data->getMessage() . ' at ' . $data->getFile() . ':' . $data->getLine());
+        }
+
         if (@Auth::user()->type == 1) {
             return redirect('admin/users')->with('success', trans('messages.success'));
         } else {

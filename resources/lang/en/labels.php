@@ -1086,8 +1086,6 @@
     "top_products" => "Top Products",
     "top_customers" => "Top Customers",
 
-    /*---------------------------------------------------*/
-
     "exchange_rate" => "Exchange Rate",
     "currency-settings" => "Currency Settings",
     "code" => "Code",

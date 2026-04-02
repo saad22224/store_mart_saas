@@ -54,10 +54,10 @@ class ProductInquiryController extends Controller
             return redirect()->back()->with('danger', trans('messages.wrong'));
         }
     }
-    
+
     public function bulk_delete(Request $request)
     {
-        
+
         if ($request->id) {
             foreach ($request->id as $id) {
                 $data = Contact::where('id', $id)->delete();
@@ -65,5 +65,6 @@ class ProductInquiryController extends Controller
             return response()->json(['status' => 1, 'msg' => trans('messages.success')], 200);
         } else {
             return response()->json(['status' => 0, 'msg' => trans('messages.error')], 200);
+        }
     }
 }

@@ -986,8 +986,8 @@ class helper
             // Create Dummy Data
             $dummyCategory = new \App\Models\Category();
             $dummyCategory->vendor_id = $vendor_id;
-            $dummyCategory->name = 'أجهزة ذكية / Smart Devices';
-            $dummyCategory->slug = 'smart-devices-' . $vendor_id;
+            $dummyCategory->name = 'خضروات طازجة / Fresh Vegetables';
+            $dummyCategory->slug = 'fresh-vegetables-' . $vendor_id;
             $dummyCategory->is_available = 1;
             $dummyCategory->is_deleted = 2;
             $dummyCategory->save();
@@ -999,7 +999,16 @@ class helper
                 mkdir(storage_path('app/public/admin-assets/images/banners/'), 0777, true);
             }
 
-            for ($i = 1; $i <= 3; $i++) {
+            $veg_names = ['طماطم طازجة', 'خيار بلدي', 'فلفل ألوان'];
+            $veg_slugs = ['fresh-tomatoes', 'local-cucumber', 'bell-pepper'];
+            $veg_prices = [15, 12, 25];
+            $veg_descriptions = [
+                '<p>طماطم حمراء طازجة مختارة بعناية من أفضل المزارع. غنية بالفيتامينات ومثالية للسلطات والطهي.</p>',
+                '<p>خيار بلدي طازج ومقرمش. يتميز بطعمه الرائع ورائحته الزكية، مثالي للاستخدام اليومي.</p>',
+                '<p>فلفل رومي ألوان (أحمر، أصفر) طازج. يضيف نكهة وشكل رائع لجميع أطباقك المتميزة.</p>'
+            ];
+
+            for ($i = 0; $i < 3; $i++) {
                 
                 $dummyItemImageName = 'item-' . uniqid() . '.png';
                 if(file_exists(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'))) {
@@ -1018,17 +1027,17 @@ class helper
                 $dummyItem = new \App\Models\Item();
                 $dummyItem->vendor_id = $vendor_id;
                 $dummyItem->cat_id = $dummyCategory->id;
-                $dummyItem->item_name = 'هاتف ذكي متطور الإصدار ' . $i;
-                $dummyItem->slug = 'smart-phone-v' . $i . '-' . $vendor_id;
-                $dummyItem->item_price = 1500 * $i;
-                $dummyItem->item_original_price = 2000 * $i;
+                $dummyItem->item_name = $veg_names[$i];
+                $dummyItem->slug = $veg_slugs[$i] . '-' . $vendor_id;
+                $dummyItem->item_price = $veg_prices[$i];
+                $dummyItem->item_original_price = $veg_prices[$i] + 5;
                 $dummyItem->tax = 0;
-                $dummyItem->description = '<p>هذا الهاتف الذكي صمم خصيصاً ليناسب احتياجاتك بأحدث التقنيات. بطارية تدوم طويلاً وكاميرا ممتازة تضمن لك أفضل تجربة للمستخدم.</p>';
+                $dummyItem->description = $veg_descriptions[$i];
                 $dummyItem->image = $dummyItemImageName;
                 $dummyItem->is_available = 1;
                 $dummyItem->is_deleted = 2;
                 $dummyItem->stock_management = 1;
-                $dummyItem->qty = 10;
+                $dummyItem->qty = 50;
                 $dummyItem->has_variants = 2;
                 $dummyItem->save();
 

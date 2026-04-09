@@ -318,46 +318,17 @@
                                 </div>
                             @endif
                             @if (!request()->is('admin/pos/item-details'))
-                                @if (@helper::checkaddons('subscription'))
-                                    @if (@helper::checkaddons('whatsapp_message'))
-                                        @php
-                                            $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
-                                                ->orderByDesc('id')
-                                                ->first();
-                                            $user = App\Models\User::where('id', $storeinfo->id)->first();
-                                            if (@$user->allow_without_subscription == 1) {
-                                                $whatsapp_message = 1;
-                                            } else {
-                                                $whatsapp_message = @$checkplan->whatsapp_message;
-                                            }
-                                        @endphp
-                                        @if (
-                                            $whatsapp_message == 1 &&
-                                                @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number != '' &&
-                                                @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number != null)
-                                            <div class="col-xxl-3 col-lg-6 col-md-3 col-6">
-                                                <a href="https://api.whatsapp.com/send?phone={{ @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number }}&text={{ $getitem->item_name }}"
-                                                    class="btn btn-enquir m-0 add-btn px-0 w-100 h-100" id="enquiries"
-                                                    target="_blank">
-                                                    <i
-                                                        class="fa-brands fa-whatsapp fs-5 {{ session()->get('direction') == 2 ? 'glyphicon' : '' }}"></i>
-                                                    <span class="px-1">{{ trans('labels.enquiries') }}</span>
-                                                </a>
-                                            </div>
-                                        @endif
-                                    @endif
-                                @else
-                                    @if (@helper::checkaddons('whatsapp_message'))
-                                        <div class="col-xxl-3 col-lg-6 col-md-3 col-6">
-                                            <a href="https://api.whatsapp.com/send?phone={{ @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number }}&text={{ $getitem->item_name }}"
-                                                class="btn btn-enquir m-0 add-btn px-0 w-100 h-100" id="enquiries"
-                                                target="_blank">
-                                                <i
-                                                    class="fa-brands fa-whatsapp fs-5 {{ session()->get('direction') == 2 ? 'glyphicon' : '' }}"></i>
-                                                <span class="px-1">{{ trans('labels.enquiries') }}</span>
-                                            </a>
-                                        </div>
-                                    @endif
+                                @if (isset($storeinfo) && $storeinfo->whatsapp)
+                                {{-- {{ dd($storeinfo->whatsapp) }} --}}
+                                    <div class="col-xxl-3 col-lg-6 col-md-3 col-6">
+                                        <a href="https://api.whatsapp.com/send?phone={{ $storeinfo->whatsapp }}&text={{ urlencode($getitem->item_name) }}"
+                                            class="btn btn-enquir m-0 add-btn px-0 w-100 h-100" id="enquiries"
+                                            target="_blank">
+                                            <i
+                                                class="fa-brands fa-whatsapp fs-5 {{ session()->get('direction') == 2 ? 'glyphicon' : '' }}"></i>
+                                            <span class="px-1">{{ trans('labels.enquiries') }}</span>
+                                        </a>
+                                    </div>
                                 @endif
                             @endif
                             @if (helper::appdata($storeinfo->id)->online_order == 1)

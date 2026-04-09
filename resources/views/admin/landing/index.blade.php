@@ -709,14 +709,18 @@
                                                         value="{{ $links->id }}">
                                                     <div class="col-md-6 form-group">
                                                         <div class="input-group">
-                                                            <input type="text"
-                                                                class="form-control soaciallink_required  {{ session()->get('direction') == 2 ? 'input-group-rtl' : '' }}"
-                                                                onkeyup="show_feature_icon(this)"
-                                                                name="edi_sociallink_icon[{{ $links->id }}]"
-                                                                placeholder="{{ trans('labels.icon') }}"
-                                                                value="{{ $links->icon }}" required>
+                                                            <select class="form-select soaciallink_required {{ session()->get('direction') == 2 ? 'input-group-rtl' : '' }}" name="edi_sociallink_icon[{{ $links->id }}]" required>
+                                                                <option value='<i class="fa-brands fa-facebook"></i>' {{ $links->icon == '<i class="fa-brands fa-facebook"></i>' ? 'selected' : '' }}>Facebook</option>
+                                                                <option value='<i class="fa-brands fa-instagram"></i>' {{ $links->icon == '<i class="fa-brands fa-instagram"></i>' ? 'selected' : '' }}>Instagram</option>
+                                                                <option value='<i class="fa-brands fa-twitter"></i>' {{ $links->icon == '<i class="fa-brands fa-twitter"></i>' ? 'selected' : '' }}>Twitter</option>
+                                                                <option value='<i class="fa-brands fa-youtube"></i>' {{ $links->icon == '<i class="fa-brands fa-youtube"></i>' ? 'selected' : '' }}>YouTube</option>
+                                                                <option value='<i class="fa-brands fa-tiktok"></i>' {{ $links->icon == '<i class="fa-brands fa-tiktok"></i>' ? 'selected' : '' }}>TikTok</option>
+                                                                <option value='<i class="fa-brands fa-whatsapp"></i>' {{ $links->icon == '<i class="fa-brands fa-whatsapp"></i>' ? 'selected' : '' }}>WhatsApp</option>
+                                                                <option value='<i class="fa-brands fa-snapchat"></i>' {{ $links->icon == '<i class="fa-brands fa-snapchat"></i>' ? 'selected' : '' }}>Snapchat</option>
+                                                                <option value='<i class="fa-brands fa-linkedin"></i>' {{ $links->icon == '<i class="fa-brands fa-linkedin"></i>' ? 'selected' : '' }}>LinkedIn</option>
+                                                            </select>
                                                             <p
-                                                                class="input-group-text {{ session()->get('direction') == 2 ? 'input-group-icon-rtl' : '' }}">
+                                                                class="input-group-text {{ session()->get('direction') == 2 ? 'input-group-icon-rtl' : '' }}" style="width: 45px; justify-content: center;">
                                                                 {!! $links->icon !!}
                                                             </p>
                                                         </div>
@@ -969,5 +973,5 @@
     <script src="{{ url('storage/app/public/admin-assets/js/user.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.12.1/ckeditor.js"></script>
     <script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/funfact.js') }}"></script>
-    <script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/settings.js') }}"></script>
+    <script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/settings.js') }}?v={{ time() }}"></script>
 @endsection

@@ -63,6 +63,10 @@
                 </div>
                 <h4 class="mb-5 order-title color-changer {{ session()->get('direction') == '2' ? 'text-right' : '' }}">
                     {{ trans('labels.order_successfull') }}</h4>
+                <div class="text-center mb-5 d-flex flex-column align-items-center justify-content-center">
+                    <p class="text-muted mb-1" style="font-size: 0.9rem; font-weight: 500; letter-spacing: 0.5px;">Powered by</p>
+                    <h2 class="fw-bold m-0" style="color: var(--bs-primary); font-family: 'Poppins', sans-serif; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">matjarhub</h2>
+                </div>
                 <div class="d-md-flex mb-4 col-md-8 col-12 mx-auto">
                     @php
                         $host = $_SERVER['HTTP_HOST'];

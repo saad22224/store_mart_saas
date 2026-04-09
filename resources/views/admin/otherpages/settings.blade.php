@@ -1163,6 +1163,12 @@
                                                     placeholder="{{ trans('labels.mobile') }}" required>
                                             </div>
                                             <div class="form-group col-sm-6">
+                                                <label class="form-label" for="whatsapp">{{ trans('labels.whatsapp') }}</label>
+                                                <input type="text" class="form-control" name="whatsapp"
+                                                    id="whatsapp" value="{{ Auth::user()->whatsapp }}"
+                                                    placeholder="{{ trans('labels.whatsapp') }}">
+                                            </div>
+                                            <div class="form-group col-sm-6">
                                                 <label class="form-label">{{ trans('labels.image') }}</label>
                                                 <input type="file" class="form-control" name="profile">
                                                 <img class="img-fluid rounded hw-70 mt-1"

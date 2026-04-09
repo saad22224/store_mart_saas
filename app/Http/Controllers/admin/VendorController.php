@@ -96,6 +96,9 @@ class VendorController extends Controller
         if ($request->store != null && $request->store != "") {
             $edituser->store_id = $request->store;
         }
+        if ($request->has('whatsapp')) {
+            $edituser->whatsapp = $request->whatsapp;
+        }
         if ($request->has('profile')) {
 
             if (file_exists(storage_path('app/public/admin-assets/images/profile/' . $edituser->image))) {

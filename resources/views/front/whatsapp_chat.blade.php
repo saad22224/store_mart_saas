@@ -27,7 +27,7 @@
                 <textarea class="form-control m-0" name="text" placeholder="{{ trans('messages.your_text_message') }}" cols="30"
                     rows="10" required></textarea>
                 <input type="hidden" name="phone"
-                    value="{{ @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number }}">
+                    value="{{ isset($storeinfo) ? $storeinfo->whatsapp : '' }}">
                 <button type="submit" class="btn btn-whatsapp btn-block m-0">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>

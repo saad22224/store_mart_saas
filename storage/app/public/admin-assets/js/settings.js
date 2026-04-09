@@ -94,9 +94,7 @@ function add_social_links(icon, link) {
   var html =
     '<div class="row remove' +
     id +
-    '"><div class="col-md-6 form-group"><div class="input-group"><input type="text" class="form-control feature_icon" onkeyup="show_feature_icon(this)" name="social_icon[]" placeholder="' +
-    icon +
-    '" required><p class="input-group-text"></p></div></div><div class="col-md-6 gap-sm-4 gap-2 d-flex align-items-center form-group"><input type="text" class="form-control" name="social_link[]" placeholder="' +
+    '"><div class="col-md-6 form-group"><div class="input-group"><select class="form-select soaciallink_required" name="social_icon[]" required><option value=\'<i class="fa-brands fa-facebook"></i>\'>Facebook</option><option value=\'<i class="fa-brands fa-instagram"></i>\'>Instagram</option><option value=\'<i class="fa-brands fa-twitter"></i>\'>Twitter</option><option value=\'<i class="fa-brands fa-youtube"></i>\'>YouTube</option><option value=\'<i class="fa-brands fa-tiktok"></i>\'>TikTok</option><option value=\'<i class="fa-brands fa-whatsapp"></i>\'>WhatsApp</option><option value=\'<i class="fa-brands fa-snapchat"></i>\'>Snapchat</option><option value=\'<i class="fa-brands fa-linkedin"></i>\'>LinkedIn</option></select><p class="input-group-text" style="width: 45px; justify-content: center;"></p></div></div><div class="col-md-6 gap-sm-4 gap-2 d-flex align-items-center form-group"><input type="text" class="form-control" name="social_link[]" placeholder="' +
     link +
     '" required><button class="btn btn-danger" type="button" onclick="remove_features(' +
     id +

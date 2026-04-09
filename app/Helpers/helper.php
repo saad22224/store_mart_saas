@@ -982,6 +982,70 @@ class helper
             $emaildata = helper::emailconfigration(helper::adminappdata()->id);
             Config::set('mail', $emaildata);
             helper::send_mail_vendor_register($user);
+
+            // Create Dummy Data
+            $dummyCategory = new \App\Models\Category();
+            $dummyCategory->vendor_id = $vendor_id;
+            $dummyCategory->name = 'أجهزة ذكية / Smart Devices';
+            $dummyCategory->slug = 'smart-devices-' . $vendor_id;
+            $dummyCategory->is_available = 1;
+            $dummyCategory->is_deleted = 2;
+            $dummyCategory->save();
+
+            if (!file_exists(storage_path('app/public/item/'))) {
+                mkdir(storage_path('app/public/item/'), 0777, true);
+            }
+            if (!file_exists(storage_path('app/public/admin-assets/images/banners/'))) {
+                mkdir(storage_path('app/public/admin-assets/images/banners/'), 0777, true);
+            }
+
+            for ($i = 1; $i <= 3; $i++) {
+                
+                $dummyItemImageName = 'item-' . uniqid() . '.png';
+                if(file_exists(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'))) {
+                    copy(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'), storage_path('app/public/item/' . $dummyItemImageName));
+                } else {
+                    $dummyItemImageName = 'default.png';
+                }
+
+                $dummyBannerImageName = 'banner-' . uniqid() . '.webp';
+                if(file_exists(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'))) {
+                    copy(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'), storage_path('app/public/admin-assets/images/banners/' . $dummyBannerImageName));
+                } else {
+                    $dummyBannerImageName = 'default.png';
+                }
+
+                $dummyItem = new \App\Models\Item();
+                $dummyItem->vendor_id = $vendor_id;
+                $dummyItem->cat_id = $dummyCategory->id;
+                $dummyItem->item_name = 'هاتف ذكي متطور الإصدار ' . $i;
+                $dummyItem->slug = 'smart-phone-v' . $i . '-' . $vendor_id;
+                $dummyItem->item_price = 1500 * $i;
+                $dummyItem->item_original_price = 2000 * $i;
+                $dummyItem->tax = 0;
+                $dummyItem->description = '<p>هذا الهاتف الذكي صمم خصيصاً ليناسب احتياجاتك بأحدث التقنيات. بطارية تدوم طويلاً وكاميرا ممتازة تضمن لك أفضل تجربة للمستخدم.</p>';
+                $dummyItem->image = $dummyItemImageName;
+                $dummyItem->is_available = 1;
+                $dummyItem->is_deleted = 2;
+                $dummyItem->stock_management = 1;
+                $dummyItem->qty = 10;
+                $dummyItem->has_variants = 2;
+                $dummyItem->save();
+
+                $dummyProductImage = new \App\Models\ProductImage();
+                $dummyProductImage->vendor_id = $vendor_id;
+                $dummyProductImage->item_id = $dummyItem->id;
+                $dummyProductImage->image = $dummyItemImageName;
+                $dummyProductImage->save();
+
+                $dummyBanner = new \App\Models\Banner();
+                $dummyBanner->vendor_id = $vendor_id;
+                $dummyBanner->banner_image = $dummyBannerImageName;
+                $dummyBanner->type = '2';
+                $dummyBanner->product_id = $dummyItem->id;
+                $dummyBanner->save();
+            }
+
             return $vendor_id;
         } catch (\Throwable $th) {
             return $th;

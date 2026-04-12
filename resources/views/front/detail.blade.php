@@ -15,7 +15,6 @@
     </div>
 </section>
 
-
 <section>
     <div class="container">
         @if ($item_check != null)

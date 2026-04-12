@@ -268,7 +268,17 @@ class helper
     }
     public static function currency_formate($price, $vendor_id)
     {
-        $price = floatval($price) * helper::currencyinfo($vendor_id)->exchange_rate;
+        $currencyInfo = helper::currencyinfo($vendor_id);
+        $exchange_rate = (!empty($currencyInfo->exchange_rate) && floatval($currencyInfo->exchange_rate) > 0) ? floatval($currencyInfo->exchange_rate) : 1;
+        
+        if (is_string($price)) {
+            $arabic_indic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+            $arabic = ['0','1','2','3','4','5','6','7','8','9'];
+            $price = str_replace($arabic_indic, $arabic, $price);
+            $price = str_replace(',', '', $price);
+        }
+        
+        $price = floatval($price) * $exchange_rate;
 
         if (helper::currencyinfo($vendor_id)->currency_position == "1") {
             if (helper::currencyinfo($vendor_id)->decimal_separator == 1) {

@@ -16,7 +16,6 @@
     </div>
 </section>
 
-
 <section>
     <div class="container">
         <?php if($item_check != null): ?>

@@ -238,6 +238,10 @@
                                                     <input type="text" class="form-control rounded-2 p-3 w-100" placeholder="<?php echo e(trans('labels.mobile')); ?>" name="customer_mobile" <?php if(env('Environment') == 'sendbox'): ?> value="937-267-4384" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->mobile : ''); ?>" <?php endif; ?> id="customer_mobile" onkeypress="return isNumber(event)">
                                                 </div>
                                             </div>
+                                            <div class="col-md-12">
+                                                <label for="customer_email" class="form-label d-flex justify-content-start fw-semibold"><?php echo e(trans('labels.email')); ?> <span class="text-danger"> *</span></label>
+                                                <input type="email" class="form-control rounded-2 p-3" placeholder="<?php echo e(trans('labels.email')); ?>" name="customer_email" <?php if(env('Environment') == 'sendbox'): ?> value="user@matjarhub.com" <?php else: ?> value="<?php echo e(@Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->email : ''); ?>" <?php endif; ?> id="customer_email" required>
+                                            </div>
                                         </div>
                                         <input type="hidden" id="vendor" name="vendor" value="<?php echo e(helper::storeinfo($storeinfo->slug)->id); ?>" />
                                     </form>
@@ -356,66 +360,68 @@
                             </div>
                             <div class="row justify-content-center g-3">
                                 <?php $__currentLoopData = $paymentlist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php
-                                        // Check if the current $payment is a system addon and activated
-                                        if ($payment->payment_type == '1' || $payment->payment_type == '16') {
-                                            $systemAddonActivated = true;
-                                        } else {
-                                            $systemAddonActivated = false;
-                                        }
-                                        $addon = App\Models\SystemAddons::where(
-                                            'unique_identifier',
-                                            $payment->unique_identifier,
-                                        )->first();
-                                        if ($addon != null && $addon->activated == 1) {
-                                            $systemAddonActivated = true;
-                                        }
-                                    ?>
-                                    <?php if($systemAddonActivated): ?>
-                                        <label class="form-check-label col-md-6 label14 cp"
-                                            for="<?php echo e($payment->payment_type); ?>">
-                                            <div class="payment-check">
-                                                <img src="<?php echo e(helper::image_path($payment->image)); ?>"
-                                                    class="img-fluid" alt="" width="40px" />
+                                    <?php if($payment->payment_type == '1'): ?>
+                                        <?php
+                                            // Check if the current $payment is a system addon and activated
+                                            if ($payment->payment_type == '1' || $payment->payment_type == '16') {
+                                                $systemAddonActivated = true;
+                                            } else {
+                                                $systemAddonActivated = false;
+                                            }
+                                            $addon = App\Models\SystemAddons::where(
+                                                'unique_identifier',
+                                                $payment->unique_identifier,
+                                            )->first();
+                                            if ($addon != null && $addon->activated == 1) {
+                                                $systemAddonActivated = true;
+                                            }
+                                        ?>
+                                        <?php if($systemAddonActivated): ?>
+                                            <label class="form-check-label col-md-6 label14 cp"
+                                                for="<?php echo e($payment->payment_type); ?>">
+                                                <div class="payment-check">
+                                                    <img src="<?php echo e(helper::image_path($payment->image)); ?>"
+                                                        class="img-fluid" alt="" width="40px" />
 
-                                                <?php if($payment->payment_type == '2'): ?>
-                                                    <input type="hidden" name="razorpay" id="razorpay"
-                                                        value="<?php echo e($payment->public_key); ?>">
-                                                <?php endif; ?>
-                                                <?php if($payment->payment_type == '3'): ?>
-                                                    <input type="hidden" name="stripe" id="stripe"
-                                                        value="<?php echo e($payment->public_key); ?>">
-                                                <?php endif; ?>
-                                                <?php if($payment->payment_type == '4'): ?>
-                                                    <input type="hidden" name="flutterwavekey" id="flutterwavekey"
-                                                        value="<?php echo e($payment->public_key); ?>">
-                                                <?php endif; ?>
-                                                <?php if($payment->payment_type == '5'): ?>
-                                                    <input type="hidden" name="paystackkey" id="paystackkey"
-                                                        value="<?php echo e($payment->public_key); ?>">
-                                                <?php endif; ?>
-
-                                                <p class="m-0"><?php echo e($payment->payment_name); ?></p>
-
-                                                <?php if(Auth::user() && Auth::user()->type == 3): ?>
-                                                    <?php if($payment->payment_type == 16): ?>
-                                                        <span
-                                                            class="text-end text-muted"><?php echo e(Helper::currency_formate(Auth::user()->wallet, $storeinfo->id)); ?></span>
+                                                    <?php if($payment->payment_type == '2'): ?>
+                                                        <input type="hidden" name="razorpay" id="razorpay"
+                                                            value="<?php echo e($payment->public_key); ?>">
                                                     <?php endif; ?>
-                                                <?php endif; ?>
+                                                    <?php if($payment->payment_type == '3'): ?>
+                                                        <input type="hidden" name="stripe" id="stripe"
+                                                            value="<?php echo e($payment->public_key); ?>">
+                                                    <?php endif; ?>
+                                                    <?php if($payment->payment_type == '4'): ?>
+                                                        <input type="hidden" name="flutterwavekey" id="flutterwavekey"
+                                                            value="<?php echo e($payment->public_key); ?>">
+                                                    <?php endif; ?>
+                                                    <?php if($payment->payment_type == '5'): ?>
+                                                        <input type="hidden" name="paystackkey" id="paystackkey"
+                                                            value="<?php echo e($payment->public_key); ?>">
+                                                    <?php endif; ?>
 
-                                                <input
-                                                    class="form-check-input payment-input <?php echo e(session()->get('direction') == '2' ? 'me-auto' : 'ms-auto'); ?>"
-                                                    type="radio" name="payment" id="<?php echo e($payment->payment_type); ?>"
-                                                    data-payment_type="<?php echo e(strtolower($payment->payment_type)); ?>"
-                                                    <?php if(!$key): ?> <?php echo 'checked'; ?> <?php endif; ?>>
+                                                    <p class="m-0"><?php echo e($payment->payment_name); ?></p>
 
-                                                <?php if(strtolower($payment->payment_type) == '6'): ?>
-                                                    <input type="hidden" value="<?php echo e($payment->payment_description); ?>"
-                                                        id="bank_payment">
-                                                <?php endif; ?>
-                                            </div>
-                                        </label>
+                                                    <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                                        <?php if($payment->payment_type == 16): ?>
+                                                            <span
+                                                                class="text-end text-muted"><?php echo e(Helper::currency_formate(Auth::user()->wallet, $storeinfo->id)); ?></span>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+
+                                                    <input
+                                                        class="form-check-input payment-input <?php echo e(session()->get('direction') == '2' ? 'me-auto' : 'ms-auto'); ?>"
+                                                        type="radio" name="payment" id="<?php echo e($payment->payment_type); ?>"
+                                                        data-payment_type="<?php echo e(strtolower($payment->payment_type)); ?>"
+                                                        checked>
+
+                                                    <?php if(strtolower($payment->payment_type) == '6'): ?>
+                                                        <input type="hidden" value="<?php echo e($payment->payment_description); ?>"
+                                                            id="bank_payment">
+                                                    <?php endif; ?>
+                                                </div>
+                                            </label>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
@@ -795,7 +801,7 @@
     <input type="hidden" name="sub_total" id="sub_total" value="<?php echo e(@$sub_total); ?>">
     <input type="hidden" name="tax" id="tax" value="<?php echo e(implode('|', $taxArr['rate'])); ?>">
     <input type="hidden" name="tax_name" id="tax_name" value="<?php echo e(implode('|', $taxArr['tax'])); ?>">
-    <input type="hidden" name="grand_total" id="grand_total" value="<?php echo e(number_format(@$grandtotal)); ?>">
+    <input type="hidden" name="grand_total" id="grand_total" value="<?php echo e(@$grandtotal); ?>">
     <input type="hidden" name="discount_amount" id="discount_amount" value="<?php echo e(@$discount); ?>">
     <input type="hidden" name="couponcode" id="couponcode" value="<?php echo e(Session::get('offer_code')); ?>">
     <input type="hidden" name="buynow_key" id="buynow_key" value="<?php echo e(request()->get('buy_now')); ?>">
@@ -1038,7 +1044,7 @@ unset($__errorArgs, $__bag); ?>" required>
         var mobile_input = $('#customer_mobile').val();
         var customer_mobile = mobile_input ? country_code + mobile_input : "";
         var customer_name = first_name + ' ' + last_name;
-        var customer_email = "noemail@example.com";
+        var customer_email = $('#customer_email').val();
 
         var payment_type = $('input[name="payment"]:checked').attr("data-payment_type");
         var flutterwavekey = $('#flutterwavekey').val();
@@ -1070,6 +1076,12 @@ unset($__errorArgs, $__bag); ?>" required>
                 return false;
             } else if (customer_mobile == "") {
                 toastr.error($('#customer_mobile_required').val());
+                return false;
+            } else if (customer_email == "") {
+                toastr.error($('#customer_email_required').val());
+                return false;
+            } else if (!validateEmail(customer_email)) {
+                toastr.error($('#valid_email').val());
                 return false;
             } else if ($("#shipping_area").find(":selected").val() == "") {
                 toastr.error($('#delivery_area_required').val());

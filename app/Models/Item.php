@@ -6,7 +6,7 @@ class Item extends Model
 {
     use HasFactory;
     protected $table = 'items';
-    protected $fillable = ['vendor_id','cat_id','item_name','item_price','slug','item_original_price','tax','description','image','video_url','sku','attchment_name','attchment_file','video_url','stock_management','min_order','max_order','low_qty','qty'];
+    protected $fillable = ['vendor_id','cat_id','item_name','item_price','slug','item_original_price','tax','description','image','video_url','sku','attchment_name','attchment_file','video_url','stock_management','min_order','max_order','low_qty','qty', 'dollar_price'];
     public function extras()
     {
         return $this->hasMany('App\Models\Extra', 'item_id', 'id')->select('id', 'name', 'price', 'item_id');
@@ -40,5 +40,21 @@ class Item extends Model
             }
         }
         return $result;
+    }
+
+    public function getItemPriceAttribute($value)
+    {
+        if (\App::getLocale() == 'en') {
+            return (isset($this->attributes['dollar_price']) && $this->attributes['dollar_price'] > 0) ? $this->attributes['dollar_price'] : $value;
+        }
+        return $value;
+    }
+
+    public function getItemOriginalPriceAttribute($value)
+    {
+        if (\App::getLocale() == 'en') {
+            return (isset($this->attributes['dollar_price']) && $this->attributes['dollar_price'] > 0) ? $this->attributes['dollar_price'] : $value;
+        }
+        return $value;
     }
 }

@@ -719,35 +719,19 @@
                     @endphp
 
                     <ul class="d-flex align-items-center justify-content-end gap-lg-4 gap-3 m-0 p-0">
-                        @if (@helper::checkaddons('language'))
-                            @if (count($languages) > 1)
-                                <li>
-                                    <div class="dropdown language-dropdown lag-btn">
-                                        <a class="dropdown-toggle open-btn bg-transparent p-0 border-0 m-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-light fa-globe fs-5 color-changer"></i>
-                                        </a>
-                                        <ul
-                                            class="dropdown-menu p-0 bg-body-secondary border-0 shadow mt-2 {{ session()->get('direction') == 2 ? 'min-dropdown-rtl' : 'min-dropdown-ltr' }}">
-                                            @foreach (helper::available_language(@$storeinfo->id) as $languagelist)
-                                                @if (in_array($languagelist->code, explode('|', helper::appdata(@$storeinfo->id)->languages)))
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center p-2 gap-2"
-                                                            href="{{ URL::to('/lang/change?lang=' . $languagelist->code) }}">
-                                                            <img src="{{ helper::image_path($languagelist->image) }}"
-                                                                alt="" class="img-fluid lag-img">
-                                                            <span class="fw-normal">
-                                                                {{ $languagelist->name }}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </li>
-                            @endif
-                        @endif
+                        <li>
+                            <div class="language-dropdown lag-btn">
+                                @if(\App::getLocale() == 'en')
+                                    <a class="open-btn bg-transparent p-0 border-0 m-0" href="{{ URL::to('/lang/change?lang=ar') }}">
+                                        <span class="fs-6 fw-bold color-changer">عربي</span>
+                                    </a>
+                                @else
+                                    <a class="open-btn bg-transparent p-0 border-0 m-0" href="{{ URL::to('/lang/change?lang=en') }}">
+                                        <span class="fs-6 fw-bold color-changer">EN</span>
+                                    </a>
+                                @endif
+                            </div>
+                        </li>
                         <li>
                             <div class="dropdown language-dropdown lag-btn">
                                 <a role="button" data-bs-toggle="dropdown" aria-expanded="false"

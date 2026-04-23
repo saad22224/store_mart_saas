@@ -725,36 +725,19 @@
                     ?>
 
                     <ul class="d-flex align-items-center justify-content-end gap-lg-4 gap-3 m-0 p-0">
-                        <?php if(@helper::checkaddons('language')): ?>
-                            <?php if(count($languages) > 1): ?>
-                                <li>
-                                    <div class="dropdown language-dropdown lag-btn">
-                                        <a class="dropdown-toggle open-btn bg-transparent p-0 border-0 m-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-light fa-globe fs-5 color-changer"></i>
-                                        </a>
-                                        <ul
-                                            class="dropdown-menu p-0 bg-body-secondary border-0 shadow mt-2 <?php echo e(session()->get('direction') == 2 ? 'min-dropdown-rtl' : 'min-dropdown-ltr'); ?>">
-                                            <?php $__currentLoopData = helper::available_language(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $languagelist): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if(in_array($languagelist->code, explode('|', helper::appdata(@$storeinfo->id)->languages))): ?>
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center p-2 gap-2"
-                                                            href="<?php echo e(URL::to('/lang/change?lang=' . $languagelist->code)); ?>">
-                                                            <img src="<?php echo e(helper::image_path($languagelist->image)); ?>"
-                                                                alt="" class="img-fluid lag-img">
-                                                            <span class="fw-normal">
-                                                                <?php echo e($languagelist->name); ?>
-
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </ul>
-                                    </div>
-                                </li>
-                            <?php endif; ?>
-                        <?php endif; ?>
+                        <li>
+                            <div class="language-dropdown lag-btn">
+                                <?php if(\App::getLocale() == 'en'): ?>
+                                    <a class="open-btn bg-transparent p-0 border-0 m-0" href="<?php echo e(URL::to('/lang/change?lang=ar')); ?>">
+                                        <span class="fs-6 fw-bold color-changer">عربي</span>
+                                    </a>
+                                <?php else: ?>
+                                    <a class="open-btn bg-transparent p-0 border-0 m-0" href="<?php echo e(URL::to('/lang/change?lang=en')); ?>">
+                                        <span class="fs-6 fw-bold color-changer">EN</span>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </li>
                         <li>
                             <div class="dropdown language-dropdown lag-btn">
                                 <a role="button" data-bs-toggle="dropdown" aria-expanded="false"

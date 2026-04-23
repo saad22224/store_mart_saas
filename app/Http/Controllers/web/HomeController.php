@@ -195,7 +195,8 @@ class HomeController extends Controller
             'items.stock_management',
             'items.is_available',
             'items.is_deleted',
-            'items.top_deals'
+            'items.top_deals',
+            'items.dollar_price'
         )->leftjoin('testimonials', 'testimonials.item_id', 'items.id')->where('items.slug', $request->slug)->first();
 
         $getitem->view_count = $getitem->view_count + 1;

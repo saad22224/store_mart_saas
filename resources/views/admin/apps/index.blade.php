@@ -40,7 +40,7 @@
                                         </h6>
                                     </div>
                                     <div class="card-footer p-3 border-top d-flex flex-wrap justify-content-between align-items-center">
-                                        <p class="card-text"><small class="text-muted">{{ date('d M Y', strtotime($addon->created_at)); }}</small></p>
+                                        <p class="card-text"><small class="text-muted">{{ date('d M Y', strtotime($addon->created_at)) }}</small></p>
                                         @if ($addon->activated == 1)
                                             <a @if (env('Environment') == 'sendbox') onclick="myFunction()" @else onclick="statusupdate('{{ URL::to('admin/systemaddons/status-' . $addon->id . '/2') }}')" @endif class="btn btn-sm btn-primary px-sm-4 {{session()->get('direction') == 2 ? 'float-start' : 'float-end'}}">{{ trans('labels.activated') }}</a>
                                         @else

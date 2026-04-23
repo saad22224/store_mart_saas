@@ -58,7 +58,7 @@
             <div class="text-center order-success-img">
 
                 <div class="justify-items-center align-items-center ">
-                    <img src="{{ helper::image_path(helper::appdata($storeinfo->id)->order_success_image) }}"
+                    <img src="{{ url(env('ASSETPATHURL') . 'front/images/thank_you_matjarhub.png') }}"
                         class="success-img m-auto" alt="ordersuccess" srcset="">
                 </div>
                 <h4 class="mb-5 order-title color-changer {{ session()->get('direction') == '2' ? 'text-right' : '' }}">

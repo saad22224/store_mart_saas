@@ -112,6 +112,7 @@ class ProductController extends Controller
         $product->item_name = $request->product_name;
         $product->item_price = $price;
         $product->item_original_price = $original_price;
+        $product->dollar_price = $request->dollar_price ?? 0;
         $product->sku = $request->product_sku;
         $product->slug = $slug;
         $product->has_variants = $request->has_variants;
@@ -154,16 +155,21 @@ class ProductController extends Controller
 
         $product->save();
 
-        if ($request->has('product_image')) {
+        if ($request->hasFile('product_image')) {
+            $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
             foreach ($request->file('product_image') as $file) {
-                $reimage = 'item-' . uniqid() . "." . $file->getClientOriginalExtension();
-                $file->move(storage_path('app/public/item/'), $reimage);
-                // $imgname = helper::imageresize($file, storage_path('app/public/item'));
-                $image = new ProductImage();
-                $image->vendor_id =  $vendor_id;
-                $image->item_id = $product->id;
-                $image->image = $reimage;
-                $image->save();
+                if (!$file->isValid()) continue;
+                $reimage = $imageOptimizationService->upload($file, 'item');
+                if (empty($product->image)) {
+                    $product->image = $reimage;
+                    $product->save();
+                }
+                ProductImage::create([
+                    'vendor_id' => $vendor_id,
+                    'item_id' => $product->id,
+                    'image' => $reimage,
+                    'is_imported' => 2
+                ]);
             }
         }
 
@@ -276,8 +282,8 @@ class ProductController extends Controller
             $product->cat_id = implode('|', $request->category);
             $product->item_name = $request->product_name;
             $product->item_price = $price;
-            $product->item_original_price = $price;
             $product->item_original_price = $original_price;
+            $product->dollar_price = $request->dollar_price ?? 0;
             $product->sku = $request->product_sku;
             if ($request->has_variants == '1') {
 
@@ -457,16 +463,21 @@ class ProductController extends Controller
         } else {
             $itemimage = ProductImage::where('id', $request->id)->first();
             $carts = Cart::where('item_id', $itemimage->item_id)->delete();
-            if ($request->has('product_image')) {
+            if ($request->hasFile('product_image') && $request->file('product_image')->isValid()) {
                 if ($itemimage->is_imported == 2) {
                     if ($itemimage->image != "" && $itemimage->image != null && file_exists(storage_path('app/public/item/' . $itemimage->image))) {
                         unlink(storage_path('app/public/item/' . $itemimage->image));
                     }
                 }
                 // $imgname = helper::imageresize($request->file('product_image'), storage_path('app/public/item'));
-                $reimage = 'item-' . uniqid() . "." . $request->file('product_image')->getClientOriginalExtension();
-                $request->file('product_image')->move(storage_path('app/public/item/'), $reimage);
+                $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+                $reimage = $imageOptimizationService->upload($request->file('product_image'), 'item');
                 ProductImage::where('id', $request->id)->update(['image' => $reimage]);
+                
+                // Update main image in items table if this is the only image or if it was the main one
+                $itemimage = ProductImage::where('id', $request->id)->first();
+                Item::where('id', $itemimage->item_id)->where('image', $request->image)->update(['image' => $reimage]);
+                
                 return redirect()->back()->with('success', trans('messages.success'));
             } else {
                 return redirect()->back()->with('error', trans('messages.wrong'));
@@ -603,16 +614,19 @@ class ProductController extends Controller
                 return redirect()->back()->with('error', trans('messages.image_size_message') . ' ' . helper::appdata('')->image_size . ' ' . 'MB');
             } else {
                 Cart::where('item_id', $request->product_id)->delete();
-                foreach ($request->file('image') as $file) {
-                    $reimage = 'item-' . uniqid() . '.' . $file->getClientOriginalExtension();
-                    $file->move(storage_path('app/public/item/'), $reimage);
-                    // $imgname = helper::imageresize($file, storage_path('app/public/item'));
-                    $productimage = new ProductImage();
-                    $productimage->image = $reimage;
-                    $productimage->vendor_id =  $vendor_id;
-                    $productimage->item_id = $request->product_id;
-                    $productimage->is_imported = 2;
-                    $productimage->save();
+                if ($request->hasFile('image')) {
+                    foreach ($request->file('image') as $file) {
+                        if (!$file->isValid()) continue;
+                        $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+                        $reimage = $imageOptimizationService->upload($file, 'item');
+                        // $imgname = helper::imageresize($file, storage_path('app/public/item'));
+                        $productimage = new ProductImage();
+                        $productimage->image = $reimage;
+                        $productimage->vendor_id =  $vendor_id;
+                        $productimage->item_id = $request->product_id;
+                        $productimage->is_imported = 2;
+                        $productimage->save();
+                    }
                 }
             }
         }

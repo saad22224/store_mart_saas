@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Mail\OrderConfirmation;
+
 use App\Models\Item;
 use App\Models\Settings;
 use App\Models\User;
@@ -268,50 +270,43 @@ class helper
     }
     public static function currency_formate($price, $vendor_id)
     {
-        $currencyInfo = helper::currencyinfo($vendor_id);
-        $exchange_rate = (!empty($currencyInfo->exchange_rate) && floatval($currencyInfo->exchange_rate) > 0) ? floatval($currencyInfo->exchange_rate) : 1;
-        
-        if (is_string($price)) {
-            $arabic_indic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-            $arabic = ['0','1','2','3','4','5','6','7','8','9'];
-            $price = str_replace($arabic_indic, $arabic, $price);
-            $price = str_replace(',', '', $price);
+        if (\App::getLocale() == 'en') {
+            return '$ ' . number_format($price, 2, '.', ',');
         }
-        
-        $price = floatval($price) * $exchange_rate;
 
-        if (helper::currencyinfo($vendor_id)->currency_position == "1") {
-            if (helper::currencyinfo($vendor_id)->decimal_separator == 1) {
-                if (helper::currencyinfo($vendor_id)->currency_space == 1) {
-                    return helper::currencyinfo($vendor_id)->currency . ' ' . number_format($price, helper::currencyinfo($vendor_id)->currency_formate, '.', ',');
+        $currency = " ل.س";
+        $currencyInfo = helper::currencyinfo($vendor_id);
+        if ($currencyInfo->currency_position == "1") {
+            if ($currencyInfo->decimal_separator == 1) {
+                if ($currencyInfo->currency_space == 1) {
+                    return $currency . ' ' . number_format($price, $currencyInfo->currency_formate, '.', ',');
                 } else {
-                    return helper::currencyinfo($vendor_id)->currency . number_format($price, helper::currencyinfo($vendor_id)->currency_formate, '.', ',');
+                    return $currency . number_format($price, $currencyInfo->currency_formate, '.', ',');
                 }
             } else {
-                if (helper::currencyinfo($vendor_id)->currency_space == 1) {
-                    return helper::currencyinfo($vendor_id)->currency . ' ' . number_format($price, helper::currencyinfo($vendor_id)->currency_formate, ',', '.');
+                if ($currencyInfo->currency_space == 1) {
+                    return $currency . ' ' . number_format($price, $currencyInfo->currency_formate, ',', '.');
                 } else {
-                    return helper::currencyinfo($vendor_id)->currency . number_format($price, helper::currencyinfo($vendor_id)->currency_formate, ',', '.');
+                    return $currency . number_format($price, $currencyInfo->currency_formate, ',', '.');
                 }
             }
         }
-        if (helper::currencyinfo($vendor_id)->currency_position == "2") {
-            if (helper::currencyinfo($vendor_id)->decimal_separator == 1) {
-                if (helper::currencyinfo($vendor_id)->currency_space == 1) {
-                    return number_format($price, helper::currencyinfo($vendor_id)->currency_formate, '.', ',') . ' ' . helper::currencyinfo($vendor_id)->currency;
+        if ($currencyInfo->currency_position == "2") {
+            if ($currencyInfo->decimal_separator == 1) {
+                if ($currencyInfo->currency_space == 1) {
+                    return number_format($price, $currencyInfo->currency_formate, '.', ',') . ' ' . $currency;
                 } else {
-                    return number_format($price, helper::currencyinfo($vendor_id)->currency_formate, '.', ',') . helper::currencyinfo($vendor_id)->currency;
+                    return number_format($price, $currencyInfo->currency_formate, '.', ',') . $currency;
                 }
             } else {
-                if (helper::currencyinfo($vendor_id)->currency_space == 1) {
-                    return number_format($price, helper::currencyinfo($vendor_id)->currency_formate, ',', '.') . ' ' . helper::currencyinfo($vendor_id)->currency;
+                if ($currencyInfo->currency_space == 1) {
+                    return number_format($price, $currencyInfo->currency_formate, ',', '.') . ' ' . $currency;
                 } else {
-                    return number_format($price, helper::currencyinfo($vendor_id)->currency_formate, ',', '.') . helper::currencyinfo($vendor_id)->currency;
+                    return number_format($price, $currencyInfo->currency_formate, ',', '.') . $currency;
                 }
-                return number_format($price, helper::currencyinfo($vendor_id)->currency_formate, ',', '.') . helper::currencyinfo($vendor_id)->currency;
             }
         }
-        return $price;
+        return number_format($price, $currencyInfo->currency_formate, '.', ',') . ' ' . $currency;
     }
 
     public static function vendortime($vendor)
@@ -1019,16 +1014,16 @@ class helper
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                
+
                 $dummyItemImageName = 'item-' . uniqid() . '.png';
-                if(file_exists(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'))) {
+                if (file_exists(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'))) {
                     copy(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'), storage_path('app/public/item/' . $dummyItemImageName));
                 } else {
                     $dummyItemImageName = 'default.png';
                 }
 
                 $dummyBannerImageName = 'banner-' . uniqid() . '.webp';
-                if(file_exists(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'))) {
+                if (file_exists(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'))) {
                     copy(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'), storage_path('app/public/admin-assets/images/banners/' . $dummyBannerImageName));
                 } else {
                     $dummyBannerImageName = 'default.png';
@@ -1271,18 +1266,29 @@ class helper
         $orderemailnewvar = [$customer_name, $order_number, $delivery_date, $delivery_time, $grand_total, $companyname];
         $vendorneworderemailmessage = str_replace($orderemailvar, $orderemailnewvar, nl2br(helper::appdata($vendorid)->vendor_new_order_email_message));
 
-        $data = ['title' => "Order Invoice", 'customer_email' => $customer_email, 'company_email' => $companyemail, 'neworderinvoicemessage' => $neworderinvoicemessage, 'vendorneworderemailmessage' => $vendorneworderemailmessage,];
+        $data = [
+            'customername' => $customer_name,
+            'ordernumber' => $order_number,
+            'date' => $delivery_date,
+            'time' => $delivery_time,
+            'grandtotal' => $grand_total,
+            'track_order_url' => $trackurl,
+            'vendorname' => $companyname,
+            'customer_email' => $customer_email,
+            'company_email' => $companyemail,
+            'neworderinvoicemessage' => $neworderinvoicemessage,
+            'vendorneworderemailmessage' => $vendorneworderemailmessage,
+        ];
 
         try {
-            Mail::send('email.customerorderemail', $data, function ($message) use ($data) {
-                $message->to($data['customer_email'])->subject($data['title']);
-            });
+            Mail::to($customer_email)->send(new OrderConfirmation($data));
 
-            Mail::send('email.vendororderemail', $data, function ($companymessage) use ($data) {
-                $companymessage->to($data['company_email'])->subject($data['title']);
+            Mail::send('email.vendororderemail', ['title' => "New Order Received", 'vendorneworderemailmessage' => $vendorneworderemailmessage], function ($companymessage) use ($companyemail) {
+                $companymessage->to($companyemail)->subject("New Order Received");
             });
             return 1;
         } catch (\Throwable $th) {
+            \Illuminate\Support\Facades\Log::error('OrderInvoice Mail Error: ' . $th->getMessage(), ['exception' => $th]);
             return 0;
         }
     }
@@ -1490,19 +1496,31 @@ class helper
     public static function emailconfigration($vendor_id)
     {
         $mailsettings = Settings::where('vendor_id', $vendor_id)->first();
-        $emaildata = [];
+        
+        // Always provide a fallback to the original config so we don't break the MailManager structure
+        $defaultConfig = config('mail');
+        
         if ($mailsettings) {
-            $emaildata = [
-                'driver' => $mailsettings->mail_driver,
+            $driver = $mailsettings->mail_driver ?? 'smtp';
+            
+            $defaultConfig['default'] = $driver;
+            $defaultConfig['mailers'][$driver] = [
+                'transport' => $driver,
                 'host' => $mailsettings->mail_host,
                 'port' => $mailsettings->mail_port,
                 'encryption' => $mailsettings->mail_encryption,
                 'username' => $mailsettings->mail_username,
                 'password' => $mailsettings->mail_password,
-                'from'     => ['address' => $mailsettings->mail_fromaddress, 'name' => $mailsettings->mail_fromname]
+                'timeout' => null,
+                'local_domain' => env('MAIL_EHLO_DOMAIN'),
+            ];
+            $defaultConfig['from'] = [
+                'address' => $mailsettings->mail_fromaddress,
+                'name' => $mailsettings->mail_fromname,
             ];
         }
-        return $emaildata;
+        
+        return $defaultConfig;
     }
     // display dynamic paymant name
     public static function getpayment($payment_type, $vendor_id)
@@ -1716,6 +1734,22 @@ class helper
             $taxes[] = Tax::find($tax);
         }
         return $taxes;
+    }
+
+    public function getItemPriceAttribute($value)
+    {
+        if (\App::getLocale() == 'en') {
+            return (isset($this->attributes['dollar_price']) && $this->attributes['dollar_price'] > 0) ? $this->attributes['dollar_price'] : $value;
+        }
+        return $value;
+    }
+
+    public function getItemOriginalPriceAttribute($value)
+    {
+        if (\App::getLocale() == 'en') {
+            return (isset($this->attributes['dollar_price']) && $this->attributes['dollar_price'] > 0) ? $this->attributes['dollar_price'] : $value;
+        }
+        return $value;
     }
 
     public static function taxRate($taxRate, $price, $quantity, $tax_type)

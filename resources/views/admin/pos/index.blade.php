@@ -180,7 +180,8 @@
 
 
         function currency_formate(price) {
-            var price = price * {{ @helper::currencyinfo($vendordata->id)->exchange_rate }};
+            var exchange_rate = {{ @helper::currencyinfo($vendor_id)->exchange_rate ?? 1 }};
+            var price = parseFloat(price) * parseFloat(exchange_rate);
             if ("{{ @helper::currencyinfo($vendor_id)->currency_position }}" == "left") {
 
                 if ("{{ helper::currencyinfo($vendor_id)->decimal_separator }}" == 1) {

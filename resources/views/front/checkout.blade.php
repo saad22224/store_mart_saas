@@ -232,6 +232,10 @@
                                                     <input type="text" class="form-control rounded-2 p-3 w-100" placeholder="{{ trans('labels.mobile') }}" name="customer_mobile" @if (env('Environment') == 'sendbox') value="937-267-4384" @else value="{{ @Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->mobile : '' }}" @endif id="customer_mobile" onkeypress="return isNumber(event)">
                                                 </div>
                                             </div>
+                                            <div class="col-md-12">
+                                                <label for="customer_email" class="form-label d-flex justify-content-start fw-semibold">{{ trans('labels.email') }} <span class="text-danger"> *</span></label>
+                                                <input type="email" class="form-control rounded-2 p-3" placeholder="{{ trans('labels.email') }}" name="customer_email" @if (env('Environment') == 'sendbox') value="user@matjarhub.com" @else value="{{ @Auth::user() && @Auth::user()->type == 3 ? @Auth::user()->email : '' }}" @endif id="customer_email" required>
+                                            </div>
                                         </div>
                                         <input type="hidden" id="vendor" name="vendor" value="{{ helper::storeinfo($storeinfo->slug)->id }}" />
                                     </form>
@@ -348,66 +352,68 @@
                             </div>
                             <div class="row justify-content-center g-3">
                                 @foreach ($paymentlist as $key => $payment)
-                                    @php
-                                        // Check if the current $payment is a system addon and activated
-                                        if ($payment->payment_type == '1' || $payment->payment_type == '16') {
-                                            $systemAddonActivated = true;
-                                        } else {
-                                            $systemAddonActivated = false;
-                                        }
-                                        $addon = App\Models\SystemAddons::where(
-                                            'unique_identifier',
-                                            $payment->unique_identifier,
-                                        )->first();
-                                        if ($addon != null && $addon->activated == 1) {
-                                            $systemAddonActivated = true;
-                                        }
-                                    @endphp
-                                    @if ($systemAddonActivated)
-                                        <label class="form-check-label col-md-6 label14 cp"
-                                            for="{{ $payment->payment_type }}">
-                                            <div class="payment-check">
-                                                <img src="{{ helper::image_path($payment->image) }}"
-                                                    class="img-fluid" alt="" width="40px" />
+                                    @if ($payment->payment_type == '1')
+                                        @php
+                                            // Check if the current $payment is a system addon and activated
+                                            if ($payment->payment_type == '1' || $payment->payment_type == '16') {
+                                                $systemAddonActivated = true;
+                                            } else {
+                                                $systemAddonActivated = false;
+                                            }
+                                            $addon = App\Models\SystemAddons::where(
+                                                'unique_identifier',
+                                                $payment->unique_identifier,
+                                            )->first();
+                                            if ($addon != null && $addon->activated == 1) {
+                                                $systemAddonActivated = true;
+                                            }
+                                        @endphp
+                                        @if ($systemAddonActivated)
+                                            <label class="form-check-label col-md-6 label14 cp"
+                                                for="{{ $payment->payment_type }}">
+                                                <div class="payment-check">
+                                                    <img src="{{ helper::image_path($payment->image) }}"
+                                                        class="img-fluid" alt="" width="40px" />
 
-                                                @if ($payment->payment_type == '2')
-                                                    <input type="hidden" name="razorpay" id="razorpay"
-                                                        value="{{ $payment->public_key }}">
-                                                @endif
-                                                @if ($payment->payment_type == '3')
-                                                    <input type="hidden" name="stripe" id="stripe"
-                                                        value="{{ $payment->public_key }}">
-                                                @endif
-                                                @if ($payment->payment_type == '4')
-                                                    <input type="hidden" name="flutterwavekey" id="flutterwavekey"
-                                                        value="{{ $payment->public_key }}">
-                                                @endif
-                                                @if ($payment->payment_type == '5')
-                                                    <input type="hidden" name="paystackkey" id="paystackkey"
-                                                        value="{{ $payment->public_key }}">
-                                                @endif
-
-                                                <p class="m-0">{{ $payment->payment_name }}</p>
-
-                                                @if (Auth::user() && Auth::user()->type == 3)
-                                                    @if ($payment->payment_type == 16)
-                                                        <span
-                                                            class="text-end text-muted">{{ Helper::currency_formate(Auth::user()->wallet, $storeinfo->id) }}</span>
+                                                    @if ($payment->payment_type == '2')
+                                                        <input type="hidden" name="razorpay" id="razorpay"
+                                                            value="{{ $payment->public_key }}">
                                                     @endif
-                                                @endif
+                                                    @if ($payment->payment_type == '3')
+                                                        <input type="hidden" name="stripe" id="stripe"
+                                                            value="{{ $payment->public_key }}">
+                                                    @endif
+                                                    @if ($payment->payment_type == '4')
+                                                        <input type="hidden" name="flutterwavekey" id="flutterwavekey"
+                                                            value="{{ $payment->public_key }}">
+                                                    @endif
+                                                    @if ($payment->payment_type == '5')
+                                                        <input type="hidden" name="paystackkey" id="paystackkey"
+                                                            value="{{ $payment->public_key }}">
+                                                    @endif
 
-                                                <input
-                                                    class="form-check-input payment-input {{ session()->get('direction') == '2' ? 'me-auto' : 'ms-auto' }}"
-                                                    type="radio" name="payment" id="{{ $payment->payment_type }}"
-                                                    data-payment_type="{{ strtolower($payment->payment_type) }}"
-                                                    @if (!$key) {!! 'checked' !!} @endif>
+                                                    <p class="m-0">{{ $payment->payment_name }}</p>
 
-                                                @if (strtolower($payment->payment_type) == '6')
-                                                    <input type="hidden" value="{{ $payment->payment_description }}"
-                                                        id="bank_payment">
-                                                @endif
-                                            </div>
-                                        </label>
+                                                    @if (Auth::user() && Auth::user()->type == 3)
+                                                        @if ($payment->payment_type == 16)
+                                                            <span
+                                                                class="text-end text-muted">{{ Helper::currency_formate(Auth::user()->wallet, $storeinfo->id) }}</span>
+                                                        @endif
+                                                    @endif
+
+                                                    <input
+                                                        class="form-check-input payment-input {{ session()->get('direction') == '2' ? 'me-auto' : 'ms-auto' }}"
+                                                        type="radio" name="payment" id="{{ $payment->payment_type }}"
+                                                        data-payment_type="{{ strtolower($payment->payment_type) }}"
+                                                        checked>
+
+                                                    @if (strtolower($payment->payment_type) == '6')
+                                                        <input type="hidden" value="{{ $payment->payment_description }}"
+                                                            id="bank_payment">
+                                                    @endif
+                                                </div>
+                                            </label>
+                                        @endif
                                     @endif
                                 @endforeach
                             </div>
@@ -779,7 +785,7 @@
     <input type="hidden" name="sub_total" id="sub_total" value="{{ @$sub_total }}">
     <input type="hidden" name="tax" id="tax" value="{{ implode('|', $taxArr['rate']) }}">
     <input type="hidden" name="tax_name" id="tax_name" value="{{ implode('|', $taxArr['tax']) }}">
-    <input type="hidden" name="grand_total" id="grand_total" value="{{ number_format(@$grandtotal) }}">
+    <input type="hidden" name="grand_total" id="grand_total" value="{{ @$grandtotal }}">
     <input type="hidden" name="discount_amount" id="discount_amount" value="{{ @$discount }}">
     <input type="hidden" name="couponcode" id="couponcode" value="{{ Session::get('offer_code') }}">
     <input type="hidden" name="buynow_key" id="buynow_key" value="{{ request()->get('buy_now') }}">
@@ -1014,7 +1020,7 @@
         var mobile_input = $('#customer_mobile').val();
         var customer_mobile = mobile_input ? country_code + mobile_input : "";
         var customer_name = first_name + ' ' + last_name;
-        var customer_email = "noemail@example.com";
+        var customer_email = $('#customer_email').val();
 
         var payment_type = $('input[name="payment"]:checked').attr("data-payment_type");
         var flutterwavekey = $('#flutterwavekey').val();
@@ -1046,6 +1052,12 @@
                 return false;
             } else if (customer_mobile == "") {
                 toastr.error($('#customer_mobile_required').val());
+                return false;
+            } else if (customer_email == "") {
+                toastr.error($('#customer_email_required').val());
+                return false;
+            } else if (!validateEmail(customer_email)) {
+                toastr.error($('#valid_email').val());
                 return false;
             } else if ($("#shipping_area").find(":selected").val() == "") {
                 toastr.error($('#delivery_area_required').val());

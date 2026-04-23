@@ -1127,7 +1127,7 @@
                     </div>
                 </div>
                 
-                <button class="btn-primary hidden md:block"><?php echo e(@$translations['nav']['start_now'] ?? 'ابدأ الآن'); ?></button>
+                <button onclick="window.location.href = '<?php echo e(url('admin/register')); ?>'" class="btn-primary hidden md:block"><?php echo e(@$translations['nav']['start_now'] ?? 'ابدأ الآن'); ?></button>
                 <span class="material-symbols-outlined nav-hamburger" onclick="toggleMobileMenu()">menu</span>
             </div>
         </nav>

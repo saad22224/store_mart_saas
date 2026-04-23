@@ -24,6 +24,8 @@ use DateTime;
 use Config;
 use DateInterval;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmation;
 
 class OrderController extends Controller
 {
@@ -46,7 +48,7 @@ class OrderController extends Controller
         }
         $request->merge([
             'customer_name' => $request->first_name . ' ' . $request->father_name . ' ' . $request->last_name,
-            'customer_email' => 'noemail@example.com'
+            'customer_email' => $request->customer_email
         ]);
         if ($request->customer_mobile == "") {
             return response()->json(["status" => 0, "message" => trans('messages.customer_mobile_required')], 200);
@@ -115,13 +117,12 @@ class OrderController extends Controller
             }
             $screenshot = $filename;
         }
-        $orderresponse = helper::createorder($request->vendor_id, $request->user_id, $request->session_id, $request->payment_type, $payment_id, $request->customer_email, $request->customer_name, $request->customer_mobile, $request->stripeToken, $request->grand_total, $request->delivery_charge, $request->address, $request->building, $request->landmark, $request->postal_code, $request->discount_amount, $request->sub_total, $request->tax, $request->tax_name, $request->delivery_time, $request->delivery_date, $request->delivery_area, $request->couponcode, $request->order_type, $request->notes, $screenshot, $request->table, $request->tablename, $request->buynow);
-
+        $orderresponse = helper::createorder($request->vendor_id, $request->user_id,  $request->session_id, $request->payment_type, $payment_id, $request->customer_email, $request->customer_name, $request->customer_mobile, $request->stripeToken, $request->grand_total, $request->delivery_charge, $request->address, $request->building, $request->landmark, $request->postal_code, $request->discount_amount, $request->sub_total, $request->tax, $request->tax_name, $request->delivery_time, $request->delivery_date, $request->delivery_area, $request->couponcode, $request->order_type, $request->notes, $screenshot, $request->table, $request->tablename, $request->buynow);
         if ($orderresponse == "") {
             return response()->json(["status" => 0, "message" => trans('messages.cart_empty')], 200);
         } else {
             $orderObj = Order::where('order_number', $orderresponse)->first();
-            if($orderObj) {
+            if ($orderObj) {
                 $orderObj->first_name = $request->first_name;
                 $orderObj->father_name = $request->father_name;
                 $orderObj->last_name = $request->last_name;

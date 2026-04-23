@@ -38,90 +38,97 @@
 </section>
 
 <!-- footer -->
-<footer class="footer-sec2 bg-light bg-changer d-none d-lg-block">
+<footer class="footer-sec2 bg-light bg-changer d-none d-lg-block py-5 border-top shadow-sm">
     <div class="container">
-        <div class="d-flex justify-content-center mb-4">
-            <script>
-                document.addEventListener("DOMContentLoaded", function(event) {
-                    if (localStorage.getItem('theme') === 'dark') {
-                        var logo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->darklogo)); ?>";
-                    } else {
-                        var logo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->logo)); ?>";
-                    }
-                    $('#footerlogoimage').attr('src', logo);
-                });
-            </script>
-            <a href="<?php echo e(URL::to($storeinfo->slug)); ?>">
-                <img src="" id="footerlogoimage" alt="logo" class="object-fit-cover my-2 logo-h-55-px "></a>
-        </div>
-        <ul class="footer-menu mb-4 color-changer">
-            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/privacypolicy')); ?>"
-                    class="color-changer text-dark"><?php echo e(trans('labels.privacy_policy')); ?></a>
-            </li>|
-            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/aboutus')); ?>"
-                    class="color-changer text-dark"><?php echo e(trans('labels.about_us')); ?></a>
-            </li>|
-            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/terms_condition')); ?>"
-                    class="color-changer text-dark"><?php echo e(trans('labels.terms_condition')); ?></a>
-            </li>|
-            <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/refund_policy')); ?>"
-                    class="color-changer text-dark"><?php echo e(trans('labels.refund_policy')); ?></a>
-            </li>|
-            <li class="px-2 cursor-pointer"><a data-bs-toggle="modal"
-                    data-bs-target="#infomodal"><?php echo e(trans('labels.store_information')); ?></a>
-            </li>
-        </ul>
-        <div class="hstack justify-content-center gap-3">
-            <?php if(@helper::checkaddons('subscription')): ?>
-                <?php if(@helper::checkaddons('user_app')): ?>
-                    <?php
-                        $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
-                            ->orderByDesc('id')
-                            ->first();
-                        $user = App\Models\User::where('id', $storeinfo->id)->first();
-                        if (@$user->allow_without_subscription == 1) {
-                            $user_app = 1;
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-3 col-md-12 text-center text-lg-start mb-4 mb-lg-0">
+                <script>
+                    document.addEventListener("DOMContentLoaded", function(event) {
+                        if (localStorage.getItem('theme') === 'dark') {
+                            var logo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->darklogo)); ?>";
                         } else {
-                            $user_app = @$checkplan->customer_app;
+                            var logo = "<?php echo e(helper::image_path(helper::appdata($storeinfo->id)->logo)); ?>";
                         }
-                    ?>
-                    <?php if($user_app == 1): ?>
-                        <!-- Google play store button -->
-                        <?php if(
-                            @helper::getappsetting($storeinfo->id)->android_link != null &&
-                                @helper::getappsetting($storeinfo->id)->android_link != ''): ?>
-                            <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->android_link); ?>"> <img
-                                    src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>"
-                                    class="app-btn" alt=""> </a>
+                        $('#footerlogoimage').attr('src', logo);
+                    });
+                </script>
+                <a href="<?php echo e(URL::to($storeinfo->slug)); ?>">
+                    <img src="" id="footerlogoimage" alt="logo" class="object-fit-contain my-2" style="max-height: 60px;">
+                </a>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <ul class="footer-menu d-flex flex-wrap justify-content-center align-items-center m-0 p-0 gap-3" style="list-style: none;">
+                    <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/privacypolicy')); ?>"
+                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition"><?php echo e(trans('labels.privacy_policy')); ?></a>
+                    </li>
+                    <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/aboutus')); ?>"
+                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition"><?php echo e(trans('labels.about_us')); ?></a>
+                    </li>
+                    <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/terms_condition')); ?>"
+                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition"><?php echo e(trans('labels.terms_condition')); ?></a>
+                    </li>
+                    <li class="px-2"><a href="<?php echo e(URL::to($storeinfo->slug . '/refund_policy')); ?>"
+                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition"><?php echo e(trans('labels.refund_policy')); ?></a>
+                    </li>
+                    <li class="px-2 cursor-pointer"><a data-bs-toggle="modal"
+                            data-bs-target="#infomodal" class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition"><?php echo e(trans('labels.store_information')); ?></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-12 text-center text-lg-end mt-4 mt-lg-0">
+                <div class="hstack justify-content-center justify-content-lg-end gap-3">
+                    <?php if(@helper::checkaddons('subscription')): ?>
+                        <?php if(@helper::checkaddons('user_app')): ?>
+                            <?php
+                                $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
+                                    ->orderByDesc('id')
+                                    ->first();
+                                $user = App\Models\User::where('id', $storeinfo->id)->first();
+                                if (@$user->allow_without_subscription == 1) {
+                                    $user_app = 1;
+                                } else {
+                                    $user_app = @$checkplan->customer_app;
+                                }
+                            ?>
+                            <?php if($user_app == 1): ?>
+                                <!-- Google play store button -->
+                                <?php if(
+                                    @helper::getappsetting($storeinfo->id)->android_link != null &&
+                                        @helper::getappsetting($storeinfo->id)->android_link != ''): ?>
+                                    <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->android_link); ?>" class="transition-zoom"> <img
+                                            src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>"
+                                            class="app-btn rounded-3 shadow-sm" alt=""> </a>
+                                <?php endif; ?>
+                                <?php if(@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != ''): ?>
+                                    <!-- App store button -->
+                                    <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->ios_link); ?>" class="transition-zoom"> <img
+                                            src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>" class="app-btn rounded-3 shadow-sm"
+                                            alt=""> </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
+        
+        
                         <?php endif; ?>
-                        <?php if(@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != ''): ?>
-                            <!-- App store button -->
-                            <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->ios_link); ?>"> <img
-                                    src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>" class="app-btn"
-                                    alt=""> </a>
+                    <?php else: ?>
+                        <?php if(@helper::checkaddons('user_app')): ?>
+                            <!-- Google play store button -->
+                            <?php if(
+                                @helper::getappsetting($storeinfo->id)->android_link != null &&
+                                    @helper::getappsetting($storeinfo->id)->android_link != ''): ?>
+                                <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->android_link); ?>" class="transition-zoom"> <img
+                                        src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>" class="app-btn rounded-3 shadow-sm"
+                                        alt=""> </a>
+                            <?php endif; ?>
+                            <?php if(@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != ''): ?>
+                                <!-- App store button -->
+                                <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->ios_link); ?>" class="transition-zoom"> <img
+                                        src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>" class="app-btn rounded-3 shadow-sm"
+                                        alt=""> </a>
+                            <?php endif; ?>
                         <?php endif; ?>
                     <?php endif; ?>
-
-
-                <?php endif; ?>
-            <?php else: ?>
-                <?php if(@helper::checkaddons('user_app')): ?>
-                    <!-- Google play store button -->
-                    <?php if(
-                        @helper::getappsetting($storeinfo->id)->android_link != null &&
-                            @helper::getappsetting($storeinfo->id)->android_link != ''): ?>
-                        <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->android_link); ?>"> <img
-                                src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>" class="app-btn"
-                                alt=""> </a>
-                    <?php endif; ?>
-                    <?php if(@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != ''): ?>
-                        <!-- App store button -->
-                        <a href="<?php echo e(@helper::getappsetting($storeinfo->id)->ios_link); ?>"> <img
-                                src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>" class="app-btn"
-                                alt=""> </a>
-                    <?php endif; ?>
-                <?php endif; ?>
-            <?php endif; ?>
+                </div>
+            </div>
         </div>
     </div>
 </footer>
@@ -606,8 +613,9 @@
     var whatsappnumber = "<?php echo e(helper::appdata($storeinfo->id)->whatsapp_number); ?>";
 
     function currency_formate(price) {
-        var formate = <?php echo e(@helper::currencyinfo($vendordata->id)->decimal_digit ?? 2); ?>;
-        var price = parseFloat(price) * <?php echo e(@helper::currencyinfo($vendordata->id)->exchange_rate); ?>;
+        var formate = <?php echo e(@helper::currencyinfo($storeinfo->id)->decimal_digit ?? 2); ?>;
+        var exchange_rate = <?php echo e(@helper::currencyinfo($storeinfo->id)->exchange_rate ?? 1); ?>;
+        var price = parseFloat(price) * parseFloat(exchange_rate);
 
         var currency = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency); ?>";
         var position = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency_position); ?>";

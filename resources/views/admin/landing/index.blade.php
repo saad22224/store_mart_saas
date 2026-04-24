@@ -718,6 +718,7 @@
                                                                 <option value='<i class="fa-brands fa-whatsapp"></i>' {{ $links->icon == '<i class="fa-brands fa-whatsapp"></i>' ? 'selected' : '' }}>WhatsApp</option>
                                                                 <option value='<i class="fa-brands fa-snapchat"></i>' {{ $links->icon == '<i class="fa-brands fa-snapchat"></i>' ? 'selected' : '' }}>Snapchat</option>
                                                                 <option value='<i class="fa-brands fa-linkedin"></i>' {{ $links->icon == '<i class="fa-brands fa-linkedin"></i>' ? 'selected' : '' }}>LinkedIn</option>
+                                                                <option value='<i class="fa-solid fa-phone"></i>' {{ $links->icon == '<i class="fa-solid fa-phone"></i>' ? 'selected' : '' }}>Phone</option>
                                                             </select>
                                                             <p
                                                                 class="input-group-text {{ session()->get('direction') == 2 ? 'input-group-icon-rtl' : '' }}" style="width: 45px; justify-content: center;">

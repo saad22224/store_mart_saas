@@ -530,6 +530,7 @@
                                                     for="">{{ trans('labels.time_format') }}
                                                 </label>
                                                 <select class="form-select" name="time_format">
+
                                                     <option value="2"
                                                         {{ $settingdata->time_format == 2 ? 'selected' : '' }}>12
                                                         {{ trans('labels.hour') }}</option>

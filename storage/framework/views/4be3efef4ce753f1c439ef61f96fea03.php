@@ -589,9 +589,15 @@
                                     <div class="social-media d-none d-lg-block">
                                         <ul class="d-flex gap-2 m-0 p-0">
                                             <?php $__currentLoopData = @helper::getsociallinks(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($links->icon == '<i class="fa-solid fa-phone"></i>'): ?>
+                                                <li><a href="tel:<?php echo e($links->link); ?>" target="_blank"
+                                                        class="social-rounded fb p-0"><?php echo $links->icon; ?></a>
+                                                </li>
+                                            <?php else: ?>
                                                 <li><a href="<?php echo e($links->link); ?>" target="_blank"
                                                         class="social-rounded fb p-0"><?php echo $links->icon; ?></a>
                                                 </li>
+                                            <?php endif; ?>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                         </ul>

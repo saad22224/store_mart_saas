@@ -585,9 +585,15 @@
                                     <div class="social-media d-none d-lg-block">
                                         <ul class="d-flex gap-2 m-0 p-0">
                                             @foreach (@helper::getsociallinks(@$storeinfo->id) as $links)
+                                            @if($links->icon == '<i class="fa-solid fa-phone"></i>')
+                                                <li><a href="tel:{{ $links->link }}" target="_blank"
+                                                        class="social-rounded fb p-0">{!! $links->icon !!}</a>
+                                                </li>
+                                            @else
                                                 <li><a href="{{ $links->link }}" target="_blank"
                                                         class="social-rounded fb p-0">{!! $links->icon !!}</a>
                                                 </li>
+                                            @endif
                                             @endforeach
 
                                         </ul>

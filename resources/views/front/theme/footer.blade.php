@@ -38,115 +38,100 @@
 <!-- footer -->
 <footer class="footer-sec2 bg-light bg-changer d-none d-lg-block py-5 border-top shadow-sm">
     <div class="container">
-        <div class="row align-items-center justify-content-between">
-            <div class="col-lg-3 col-md-12 text-center text-lg-start mb-4 mb-lg-0">
-                <script>
-                    document.addEventListener("DOMContentLoaded", function(event) {
-                        if (localStorage.getItem('theme') === 'dark') {
-                            var logo = "{{ helper::image_path(helper::appdata($storeinfo->id)->darklogo) }}";
-                        } else {
-                            var logo = "{{ helper::image_path(helper::appdata($storeinfo->id)->logo) }}";
-                        }
-                        $('#footerlogoimage').attr('src', logo);
-                    });
-                </script>
-                <a href="{{ URL::to($storeinfo->slug) }}">
-                    <img src="" id="footerlogoimage" alt="logo" class="object-fit-contain my-2" style="max-height: 60px;">
-                </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-                <ul class="footer-menu d-flex flex-wrap justify-content-center align-items-center m-0 p-0 gap-3" style="list-style: none;">
-                    <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
-                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.privacy_policy') }}</a>
+        <style>
+            .footer-input::placeholder { color: inherit !important; opacity: 0.6; }
+            .hover-opacity-100:hover { opacity: 1 !important; }
+        </style>
+        <div class="row align-items-start justify-content-between">
+            
+            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0 text-center {{ session()->get('direction') == 2 ? 'text-lg-end' : 'text-lg-start' }}">
+                <h5 class="text-dark color-changer mb-4 fw-bold">{{ trans('labels.pages') == 'labels.pages' ? 'الصفحات' : trans('labels.pages') }}</h5>
+                <ul class="footer-menu d-flex flex-column m-0 p-0 gap-2" style="list-style: none;">
+                    <li><a href="{{ URL::to($storeinfo->slug . '/contact') }}"
+                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.contact_us') }}</a>
                     </li>
-                    <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
-                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.about_us') }}</a>
+                    <li><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
+                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.privacy_policy') }}</a>
                     </li>
-                    <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/terms_condition') }}"
-                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.terms_condition') }}</a>
+                    <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
+                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.refund_policy') }} - {{ trans('labels.terms_condition') }}</a>
                     </li>
-                    <li class="px-2"><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
-                            class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.refund_policy') }}</a>
-                    </li>
-                    <li class="px-2 cursor-pointer"><a data-bs-toggle="modal"
-                            data-bs-target="#infomodal" class="color-changer text-dark text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.store_information') }}</a>
+                    <li><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
+                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.about_us') }}</a>
                     </li>
                 </ul>
             </div>
-            <div class="col-lg-3 col-md-12 text-center text-lg-end mt-4 mt-lg-0">
-                <div class="hstack justify-content-center justify-content-lg-end gap-3">
-                    @if (@helper::checkaddons('subscription'))
-                        @if (@helper::checkaddons('user_app'))
-                            @php
-                                $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
-                                    ->orderByDesc('id')
-                                    ->first();
-                                $user = App\Models\User::where('id', $storeinfo->id)->first();
-                                if (@$user->allow_without_subscription == 1) {
-                                    $user_app = 1;
-                                } else {
-                                    $user_app = @$checkplan->customer_app;
-                                }
-                            @endphp
-                            @if ($user_app == 1)
-                                <!-- Google play store button -->
-                                @if (
-                                    @helper::getappsetting($storeinfo->id)->android_link != null &&
-                                        @helper::getappsetting($storeinfo->id)->android_link != '')
-                                    <a href="{{ @helper::getappsetting($storeinfo->id)->android_link }}" class="transition-zoom"> <img
-                                            src="{{ url(env('ASSETPATHURL') . 'front/images/google-play.svg') }}"
-                                            class="app-btn rounded-3 shadow-sm" alt=""> </a>
-                                @endif
-                                @if (@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != '')
-                                    <!-- App store button -->
-                                    <a href="{{ @helper::getappsetting($storeinfo->id)->ios_link }}" class="transition-zoom"> <img
-                                            src="{{ url(env('ASSETPATHURL') . 'front/images/app-store.svg') }}" class="app-btn rounded-3 shadow-sm"
-                                            alt=""> </a>
-                                @endif
-                            @endif
-        
-        
-                        @endif
+
+            <div class="col-lg-5 col-md-12 text-center mb-4 mb-lg-0">
+                <h5 class="text-dark color-changer mb-4 fw-bold">{{ trans('labels.contact_info') == 'labels.contact_info' ? 'معلومات الاتصال' : trans('labels.contact_info') }}</h5>
+                <ul class="m-0 p-0 d-inline-block text-start" style="list-style: none;">
+                    <li class="d-flex align-items-center mb-3 gap-3">
+                        <div style="width: 30px; text-align: center;">
+                            <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
+                        </div>
+                        <a href="mailto:{{ $storeinfo->email }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 transition" dir="ltr">
+                            {{ $storeinfo->email }}
+                        </a>
+                    </li>
+                    <li class="d-flex align-items-center mb-3 gap-3">
+                        <div style="width: 30px; text-align: center;">
+                            <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
+                        </div>
+                        <a href="tel:{{ $storeinfo->mobile }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 transition" dir="ltr">
+                            {{ $storeinfo->mobile }}
+                        </a>
+                    </li>
+                    @php
+                        $city = \App\Models\City::find(@$storeinfo->city_id);
+                        $country = \App\Models\Country::find(@$storeinfo->country_id);
+                        $location = [];
+                        if($city) $location[] = $city->city;
+                        if($country) $location[] = $country->name;
+                        $location_text = implode(', ', $location);
+                    //    dd( $city->city . " " . $country->name) 
+                    @endphp
+                    @if(!empty($location_text))
+                    <li class="d-flex align-items-center mb-3 gap-3">
+                        <div style="width: 30px; text-align: center;">
+                            <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
+                        </div>
+                        <span class="text-dark color-changer opacity-75 text-nowrap">
+                            {{ $location_text }}
+                        </span>
+                    </li>
                     @else
-                        @if (@helper::checkaddons('user_app'))
-                            <!-- Google play store button -->
-                            @if (
-                                @helper::getappsetting($storeinfo->id)->android_link != null &&
-                                    @helper::getappsetting($storeinfo->id)->android_link != '')
-                                <a href="{{ @helper::getappsetting($storeinfo->id)->android_link }}" class="transition-zoom"> <img
-                                        src="{{ url(env('ASSETPATHURL') . 'front/images/google-play.svg') }}" class="app-btn rounded-3 shadow-sm"
-                                        alt=""> </a>
-                            @endif
-                            @if (@helper::getappsetting($storeinfo->id)->ios_link != null && @helper::getappsetting($storeinfo->id)->ios_link != '')
-                                <!-- App store button -->
-                                <a href="{{ @helper::getappsetting($storeinfo->id)->ios_link }}" class="transition-zoom"> <img
-                                        src="{{ url(env('ASSETPATHURL') . 'front/images/app-store.svg') }}" class="app-btn rounded-3 shadow-sm"
-                                        alt=""> </a>
-                            @endif
-                        @endif
+                    <li class="d-flex align-items-center mb-3 gap-3">
+                        <div style="width: 30px; text-align: center;">
+                            <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
+                        </div>
+                        <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}" target="_blank" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 transition text-nowrap">
+                            {{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}
+                        </a>
+                    </li>
                     @endif
-                </div>
+                </ul>
             </div>
+
+            <div class="col-lg-4 col-md-12 text-center {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }} mt-4 mt-lg-0">
+                <h5 class="text-dark color-changer mb-4 fw-bold">{{ trans('labels.newslatter') == 'labels.newslatter' ? 'ليصلك جديدنا' : trans('labels.newslatter') }}</h5>
+                <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post" class="d-flex justify-content-center {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
+                    @csrf
+                    <div class="input-group" style="max-width: 300px; border-radius: 5px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1);">
+                        <input type="email" class="form-control text-dark color-changer bg-transparent footer-input" name="subscribe_email" placeholder="{{ trans('labels.email') }}" required style="box-shadow: none;">
+                        <button type="submit" class="btn btn-store fw-bold px-4" style="border-radius: 0;">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'اشترك' : trans('labels.subscribe') }}</button>
+                    </div>
+                </form>
+            </div>
+            
         </div>
     </div>
 </footer>
 
 <!-- copy-right-sec -->
-
-<div class="copy-right-sec bg-changer py-3 d-none d-lg-block">
+<div class="copy-right-sec bg-light bg-changer py-3 d-none d-lg-block border-top">
     <div class="container">
-        <div
-            class="d-md-flex {{ helper::appdata($storeinfo->id)->online_order == 1 && helper::getallpayment($storeinfo->id)->count() > 0 ? 'justify-content-between' : 'justify-content-center' }}">
-            <p class="mb-md-0">{{ helper::appdata($storeinfo->id)->copyright }}</p>
-            @if (helper::appdata($storeinfo->id)->online_order == 1 && helper::getallpayment($storeinfo->id)->count() > 0)
-                <ul class="footer_acceped_card d-flex justify-content-center gap-3 p-0 m-0">
-                    @foreach (helper::getallpayment($storeinfo->id) as $item)
-                        <li>
-                            <img src="{{ helper::image_path($item->image) }}" class="w-20px">
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
+        <div class="d-md-flex justify-content-center align-items-center">
+            <p class="mb-md-0 text-dark color-changer opacity-75">{{ helper::appdata($storeinfo->id)->copyright }}</p>
         </div>
     </div>
 </div>
@@ -607,7 +592,8 @@
         var exchange_rate = {{ @helper::currencyinfo($storeinfo->id)->exchange_rate ?? 1 }};
         var price = parseFloat(price) * parseFloat(exchange_rate);
 
-        var currency = "{{ @helper::currencyinfo($storeinfo->id)->currency }}";
+        var locale = "{{ \App::getLocale() }}";
+        var currency = locale === 'ar' ? "ل.س" : "{{ @helper::currencyinfo($storeinfo->id)->currency }}";
         var position = "{{ @helper::currencyinfo($storeinfo->id)->currency_position }}";
         var space = "{{ @helper::currencyinfo($storeinfo->id)->currency_space }}";
         var decimal_sep = "{{ @helper::currencyinfo($storeinfo->id)->decimal_separator }}";

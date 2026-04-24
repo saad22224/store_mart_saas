@@ -4,7 +4,9 @@ namespace App\Services;
 
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Alignment;
 use Intervention\Image\Format;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -27,18 +29,22 @@ class ImageOptimizationService
         $path = $folder . '/' . $filename;
 
         // Create manager using the desired driver (Intervention V4 syntax)
-        $manager = ImageManager::usingDriver(Driver::class);
+      $manager = new ImageManager(new Driver());
 
         // Read image data as binary content to avoid permission issues with Windows Temp folder
-        $image = $manager->decodeBinary($file->get());
-
+        // Check method existence to support both Intervention Image V3 (server) and V4 (local)
+        if (method_exists($manager, 'decodeBinary')) {
+            $image = $manager->decodeBinary($file->get()); // V4
+        } else {
+            $image = $manager->read($file->get()); // V3
+        }
         // Scale image if dimensions are provided
         if ($width || $height) {
             $image->scale(width: $width, height: $height);
         }
 
         // Encode using WebP format (V4 syntax)
-        $encoded = $image->encodeUsingFormat(Format::WEBP, quality: 80);
+        $encoded = $image->encode(new \Intervention\Image\Encoders\WebpEncoder(quality: 80));
 
         // Store the encoded image in the public disk
         Storage::disk('public')->put($path, (string) $encoded);

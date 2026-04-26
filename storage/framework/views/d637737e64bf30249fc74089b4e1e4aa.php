@@ -38,7 +38,7 @@
 </section>
 
 <!-- footer -->
-<footer class="footer-sec2 bg-light bg-changer d-none d-lg-block py-5 border-top shadow-sm">
+<footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
     <div class="container">
         <style>
             .footer-input::placeholder { color: inherit !important; opacity: 0.6; }
@@ -134,7 +134,7 @@
 </footer>
 
 <!-- copy-right-sec -->
-<div class="copy-right-sec bg-light bg-changer py-3 d-none d-lg-block border-top">
+<div class="copy-right-sec bg-light bg-changer py-3 border-top">
     <div class="container">
         <div class="d-md-flex justify-content-center align-items-center">
             <p class="mb-md-0 text-dark color-changer opacity-75"><?php echo e(helper::appdata($storeinfo->id)->copyright); ?></p>

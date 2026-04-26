@@ -60,6 +60,7 @@
                 <div class="justify-items-center align-items-center ">
                     <img src="{{ url(env('ASSETPATHURL') . 'front/images/thank_you_matjarhub.png') }}"
                         class="success-img m-auto" alt="ordersuccess" srcset="">
+                       
                 </div>
                 <h4 class="mb-5 order-title color-changer {{ session()->get('direction') == '2' ? 'text-right' : '' }}">
                     {{ trans('labels.order_successfull') }}</h4>

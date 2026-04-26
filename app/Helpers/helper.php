@@ -991,8 +991,8 @@ class helper
             // Create Dummy Data
             $dummyCategory = new \App\Models\Category();
             $dummyCategory->vendor_id = $vendor_id;
-            $dummyCategory->name = 'خضروات طازجة / Fresh Vegetables';
-            $dummyCategory->slug = 'fresh-vegetables-' . $vendor_id;
+            $dummyCategory->name = 'منتج';
+            $dummyCategory->slug = 'product-' . $vendor_id;
             $dummyCategory->is_available = 1;
             $dummyCategory->is_deleted = 2;
             $dummyCategory->save();
@@ -1004,27 +1004,18 @@ class helper
                 mkdir(storage_path('app/public/admin-assets/images/banners/'), 0777, true);
             }
 
-            $veg_names = ['طماطم طازجة', 'خيار بلدي', 'فلفل ألوان'];
-            $veg_slugs = ['fresh-tomatoes', 'local-cucumber', 'bell-pepper'];
-            $veg_prices = [15, 12, 25];
-            $veg_descriptions = [
-                '<p>طماطم حمراء طازجة مختارة بعناية من أفضل المزارع. غنية بالفيتامينات ومثالية للسلطات والطهي.</p>',
-                '<p>خيار بلدي طازج ومقرمش. يتميز بطعمه الرائع ورائحته الزكية، مثالي للاستخدام اليومي.</p>',
-                '<p>فلفل رومي ألوان (أحمر، أصفر) طازج. يضيف نكهة وشكل رائع لجميع أطباقك المتميزة.</p>'
-            ];
-
             for ($i = 0; $i < 3; $i++) {
 
-                $dummyItemImageName = 'item-' . uniqid() . '.png';
-                if (file_exists(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'))) {
-                    copy(storage_path('app/public/admin-assets/images/dummy/item-65dc7e862ef02.png'), storage_path('app/public/item/' . $dummyItemImageName));
+                $dummyItemImageName = 'item-' . uniqid() . '.jpeg';
+                if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
+                    copy(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'), storage_path('app/public/item/' . $dummyItemImageName));
                 } else {
                     $dummyItemImageName = 'default.png';
                 }
 
-                $dummyBannerImageName = 'banner-' . uniqid() . '.webp';
-                if (file_exists(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'))) {
-                    copy(storage_path('app/public/admin-assets/images/dummy/banner-65d9bc969fc4d.webp'), storage_path('app/public/admin-assets/images/banners/' . $dummyBannerImageName));
+                $dummyBannerImageName = 'banner-' . uniqid() . '.jpeg';
+                if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
+                    copy(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'), storage_path('app/public/admin-assets/images/banners/' . $dummyBannerImageName));
                 } else {
                     $dummyBannerImageName = 'default.png';
                 }
@@ -1032,12 +1023,12 @@ class helper
                 $dummyItem = new \App\Models\Item();
                 $dummyItem->vendor_id = $vendor_id;
                 $dummyItem->cat_id = $dummyCategory->id;
-                $dummyItem->item_name = $veg_names[$i];
-                $dummyItem->slug = $veg_slugs[$i] . '-' . $vendor_id;
-                $dummyItem->item_price = $veg_prices[$i];
-                $dummyItem->item_original_price = $veg_prices[$i] + 5;
+                $dummyItem->item_name = 'منتج';
+                $dummyItem->slug = 'product-' . uniqid() . '-' . $vendor_id;
+                $dummyItem->item_price = 15;
+                $dummyItem->item_original_price = 20;
                 $dummyItem->tax = 0;
-                $dummyItem->description = $veg_descriptions[$i];
+                $dummyItem->description = '<p>وصف المنتج</p>';
                 $dummyItem->image = $dummyItemImageName;
                 $dummyItem->is_available = 1;
                 $dummyItem->is_deleted = 2;

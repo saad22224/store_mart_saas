@@ -112,6 +112,7 @@ class ProductController extends Controller
         $product->item_name = $request->product_name;
         $product->item_price = $price;
         $product->item_original_price = $original_price;
+        $product->currency = $request->currency;
         $product->dollar_price = $request->dollar_price ?? 0;
         $product->sku = $request->product_sku;
         $product->slug = $slug;
@@ -283,6 +284,7 @@ class ProductController extends Controller
             $product->item_name = $request->product_name;
             $product->item_price = $price;
             $product->item_original_price = $original_price;
+            $product->currency = $request->currency;
             $product->dollar_price = $request->dollar_price ?? 0;
             $product->sku = $request->product_sku;
             if ($request->has_variants == '1') {

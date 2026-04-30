@@ -78,7 +78,7 @@
                                             </td>
                                             <td class="price">
                                                 <p class="cart-total-price td_a m-0 text-left">
-                                                    {{ helper::currency_formate($cart->item_price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency) }}
                                                 </p>
                                             </td>
                                             <td class="">
@@ -102,7 +102,7 @@
                                             </td>
                                             <td>
                                                 <p class="cart-total-price m-0 td_a text-left" id="total_price">
-                                                    {{ helper::currency_formate($cart->price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($cart->price, $storeinfo->id, $cart->currency) }}
                                                 </p>
                                             </td>
                                             <td>

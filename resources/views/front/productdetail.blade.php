@@ -107,12 +107,12 @@
 
                             @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
                                 <p class="pro-text pricing" id="modal_detail_item_price">
-                                    {{ helper::currency_formate($price, $storeinfo->id) }}
+                                    {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                 </p>
                                 @if ($original_price > $price)
                                     <p class="card-text pro-org-value text-muted pricing"
                                         id="modal_detail_original_price">
-                                        {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                     </p>
                                 @endif
                             @endif
@@ -282,7 +282,7 @@
                                                         extras_name="{{ $extras->name }}" class="Checkbox"
                                                         value="{{ $extras->id }}" price="{{ $extras->price }}">
                                                     <p class="color-changer">{{ $extras->name }} :
-                                                        {{ helper::currency_formate($extras->price, $getitem->vendor_id) }}
+                                                        {{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}
                                                     </p>
                                                 </li>
                                             @endforeach
@@ -438,6 +438,7 @@
                     <input type="hidden" name="variants_name" id="modal_variants_name">
                     <input type="hidden" name="stock_management" id="modal_stock_management"
                         value="{{ $getitem->stock_management }}">
+                    <input type="hidden" name="currency" id="modal_currency" value="{{ $getitem->currency }}">
                 </div>
             </div>
         </div>
@@ -500,12 +501,12 @@
                     $('.modal-product-detail-price').removeClass('d-none');
                     $('#modal_variants_name').val(variants);
 
-                    $('#modal_detail_item_price').text(currency_formate(parseFloat(data.price)));
+                    $('#modal_detail_item_price').text(currency_formate(parseFloat(data.price), data.currency));
                     $('#modal_overview_item_price').val(data.price);
                     $('#modal_offer').removeClass('d-none');
                     if (parseFloat(data.original_price) > parseFloat(data.price)) {
                         $('#modal_detail_original_price').text(currency_formate(parseFloat(data
-                            .original_price)));
+                            .original_price), data.currency));
                         $('#modal_offer').removeClass('d-none');
                         $('#modal_offer').text($.number(off, 1) + '% {{ trans('labels.off') }}');
                     } else {

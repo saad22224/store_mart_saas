@@ -190,10 +190,10 @@
                                                 @endif
                                             </div>
                                             <p class="pro-pricing color-changer fs-15 line-1 m-0">
-                                                {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                 @if ($original_price > $price)
                                                     <del class="old-price fs-13 text-muted fw-600">
-                                                        {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                        {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                     </del>
                                                 @endif
                                             </p>
@@ -475,10 +475,10 @@
                                                         @endif
                                                     </div>
                                                     <p class="pro-pricing color-changer fs-15 line-1 m-0">
-                                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                         @if ($original_price > $price)
                                                             <del class="old-price fs-13 text-muted fw-600">
-                                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                             </del>
                                                         @endif
                                                     </p>
@@ -694,10 +694,10 @@
                                                 @endif
                                             </div>
                                             <p class="pro-pricing color-changer fs-15 line-1 m-0">
-                                                {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                 @if ($original_price > $price)
                                                     <del class="old-price fs-13 text-muted fw-600">
-                                                        {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                        {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                     </del>
                                                 @endif
                                             </p>

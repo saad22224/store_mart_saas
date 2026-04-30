@@ -194,11 +194,11 @@
                                                 <div class="d-flex align-items-center justify-content-between w-100">
                                                     <div class="d-flex align-items-center">
                                                         <p class="card-text pro-value">
-                                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                         </p>
                                                         @if ($original_price > $price)
                                                             <p class="card-text pro-org-value">
-                                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                             </p>
                                                         @endif
                                                     </div>
@@ -510,11 +510,11 @@
                                                                 class="d-flex align-items-center justify-content-between w-100">
                                                                 <div class="d-flex align-items-center">
                                                                     <p class="card-text pro-value">
-                                                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                                     </p>
                                                                     @if ($original_price > $price)
                                                                         <p class="card-text pro-org-value">
-                                                                            {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                                            {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                                         </p>
                                                                     @endif
                                                                 </div>
@@ -631,7 +631,7 @@
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <p
                                                                 class="total-price color-changer m-0 {{ session()->get('direction') == 2 ? 'text-left' : '' }}">
-                                                                {{ helper::currency_formate($cart->item_price, $storeinfo->id) }}
+                                                                {{ helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency) }}
                                                             </p>
                                                             <div
                                                                 class="d-flex qty-input2 align-items-center col-xl-4 col-lg-6 rounded-0">
@@ -868,11 +868,11 @@
                                                 <div class="d-flex align-items-center justify-content-between w-100">
                                                     <div class="d-flex align-items-center">
                                                         <p class="card-text pro-value">
-                                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                         </p>
                                                         @if ($original_price > $price)
                                                             <p class="card-text pro-org-value">
-                                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                             </p>
                                                         @endif
                                                     </div>

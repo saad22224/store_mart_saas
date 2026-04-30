@@ -226,12 +226,12 @@
                                 <div class="card-footer p-2 border-0 bg-transparent">
                                     <div class="d-flex align-items-baseline flex-wrap gap-1">
                                         <p class="pro-pricing color-changer line-1 m-0">
-                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                         </p>
                                         <!-- false-price -->
                                         @if ($original_price > $price)
                                             <del class="fs-13 fw-600 text-muted m-0">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                             </del>
                                         @endif
                                     </div>
@@ -531,12 +531,12 @@
                                 <div class="card-footer border-0 bg-transparent p-2">
                                     <div class="d-flex align-items-baseline flex-wrap gap-1">
                                         <p class="pro-pricing color-changer line-1 m-0">
-                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                         </p>
                                         <!-- false-price -->
                                         @if ($original_price > $price)
                                             <del class="fs-13 fw-600 text-muted m-0">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                             </del>
                                         @endif
                                     </div>

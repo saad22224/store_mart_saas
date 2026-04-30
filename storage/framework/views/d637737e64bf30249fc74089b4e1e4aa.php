@@ -601,7 +601,16 @@
     }
     var whatsappnumber = "<?php echo e(helper::appdata($storeinfo->id)->whatsapp_number); ?>";
 
-    function currency_formate(price) {
+    function currency_formate(price, currency_type = null) {
+        if (currency_type == 'USD') {
+            return '$' + $.number(price, 2);
+        }
+        if (currency_type == 'Lira') {
+            var locale = "<?php echo e(\App::getLocale()); ?>";
+            var currency_text = locale === 'en' ? " L.S" : " ل.س";
+            return $.number(price, 0) + currency_text;
+        }
+
         var formate = <?php echo e(@helper::currencyinfo($storeinfo->id)->decimal_digit ?? 2); ?>;
         var exchange_rate = <?php echo e(@helper::currencyinfo($storeinfo->id)->exchange_rate ?? 1); ?>;
         var price = parseFloat(price) * parseFloat(exchange_rate);

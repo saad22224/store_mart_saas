@@ -105,12 +105,13 @@
                                 @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
 
                                     <p class="pro-text color-changer pricing detail_item_price">
-                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($price, $storeinfo->id, $getitem->currency) }}
                                     </p>
                                     @if ($original_price > $price)
                                         <del
                                             class="card-text pro-org-value text-muted pricing mb-0 px-1 detail_original_price">
-                                            {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                            {{ helper::currency_formate($original_price, $storeinfo->id, $getitem->currency) }}
+                                            {{-- {{ dd(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)) }} --}}
                                         </del>
                                     @endif
                                 @endif
@@ -276,7 +277,7 @@
                                                             extras_name="{{ $extras->name }}" class="Checkbox"
                                                             value="{{ $extras->id }}" price="{{ $extras->price }}">
                                                         <p class="color-changer">{{ $extras->name }} :
-                                                            {{ helper::currency_formate($extras->price, $getitem->vendor_id) }}
+                                                            {{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}
                                                         </p>
                                                     </li>
                                                 @endforeach
@@ -485,12 +486,12 @@
                                                         <div class="d-flex align-items-center flex-wrap gap-1">
                                                             <h6
                                                                 class="color-changer fw-600 fs-7 detail_item_price mb-0">
-                                                                {{ helper::currency_formate($price, $getitem->vendor_id) }}
+                                                                {{ helper::currency_formate($price, $getitem->vendor_id, $getitem->currency) }}
                                                             </h6>
                                                             @if ($original_price > 0 && $original_price > $price)
                                                                 <del
                                                                     class="text-muted fw-500 fs-8 detail_original_price">
-                                                                    {{ helper::currency_formate($original_price, $getitem->vendor_id) }}
+                                                                    {{ helper::currency_formate($original_price, $getitem->vendor_id, $getitem->currency) }}
                                                                 </del>
                                                             @endif
                                                         </div>
@@ -609,11 +610,11 @@
                                                         <div class="woo_price mt-3">
                                                             <div class="d-flex align-items-center flex-wrap gap-1">
                                                                 <h6 class="color-changer fw-600 fs-7 mb-0 ">
-                                                                    {{ helper::currency_formate($fbtprice, $getitem->vendor_id) }}
+                                                                    {{ helper::currency_formate($fbtprice, $getitem->vendor_id, $frequently_bought_item->currency) }}
                                                                 </h6>
                                                                 @if ($fbtoriginal_price > 0 && $fbtoriginal_price > $fbtprice)
                                                                     <del class="text-muted fw-500 fs-8">
-                                                                        {{ helper::currency_formate($fbtoriginal_price, $getitem->vendor_id) }}
+                                                                        {{ helper::currency_formate($fbtoriginal_price, $getitem->vendor_id, $frequently_bought_item->currency) }}
                                                                     </del>
                                                                 @endif
                                                             </div>
@@ -632,7 +633,7 @@
                                             <div class="">
                                                 <p class="fs-7 text-muted mb-0">1 {{ trans('labels.product') }}</p>
                                                 <p class="color-changer fs-6 fw-600 detail_item_price">
-                                                    {{ helper::currency_formate($price, $getitem->vendor_id) }}
+                                                    {{ helper::currency_formate($price, $getitem->vendor_id, $getitem->currency) }}
                                                 </p>
                                             </div>
                                             <i class="fa-solid fa-plus fs-6 color-changer"></i>
@@ -989,11 +990,11 @@
 
                                     <div class="d-flex align-items-baseline flex-wrap gap-1">
                                         <p class="pro-pricing color-changer line-1">
-                                            {{ helper::currency_formate($rprice, $storeinfo->id) }}
+                                            {{ helper::currency_formate($rprice, $storeinfo->id, $item->currency) }}
                                         </p>
                                         @if ($roriginal_price > $rprice)
                                             <p class="pro-pricing pro-org-value line-1 m-0">
-                                                {{ helper::currency_formate($roriginal_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency) }}
                                             </p>
                                         @endif
 
@@ -1183,11 +1184,11 @@
 
                                             <div class="d-flex align-items-baseline flex-wrap gap-1">
                                                 <p class="pro-pricing color-changer line-1">
-                                                    {{ helper::currency_formate($rprice, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($rprice, $storeinfo->id, $item->currency) }}
                                                 </p>
                                                 @if ($roriginal_price > $rprice)
                                                     <p class="pro-pricing pro-org-value line-1 m-0">
-                                                        {{ helper::currency_formate($roriginal_price, $storeinfo->id) }}
+                                                        {{ helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency) }}
                                                     </p>
                                                 @endif
 
@@ -1239,12 +1240,12 @@
                             </h6>
                             <div class="d-flex gap-1 flex-wrap align-items-center">
                                 <p class="pro-text fs-7 detail_item_price">
-                                    {{ helper::currency_formate($price, $storeinfo->id) }}
+                                    {{ helper::currency_formate($price, $storeinfo->id, $getitem->currency) }}
                                 </p>
                                 @if ($original_price > $price)
                                     <del
                                         class="card-text pro-org-value text-muted fs-8 mb-0 px-1 detail_original_price">
-                                        {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($original_price, $storeinfo->id, $getitem->currency) }}
                                     </del>
                                 @endif
                             </div>
@@ -1303,8 +1304,8 @@
             $('#total_product').text("{{ trans('labels.add') }} " + (checkedCount + 1) +
                 " {{ trans('labels.item_to_cart') }}");
             $('#total_addon').text(checkedCount + " {{ trans('labels.addon') }}");
-            $('#addon_total').text(currency_formate(addonstotal));
-            $('#total_price').text(currency_formate(subtotal));
+            $('#addon_total').text(currency_formate(addonstotal, "{{ $getitem->currency }}"));
+            $('#total_price').text(currency_formate(subtotal, "{{ $getitem->currency }}"));
             $("#addon_cart_btn").prop('disabled', false);
         } else {
             $('#addon_section').addClass("d-none");

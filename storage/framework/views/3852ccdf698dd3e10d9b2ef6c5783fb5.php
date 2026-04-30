@@ -12,13 +12,13 @@
                                 <?php echo e($getitem->item_name); ?></h5>
                             <div class="d-flex gap-1 flex-wrap align-items-center">
                                 <p class="pro-text fs-7 detail_item_price">
-                                    <?php echo e(helper::currency_formate($price, $storeinfo->id)); ?>
+                                    <?php echo e(helper::currency_formate($price, $storeinfo->id, $getitem->currency)); ?>
 
                                 </p>
                                 <?php if($original_price > $price): ?>
                                     <del
                                         class="card-text pro-org-value text-muted fs-8 mb-0 px-1 detail_original_price">
-                                        <?php echo e(helper::currency_formate($original_price, $storeinfo->id)); ?>
+                                        <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)); ?>
 
                                     </del>
                                 <?php endif; ?>

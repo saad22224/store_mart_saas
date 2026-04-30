@@ -796,4 +796,27 @@
             </button>
         </div>
     </form>
+
+    {{-- @if (@helper::checkaddons('subscription')) --}}
+        {{-- @if (@helper::checkaddons('pwa')) --}}
+            {{-- @php
+                $checkplan = App\Models\Transaction::where('vendor_id', $vendor_id)
+                    ->orderByDesc('id')
+                    ->first();
+
+                if (@$user->allow_without_subscription == 1) {
+                    $pwa = 1;
+                } else {
+                    $pwa = @$checkplan->pwa;
+                }
+            @endphp
+            @if ($pwa == 1) --}}
+                @include('admin.pwa.pwa_settings')
+            {{-- @endif --}}
+        {{-- @endif --}}
+    {{-- @else --}}
+        {{-- @if (@helper::checkaddons('pwa'))
+            @include('admin.pwa.pwa_settings')
+        @endif --}}
+    {{-- @endif --}}
 @endsection

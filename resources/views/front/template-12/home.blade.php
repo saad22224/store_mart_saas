@@ -217,11 +217,11 @@
                                     <!-- price -->
                                     <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
                                         <p class="price m-0 fw-600">
-                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                             <!-- old-price -->
                                             @if ($original_price > $price)
                                                 <del class="old-price fw-500 text-muted">
-                                                    {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                 </del>
                                             @endif
                                         </p>
@@ -472,12 +472,12 @@
                                                     <div
                                                         class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
                                                         <p class="price m-0 fw-600">
-                                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
 
                                                             <!-- old-price -->
                                                             @if ($original_price > $price)
                                                                 <del class="old-price fw-500 text-muted">
-                                                                    {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                                    {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                                 </del>
                                                             @endif
                                                         </p>
@@ -750,11 +750,11 @@
                                     <!-- price -->
                                     <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
                                         <p class="price m-0 fw-600">
-                                            {{ helper::currency_formate($price, $storeinfo->id) }}
+                                            {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                             <!-- old-price -->
                                             @if ($original_price > $price)
                                                 <del class="old-price fw-500 text-muted">
-                                                    {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                 </del>
                                             @endif
                                         </p>

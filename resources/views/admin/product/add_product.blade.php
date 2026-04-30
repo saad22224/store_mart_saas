@@ -276,13 +276,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label">السعر بالدولار <span
-                                                    class="text-danger"> * </span></label>
-                                            <input type="text" class="form-control numbers_only" name="dollar_price"
-                                                value="{{ old('dollar_price', 0) }}"
-                                                placeholder="السعر بالدولار" id="dollar_price"
-                                                required>
-
+                                            <label class="form-label">العملة <span class="text-danger"> * </span></label>
+                                            <select class="form-control" name="currency" required>
+                                                <option value="Lira" {{ old('currency') == 'Lira' ? 'selected' : '' }}>ليرة</option>
+                                                <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>دولار ($)</option>
+                                            </select>
                                         </div>
                                     </div>
 

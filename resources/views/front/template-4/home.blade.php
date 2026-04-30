@@ -215,11 +215,11 @@
                                     <div class="d-flex align-items-baseline justify-content-center">
                                         <div class="d-flex align-items-baseline">
                                             <p class="pro-text ">
-                                                {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                             </p>
                                             @if ($original_price > $price)
                                                 <p class="pro-text pro-org-value text-muted">
-                                                    {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                 </p>
                                             @endif
                                         </div>
@@ -507,11 +507,11 @@
                                             <div class="d-flex align-items-baseline justify-content-center">
                                                 <div class="d-flex align-items-baseline">
                                                     <p class="pro-text ">
-                                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                     </p>
                                                     @if ($original_price > $price)
                                                         <p class="pro-text pro-org-value text-muted">
-                                                            {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                            {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                         </p>
                                                     @endif
                                                 </div>
@@ -728,11 +728,11 @@
                                     <div class="d-flex align-items-baseline justify-content-center">
                                         <div class="d-flex align-items-baseline">
                                             <p class="pro-text ">
-                                                {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                             </p>
                                             @if ($original_price > $price)
                                                 <p class="pro-text pro-org-value text-muted">
-                                                    {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                 </p>
                                             @endif
                                         </div>

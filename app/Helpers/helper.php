@@ -268,14 +268,21 @@ class helper
         }
         return $path;
     }
-    public static function currency_formate($price, $vendor_id)
+    public static function currency_formate($price, $vendor_id, $currency = null)
     {
-        if (\App::getLocale() == 'en') {
-            return '$ ' . number_format($price, 2, '.', ',');
+        $currencyInfo = helper::currencyinfo($vendor_id);
+        if ($currency == "" || $currency == null) {
+            $currency = $currencyInfo->currency;
         }
 
-        $currency = " ل.س";
-        $currencyInfo = helper::currencyinfo($vendor_id);
+        if ($currency == 'USD') {
+            return '$' . number_format($price, 2, '.', ',');
+        }
+        if ($currency == 'Lira') {
+            $currency_text = \App::getLocale() == 'en' ? ' L.S' : ' ل.س';
+            return number_format($price, 0, '.', ',') . $currency_text;
+        }
+
         if ($currencyInfo->currency_position == "1") {
             if ($currencyInfo->decimal_separator == 1) {
                 if ($currencyInfo->currency_space == 1) {

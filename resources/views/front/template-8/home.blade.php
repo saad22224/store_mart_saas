@@ -236,12 +236,12 @@
                                     @endif
                                     <!-- price -->
                                     <p class="price color-changer m-0">
-                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
 
                                         <!-- false-price -->
                                         @if ($original_price > $price)
                                             <span class="theme-5-false-price">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                             </span>
                                         @endif
                                     </p>
@@ -511,12 +511,12 @@
                                                 @endif
                                                 <!-- price -->
                                                 <p class="price color-changer m-0">
-                                                    {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
 
                                                     <!-- false-price -->
                                                     @if ($original_price > $price)
                                                         <span class="theme-5-false-price">
-                                                            {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                            {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                         </span>
                                                     @endif
                                                 </p>
@@ -736,12 +736,12 @@
                                     @endif
                                     <!-- price -->
                                     <p class="price color-changer m-0">
-                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
 
                                         <!-- false-price -->
                                         @if ($original_price > $price)
                                             <span class="theme-5-false-price">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                             </span>
                                         @endif
                                     </p>

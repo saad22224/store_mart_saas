@@ -106,14 +106,15 @@
                                 <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
 
                                     <p class="pro-text color-changer pricing detail_item_price">
-                                        <?php echo e(helper::currency_formate($price, $storeinfo->id)); ?>
+                                        <?php echo e(helper::currency_formate($price, $storeinfo->id, $getitem->currency)); ?>
 
                                     </p>
                                     <?php if($original_price > $price): ?>
                                         <del
                                             class="card-text pro-org-value text-muted pricing mb-0 px-1 detail_original_price">
-                                            <?php echo e(helper::currency_formate($original_price, $storeinfo->id)); ?>
+                                            <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)); ?>
 
+                                            
                                         </del>
                                     <?php endif; ?>
                                 <?php endif; ?>
@@ -287,7 +288,7 @@
                                                             extras_name="<?php echo e($extras->name); ?>" class="Checkbox"
                                                             value="<?php echo e($extras->id); ?>" price="<?php echo e($extras->price); ?>">
                                                         <p class="color-changer"><?php echo e($extras->name); ?> :
-                                                            <?php echo e(helper::currency_formate($extras->price, $getitem->vendor_id)); ?>
+                                                            <?php echo e(helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency)); ?>
 
                                                         </p>
                                                     </li>
@@ -500,13 +501,13 @@
                                                         <div class="d-flex align-items-center flex-wrap gap-1">
                                                             <h6
                                                                 class="color-changer fw-600 fs-7 detail_item_price mb-0">
-                                                                <?php echo e(helper::currency_formate($price, $getitem->vendor_id)); ?>
+                                                                <?php echo e(helper::currency_formate($price, $getitem->vendor_id, $getitem->currency)); ?>
 
                                                             </h6>
                                                             <?php if($original_price > 0 && $original_price > $price): ?>
                                                                 <del
                                                                     class="text-muted fw-500 fs-8 detail_original_price">
-                                                                    <?php echo e(helper::currency_formate($original_price, $getitem->vendor_id)); ?>
+                                                                    <?php echo e(helper::currency_formate($original_price, $getitem->vendor_id, $getitem->currency)); ?>
 
                                                                 </del>
                                                             <?php endif; ?>
@@ -628,12 +629,12 @@
                                                         <div class="woo_price mt-3">
                                                             <div class="d-flex align-items-center flex-wrap gap-1">
                                                                 <h6 class="color-changer fw-600 fs-7 mb-0 ">
-                                                                    <?php echo e(helper::currency_formate($fbtprice, $getitem->vendor_id)); ?>
+                                                                    <?php echo e(helper::currency_formate($fbtprice, $getitem->vendor_id, $frequently_bought_item->currency)); ?>
 
                                                                 </h6>
                                                                 <?php if($fbtoriginal_price > 0 && $fbtoriginal_price > $fbtprice): ?>
                                                                     <del class="text-muted fw-500 fs-8">
-                                                                        <?php echo e(helper::currency_formate($fbtoriginal_price, $getitem->vendor_id)); ?>
+                                                                        <?php echo e(helper::currency_formate($fbtoriginal_price, $getitem->vendor_id, $frequently_bought_item->currency)); ?>
 
                                                                     </del>
                                                                 <?php endif; ?>
@@ -653,7 +654,7 @@
                                             <div class="">
                                                 <p class="fs-7 text-muted mb-0">1 <?php echo e(trans('labels.product')); ?></p>
                                                 <p class="color-changer fs-6 fw-600 detail_item_price">
-                                                    <?php echo e(helper::currency_formate($price, $getitem->vendor_id)); ?>
+                                                    <?php echo e(helper::currency_formate($price, $getitem->vendor_id, $getitem->currency)); ?>
 
                                                 </p>
                                             </div>
@@ -1023,12 +1024,12 @@
 
                                     <div class="d-flex align-items-baseline flex-wrap gap-1">
                                         <p class="pro-pricing color-changer line-1">
-                                            <?php echo e(helper::currency_formate($rprice, $storeinfo->id)); ?>
+                                            <?php echo e(helper::currency_formate($rprice, $storeinfo->id, $item->currency)); ?>
 
                                         </p>
                                         <?php if($roriginal_price > $rprice): ?>
                                             <p class="pro-pricing pro-org-value line-1 m-0">
-                                                <?php echo e(helper::currency_formate($roriginal_price, $storeinfo->id)); ?>
+                                                <?php echo e(helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency)); ?>
 
                                             </p>
                                         <?php endif; ?>
@@ -1220,12 +1221,12 @@
 
                                             <div class="d-flex align-items-baseline flex-wrap gap-1">
                                                 <p class="pro-pricing color-changer line-1">
-                                                    <?php echo e(helper::currency_formate($rprice, $storeinfo->id)); ?>
+                                                    <?php echo e(helper::currency_formate($rprice, $storeinfo->id, $item->currency)); ?>
 
                                                 </p>
                                                 <?php if($roriginal_price > $rprice): ?>
                                                     <p class="pro-pricing pro-org-value line-1 m-0">
-                                                        <?php echo e(helper::currency_formate($roriginal_price, $storeinfo->id)); ?>
+                                                        <?php echo e(helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency)); ?>
 
                                                     </p>
                                                 <?php endif; ?>
@@ -1279,13 +1280,13 @@
                             </h6>
                             <div class="d-flex gap-1 flex-wrap align-items-center">
                                 <p class="pro-text fs-7 detail_item_price">
-                                    <?php echo e(helper::currency_formate($price, $storeinfo->id)); ?>
+                                    <?php echo e(helper::currency_formate($price, $storeinfo->id, $getitem->currency)); ?>
 
                                 </p>
                                 <?php if($original_price > $price): ?>
                                     <del
                                         class="card-text pro-org-value text-muted fs-8 mb-0 px-1 detail_original_price">
-                                        <?php echo e(helper::currency_formate($original_price, $storeinfo->id)); ?>
+                                        <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)); ?>
 
                                     </del>
                                 <?php endif; ?>
@@ -1346,8 +1347,8 @@
             $('#total_product').text("<?php echo e(trans('labels.add')); ?> " + (checkedCount + 1) +
                 " <?php echo e(trans('labels.item_to_cart')); ?>");
             $('#total_addon').text(checkedCount + " <?php echo e(trans('labels.addon')); ?>");
-            $('#addon_total').text(currency_formate(addonstotal));
-            $('#total_price').text(currency_formate(subtotal));
+            $('#addon_total').text(currency_formate(addonstotal, "<?php echo e($getitem->currency); ?>"));
+            $('#total_price').text(currency_formate(subtotal, "<?php echo e($getitem->currency); ?>"));
             $("#addon_cart_btn").prop('disabled', false);
         } else {
             $('#addon_section').addClass("d-none");

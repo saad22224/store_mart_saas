@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\LandingSettings;
+use App\Models\User;
 class WebSettingsController extends Controller
 {
     public function basic_settings()
@@ -606,7 +607,15 @@ class WebSettingsController extends Controller
             ];
         }
         
-        return view('admin.landing2.index', compact('translations'));
+        if (Auth::user()->type == 4) {
+            $vendor_id = Auth::user()->vendor_id;
+        } else {
+            $vendor_id = Auth::user()->id;
+        }
+        $user = User::where('id', $vendor_id)->first();
+        $settingdata = Settings::where('vendor_id', $vendor_id)->first();
+        
+        return view('admin.landing2.index', compact('translations', 'vendor_id', 'user', 'settingdata'));
     }
 
     public function landing2_settings_update(Request $request)

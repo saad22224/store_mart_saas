@@ -96,12 +96,13 @@ class HomeController extends Controller
 
         $bannerimage1 = Banner::with('category_info', 'product_info')->where('vendor_id', @$storeinfo->id)->where('section', 1)->orderBy('reorder_id')->get();
         $bannerimage2 = Banner::with('category_info', 'product_info')->where('vendor_id', @$storeinfo->id)->where('section', 2)->orderBy('reorder_id')->get();
-        $cartitems = Cart::select('id', 'item_id', 'item_name', 'item_image', 'item_price', 'extras_id', 'extras_name', 'extras_price', 'qty', 'price', 'tax', 'variants_id', 'variants_name', 'attribute', 'buynow')
-            ->where('vendor_id', @$storeinfo->id);
+        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_id', 'carts.extras_name', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.variants_name', 'carts.attribute', 'carts.buynow', 'items.currency')
+            ->join('items', 'carts.item_id', 'items.id')
+            ->where('carts.vendor_id', @$storeinfo->id);
         if (Auth::user() && Auth::user()->type == 3) {
-            $cartitems->where('user_id', @Auth::user()->id);
+            $cartitems->where('carts.user_id', @Auth::user()->id);
         } else {
-            $cartitems->where('session_id', Session::getId());
+            $cartitems->where('carts.session_id', Session::getId());
         }
         $cartdata = $cartitems->get();
         if (empty($storeinfo)) {
@@ -196,6 +197,7 @@ class HomeController extends Controller
             'items.is_available',
             'items.is_deleted',
             'items.top_deals',
+            'items.currency',
             'items.dollar_price'
         )->leftjoin('testimonials', 'testimonials.item_id', 'items.id')->where('items.slug', $request->slug)->first();
 
@@ -295,7 +297,8 @@ class HomeController extends Controller
             'max_order' => $max_order,
             'stock_management' => $stock_management,
             'variants_name' => $variants_name,
-            'is_available' => $is_available
+            'is_available' => $is_available,
+            'currency' => $item->currency
         ], 200);
     }
 
@@ -489,7 +492,7 @@ class HomeController extends Controller
     public function cart(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.attribute', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_name', 'carts.extras_id', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.buynow', 'carts.variants_name', 'carts.variants_price', 'items.slug')->join('items', 'carts.item_id', 'items.id')->where('carts.vendor_id', @$storeinfo->id)->where('carts.buynow', '!=', 1);
+        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.attribute', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_name', 'carts.extras_id', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.buynow', 'carts.variants_name', 'carts.variants_price', 'items.slug', 'items.currency')->join('items', 'carts.item_id', 'items.id')->where('carts.vendor_id', @$storeinfo->id)->where('carts.buynow', '!=', 1);
         if (Auth::user() && Auth::user()->type == 3) {
             $cartitems->where('user_id', @Auth::user()->id);
         } else {
@@ -501,8 +504,9 @@ class HomeController extends Controller
     public function checkout(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_name', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.variants_name', 'carts.variants_price', DB::raw("GROUP_CONCAT(tax.name) as name"), 'carts.buynow')
+        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_name', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.variants_name', 'carts.variants_price', DB::raw("GROUP_CONCAT(tax.name) as name"), 'carts.buynow', 'items.currency')
             ->leftjoin("tax", DB::raw("FIND_IN_SET(tax.id,carts.tax)"), ">", DB::raw("'0'"))
+            ->join('items', 'carts.item_id', 'items.id')
             ->where('carts.vendor_id', @$storeinfo->id);
         if (Auth::user() && Auth::user()->type == 3) {
             $cartitems->where('carts.user_id', @Auth::user()->id);

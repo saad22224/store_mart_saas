@@ -214,12 +214,12 @@
                                         </div>
                                         <div class="d-flex align-items-baseline flex-wrap gap-1">
                                             <p class="pro-pricing color-changer line-1">
-                                                <?php echo e(helper::currency_formate($price, $storeinfo->id)); ?>
+                                                <?php echo e(helper::currency_formate($price, $storeinfo->id, $item->currency)); ?>
 
                                             </p>
                                             <?php if($original_price > $price): ?>
                                                 <p class="pro-pricing pro-org-value line-1 m-0">
-                                                    <?php echo e(helper::currency_formate($original_price, $storeinfo->id)); ?>
+                                                    <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $item->currency)); ?>
 
                                                 </p>
                                             <?php endif; ?>
@@ -532,13 +532,13 @@
                                                                 <div
                                                                     class="d-flex align-items-baseline flex-wrap gap-1">
                                                                     <p class="pro-pricing color-changer line-1">
-                                                                        <?php echo e(helper::currency_formate($price, $storeinfo->id)); ?>
+                                                                        <?php echo e(helper::currency_formate($price, $storeinfo->id, $item->currency)); ?>
 
                                                                     </p>
                                                                     <?php if($original_price > $price): ?>
                                                                         <p
                                                                             class="pro-pricing pro-org-value line-1 m-0">
-                                                                            <?php echo e(helper::currency_formate($original_price, $storeinfo->id)); ?>
+                                                                            <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $item->currency)); ?>
 
                                                                         </p>
                                                                     <?php endif; ?>
@@ -748,12 +748,12 @@
                                         </div>
                                         <div class="d-flex align-items-baseline flex-wrap gap-1">
                                             <p class="pro-pricing line-1 color-changer">
-                                                <?php echo e(helper::currency_formate($price, $storeinfo->id)); ?>
+                                                <?php echo e(helper::currency_formate($price, $storeinfo->id, $item->currency)); ?>
 
                                             </p>
                                             <?php if($original_price > $price): ?>
                                                 <p class="pro-pricing pro-org-value line-1 m-0">
-                                                    <?php echo e(helper::currency_formate($original_price, $storeinfo->id)); ?>
+                                                    <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $item->currency)); ?>
 
                                                 </p>
                                             <?php endif; ?>

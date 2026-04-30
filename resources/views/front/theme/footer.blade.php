@@ -587,7 +587,16 @@
     }
     var whatsappnumber = "{{ helper::appdata($storeinfo->id)->whatsapp_number }}";
 
-    function currency_formate(price) {
+    function currency_formate(price, currency_type = null) {
+        if (currency_type == 'USD') {
+            return '$' + $.number(price, 2);
+        }
+        if (currency_type == 'Lira') {
+            var locale = "{{ \App::getLocale() }}";
+            var currency_text = locale === 'en' ? " L.S" : " ل.س";
+            return $.number(price, 0) + currency_text;
+        }
+
         var formate = {{ @helper::currencyinfo($storeinfo->id)->decimal_digit ?? 2 }};
         var exchange_rate = {{ @helper::currencyinfo($storeinfo->id)->exchange_rate ?? 1 }};
         var price = parseFloat(price) * parseFloat(exchange_rate);

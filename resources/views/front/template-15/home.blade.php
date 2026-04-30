@@ -230,11 +230,11 @@
                                 <div class="card-footer bg-transparent border-0">
                                     <!-- price -->
                                     <p class="price color-changer fs-15 m-0">
-                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                         <!-- false-price -->
                                         @if ($original_price > $price)
                                             <del class="fs-13 text-muted">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                             </del>
                                         @endif
                                     </p>
@@ -500,11 +500,11 @@
                                             <div class="card-footer bg-transparent border-0">
                                                 <!-- price -->
                                                 <p class="price color-changer fs-15 m-0">
-                                                    {{ helper::currency_formate($price, $storeinfo->id) }}
+                                                    {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                                     <!-- false-price -->
                                                     @if ($original_price > $price)
                                                         <del class="fs-13 text-muted">
-                                                            {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                            {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                                         </del>
                                                     @endif
                                                 </p>
@@ -747,11 +747,11 @@
                                 <div class="card-footer bg-transparent border-0">
                                     <!-- price -->
                                     <p class="price color-changer fs-15 m-0">
-                                        {{ helper::currency_formate($price, $storeinfo->id) }}
+                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
                                         <!-- false-price -->
                                         @if ($original_price > $price)
                                             <del class="fs-13 text-muted">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
                                             </del>
                                         @endif
                                     </p>

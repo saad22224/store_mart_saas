@@ -314,13 +314,11 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="form-label">السعر بالدولار <span
-                                                        class="text-danger">
-                                                        * </span></label>
-                                                <input type="text" step="any" class="form-control numbers_only"
-                                                    name="dollar_price"
-                                                    value="{{ $getproductdata->has_variants == 1 ? '' : $getproductdata->dollar_price }}"
-                                                    placeholder="السعر بالدولار" id="dollar_price">
+                                                <label class="form-label">العملة <span class="text-danger"> * </span></label>
+                                                <select class="form-control" name="currency" required>
+                                                    <option value="Lira" {{ $getproductdata->currency == 'Lira' ? 'selected' : '' }}>ليرة</option>
+                                                    <option value="USD" {{ $getproductdata->currency == 'USD' ? 'selected' : '' }}>دولار ($)</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div

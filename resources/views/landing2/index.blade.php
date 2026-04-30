@@ -1067,6 +1067,27 @@
             will-change: transform, opacity;
         }
     </style>
+    {{-- @if (@helper::checkaddons('pwa')) --}}
+        @php
+            $admin_id = 1;
+            $admin_user = App\Models\User::where('id', $admin_id)->first();
+            $pwa = 0;
+            if ($admin_user) {
+                $checkplan = App\Models\Transaction::where('vendor_id', $admin_id)->orderByDesc('id')->first();
+                if (@$admin_user->allow_without_subscription == 1) {
+                    $pwa = 1;
+                } else {
+                    $pwa = @$checkplan->pwa;
+                }
+            }
+        @endphp
+        @if (helper::appdata($admin_id)->pwa == 1)
+            <meta name="theme-color" content="{{ helper::appdata($admin_id)->theme_color }}">
+            <meta name="background-color" content="{{ helper::appdata($admin_id)->background_color }}">
+            <link rel="apple-touch-icon" href="{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}">
+            <link rel="manifest" href='data:application/manifest+json,{"name": "{{ helper::appdata($admin_id)->app_name }}","short_name": "{{ helper::appdata($admin_id)->app_name }}","icons": [{"src": "{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}", "sizes": "512x512", "type": "image/png"}, {"src": "{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}", "sizes": "1024x1024", "type": "image/png"}], "start_url": "{{ request()->url() }}","display": "standalone","prefer_related_applications":"false" }'>
+        @endif
+    {{-- @endif --}}
 </head>
 
 <body>
@@ -1191,8 +1212,8 @@
             </p>
 
             <div class="hero-actions" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
-                <button class="btn-hero-primary">{{ @$translations['hero']['btn_primary'] ?? 'ابدأ مجاناً الآن' }}</button>
-                <button class="btn-hero-secondary">{{ @$translations['hero']['btn_secondary'] ?? 'شاهد العرض التجريبي' }}</button>
+                <button class="btn-hero-primary" onclick="window.location.href = '{{ url('admin/register') }}'">{{ @$translations['hero']['btn_primary'] ?? 'ابدأ مجاناً الآن' }}</button>
+                {{-- <button class="btn-hero-secondary">{{ @$translations['hero']['btn_secondary'] ?? 'شاهد العرض التجريبي' }}</button> --}}
             </div>
         </div>
     </section>
@@ -1584,6 +1605,57 @@
                 close: true
             }).showToast();
         </script>
+    @endif
+
+    @if (@helper::checkaddons('pwa'))
+        @if ($pwa == 1 && helper::appdata($admin_id)->pwa == 1)
+            <!--------------- PWA Section start ------------------>
+            <div class="d-block d-sm-none" id="pwa-container">
+                <div class="pwa d-flex gap-2" style="position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:9999;padding:15px;box-shadow:0 -2px 10px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;">
+                    <div class="d-flex align-items-center gap-2" style="display:flex;align-items:center;gap:10px;">
+                        <img src="{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}" class="pwa-image" alt="" height="40px" style="border-radius:10px;">
+                        <div class="pwa-content">
+                            <h5 class="mb-1 line-1 fs-7" style="margin:0;font-size:14px;font-weight:700;">{{ helper::appdata($admin_id)->app_title }}</h5>
+                            <p class="m-0 fs-8 line-1 text-dark" style="margin:0;font-size:12px;color:#475569;">{{ trans('labels.pwa_message') ?? 'Add to Home Screen' }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2" style="display:flex;align-items:center;gap:10px;">
+                        <a class="btn mobile-install-btn" id="mobile-install-app" style="background:#15AC82;color:#fff;padding:5px 10px;border-radius:5px;font-size:12px;cursor:pointer;">{{ trans('labels.install') ?? 'Install' }}</a>
+                        <a class="close-btn" id="close-btn" style="cursor:pointer;">
+                            <span class="material-symbols-outlined" style="font-size:16px;color:#dc3545;">close</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--------------- PWA Section End ------------------>
+            <script>
+                if (!navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.register("{{ url('storage/app/public/sw.js') }}").then(function(reg) {
+                        console.log("Service worker has been registered for scope: " + reg.scope);
+                    });
+                }
+                
+                let deferredPrompt;
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                });
+                
+                document.getElementById('mobile-install-app')?.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            deferredPrompt = null;
+                        }
+                    }
+                });
+                
+                document.getElementById('close-btn')?.addEventListener('click', () => {
+                    document.getElementById('pwa-container').style.display = 'none';
+                });
+            </script>
+        @endif
     @endif
 
 </body>

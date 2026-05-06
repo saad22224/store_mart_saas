@@ -316,10 +316,11 @@ class VendorController extends Controller
             return redirect('admin/users')->with('success', trans('messages.success'));
         } else {
             session()->put('user_login', 1);
+            session()->put('new_vendor', true);
             $newuser = User::select('id', 'name', 'email', 'mobile', 'image')->where('id', $data)->first();
   
             Auth::login($newuser);
-            return redirect('admin/dashboard')->with('success', trans('messages.success'));
+            return redirect('admin/onboarding')->with('success', trans('messages.success'));
         }
     }
     public function forgot_password()

@@ -1,5 +1,4 @@
-@extends('admin.layout.auth_default')
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         /* ===== Multi-Step Registration Styles ===== */
         .register-wrapper {
@@ -250,180 +249,184 @@
 
     <section>
         <div class="row g-0 register-wrapper">
-            {{-- Left: Hero Image --}}
+            
             <div class="col-xl-7 col-lg-6 col-md-6 d-md-block d-none register-hero">
-                <img src="{{ helper::image_path(helper::appdata('')->admin_auth_pages_bg_image) }}" alt="">
+                <img src="<?php echo e(helper::image_path(helper::appdata('')->admin_auth_pages_bg_image)); ?>" alt="">
             </div>
 
-            {{-- Right: Form --}}
+            
             <div class="col-xl-5 col-lg-6 col-md-6 register-form-side">
                 <div class="register-card">
-                    {{-- Header --}}
+                    
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h2 class="reg-title mb-1">{{ trans('labels.register') }}</h2>
-                            <p class="reg-subtitle mb-0">{{ trans('labels.create_sub_title') }}</p>
+                            <h2 class="reg-title mb-1"><?php echo e(trans('labels.register')); ?></h2>
+                            <p class="reg-subtitle mb-0"><?php echo e(trans('labels.create_sub_title')); ?></p>
                         </div>
-                        @if (helper::available_language('')->count() > 1)
-                            @if (@helper::checkaddons('language'))
+                        <?php if(helper::available_language('')->count() > 1): ?>
+                            <?php if(@helper::checkaddons('language')): ?>
                                 <div class="lag-btn dropdown border-0 shadow-none login-lang">
                                     <button class="border-0 bg-transparent language-dropdown" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="{{ helper::image_path(session()->get('flag')) }}" alt=""
+                                        <img src="<?php echo e(helper::image_path(session()->get('flag'))); ?>" alt=""
                                             class="lag-img rounded-circle w-25">
                                     </button>
                                     <ul class="dropdown-menu rounded-1 mt-1 p-0 bg-body-secondary shadow border-0 rounded-3 overflow-hidden">
-                                        @foreach (helper::listoflanguage() as $languagelist)
+                                        <?php $__currentLoopData = helper::listoflanguage(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $languagelist): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <li>
                                                 <a class="dropdown-item text-dark d-flex align-items-center px-2 gap-2 py-2"
-                                                    href="{{ URL::to('/lang/change?lang=' . $languagelist->code) }}">
-                                                    <img src="{{ helper::image_path($languagelist->image) }}" alt="" class="img-fluid lag-img w-25">
-                                                    {{ $languagelist->name }}
+                                                    href="<?php echo e(URL::to('/lang/change?lang=' . $languagelist->code)); ?>">
+                                                    <img src="<?php echo e(helper::image_path($languagelist->image)); ?>" alt="" class="img-fluid lag-img w-25">
+                                                    <?php echo e($languagelist->name); ?>
+
                                                 </a>
                                             </li>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ul>
                                 </div>
-                            @endif
-                        @endif
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
 
-                    {{-- Progress Steps --}}
+                    
                     <div class="step-progress">
                         <div class="step-indicator">
                             <div class="step-circle active" id="stepCircle1">1</div>
-                            <span class="step-label active" id="stepLabel1">{{ trans('labels.basic_info') == 'labels.basic_info' ? 'البيانات الأساسية' : trans('labels.basic_info') }}</span>
+                            <span class="step-label active" id="stepLabel1"><?php echo e(trans('labels.basic_info') ?? 'البيانات الأساسية'); ?></span>
                         </div>
                         <div class="step-connector" id="stepConnector">
                             <div class="fill"></div>
                         </div>
                         <div class="step-indicator">
                             <div class="step-circle" id="stepCircle2">2</div>
-                            <span class="step-label" id="stepLabel2">{{ trans('labels.store_info') == 'labels.store_info' ? 'بيانات المتجر' : trans('labels.store_info') }}</span>
+                            <span class="step-label" id="stepLabel2"><?php echo e(trans('labels.store_info') ?? 'بيانات المتجر'); ?></span>
                         </div>
                     </div>
 
-                    {{-- Form --}}
-                    <form id="registerForm" method="POST" action="{{ URL::to('admin/register_vendor') }}">
-                        @csrf
+                    
+                    <form id="registerForm" method="POST" action="<?php echo e(URL::to('admin/register_vendor')); ?>">
+                        <?php echo csrf_field(); ?>
 
-                        {{-- ===== STEP 1: Basic Info ===== --}}
+                        
                         <div class="form-step active" id="step1">
                             <div class="row">
                                 <div class="col-12 reg-form-group">
-                                    <label for="name">{{ trans('labels.name') }}<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}" id="name"
-                                        placeholder="{{ trans('labels.name') }}" required>
+                                    <label for="name"><?php echo e(trans('labels.name')); ?><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="name" value="<?php echo e(old('name')); ?>" id="name"
+                                        placeholder="<?php echo e(trans('labels.name')); ?>" required>
                                 </div>
                                 <div class="col-12 reg-form-group">
-                                    <label for="email">{{ trans('labels.email') }}<span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email" value="{{ old('email') }}" id="email"
-                                        placeholder="{{ trans('labels.email') }}" required>
+                                    <label for="email"><?php echo e(trans('labels.email')); ?><span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" name="email" value="<?php echo e(old('email')); ?>" id="email"
+                                        placeholder="<?php echo e(trans('labels.email')); ?>" required>
                                 </div>
                                 <div class="col-12 reg-form-group">
-                                    <label for="mobile">{{ trans('labels.mobile') }}<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control mobile-number" name="mobile" value="{{ old('mobile') }}" id="mobile"
-                                        placeholder="{{ trans('labels.mobile') }}" required>
+                                    <label for="mobile"><?php echo e(trans('labels.mobile')); ?><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control mobile-number" name="mobile" value="<?php echo e(old('mobile')); ?>" id="mobile"
+                                        placeholder="<?php echo e(trans('labels.mobile')); ?>" required>
                                 </div>
                                 <div class="col-12 reg-form-group">
-                                    <label for="password">{{ trans('labels.password') }}<span class="text-danger">*</span></label>
+                                    <label for="password"><?php echo e(trans('labels.password')); ?><span class="text-danger">*</span></label>
                                     <div class="password-wrapper">
-                                        <input type="password" class="form-control" name="password" value="{{ old('password') }}" id="password"
-                                            placeholder="{{ trans('labels.password') }}" required>
+                                        <input type="password" class="form-control" name="password" value="<?php echo e(old('password')); ?>" id="password"
+                                            placeholder="<?php echo e(trans('labels.password')); ?>" required>
                                         <span class="toggle-pass"><i class="fa-light fa-eye-slash" id="eye"></i></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex gap-2 mt-3">
-                                <a href="{{ URL::to('/admin') }}" class="btn btn-login-link flex-fill text-center">{{ trans('labels.login') }}</a>
+                                <a href="<?php echo e(URL::to('/admin')); ?>" class="btn btn-login-link flex-fill text-center"><?php echo e(trans('labels.login')); ?></a>
                                 <button type="button" class="btn btn-step btn-next flex-fill" onclick="nextStep()">
-                                    {{ trans('labels.next') == 'labels.next' ? 'التالي' : trans('labels.next') }} <i class="fa-solid fa-arrow-{{ session()->get('direction') == 2 ? 'left' : 'right' }} ms-1"></i>
+                                    <?php echo e(trans('labels.next') == 'labels.next' ? 'التالي' : trans('labels.next')); ?> <i class="fa-solid fa-arrow-<?php echo e(session()->get('direction') == 2 ? 'left' : 'right'); ?> ms-1"></i>
                                 </button>
                             </div>
                         </div>
 
-                        {{-- ===== STEP 2: Store Info ===== --}}
+                        
                         <div class="form-step" id="step2">
                             <div class="row">
                                 <div class="col-md-6 reg-form-group">
-                                    <label for="country">{{ trans('labels.country') }}<span class="text-danger">*</span></label>
+                                    <label for="country"><?php echo e(trans('labels.country')); ?><span class="text-danger">*</span></label>
                                     <select name="country" class="form-select" id="country" required>
-                                        <option value="">{{ trans('labels.select') }}</option>
-                                        @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                        @endforeach
+                                        <option value=""><?php echo e(trans('labels.select')); ?></option>
+                                        <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($country->id); ?>"><?php echo e($country->name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                                 <div class="col-md-6 reg-form-group">
-                                    <label for="city">{{ trans('labels.city') }}<span class="text-danger">*</span></label>
+                                    <label for="city"><?php echo e(trans('labels.city')); ?><span class="text-danger">*</span></label>
                                     <select name="city" class="form-select" id="city" required>
-                                        <option value="">{{ trans('labels.select') }}</option>
+                                        <option value=""><?php echo e(trans('labels.select')); ?></option>
                                     </select>
                                 </div>
 
-                                @if (@helper::checkaddons('digital_product'))
+                                <?php if(@helper::checkaddons('digital_product')): ?>
                                     <div class="col-md-6 reg-form-group">
-                                        <label for="store">{{ trans('labels.store_categories') }}<span class="text-danger">*</span></label>
+                                        <label for="store"><?php echo e(trans('labels.store_categories')); ?><span class="text-danger">*</span></label>
                                         <select name="store" class="form-select" id="store" required>
-                                            <option value="">{{ trans('labels.select') }}</option>
-                                            @foreach ($stores as $store)
-                                                <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                            @endforeach
+                                            <option value=""><?php echo e(trans('labels.select')); ?></option>
+                                            <?php $__currentLoopData = $stores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $store): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($store->id); ?>"><?php echo e($store->name); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
                                     <div class="col-md-6 reg-form-group">
-                                        <label for="product_type">{{ trans('labels.product_type') }}<span class="text-danger">*</span></label>
+                                        <label for="product_type"><?php echo e(trans('labels.product_type')); ?><span class="text-danger">*</span></label>
                                         <select name="product_type" class="form-select" required>
-                                            <option value="">{{ trans('labels.select') }}</option>
-                                            <option value="1" {{ old('store') == 1 ? 'selected' : '' }}>{{ trans('labels.physical') }}</option>
-                                            <option value="2" {{ old('store') == 2 ? 'selected' : '' }}>{{ trans('labels.digital') }}</option>
+                                            <option value=""><?php echo e(trans('labels.select')); ?></option>
+                                            <option value="1" <?php echo e(old('store') == 1 ? 'selected' : ''); ?>><?php echo e(trans('labels.physical')); ?></option>
+                                            <option value="2" <?php echo e(old('store') == 2 ? 'selected' : ''); ?>><?php echo e(trans('labels.digital')); ?></option>
                                         </select>
                                     </div>
-                                @else
+                                <?php else: ?>
                                     <div class="col-12 reg-form-group">
-                                        <label for="store">{{ trans('labels.store_categories') }}<span class="text-danger">*</span></label>
+                                        <label for="store"><?php echo e(trans('labels.store_categories')); ?><span class="text-danger">*</span></label>
                                         <select name="store" class="form-select" id="store" required>
-                                            <option value="">{{ trans('labels.select') }}</option>
-                                            @foreach ($stores as $store)
-                                                <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                            @endforeach
+                                            <option value=""><?php echo e(trans('labels.select')); ?></option>
+                                            <?php $__currentLoopData = $stores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $store): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($store->id); ?>"><?php echo e($store->name); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
-                                @if (@helper::checkaddons('unique_slug'))
+                                <?php if(@helper::checkaddons('unique_slug')): ?>
                                     <div class="col-12 reg-form-group">
-                                        <label for="slug">{{ trans('labels.personlized_link') }}<span class="text-danger">*</span></label>
-                                        @if (env('Environment') == 'sendbox')
-                                            <span class="badge badge bg-danger ms-2 mb-0">{{ trans('labels.addon') }}</span>
-                                        @endif
+                                        <label for="slug"><?php echo e(trans('labels.personlized_link')); ?><span class="text-danger">*</span></label>
+                                        <?php if(env('Environment') == 'sendbox'): ?>
+                                            <span class="badge badge bg-danger ms-2 mb-0"><?php echo e(trans('labels.addon')); ?></span>
+                                        <?php endif; ?>
                                         <div class="input-group">
-                                            <span class="input-group-text col-5 overflow-x-auto {{ session()->get('direction') == 2 ? 'rounded-start-0 rounded-end' : 'rounded-end-0' }}" style="border-radius:12px 0 0 12px;">{{ URL::to('/') }}/</span>
-                                            <input type="text" class="form-control {{ session()->get('direction') == 2 ? 'rounded-end-0 rounded-start' : 'rounded-start-0' }}" id="slug" name="slug" value="{{ old('slug') }}" required style="border-radius:0 12px 12px 0;">
+                                            <span class="input-group-text col-5 overflow-x-auto <?php echo e(session()->get('direction') == 2 ? 'rounded-start-0 rounded-end' : 'rounded-end-0'); ?>" style="border-radius:12px 0 0 12px;"><?php echo e(URL::to('/')); ?>/</span>
+                                            <input type="text" class="form-control <?php echo e(session()->get('direction') == 2 ? 'rounded-end-0 rounded-start' : 'rounded-start-0'); ?>" id="slug" name="slug" value="<?php echo e(old('slug')); ?>" required style="border-radius:0 12px 12px 0;">
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
                                 <div class="col-12 reg-form-group">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" name="check_terms" id="check_terms" checked required>
                                         <label class="form-check-label" for="check_terms">
-                                            {{ trans('labels.i_accept_the') }}
-                                            <a href="{{ URL::to('/termscondition') }}" target="_blank" class="fw-bold" style="color:var(--bs-secondary)">{{ trans('labels.terms') }}</a>
+                                            <?php echo e(trans('labels.i_accept_the')); ?>
+
+                                            <a href="<?php echo e(URL::to('/termscondition')); ?>" target="_blank" class="fw-bold" style="color:var(--bs-secondary)"><?php echo e(trans('labels.terms')); ?></a>
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- @include('landing.layout.recaptcha') --}}
+                            
 
                             <div class="d-flex gap-2 mt-2">
                                 <button type="button" class="btn btn-step btn-prev flex-fill" onclick="prevStep()">
-                                    <i class="fa-solid fa-arrow-{{ session()->get('direction') == 2 ? 'right' : 'left' }} me-1"></i> {{ trans('labels.previous') == 'labels.previous' ? 'السابق' : trans('labels.previous') }}
+                                    <i class="fa-solid fa-arrow-<?php echo e(session()->get('direction') == 2 ? 'right' : 'left'); ?> me-1"></i> <?php echo e(trans('labels.previous') == 'labels.previous' ? 'السابق' : trans('labels.previous')); ?>
+
                                 </button>
                                 <button class="btn btn-step btn-submit flex-fill"
-                                    @if (env('Environment') == 'sendbox') type="button" onclick="myFunction()" @else type="submit" @endif>
-                                    <i class="fa-solid fa-check me-1"></i> {{ trans('labels.register') == 'labels.register' ? 'إنشاء حساب' : trans('labels.register') }}
+                                    <?php if(env('Environment') == 'sendbox'): ?> type="button" onclick="myFunction()" <?php else: ?> type="submit" <?php endif; ?>>
+                                    <i class="fa-solid fa-check me-1"></i> <?php echo e(trans('labels.register')); ?>
+
                                 </button>
                             </div>
                         </div>
@@ -433,13 +436,13 @@
         </div>
     </section>
 
-    @if (env('Environment') == 'sendbox')
+    <?php if(env('Environment') == 'sendbox'): ?>
         <button class="btn btn-primary theme-label text-white" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
             <i class="fa-solid fa-list text-white px-2"></i>
             Themes</button>
 
-        <div class="offcanvas {{ session()->get('direction') == 2 ? 'offcanvas-start' : 'offcanvas-end ' }}"
+        <div class="offcanvas <?php echo e(session()->get('direction') == 2 ? 'offcanvas-start' : 'offcanvas-end '); ?>"
             tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
             <div class="offcanvas-header justify-content-between border-bottom">
                 <h5 id="offcanvasRightLabel" class="color-changer">Themes</h5>
@@ -450,27 +453,27 @@
             </div>
             <div class="offcanvas-body">
                 <div class="row px-3">
-                    @for ($i = 1; $i <= 10; $i++)
-                        <a href="https://store-mart.paponapps.co.in/theme-{{ $i }}" target="_blank"
+                    <?php for($i = 1; $i <= 10; $i++): ?>
+                        <a href="https://store-mart.paponapps.co.in/theme-<?php echo e($i); ?>" target="_blank"
                             class="card h-100 them-card-box overflow-hidden mb-3 rounded-5 border-0 p-0">
-                            <img src="{{ helper::image_path('theme-' . $i . '.png') }}" class="card-img-top them-name-images">
+                            <img src="<?php echo e(helper::image_path('theme-' . $i . '.png')); ?>" class="card-img-top them-name-images">
                             <div class="card-body">
-                                <h5 class="card-title text-center color-changer">Theme - {{ $i }}</h5>
+                                <h5 class="card-title text-center color-changer">Theme - <?php echo e($i); ?></h5>
                             </div>
                         </a>
-                    @endfor
+                    <?php endfor; ?>
                 </div>
             </div>
         </div>
-    @endif
-@endsection
-@section('scripts')
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
     <script>
-        @if (count($errors) > 0)
-            @foreach ($errors->all() as $error)
-                toastr.error("{{ $error }}");
-            @endforeach
-        @endif
+        <?php if(count($errors) > 0): ?>
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                toastr.error("<?php echo e($error); ?>");
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php endif; ?>
     </script>
     <script>
         let currentStep = 1;
@@ -482,10 +485,10 @@
             const mobile = document.getElementById('mobile');
             const password = document.getElementById('password');
 
-            if (!name.value.trim()) { toastr.error("{{ trans('labels.name') }} {{ trans('messages.required') ?? 'مطلوب' }}"); name.focus(); return; }
-            if (!email.value.trim() || !email.checkValidity()) { toastr.error("{{ trans('labels.email') }} {{ trans('messages.required') ?? 'مطلوب' }}"); email.focus(); return; }
-            if (!mobile.value.trim()) { toastr.error("{{ trans('labels.mobile') }} {{ trans('messages.required') ?? 'مطلوب' }}"); mobile.focus(); return; }
-            if (!password.value.trim()) { toastr.error("{{ trans('labels.password') }} {{ trans('messages.required') ?? 'مطلوب' }}"); password.focus(); return; }
+            if (!name.value.trim()) { toastr.error("<?php echo e(trans('labels.name')); ?> <?php echo e(trans('messages.required') ?? 'مطلوب'); ?>"); name.focus(); return; }
+            if (!email.value.trim() || !email.checkValidity()) { toastr.error("<?php echo e(trans('labels.email')); ?> <?php echo e(trans('messages.required') ?? 'مطلوب'); ?>"); email.focus(); return; }
+            if (!mobile.value.trim()) { toastr.error("<?php echo e(trans('labels.mobile')); ?> <?php echo e(trans('messages.required') ?? 'مطلوب'); ?>"); mobile.focus(); return; }
+            if (!password.value.trim()) { toastr.error("<?php echo e(trans('labels.password')); ?> <?php echo e(trans('messages.required') ?? 'مطلوب'); ?>"); password.focus(); return; }
 
             currentStep = 2;
             updateSteps();
@@ -538,9 +541,11 @@
         });
     </script>
     <script>
-        var cityurl = "{{ URL::to('admin/getcity') }}";
-        var select = "{{ trans('labels.select') }}";
+        var cityurl = "<?php echo e(URL::to('admin/getcity')); ?>";
+        var select = "<?php echo e(trans('labels.select')); ?>";
         var cityid = "0";
     </script>
-    <script src="{{ url(env('ASSETPATHURL') . '/admin-assets/js/user.js') }}"></script>
-@endsection
+    <script src="<?php echo e(url(env('ASSETPATHURL') . '/admin-assets/js/user.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layout.auth_default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/admin/auth/register.blade.php ENDPATH**/ ?>

@@ -262,4 +262,140 @@ class AdminController extends Controller
 
         return response()->json(['status' => 1, 'msg' => trans('messages.success')], 200);
     }
+
+    public function onboarding(Request $request)
+    {
+        if (Auth::user()->type != 2) {
+            return redirect('admin/dashboard');
+        }
+        $vendor_id = Auth::user()->id;
+        $categories = \App\Models\Category::where('vendor_id', $vendor_id)->where('is_deleted', 2)->get();
+        $settings = \App\Models\Settings::where('vendor_id', $vendor_id)->first();
+        return view('admin.onboarding.index', compact('categories', 'settings'));
+    }
+
+    public function onboarding_save_categories(Request $request)
+    {
+        $vendor_id = Auth::user()->id;
+        $names = $request->categories;
+        if (!empty($names) && is_array($names)) {
+            foreach ($names as $name) {
+                $name = trim($name);
+                if (empty($name)) continue;
+                $slug = \Illuminate\Support\Str::slug($name, '-');
+                $exists = \App\Models\Category::where('slug', $slug)->where('vendor_id', $vendor_id)->first();
+                if (!$exists) {
+                    $cat = new \App\Models\Category();
+                    $cat->vendor_id = $vendor_id;
+                    $cat->name = $name;
+                    $cat->slug = $slug ?: $slug . '-' . uniqid();
+                    $cat->save();
+                }
+            }
+        }
+        
+        $categories = \App\Models\Category::where('vendor_id', $vendor_id)->get(['id', 'name']);
+        return response()->json(['status' => 1, 'msg' => trans('messages.success'), 'categories' => $categories]);
+    }
+
+    public function onboarding_save_product(Request $request)
+    {
+        $vendor_id = Auth::user()->id;
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'item_name' => 'required|string',
+            'item_price' => 'required|numeric'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 0, 'msg' => trans('messages.wrong')]);
+        }
+
+        $check_slug = \App\Models\Item::where('slug', \Illuminate\Support\Str::slug($request->item_name, '-'))->first();
+        if (!empty($check_slug)) {
+            $last_id = \App\Models\Item::select('id')->orderByDesc('id')->first()->id ?? 1;
+            $slug = \Illuminate\Support\Str::slug($request->item_name . ' ' . $last_id, '-');
+        } else {
+            $slug = \Illuminate\Support\Str::slug($request->item_name, '-');
+        }
+
+        $cat_id = $request->cat_id;
+        if (!$cat_id) {
+            $cat = \App\Models\Category::where('vendor_id', $vendor_id)->first();
+            if (!$cat) {
+                $cat = new \App\Models\Category();
+                $cat->vendor_id = $vendor_id;
+                $cat->name = 'قسم عام';
+                $cat->slug = 'general-' . uniqid();
+                $cat->save();
+            }
+            $cat_id = $cat->id;
+        }
+
+        $image_name = 'default.png';
+        if ($request->hasFile('product_image')) {
+            $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+            $image_name = $imageOptimizationService->upload($request->file('product_image'), 'item');
+        }
+
+        $item = new \App\Models\Item();
+        $item->vendor_id = $vendor_id;
+        $item->item_name = $request->item_name;
+        $item->slug = $slug;
+        $item->item_price = $request->item_price;
+        $item->cat_id = $cat_id;
+        $item->image = $image_name;
+        $item->is_available = 1;
+        $item->is_deleted = 2;
+        $item->save();
+
+        if ($image_name != 'default.png') {
+            \App\Models\ProductImage::create([
+                'item_id' => $item->id,
+                'image' => $image_name
+            ]);
+        }
+
+        return response()->json(['status' => 1, 'msg' => trans('messages.success')]);
+    }
+
+    public function onboarding_save_settings(Request $request)
+    {
+        $vendor_id = Auth::user()->id;
+        $settings = \App\Models\Settings::where('vendor_id', $vendor_id)->first();
+        
+        if ($settings) {
+            if ($request->has('email')) { $settings->email = $request->email; }
+            if ($request->has('mobile')) { $settings->contact = $request->mobile; $settings->mobile = $request->mobile; }
+            if ($request->has('address')) { $settings->address = $request->address; }
+            
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $logo_name = 'logo-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(storage_path('app/public/admin-assets/images/about/logo/'), $logo_name);
+                $settings->logo = $logo_name;
+            }
+            $settings->update();
+        }
+
+        if ($request->has('whatsapp')) {
+            $user = \App\Models\User::where('id', $vendor_id)->first();
+            if ($user) {
+                $user->whatsapp = $request->whatsapp;
+                $user->update();
+            }
+        }
+
+        return response()->json(['status' => 1, 'msg' => trans('messages.success')]);
+    }
+
+    public function onboarding_complete(Request $request)
+    {
+        session()->put('new_vendor', true);
+        return redirect('admin/dashboard')->with('success', trans('messages.success'));
+    }
+
+    public function onboarding_clear_session(Request $request)
+    {
+        session()->forget('new_vendor');
+        return response()->json(['status' => 1]);
+    }
 }

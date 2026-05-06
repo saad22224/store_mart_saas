@@ -32,7 +32,7 @@
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/sweetalert/sweetalert2.min.css') }}">
     <!-- Sweetalert CSS -->
-    <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/style.css') }}"><!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/style.css?v='.time()) }}"><!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/responsive.css') }}">
     <!-- Responsive CSS -->
     <link rel="stylesheet"

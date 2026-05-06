@@ -76,6 +76,12 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
         Route::get('admin_back', [VendorController::class, 'admin_back']);
         Route::get('logout', [AdminController::class, 'logout']);
         Route::get('dashboard', [AdminController::class, 'index']);
+        Route::get('onboarding', [AdminController::class, 'onboarding']);
+        Route::post('onboarding/save-categories', [AdminController::class, 'onboarding_save_categories']);
+        Route::post('onboarding/save-product', [AdminController::class, 'onboarding_save_product']);
+        Route::post('onboarding/save-settings', [AdminController::class, 'onboarding_save_settings']);
+        Route::post('onboarding/complete', [AdminController::class, 'onboarding_complete']);
+        Route::post('onboarding/clear-session', [AdminController::class, 'onboarding_clear_session']);
         // SETTINGS
         Route::get('settings', [SettingsController::class, 'settings_index']);
         Route::post('settings/update', [SettingsController::class, 'settings_update']);

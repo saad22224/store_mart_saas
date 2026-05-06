@@ -1,22 +1,22 @@
 <div class="modal-body p-3 pro-modal">
-    @if ($item_check != null)
+    <?php if($item_check != null): ?>
         <div class="row gx-3">
             <div class="d-flex justify-content-end mb-2">
                 <button type="button" class="bg-transparent border-0" data-bs-dismiss="modal">
                     <i class="fa-regular fa-xmark fs-4 color-changer"></i>
                 </button>
             </div>
-            @if (!request()->is('admin/pos/item-details'))
+            <?php if(!request()->is('admin/pos/item-details')): ?>
                 <div class="col-lg-5">
                     <div id="carouseltest" class="carousel slide pb-3">
                         <div class="carousel-inner">
-                            @foreach ($getitem['multi_image'] as $key => $image)
-                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }} "
-                                    name="image{{ $key }}">
-                                    <img class="img-fluid w-100" src="{{ helper::image_path($image->image) }}">
+                            <?php $__currentLoopData = $getitem['multi_image']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="carousel-item <?php echo e($key == 0 ? 'active' : ''); ?> "
+                                    name="image<?php echo e($key); ?>">
+                                    <img class="img-fluid w-100" src="<?php echo e(helper::image_path($image->image)); ?>">
                                 </div>
-                            @endforeach
-                            @if (count($getitem['multi_image']) > 1)
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php if(count($getitem['multi_image']) > 1): ?>
                                 <button class='carousel-control-prev' type='button' data-bs-target='#carouseltest'
                                     data-bs-slide='prev'>
                                     <span
@@ -31,14 +31,14 @@
                                         aria-hidden='true'> <i
                                             class='fa-solid fa-arrow-right-long text-white'></i></span>
                                 </button>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <div class="{{ !request()->is('admin/pos/item-details') ? 'col-lg-7' : 'col-lg-12' }}">
-                @php
+            <div class="<?php echo e(!request()->is('admin/pos/item-details') ? 'col-lg-7' : 'col-lg-12'); ?>">
+                <?php
                     if (
                         !request()->is('admin/pos/item-details') &&
                         $getitem->top_deals == 1 &&
@@ -92,75 +92,77 @@
                         }
                         $off = $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
                     }
-                @endphp
+                ?>
                 <div class="card-body repsonsive-cart-modal p-0 text-left">
-                    @if ($off > 0)
-                        <span class="badge text-bg-primary fs-7 mb-2" id="modal_offer">{{ $off }}%
-                            {{ trans('labels.off') }}</span>
-                    @endif
+                    <?php if($off > 0): ?>
+                        <span class="badge text-bg-primary fs-7 mb-2" id="modal_offer"><?php echo e($off); ?>%
+                            <?php echo e(trans('labels.off')); ?></span>
+                    <?php endif; ?>
 
-                    <p class="pro-title color-changer fs-4 fw-600 mb-sm-2 mb-2">{{ $getitem->item_name }}</p>
+                    <p class="pro-title color-changer fs-4 fw-600 mb-sm-2 mb-2"><?php echo e($getitem->item_name); ?></p>
                     <!-- category name and rating star -->
                     <div class="d-flex align-items-center justify-content-between">
                         <p id="modal_laodertext" class="d-none laodertext"></p>
                         <div class="d-flex align-items-center modal-price modal-product-detail-price">
 
-                            @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
+                            <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
                                 <p class="pro-text pricing" id="modal_detail_item_price">
-                                    {{ helper::currency_formate($price, $storeinfo->id, $getitem->currency) }}
+                                    <?php echo e(helper::currency_formate($price, $storeinfo->id, $getitem->currency)); ?>
+
                                 </p>
-                                @if ($original_price > $price)
+                                <?php if($original_price > $price): ?>
                                     <p class="card-text pro-org-value text-muted pricing"
                                         id="modal_detail_original_price">
-                                        {{ helper::currency_formate($original_price, $storeinfo->id, $getitem->currency) }}
-                                    </p>
-                                @endif
-                            @endif
+                                        <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)); ?>
 
-                            @if ($getitem->has_variants == 2)
-                                @if ($getitem->is_available == 2 || $getitem->is_deleted == 1)
-                                    <h3 class="text-danger">{{ trans('labels.not_available') }}</h3>
-                                @endif
-                            @else
+                                    </p>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <?php if($getitem->has_variants == 2): ?>
+                                <?php if($getitem->is_available == 2 || $getitem->is_deleted == 1): ?>
+                                    <h3 class="text-danger"><?php echo e(trans('labels.not_available')); ?></h3>
+                                <?php endif; ?>
+                            <?php else: ?>
                                 <h3 class="text-danger" id="modal_detail_not_available_text"></h3>
-                            @endif
+                            <?php endif; ?>
 
                         </div>
 
                         <!-- rating star -->
-                        @if (!request()->is('admin/pos/item-details'))
-                            @if (@helper::checkaddons('product_reviews'))
-                                @if (helper::appdata($storeinfo->id)->product_ratting_switch == 1)
+                        <?php if(!request()->is('admin/pos/item-details')): ?>
+                            <?php if(@helper::checkaddons('product_reviews')): ?>
+                                <?php if(helper::appdata($storeinfo->id)->product_ratting_switch == 1): ?>
                                     <ul class="d-flex bg-gray bg-changer px-2 py-1 rounded-2 align-items-center p-0 m-0 cursor-pointer"
                                         tooltip="View"
-                                        onclick="rattingmodal('{{ $getitem->id }}','{{ $getitem->vendor_id }}','{{ $getitem->item_name }}')">
+                                        onclick="rattingmodal('<?php echo e($getitem->id); ?>','<?php echo e($getitem->vendor_id); ?>','<?php echo e($getitem->item_name); ?>')">
                                         <li class="d-flex align-items-center gap-1">
                                             <i class="fa-solid fa-star text-warning fs-7"></i>
                                             <div id="ratting-div" class="fs-7 fw-semibold">
                                                 <p class="px-1 color-changer avg-ratting">
-                                                    {{ number_format($getitem->ratings_average, 1) }}</p>
+                                                    <?php echo e(number_format($getitem->ratings_average, 1)); ?></p>
                                             </div>
                                         </li>
                                     </ul>
-                                @endif
-                            @endif
-                        @endif
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
-                    @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
+                    <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
                         <p id="modal_tax" class="responcive-tax text-left mb-1">
                             <span class="text-muted fs-7">
-                                @if ($getitem->tax != null && $getitem->tax != '')
-                                    <span class="text-danger fs-7"> {{ trans('labels.exclusive_taxes') }}</span>
-                                @else
-                                    <span class="text-success fs-7"> {{ trans('labels.inclusive_taxes') }}</span>
-                                @endif
+                                <?php if($getitem->tax != null && $getitem->tax != ''): ?>
+                                    <span class="text-danger fs-7"> <?php echo e(trans('labels.exclusive_taxes')); ?></span>
+                                <?php else: ?>
+                                    <span class="text-success fs-7"> <?php echo e(trans('labels.inclusive_taxes')); ?></span>
+                                <?php endif; ?>
                             </span>
                         </p>
-                    @endif
-                    @if (!request()->is('admin/pos/item-details'))
-                        @if (@Helper::checkaddons('fake_view'))
-                            @if (Helper::appdata($storeinfo->id)->product_fake_view == 1)
-                                @php
+                    <?php endif; ?>
+                    <?php if(!request()->is('admin/pos/item-details')): ?>
+                        <?php if(@Helper::checkaddons('fake_view')): ?>
+                            <?php if(Helper::appdata($storeinfo->id)->product_fake_view == 1): ?>
+                                <?php
 
                                     $var = ['{eye}', '{count}'];
                                     $newvar = [
@@ -176,116 +178,122 @@
                                         $newvar,
                                         Helper::appdata($storeinfo->id)->fake_view_message,
                                     );
-                                @endphp
+                                ?>
                                 <div class="border-bottom pb-2">
                                     <div class="d-flex gap-1 align-items-center blink_me mb-1">
-                                        <p class="fw-600 text-success m-0">{!! $fake_view !!}</p>
+                                        <p class="fw-600 text-success m-0"><?php echo $fake_view; ?></p>
                                     </div>
                                 </div>
-                            @endif
-                        @endif
-                    @endif
-                    <input type="hidden" name="price" id="price" value="{{ $getitem->price }}">
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <input type="hidden" name="price" id="price" value="<?php echo e($getitem->price); ?>">
 
-                    <div class="border-bottom pb-3 {{ $getitem->sku != null || $getitem->stock_management == 1 || $getitem->attchment_url != null || $getitem->attchment_name != null ? 'd-block' : 'd-none' }}"
+                    <div class="border-bottom pb-3 <?php echo e($getitem->sku != null || $getitem->stock_management == 1 || $getitem->attchment_url != null || $getitem->attchment_name != null ? 'd-block' : 'd-none'); ?>"
                         id="sku_stock">
                         <div class="meta-content bg-gray bg-changer p-3 mt-3 rounded-2">
-                            @if ($getitem->sku != '' && $getitem->sku != null)
+                            <?php if($getitem->sku != '' && $getitem->sku != null): ?>
                                 <div class="sku-wrapper product_meta ">
                                     <span class="fs-7" id="sku_lable">
-                                        <span class="fw-semibold color-changer">{{ trans('labels.sku') }}</span>
-                                        <span class="text-muted fs-7" id="sku_value">: {{ $getitem->sku }}</span>
+                                        <span class="fw-semibold color-changer"><?php echo e(trans('labels.sku')); ?></span>
+                                        <span class="text-muted fs-7" id="sku_value">: <?php echo e($getitem->sku); ?></span>
                                     </span>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if ($getitem->has_variants == 2 && $getitem->stock_management == 1)
+                            <?php if($getitem->has_variants == 2 && $getitem->stock_management == 1): ?>
                                 <div class="sku-wrapper product_meta" id="modal_stock">
                                     <span class="fs-7"><span
-                                            class="fw-semibold color-changer">{{ trans('labels.stock') }}:</span>
+                                            class="fw-semibold color-changer"><?php echo e(trans('labels.stock')); ?>:</span>
                                     </span>
-                                    @if ($getitem->qty > 0)
-                                        <span class="text-success fs-7">{{ $getitem->qty }}
-                                            {{ trans('labels.in_stock') }}</span>
-                                    @else
-                                        <span class="text-danger fs-7">{{ trans('labels.out_of_stock') }}</span>
-                                    @endif
+                                    <?php if($getitem->qty > 0): ?>
+                                        <span class="text-success fs-7"><?php echo e($getitem->qty); ?>
+
+                                            <?php echo e(trans('labels.in_stock')); ?></span>
+                                    <?php else: ?>
+                                        <span class="text-danger fs-7"><?php echo e(trans('labels.out_of_stock')); ?></span>
+                                    <?php endif; ?>
                                 </div>
-                            @elseif ($getitem->has_variants == 1)
+                            <?php elseif($getitem->has_variants == 1): ?>
                                 <div class="sku-wrapper product_meta" id="modal_stock">
                                     <span class="fs-7">
-                                        <span class="fw-semibold color-changer">{{ trans('labels.stock') }}:</span>
+                                        <span class="fw-semibold color-changer"><?php echo e(trans('labels.stock')); ?>:</span>
                                     </span>
                                     <span class="fs-7" id="modal_detail_out_of_stock"></span>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if ($getitem->attchment_url != '' && $getitem->attchment_url != null)
+                            <?php if($getitem->attchment_url != '' && $getitem->attchment_url != null): ?>
                                 <div>
-                                    @if ($getitem->attchment_name != '' && $getitem->attchment_name != null)
-                                        <a href="{{ $getitem->attchment_url }}" target="_blank">
+                                    <?php if($getitem->attchment_name != '' && $getitem->attchment_name != null): ?>
+                                        <a href="<?php echo e($getitem->attchment_url); ?>" target="_blank">
                                             <p class="fs-7 d-flex align-items-center gap-2">
                                                 <i class="fa-light fa-file fs-6"></i>
-                                                {{ $getitem->attchment_name }}
+                                                <?php echo e($getitem->attchment_name); ?>
+
                                             </p>
                                         </a>
-                                    @else
-                                        <a href="{{ $getitem->attchment_url }}" target="_blank">
+                                    <?php else: ?>
+                                        <a href="<?php echo e($getitem->attchment_url); ?>" target="_blank">
                                             <p class="fs-7 d-flex align-items-center gap-2">
                                                 <i class="fa-light fa-file fs-6"></i>
-                                                {{ trans('labels.click_here') }}
+                                                <?php echo e(trans('labels.click_here')); ?>
+
                                             </p>
                                         </a>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
-                    @if ($getitem->has_variants == 1)
+                    <?php if($getitem->has_variants == 1): ?>
                         <div class="product-variations-wrapper">
                             <div class="size-variation modal_size_variation" id="modal_variation">
 
-                                @for ($i = 0; $i < count($getitem->variants_json); $i++)
+                                <?php for($i = 0; $i < count($getitem->variants_json); $i++): ?>
                                     <label class="fw-semibold form-label mt-3"
-                                        for="">{{ $getitem->variants_json[$i]['variant_name'] }}</label><br>
+                                        for=""><?php echo e($getitem->variants_json[$i]['variant_name']); ?></label><br>
                                     <div class="d-flex flex-wrap gap-2 border-bottom pb-3">
-                                        @for ($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++)
+                                        <?php for($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++): ?>
                                             <label
-                                                class="checkbox-inline check{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }} {{ $t == 0 ? 'active' : '' }}"
-                                                id="check_{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}"
-                                                for="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
+                                                class="checkbox-inline check<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?> <?php echo e($t == 0 ? 'active' : ''); ?>"
+                                                id="check_<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>-<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>"
+                                                for="<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>-<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>">
                                                 <input type="checkbox" class="" name="skills"
-                                                    {{ $t == 0 ? 'checked' : '' }}
-                                                    value="{{ $getitem->variants_json[$i]['variant_options'][$t] }}"
-                                                    id="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
-                                                {{ $getitem->variants_json[$i]['variant_options'][$t] }}
+                                                    <?php echo e($t == 0 ? 'checked' : ''); ?>
+
+                                                    value="<?php echo e($getitem->variants_json[$i]['variant_options'][$t]); ?>"
+                                                    id="<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>-<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>">
+                                                <?php echo e($getitem->variants_json[$i]['variant_options'][$t]); ?>
+
                                             </label>
-                                        @endfor
+                                        <?php endfor; ?>
                                     </div>
-                                @endfor
+                                <?php endfor; ?>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    @if (count($getitem['extras']) > 0)
+                    <?php if(count($getitem['extras']) > 0): ?>
                         <div class="woo_pr_color flex_inline_center my-3 border-bottom pb-3">
                             <div class="woo_colors_list text-left">
                                 <span id="extras">
                                     <h5 class="extra-title fw-semibold color-changer mb-2">
-                                        {{ trans('labels.extras') }}</h5>
+                                        <?php echo e(trans('labels.extras')); ?></h5>
                                     <ul class="list-unstyled extra-food m-0">
                                         <div id="pricelist">
-                                            @foreach ($getitem['extras'] as $key => $extras)
+                                            <?php $__currentLoopData = $getitem['extras']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $extras): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <li class="mb-2">
                                                     <input type="checkbox" name="addons[]"
-                                                        extras_name="{{ $extras->name }}" class="Checkbox"
-                                                        value="{{ $extras->id }}" price="{{ $extras->price }}">
-                                                    <p class="color-changer">{{ $extras->name }} :
-                                                        {{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}
+                                                        extras_name="<?php echo e($extras->name); ?>" class="Checkbox"
+                                                        value="<?php echo e($extras->id); ?>" price="<?php echo e($extras->price); ?>">
+                                                    <p class="color-changer"><?php echo e($extras->name); ?> :
+                                                        <?php echo e(helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency)); ?>
+
                                                     </p>
                                                 </li>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                         </div>
                                     </ul>
@@ -293,93 +301,93 @@
 
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
+                    <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
                         <div class="row border-bottom g-2 pb-3" id="modal_detail_plus_minus">
-                            @if (helper::appdata($storeinfo->id)->online_order == 1)
+                            <?php if(helper::appdata($storeinfo->id)->online_order == 1): ?>
                                 <div
-                                    class="{{ !request()->is('admin/pos/item-details') ? 'col-xxl-3 col-lg-6 col-md-3 col-6' : 'col-4' }}">
+                                    class="<?php echo e(!request()->is('admin/pos/item-details') ? 'col-xxl-3 col-lg-6 col-md-3 col-6' : 'col-4'); ?>">
                                     <div
                                         class="input-group qty-input2 col-md-auto col-12 responsive-margin m-0 rounded-2 h-100">
                                         <button class="btn p-0 change-qty-2 h-100" id="minus" data-type="minus"
-                                            data-item_id="{{ $getitem->id }}"
+                                            data-item_id="<?php echo e($getitem->id); ?>"
                                             onclick="changeqty($(this).attr('data-item_id'),'minus')"
                                             value="minus value"><i class="fa fa-minus"></i>
                                         </button>
-                                        <input type="number" class="bg-transparent color-changer text-center item_qty_{{ $getitem->id }}"
+                                        <input type="number" class="bg-transparent color-changer text-center item_qty_<?php echo e($getitem->id); ?>"
                                             name="number" value="1" readonly="">
                                         <button class="btn p-0 change-qty-2 h-100" id="plus"
-                                            data-item_id="{{ $getitem->id }}"
+                                            data-item_id="<?php echo e($getitem->id); ?>"
                                             onclick="changeqty($(this).attr('data-item_id'),'plus')" data-type="plus"
                                             value="plus value"><i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
-                            @endif
-                            @if (!request()->is('admin/pos/item-details'))
-                                @if (isset($storeinfo) && $storeinfo->whatsapp)
-                                {{-- {{ dd($storeinfo->whatsapp) }} --}}
+                            <?php endif; ?>
+                            <?php if(!request()->is('admin/pos/item-details')): ?>
+                                <?php if(isset($storeinfo) && $storeinfo->whatsapp): ?>
+                                
                                     <div class="col-xxl-3 col-lg-6 col-md-3 col-6">
-                                        <a href="https://api.whatsapp.com/send?phone={{ $storeinfo->whatsapp }}&text={{ urlencode($getitem->item_name) }}"
+                                        <a href="https://api.whatsapp.com/send?phone=<?php echo e($storeinfo->whatsapp); ?>&text=<?php echo e(urlencode($getitem->item_name)); ?>"
                                             class="btn btn-enquir m-0 add-btn px-0 w-100 h-100" id="enquiries"
                                             target="_blank">
                                             <i
-                                                class="fa-brands fa-whatsapp fs-5 {{ session()->get('direction') == 2 ? 'glyphicon' : '' }}"></i>
-                                            <span class="px-1">{{ trans('labels.enquiries') }}</span>
+                                                class="fa-brands fa-whatsapp fs-5 <?php echo e(session()->get('direction') == 2 ? 'glyphicon' : ''); ?>"></i>
+                                            <span class="px-1"><?php echo e(trans('labels.enquiries')); ?></span>
                                         </a>
                                     </div>
-                                @endif
-                            @endif
-                            @if (helper::appdata($storeinfo->id)->online_order == 1)
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <?php if(helper::appdata($storeinfo->id)->online_order == 1): ?>
                                 <div
-                                    class="{{ !request()->is('admin/pos/item-details') ? 'col-xxl-3 col-lg-6 col-md-3 col-6' : 'col-8' }}">
+                                    class="<?php echo e(!request()->is('admin/pos/item-details') ? 'col-xxl-3 col-lg-6 col-md-3 col-6' : 'col-8'); ?>">
                                     <button
-                                        class="btn btn-store m-0 modal_add_btn addtocart w-100 px-0 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
-                                        @if (!request()->is('admin/pos/item-details')) onclick="AddtoCart('0')" @else onclick="posaddtocart()" @endif>
-                                        <span class="px-1">{{ trans('labels.add_to_cart') }}</span>
+                                        class="btn btn-store m-0 modal_add_btn addtocart w-100 px-0 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
+                                        <?php if(!request()->is('admin/pos/item-details')): ?> onclick="AddtoCart('0')" <?php else: ?> onclick="posaddtocart()" <?php endif; ?>>
+                                        <span class="px-1"><?php echo e(trans('labels.add_to_cart')); ?></span>
                                     </button>
                                 </div>
-                                @if (!request()->is('admin/pos/item-details'))
+                                <?php if(!request()->is('admin/pos/item-details')): ?>
                                     <div class="col-xxl-3 col-lg-6 col-md-3 col-6">
-                                        @if (@helper::checkaddons('customer_login'))
-                                            @if (helper::appdata($storeinfo->id)->checkout_login_required == 1)
+                                        <?php if(@helper::checkaddons('customer_login')): ?>
+                                            <?php if(helper::appdata($storeinfo->id)->checkout_login_required == 1): ?>
                                                 <button
-                                                    class="btn btn-store-outline m-0 modal_add_btn buynow w-100 px-0 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
-                                                    @if (helper::appdata($storeinfo->id)->is_checkout_login_required == 1) onclick="login()" @else onclick="AddtoCart('1')" @endif>
-                                                    <span class="px-1">{{ trans('labels.buy_now') }}</span>
+                                                    class="btn btn-store-outline m-0 modal_add_btn buynow w-100 px-0 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
+                                                    <?php if(helper::appdata($storeinfo->id)->is_checkout_login_required == 1): ?> onclick="login()" <?php else: ?> onclick="AddtoCart('1')" <?php endif; ?>>
+                                                    <span class="px-1"><?php echo e(trans('labels.buy_now')); ?></span>
                                                 </button>
-                                            @else
+                                            <?php else: ?>
                                                 <button
-                                                    class="btn btn-store-outline m-0 modal_add_btn buynow w-100 px-0 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                                    class="btn btn-store-outline m-0 modal_add_btn buynow w-100 px-0 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
                                                     onclick="AddtoCart('1')">
-                                                    <span class="px-1">{{ trans('labels.buy_now') }}</span>
+                                                    <span class="px-1"><?php echo e(trans('labels.buy_now')); ?></span>
                                                 </button>
-                                            @endif
-                                        @else
+                                            <?php endif; ?>
+                                        <?php else: ?>
                                             <button
-                                                class="btn btn-store-outline m-0 modal_add_btn buynow w-100 px-0 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                                class="btn btn-store-outline m-0 modal_add_btn buynow w-100 px-0 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
                                                 onclick="AddtoCart('1')">
-                                                <span class="px-1">{{ trans('labels.buy_now') }}</span>
+                                                <span class="px-1"><?php echo e(trans('labels.buy_now')); ?></span>
                                             </button>
-                                        @endif
+                                        <?php endif; ?>
 
                                     </div>
-                                @endif
-                            @endif
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
-                    @endif
-                    @if (!request()->is('admin/pos/item-details'))
+                    <?php endif; ?>
+                    <?php if(!request()->is('admin/pos/item-details')): ?>
                         <div
                             class="d-flex flex-wrap gap-sm-2 gap-3 justify-content-between align-items-center w-100 mt-3">
-                            @if (@helper::checkaddons('customer_login'))
-                                @if (helper::appdata($storeinfo->id)->checkout_login_required == 1)
+                            <?php if(@helper::checkaddons('customer_login')): ?>
+                                <?php if(helper::appdata($storeinfo->id)->checkout_login_required == 1): ?>
                                     <p class="fs-7 d-flex align-items-center m-0">
-                                        <a onclick="managefavorite('{{ $getitem->id }}',{{ $storeinfo->id }},'{{ URL::to(@$storeinfo->slug . '/managefavorite') }}')"
-                                            class="btn-sm btn-Wishlist cursor-pointer {{ session()->get('direction') == 2 ? 'me-auto' : 'ms-auto' }}">
+                                        <a onclick="managefavorite('<?php echo e($getitem->id); ?>',<?php echo e($storeinfo->id); ?>,'<?php echo e(URL::to(@$storeinfo->slug . '/managefavorite')); ?>')"
+                                            class="btn-sm btn-Wishlist cursor-pointer <?php echo e(session()->get('direction') == 2 ? 'me-auto' : 'ms-auto'); ?>">
                                             <span class=" btn-sm btn-Wishlist mx-2">
-                                                @if (Auth::user() && Auth::user()->type == 3)
-                                                    @php
+                                                <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                                    <?php
 
                                                         $favorite = helper::ceckfavorite(
                                                             $getitem->id,
@@ -387,64 +395,64 @@
                                                             Auth::user()->id,
                                                         );
 
-                                                    @endphp
-                                                    @if (!empty($favorite) && $favorite->count() > 0)
+                                                    ?>
+                                                    <?php if(!empty($favorite) && $favorite->count() > 0): ?>
                                                         <i class="fa-solid fa-heart"></i>
-                                                    @else
+                                                    <?php else: ?>
                                                         <i class="fa-regular fa-heart"></i>
-                                                    @endif
-                                                @else
+                                                    <?php endif; ?>
+                                                <?php else: ?>
                                                     <i class="fa-regular fa-heart"></i>
-                                                @endif
+                                                <?php endif; ?>
                                             </span>
                                         </a>
-                                        <span class="color-changer mx-2">{{ trans('labels.add_to_wishlist') }}</span>
+                                        <span class="color-changer mx-2"><?php echo e(trans('labels.add_to_wishlist')); ?></span>
                                     </p>
-                                @endif
-                            @endif
+                                <?php endif; ?>
+                            <?php endif; ?>
                             <div class="d-flex align-items-center justify-content-center gap-2">
 
-                                @if ($getitem->video_url != '' && $getitem->video_url != null)
-                                    <a href="{{ $getitem->video_url }}" tooltip="Video"
+                                <?php if($getitem->video_url != '' && $getitem->video_url != null): ?>
+                                    <a href="<?php echo e($getitem->video_url); ?>" tooltip="Video"
                                         class=" rounded-circle prod-social m-0" id="btn-video" target="_blank">
                                         <i class="fa-regular fa-video fs-7"></i></a>
-                                @endif
+                                <?php endif; ?>
 
-                                @if (helper::appdata($storeinfo->id)->google_review != '' && helper::appdata($storeinfo->id)->google_review != null)
-                                    <a href="{{ helper::appdata($storeinfo->id)->google_review }}" target="_blank"
+                                <?php if(helper::appdata($storeinfo->id)->google_review != '' && helper::appdata($storeinfo->id)->google_review != null): ?>
+                                    <a href="<?php echo e(helper::appdata($storeinfo->id)->google_review); ?>" target="_blank"
                                         tooltip="Review" class=" rounded-circle prod-social m-0"><i
                                             class="fa-regular fa-star fs-7"></i></a>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <input type="hidden" name="vendor" id="modal_overview_vendor"
-                        value="{{ $getitem->vendor_id }}">
-                    <input type="hidden" name="item_id" id="modal_overview_item_id" value="{{ $getitem->id }}">
+                        value="<?php echo e($getitem->vendor_id); ?>">
+                    <input type="hidden" name="item_id" id="modal_overview_item_id" value="<?php echo e($getitem->id); ?>">
                     <input type="hidden" name="item_name" id="modal_overview_item_name"
-                        value="{{ $getitem->item_name }}">
+                        value="<?php echo e($getitem->item_name); ?>">
                     <input type="hidden" name="item_image" id="modal_overview_item_image"
-                        value="{{ @$getitem['product_image']->image }}">
+                        value="<?php echo e(@$getitem['product_image']->image); ?>">
                     <input type="hidden" name="item_min_order" id="modal_item_min_order"
-                        value="{{ $getitem->min_order }}">
+                        value="<?php echo e($getitem->min_order); ?>">
                     <input type="hidden" name="item_max_order" id="modal_item_max_order"
-                        value="{{ $getitem->max_order }}">
+                        value="<?php echo e($getitem->max_order); ?>">
                     <input type="hidden" name="item_price" id="modal_overview_item_price"
-                        value="{{ $price }}">
+                        value="<?php echo e($price); ?>">
                     <input type="hidden" name="item_original_price" id="modal_overview_item_original_price"
-                        value ="{{ $original_price }}">
-                    <input type="hidden" name="tax" id="modal_tax_val" value="{{ $getitem->tax }}">
+                        value ="<?php echo e($original_price); ?>">
+                    <input type="hidden" name="tax" id="modal_tax_val" value="<?php echo e($getitem->tax); ?>">
                     <input type="hidden" name="variants_name" id="modal_variants_name">
                     <input type="hidden" name="stock_management" id="modal_stock_management"
-                        value="{{ $getitem->stock_management }}">
-                    <input type="hidden" name="currency" id="modal_currency" value="{{ $getitem->currency }}">
+                        value="<?php echo e($getitem->stock_management); ?>">
+                    <input type="hidden" name="currency" id="modal_currency" value="<?php echo e($getitem->currency); ?>">
                 </div>
             </div>
         </div>
-    @else
-        @include('front.no_data')
-    @endif
+    <?php else: ?>
+        <?php echo $__env->make('front.no_data', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php endif; ?>
 </div>
 <script>
     $(document).ready(function($) {
@@ -485,11 +493,11 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "{{ !request()->is('admin/pos/item-details') ? URL::to('get-products-variant-quantity') : URL::to('admin/pos/get-products-variant-quantity') }}",
+            url: "<?php echo e(!request()->is('admin/pos/item-details') ? URL::to('get-products-variant-quantity') : URL::to('admin/pos/get-products-variant-quantity')); ?>",
             data: {
                 name: variants,
                 item_id: $('#modal_overview_item_id').val(),
-                vendor_id: {{ $storeinfo->id }},
+                vendor_id: <?php echo e($storeinfo->id); ?>,
             },
             success: function(data) {
                 if (data.status == 1) {
@@ -508,7 +516,7 @@
                         $('#modal_detail_original_price').text(currency_formate(parseFloat(data
                             .original_price), data.currency));
                         $('#modal_offer').removeClass('d-none');
-                        $('#modal_offer').text($.number(off, 1) + '% {{ trans('labels.off') }}');
+                        $('#modal_offer').text($.number(off, 1) + '% <?php echo e(trans('labels.off')); ?>');
                     } else {
                         $('#modal_detail_original_price').text('');
                         $('#modal_offer').addClass('d-none');
@@ -520,7 +528,7 @@
                     $('#modal_item_max_order').val(data.max_order);
                     if (data.is_available == 2) {
                         $('#modal_offer').addClass('d-none');
-                        $('#modal_detail_not_available_text').html('{{ trans('labels.not_available') }}');
+                        $('#modal_detail_not_available_text').html('<?php echo e(trans('labels.not_available')); ?>');
                         $('.modal_add_btn').attr('disabled', true);
                         $('.modal_add_btn').addClass('d-none');
                         $('#modal_detail_item_price').addClass('d-none');
@@ -546,13 +554,13 @@
                                 $('#modal_detail_out_of_stock').removeClass('text-danger');
                                 $('#modal_detail_out_of_stock').addClass('text-success');
                                 $('#modal_detail_out_of_stock').html('(' + data.quantity +
-                                    ' {{ trans('labels.in_stock') }})');
+                                    ' <?php echo e(trans('labels.in_stock')); ?>)');
                             } else {
                                 $('.modal_add_btn').attr('disabled', true);
                                 $('#modal_detail_out_of_stock').removeClass('text-dark');
                                 $('#modal_detail_out_of_stock').addClass('text-danger');
                                 $('#modal_detail_out_of_stock').html(
-                                    '({{ trans('labels.out_of_stock') }})');
+                                    '(<?php echo e(trans('labels.out_of_stock')); ?>)');
                             }
                         } else {
                             $('#modal_detail_out_of_stock').addClass('d-none');
@@ -566,3 +574,4 @@
 
     }
 </script>
+<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/productdetail.blade.php ENDPATH**/ ?>

@@ -270,50 +270,7 @@ class helper
     }
     public static function currency_formate($price, $vendor_id, $currency = null)
     {
-        $currencyInfo = helper::currencyinfo($vendor_id);
-        if ($currency == "" || $currency == null) {
-            $currency = $currencyInfo->currency;
-        }
-
-        if ($currency == 'USD') {
-            return '$' . number_format($price, 2, '.', ',');
-        }
-        if ($currency == 'Lira') {
-            $currency_text = \App::getLocale() == 'en' ? ' L.S' : ' ل.س';
-            return number_format($price, 0, '.', ',') . $currency_text;
-        }
-
-        if ($currencyInfo->currency_position == "1") {
-            if ($currencyInfo->decimal_separator == 1) {
-                if ($currencyInfo->currency_space == 1) {
-                    return $currency . ' ' . number_format($price, $currencyInfo->currency_formate, '.', ',');
-                } else {
-                    return $currency . number_format($price, $currencyInfo->currency_formate, '.', ',');
-                }
-            } else {
-                if ($currencyInfo->currency_space == 1) {
-                    return $currency . ' ' . number_format($price, $currencyInfo->currency_formate, ',', '.');
-                } else {
-                    return $currency . number_format($price, $currencyInfo->currency_formate, ',', '.');
-                }
-            }
-        }
-        if ($currencyInfo->currency_position == "2") {
-            if ($currencyInfo->decimal_separator == 1) {
-                if ($currencyInfo->currency_space == 1) {
-                    return number_format($price, $currencyInfo->currency_formate, '.', ',') . ' ' . $currency;
-                } else {
-                    return number_format($price, $currencyInfo->currency_formate, '.', ',') . $currency;
-                }
-            } else {
-                if ($currencyInfo->currency_space == 1) {
-                    return number_format($price, $currencyInfo->currency_formate, ',', '.') . ' ' . $currency;
-                } else {
-                    return number_format($price, $currencyInfo->currency_formate, ',', '.') . $currency;
-                }
-            }
-        }
-        return number_format($price, $currencyInfo->currency_formate, '.', ',') . ' ' . $currency;
+        return number_format($price, 0, '.', ',') . ' ل.س';
     }
 
     public static function vendortime($vendor)

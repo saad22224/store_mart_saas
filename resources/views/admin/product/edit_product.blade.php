@@ -312,15 +312,7 @@
                                                     placeholder="{{ trans('labels.selling_price') }}" id="price">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label">العملة <span class="text-danger"> * </span></label>
-                                                <select class="form-control" name="currency" required>
-                                                    <option value="Lira" {{ $getproductdata->currency == 'Lira' ? 'selected' : '' }}>ليرة</option>
-                                                    <option value="USD" {{ $getproductdata->currency == 'USD' ? 'selected' : '' }}>دولار ($)</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        <input type="hidden" name="currency" value="Lira">
                                         <div
                                             class="col-12 d-flex border-top border-bottom py-2 my-2 align-items-center justify-content-between">
                                             <div class="form-group">

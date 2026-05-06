@@ -1,4 +1,4 @@
-<section class="newsletter my-5">
+{{-- <section class="newsletter my-5">
     <div class="container">
         <div class="col bg-light bg-change-mode p-3 rounded-2">
             <div class="row align-items-center justify-content-between">
@@ -35,4 +35,4 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}

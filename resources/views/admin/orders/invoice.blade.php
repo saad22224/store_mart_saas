@@ -4,6 +4,22 @@
     } else {
         $vendor_id = Auth::user()->id;
     }
+
+    $translateStatus = function($name) {
+        $ar_status = [
+            'Pending' => 'قيد الانتظار',
+            'Accepted' => 'تم القبول',
+            'Out For Delivery' => 'جاري التوصيل',
+            'Complete' => 'مكتمل',
+            'Cancel' => 'ملغي',
+            'Waiting For Pickup' => 'في انتظار الاستلام',
+            'In Progress' => 'قيد التنفيذ'
+        ];
+        if (session()->get('direction') == 2 && is_string($name) && array_key_exists($name, $ar_status)) {
+            return $ar_status[$name];
+        }
+        return $name;
+    };
 @endphp
 
 @extends('admin.layout.default')
@@ -35,19 +51,19 @@
                 <div class="col-md-12 my-2 d-flex justify-content-end">
                     @if ($getorderdata->status_type == '1')
                         <span class="px-sm-4 btn btn-warning">
-                            {{ @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name }}
+                            {{ $translateStatus(@helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name) }}
                         </span>
                     @elseif($getorderdata->status_type == '2')
                         <span class="px-sm-4 btn btn-info">
-                            {{ @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name }}
+                            {{ $translateStatus(@helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name) }}
                         </span>
                     @elseif($getorderdata->status_type == '3')
                         <span class="px-sm-4 btn btn-success">
-                            {{ @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name }}
+                            {{ $translateStatus(@helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name) }}
                         </span>
                     @elseif($getorderdata->status_type == '4')
                         <span class="px-sm-4 btn btn-danger">
-                            {{ @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name }}
+                            {{ $translateStatus(@helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name) }}
                         </span>
                     @else
                         --
@@ -70,12 +86,12 @@
                     @if ($getorderdata->status_type != 3 || $getorderdata->status_type != 4)
                         <div class="lag-btn dropdown">
                             <button type="button" class="btn btn-sm btn-secondary dropdown-toggle py-2 px-sm-4"
-                                data-bs-toggle="dropdown">{{ @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name }}</button>
+                                data-bs-toggle="dropdown">{{ $translateStatus(@helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name == null ? '-' : @helper::gettype($getorderdata->status, $getorderdata->status_type, $getorderdata->order_type, $vendor_id)->name) }}</button>
                             <div
                                 class="dropdown-menu rounded mt-1 p-0 bg-body-secondary shadow border-0 overflow-hidden {{ Auth::user()->type == 1 ? 'disabled' : '' }}">
                                 @foreach (helper::customstauts($getorderdata->vendor_id, $getorderdata->order_type) as $status)
                                     <a class="dropdown-item w-auto cursor-pointer p-2 @if ($getorderdata->status == $status->id) fw-600 @endif"
-                                        onclick="statusupdate('{{ URL::to('admin/orders/update-' . $getorderdata->id . '-' . $status->id . '-' . $status->type) }}')">{{ $status->name }}</a>
+                                        onclick="statusupdate('{{ URL::to('admin/orders/update-' . $getorderdata->id . '-' . $status->id . '-' . $status->type) }}')">{{ $translateStatus($status->name) }}</a>
                                 @endforeach
                             </div>
                         </div>

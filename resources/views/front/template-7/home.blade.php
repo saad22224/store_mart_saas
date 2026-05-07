@@ -316,6 +316,157 @@
         box-shadow: 0 5px 15px rgba(142, 36, 170, 0.2);
     }
 
+    /* ── Featured products section (reference-like layout) ── */
+    .t7-featured-title {
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: #2b0f13;
+        margin-bottom: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .t7-featured-title i {
+        color: #ff7a00;
+        font-size: 1.9rem;
+    }
+
+    .t7-featured-wrap .card-bg {
+        border: 0;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .t7-featured-wrap .pro-7-img {
+        border-radius: 14px;
+        overflow: hidden;
+        background: #f8f8f8;
+        position: relative;
+    }
+
+    .t7-featured-wrap .pro-7-img img {
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .t7-featured-wrap .outer-functional .wishlist {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        z-index: 3;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.95);
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .t7-featured-wrap .outer-functional .product-add {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        z-index: 3;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.95);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .t7-featured-wrap .outer-functional {
+        position: static;
+        margin: 0;
+        padding: 0;
+    }
+
+    .t7-featured-wrap .outer-functional .product-add i,
+    .t7-featured-wrap .outer-functional .wishlist i {
+        color: #7a0f1f;
+        font-size: 15px;
+    }
+
+    .t7-featured-wrap .card-body {
+        padding-top: 12px !important;
+        text-align: center;
+    }
+
+    .t7-featured-wrap .card-footer {
+        text-align: center;
+    }
+
+    .t7-featured-wrap .title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2b0f13 !important;
+        line-height: 1.45;
+        margin-bottom: 8px !important;
+    }
+
+    .t7-featured-wrap .pro-pricing {
+        color: #2b0f13 !important;
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .t7-featured-wrap .old-price {
+        color: #9f9f9f !important;
+        font-size: 1rem;
+    }
+
+    .t7-featured-wrap .pro-rating,
+    .t7-featured-wrap .out-stock,
+    .t7-featured-wrap .in-stock {
+        justify-content: center;
+    }
+
+    @media(max-width:992px) {
+        .t7-featured-title {
+            font-size: 2rem;
+        }
+
+        .t7-featured-wrap .pro-7-img img {
+            aspect-ratio: 4 / 4.8;
+        }
+
+        .t7-featured-wrap .title {
+            font-size: 1.05rem;
+        }
+
+        .t7-featured-wrap .pro-pricing {
+            font-size: 1.1rem;
+        }
+
+        .t7-featured-wrap .old-price {
+            font-size: .9rem;
+        }
+    }
+
+    @media(max-width:576px) {
+        .t7-featured-title {
+            font-size: 1.6rem;
+        }
+
+        .t7-featured-wrap .pro-7-img img {
+            aspect-ratio: 4 / 4.6;
+        }
+
+        .t7-featured-wrap .title {
+            font-size: .95rem;
+        }
+
+        .t7-featured-wrap .pro-pricing {
+            font-size: 1rem;
+        }
+    }
+
     /* ── Promo banners ── */
     .t7-promo-wrap {
         border-radius: 16px;
@@ -707,15 +858,15 @@
 @if (count($getitem) > 0)
     <section class="pro-7-sec my-sm-5 my-3">
         <div class="container">
-            <div class="sec-header mb-4">
-                <h4 class="main-title-7 mb-2 color-changer main-title text-center">
-                    {{ trans('labels.featured_products') }}</h4>
-                <p class="m-0 line-2 fs-15 text-center mb-2 fw-500 text-muted">
-                    {{ trans('labels.featured_products_subtitle') }}</p>
+            <div class="sec-header mb-4 text-center">
+                <h4 class="t7-featured-title">
+                    <i class="fa-solid fa-fire"></i>
+                    {{ trans('labels.featured_products') }}
+                </h4>
             </div>
-            <div class="pro-7">
-                <div class="row g-sm-4 g-3 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-2">
-                    @foreach ($getitem->take(15) as $key => $item)
+            <div class="pro-7 t7-featured-wrap">
+                <div class="row g-sm-4 g-3 row-cols-lg-2 row-cols-2">
+                    @foreach ($getitem->take(10) as $key => $item)
                         @php
                             if ($item->top_deals == 1 && helper::top_deals($storeinfo->id) != null) {
                                 if (@helper::top_deals($storeinfo->id)->offer_type == 1) {

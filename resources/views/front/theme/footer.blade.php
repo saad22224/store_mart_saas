@@ -39,45 +39,123 @@
 <footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
     <div class="container">
         <style>
+            :root { --t7-footer-accent: {{ helper::appdata($storeinfo->id)->primary_color ?? '#8e24aa' }}; }
+            .footer-sec2 {
+                background: linear-gradient(145deg, color-mix(in srgb, var(--t7-footer-accent) 92%, #000 8%), var(--t7-footer-accent)) !important;
+                border-top: 0 !important;
+            }
+            .footer-sec2 .color-changer,
+            .footer-sec2 .text-dark { color: #fff !important; }
             .footer-input::placeholder { color: inherit !important; opacity: 0.6; }
             .hover-opacity-100:hover { opacity: 1 !important; }
+            .t7-footer-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.1rem; }
+            .t7-footer-menu { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; }
+            .t7-footer-menu a { text-decoration: none; font-weight: 600; opacity: .82; transition: .2s ease; }
+            .t7-footer-menu a:hover { opacity: 1; transform: translateX(-2px); }
+            .t7-footer-contact { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+            .t7-footer-contact li { display: flex; align-items: center; gap: .7rem; }
+            .t7-footer-icon {
+                width: 34px;
+                height: 34px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.18);
+                border: 1px solid rgba(255, 255, 255, 0.25);
+            }
+            .t7-footer-newsletter .input-group {
+                max-width: 320px;
+                border-radius: 10px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, .35);
+                background: rgba(255, 255, 255, .08);
+            }
+            .t7-footer-newsletter .form-control {
+                box-shadow: none;
+                border: 0;
+                background: transparent;
+            }
+            .t7-footer-newsletter .btn-store {
+                background: #fff !important;
+                color: var(--t7-footer-accent) !important;
+                border: 0 !important;
+            }
+            .t7-footer-newsletter .btn-store:hover {
+                opacity: .92;
+            }
+            .t7-footer-note {
+                margin-top: .9rem;
+                font-size: .95rem;
+                opacity: .85;
+                font-weight: 600;
+            }
+            .t7-footer-social {
+                display: flex;
+                gap: .55rem;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            .t7-footer-social a {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid rgba(255, 255, 255, .35);
+                text-decoration: none;
+                opacity: .9;
+            }
+            .t7-footer-social a:hover { opacity: 1; }
+            .copy-right-sec {
+                background: color-mix(in srgb, var(--t7-footer-accent) 88%, #000 12%) !important;
+                border-top: 1px solid rgba(255, 255, 255, .16) !important;
+            }
+            .copy-right-sec .color-changer,
+            .copy-right-sec .text-dark { color: #fff !important; }
+            @media (min-width: 992px) {
+                .t7-footer-col-right { padding-inline-end: 2rem; }
+                .t7-footer-col-center { padding-inline: 1rem; }
+                .t7-footer-col-left { padding-inline-start: 2rem; }
+            }
         </style>
-        <div class="row align-items-start justify-content-between">
+        <div class="row g-4 align-items-start justify-content-between">
             
-            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0 text-center {{ session()->get('direction') == 2 ? 'text-lg-end' : 'text-lg-start' }}">
-                <h5 class="text-dark color-changer mb-4 fw-bold">{{ trans('labels.pages') == 'labels.pages' ? 'الصفحات' : trans('labels.pages') }}</h5>
-                <ul class="footer-menu d-flex flex-column m-0 p-0 gap-2" style="list-style: none;">
+            <div class="col-lg-4 col-md-12 t7-footer-col-right text-center {{ session()->get('direction') == 2 ? 'text-lg-end' : 'text-lg-start' }}">
+                <h5 class="text-dark color-changer t7-footer-title">{{ trans('labels.pages') == 'labels.pages' ? 'الصفحات' : trans('labels.pages') }}</h5>
+                <ul class="t7-footer-menu footer-menu">
                     <li><a href="{{ URL::to($storeinfo->slug . '/contact') }}"
-                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.contact_us') }}</a>
+                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.contact_us') }}</a>
                     </li>
                     <li><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
-                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.privacy_policy') }}</a>
+                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.privacy_policy') }}</a>
                     </li>
                     <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
-                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.refund_policy') }} - {{ trans('labels.terms_condition') }}</a>
+                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.refund_policy') }} - {{ trans('labels.terms_condition') }}</a>
                     </li>
                     <li><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
-                            class="text-dark color-changer text-decoration-none fw-semibold opacity-75 hover-opacity-100 transition">{{ trans('labels.about_us') }}</a>
+                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.about_us') }}</a>
                     </li>
                 </ul>
             </div>
 
-            <div class="col-lg-5 col-md-12 text-center mb-4 mb-lg-0">
-                <h5 class="text-dark color-changer mb-4 fw-bold">{{ trans('labels.contact_info') == 'labels.contact_info' ? 'معلومات الاتصال' : trans('labels.contact_info') }}</h5>
-                <ul class="m-0 p-0 d-inline-block text-start" style="list-style: none;">
-                    <li class="d-flex align-items-center mb-3 gap-3">
-                        <div style="width: 30px; text-align: center;">
+            <div class="col-lg-4 col-md-12 t7-footer-col-center text-center">
+                <h5 class="text-dark color-changer t7-footer-title">{{ trans('labels.contact_info') == 'labels.contact_info' ? 'معلومات الاتصال' : trans('labels.contact_info') }}</h5>
+                <ul class="t7-footer-contact d-inline-grid text-start">
+                    <li>
+                        <div class="t7-footer-icon">
                             <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="mailto:{{ $storeinfo->email }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 transition" dir="ltr">
+                        <a href="mailto:{{ $storeinfo->email }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
                             {{ $storeinfo->email }}
                         </a>
                     </li>
-                    <li class="d-flex align-items-center mb-3 gap-3">
-                        <div style="width: 30px; text-align: center;">
+                    <li>
+                        <div class="t7-footer-icon">
                             <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="tel:{{ $storeinfo->mobile }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 transition" dir="ltr">
+                        <a href="tel:{{ $storeinfo->mobile }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
                             {{ $storeinfo->mobile }}
                         </a>
                     </li>
@@ -91,8 +169,8 @@
                     //    dd( $city->city . " " . $country->name) 
                     @endphp
                     @if(!empty($location_text))
-                    <li class="d-flex align-items-center mb-3 gap-3">
-                        <div style="width: 30px; text-align: center;">
+                    <li>
+                        <div class="t7-footer-icon">
                             <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
                         </div>
                         <span class="text-dark color-changer opacity-75 text-nowrap">
@@ -100,11 +178,11 @@
                         </span>
                     </li>
                     @else
-                    <li class="d-flex align-items-center mb-3 gap-3">
-                        <div style="width: 30px; text-align: center;">
+                    <li>
+                        <div class="t7-footer-icon">
                             <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}" target="_blank" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 transition text-nowrap">
+                        <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}" target="_blank" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 text-nowrap">
                             {{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}
                         </a>
                     </li>
@@ -112,15 +190,27 @@
                 </ul>
             </div>
 
-            <div class="col-lg-4 col-md-12 text-center {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }} mt-4 mt-lg-0">
-                <h5 class="text-dark color-changer mb-4 fw-bold">{{ trans('labels.newslatter') == 'labels.newslatter' ? 'ليصلك جديدنا' : trans('labels.newslatter') }}</h5>
-                <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post" class="d-flex justify-content-center {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
+            <div class="col-lg-4 col-md-12 t7-footer-col-left text-center {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }} mt-2 mt-lg-0">
+                <h5 class="text-dark color-changer t7-footer-title">{{ trans('labels.newslatter') == 'labels.newslatter' ? 'ليصلك جديدنا' : trans('labels.newslatter') }}</h5>
+                <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post" class="t7-footer-newsletter d-flex justify-content-center {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
                     @csrf
-                    <div class="input-group" style="max-width: 300px; border-radius: 5px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1);">
-                        <input type="email" class="form-control text-dark color-changer bg-transparent footer-input" name="subscribe_email" placeholder="{{ trans('labels.email') }}" required style="box-shadow: none;">
+                    <div class="input-group">
+                        <input type="email" class="form-control text-dark color-changer footer-input" name="subscribe_email" placeholder="{{ trans('labels.email') }}" required>
                         <button type="submit" class="btn btn-store fw-bold px-4" style="border-radius: 0;">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'اشترك' : trans('labels.subscribe') }}</button>
                     </div>
                 </form>
+                <p class="t7-footer-note {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }}">
+                    لأن ذوقك يستحق الأفضل دائمًا ✨
+                </p>
+                @if (helper::getsociallinks($storeinfo->id)->count() > 0)
+                    <div class="t7-footer-social {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
+                        @foreach (helper::getsociallinks($storeinfo->id) as $links)
+                            <a href="{{ $links->link }}" target="_blank" class="text-dark color-changer" aria-label="social-link">
+                                {!! $links->icon !!}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
             </div>
             
         </div>

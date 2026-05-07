@@ -292,14 +292,14 @@
                     <div class="step-progress">
                         <div class="step-indicator">
                             <div class="step-circle active" id="stepCircle1">1</div>
-                            <span class="step-label active" id="stepLabel1"><?php echo e(trans('labels.basic_info') ?? 'البيانات الأساسية'); ?></span>
+                            <span class="step-label active" id="stepLabel1"><?php echo e(trans('labels.basic_info') == 'labels.basic_info' ? 'البيانات الأساسية' : trans('labels.basic_info')); ?></span>
                         </div>
                         <div class="step-connector" id="stepConnector">
                             <div class="fill"></div>
                         </div>
                         <div class="step-indicator">
                             <div class="step-circle" id="stepCircle2">2</div>
-                            <span class="step-label" id="stepLabel2"><?php echo e(trans('labels.store_info') ?? 'بيانات المتجر'); ?></span>
+                            <span class="step-label" id="stepLabel2"><?php echo e(trans('labels.store_info') == 'labels.store_info' ? 'بيانات المتجر' : trans('labels.store_info')); ?></span>
                         </div>
                     </div>
 
@@ -425,7 +425,7 @@
                                 </button>
                                 <button class="btn btn-step btn-submit flex-fill"
                                     <?php if(env('Environment') == 'sendbox'): ?> type="button" onclick="myFunction()" <?php else: ?> type="submit" <?php endif; ?>>
-                                    <i class="fa-solid fa-check me-1"></i> <?php echo e(trans('labels.register')); ?>
+                                    <i class="fa-solid fa-check me-1"></i> <?php echo e(trans('labels.register') == 'labels.register' ? 'إنشاء حساب' : trans('labels.register')); ?>
 
                                 </button>
                             </div>

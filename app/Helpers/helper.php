@@ -920,8 +920,8 @@ class helper
             $data->order_prefix = 'PITS';
             $data->order_number_start = 1001;
             $data->firebase = '-';
-            $data->primary_color = @$landingsettings->primary_color ?? '#000000';
-            $data->secondary_color = @$landingsettings->secondary_color ?? '#000000';
+            $data->primary_color = '#E84393';   // Default rose – vendor can change from dashboard
+            $data->secondary_color = '#FF6BB5';
             $data->contact_email_message = @$rec->contact_email_message ?? '';
             $data->new_order_invoice_email_message = @$rec->new_order_invoice_email_message ?? '';
             $data->vendor_new_order_email_message = @$rec->vendor_new_order_email_message ?? '';
@@ -938,7 +938,54 @@ class helper
             $data->product_type = $product_type;
             $data->shopify_store_url = '-';
             $data->shopify_access_token = '-';
+            $data->template = 7;   // Default to modern template-7
             $data->save();
+
+            // ── Auto-assign the basic free plan ──────────────────────────────────
+            $basicPlan = PricingPlan::where('price', 0)->where('is_available', 1)->first();
+            if ($basicPlan) {
+                User::where('id', $vendor_id)->update([
+                    'plan_id'         => $basicPlan->id,
+                    'purchase_amount' => 0,
+                    'purchase_date'   => date('Y-m-d h:i:sa'),
+                ]);
+                $freeTx = new Transaction();
+                $freeTx->vendor_id          = $vendor_id;
+                $freeTx->plan_id            = $basicPlan->id;
+                $freeTx->plan_name          = $basicPlan->name;
+                $freeTx->payment_type       = '0';
+                $freeTx->transaction_number = Str::upper(Str::random(8));
+                $freeTx->payment_id         = '';
+                $freeTx->amount             = 0;
+                $freeTx->grand_total        = 0;
+                $freeTx->tax                = '';
+                $freeTx->tax_name           = '';
+                $freeTx->service_limit      = $basicPlan->order_limit;
+                $freeTx->appoinment_limit   = $basicPlan->appointment_limit;
+                $freeTx->status             = 2;
+                $freeTx->purchase_date      = date('Y-m-d h:i:sa');
+                $freeTx->expire_date        = ''; // lifetime
+                $freeTx->duration           = $basicPlan->duration;
+                $freeTx->days               = $basicPlan->days;
+                $freeTx->custom_domain      = $basicPlan->custom_domain;
+                $freeTx->themes_id          = $basicPlan->themes_id;
+                $freeTx->google_analytics   = $basicPlan->google_analytics;
+                $freeTx->pos                = $basicPlan->pos;
+                $freeTx->vendor_app         = $basicPlan->vendor_app;
+                $freeTx->customer_app       = $basicPlan->customer_app;
+                $freeTx->role_management    = $basicPlan->role_management;
+                $freeTx->pwa                = $basicPlan->pwa;
+                $freeTx->coupons            = $basicPlan->coupons;
+                $freeTx->blogs              = $basicPlan->blogs;
+                $freeTx->google_login       = $basicPlan->google_login;
+                $freeTx->facebook_login     = $basicPlan->facebook_login;
+                $freeTx->sound_notification = $basicPlan->sound_notification;
+                $freeTx->whatsapp_message   = $basicPlan->whatsapp_message;
+                $freeTx->telegram_message   = $basicPlan->telegram_message;
+                $freeTx->features           = $basicPlan->features;
+                $freeTx->save();
+            }
+            // ─────────────────────────────────────────────────────────────────────
 
             $otherdata = OtherSettings::where('vendor_id', '1')->first();
             $other = new OtherSettings();

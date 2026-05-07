@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SyriaLocationSeeder::class,
+            PackageSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

@@ -4169,10 +4169,10 @@ a {
   background-color: var(--bs-primary) !important;
   border-color: var(--bs-primary) !important;
 }
-
+/* 
 .dark body .breadcrumb-item+.breadcrumb-item::before {
   color: #aab8c5;
-}
+} */
 
 .dark body .breadcrumb-item.active {
   color: #aab8c5;

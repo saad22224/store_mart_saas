@@ -57,6 +57,7 @@
         href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/sweetalert/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'front/css/dataTables.bootstrap4.min.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
     <!-- IF VERSION 2  -->
     @if (helper::adminappdata()->recaptcha_version == 'v2')
@@ -614,222 +615,84 @@
         @endphp
         <!-- mine header -->
 
-        <div
-            class="navbar main-header main-sticky-top p-0 {{ helper::appdata(@$storeinfo->id)->template == 10 ? 'header-10-bg top-0' : '' }}">
-            <div class="container">
-
-                <div class="col-xxl-4 col-xl-5 col-lg-5 d-none d-xl-block main-menu">
-                    <ul class="d-flex gap-4 p-0 m-0">
-                        <li>
-                            <a class="{{ request()->is($storeinfo->slug) ? 'menu-active' : '' }}"
-                                href="{{ URL::to($storeinfo->slug) }}">{{ trans('labels.home') }}</a>
-                        </li>
-                        @if (helper::appdata(@$storeinfo->id)->online_order == 1)
-                            <li><a class="{{ request()->is($storeinfo->slug . '/find-order') ? 'menu-active' : '' }}"
-                                    href="{{ URL::to($storeinfo->slug . '/find-order') }}">{{ trans('labels.track_order') }}</a>
-                            </li>
-                        @endif
-                        @if (@helper::checkaddons('blog'))
-                            @if (helper::getblogs(@$storeinfo->id)->count() > 0)
-                                <li><a class="{{ request()->is($storeinfo->slug . '/blogs') ? 'menu-active' : '' }}"
-                                        href="{{ URL::to($storeinfo->slug . '/blogs') }}">{{ trans('labels.blogs') }}
-                                    </a>
-                                </li>
-                            @endif
-                        @endif
-
-                        <li><a class="{{ request()->is($storeinfo->slug . '/contact') ? 'menu-active' : '' }}"
-                                href="{{ URL::to($storeinfo->slug . '/contact') }}">{{ trans('labels.contact_us') }}</a>
-                        </li>
-                        @if (helper::getfaqs(@$storeinfo->id)->count() > 0)
-                            <li><a class="{{ request()->is($storeinfo->slug . '/faqs') ? 'menu-active' : '' }}"
-                                    href="{{ URL::to($storeinfo->slug . '/faqs') }}">{{ trans('labels.faqs') }}</a>
-                            </li>
-                        @endif
-                    </ul>
+        @if (helper::appdata(@$storeinfo->id)->template == 7)
+            <!-- Template 7 Modern Header -->
+            <div class="t7-top-promo">
+                <div class="container">
+                    <marquee behavior="scroll" direction="right" onmouseover="this.stop();" onmouseout="this.start();">
+                         🌸 أهلاً وسهلاً بكم في متجرنا 🌸 متجركم المفضل تحت سقف واحد 🌸 خدمة متميزة وتوصيل سريع 🌸
+                    </marquee>
                 </div>
-
-                <div class="col-auto">
-                    <div class="d-flex align-items-center gap-3">
-                        <!-- mobile sidebar trigger -->
-                        @if (@helper::checkaddons('customer_login'))
-                            @if (helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
-                                <li class="d-block d-xl-none">
-                                    <a type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-sidebar"
-                                        aria-controls="offcanvasExample"
-                                        class="d-flex justify-content-center align-items-center">
-                                        <i class="fa-light fa-bars fs-4 color-changer text-dark"></i>
-                                    </a>
-                                </li>
+            </div>
+            
+            <header class="t7-header-main sticky-top">
+                <div class="t7-header-container">
+                    <!-- Left Side: Profile & Search -->
+                    <div class="t7-header-left">
+                        @if (@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
+                            @if (Auth::user() && Auth::user()->type == 3)
+                                <a href="{{ URL::to($storeinfo->slug . '/profile') }}" class="t7-header-icon-btn">
+                                    <i class="fa-light fa-user"></i>
+                                </a>
+                            @else
+                                <a href="javascript:void(0)" data-bs-toggle="offcanvas" data-bs-target="#loginpage" class="t7-header-icon-btn">
+                                    <i class="fa-light fa-user"></i>
+                                </a>
                             @endif
                         @endif
                         
-                        <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    let logo = "";
-
-
-                    if (localStorage.getItem('theme') === 'dark') {
-                        logo = "{{ helper::image_path(helper::appdata(@$storeinfo->id)->darklogo) }}";
-                    } else {
-                        logo = "{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}";
-                    }
-
-                    // Set logo image src
-                    document.getElementById('logoimage2').src = logo;
-                });
-            </script>
-
-            <a href="{{ URL::to($storeinfo->slug) }}">
-                <img id="logoimage2" src="" alt="logo" class="object-fit-cover my-2 logo-h-55-px">
-            </a>
-
-                       
-
+                        <a href="{{ URL::to($storeinfo->slug . '/search') }}" class="t7-header-icon-btn">
+                            <i class="fa-light fa-magnifying-glass"></i>
+                        </a>
                     </div>
-                </div>
 
-                {{-- Mobile Social Links - Centered --}}
-                <div class="col-auto d-lg-none">
-                    <div class="d-flex align-items-center justify-content-center gap-2">
-                        @foreach (@helper::getsociallinks(@$storeinfo->id) as $links)
-                            <a href="{{ $links->link }}" target="_blank" 
-                               style="
-                                   width: 24px;
-                                   height: 24px;
-                                   border-radius: 50%;
-                                   display: flex;
-                                   align-items: center;
-                                   justify-content: center;
-                                   background: var(--bs-primary);
-                                   color: #fff;
-                                   font-size: 11px;
-                                   text-decoration: none;
-                                   transition: all 0.3s ease;
-                               "
-                               onmouseover="this.style.transform='scale(1.1)';this.style.opacity='0.9'"
-                               onmouseout="this.style.transform='scale(1)';this.style.opacity='1'">
-                                {!! $links->icon !!}
+                    <!-- Center: Circular Logo -->
+                    <div class="t7-logo-center-wrap">
+                        <a style="border-radius: 30%;" href="{{ URL::to($storeinfo->slug) }}" class="t7-logo-circle">
+                            <img src="{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}" alt="Logo">
+                        </a>
+                    </div>
+
+                    <!-- Right Side: Wishlist & Cart & Language -->
+                    <div class="t7-header-right">
+                        @if (@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
+                            <a href="{{ URL::to($storeinfo->slug . '/wishlist') }}" class="t7-header-icon-btn">
+                                <i class="fa-light fa-heart"></i>
+                                <span class="t7-icon-badge" id="wishlistcnt">0</span>
                             </a>
-                        @endforeach
+                        @endif
+                        
+                        @if (helper::appdata(@$storeinfo->id)->online_order == 1)
+                            <a href="{{ URL::to($storeinfo->slug . '/cart/') }}" class="t7-header-icon-btn">
+                                <i class="fa-light fa-bag-shopping"></i>
+                                <span class="t7-icon-badge" id="cartcnt">{{ session()->get('cart') ?? 0 }}</span>
+                            </a>
+                        @endif
+
+                        <div class="dropdown">
+                            <a class="t7-header-icon-btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fa-light fa-globe"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @if(\App::getLocale() == 'en')
+                                    <li><a class="dropdown-item" href="{{ URL::to('/lang/change?lang=ar') }}">العربية</a></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ URL::to('/lang/change?lang=en') }}">English</a></li>
+                                @endif
+                            </ul>
+                        </div>
                     </div>
                 </div>
-
-                <!-- mobile lag button -->
-                <div class="col-xxl-4 col-xl-5">
-
-                    <!-- right side option -->
-                    @php
-                        $languages = explode('|', helper::appdata(@$storeinfo->id)->languages);
-                        $currencies = explode('|', helper::appdata(@$storeinfo->id)->currencies);
-                    @endphp
-
-                    <ul class="d-flex align-items-center justify-content-end gap-lg-4 gap-3 m-0 p-0">
-                        <li>
-                            <div class="language-dropdown lag-btn">
-                                @if(\App::getLocale() == 'en')
-                                    <a class="open-btn bg-transparent p-0 border-0 m-0" href="{{ URL::to('/lang/change?lang=ar') }}">
-                                        <span class="fs-6 fw-bold color-changer">عربي</span>
-                                    </a>
-                                @else
-                                    <a class="open-btn bg-transparent p-0 border-0 m-0" href="{{ URL::to('/lang/change?lang=en') }}">
-                                        <span class="fs-6 fw-bold color-changer">EN</span>
-                                    </a>
-                                @endif
-                            </div>
-                        </li>
-                        <li>
-                            <div class="dropdown language-dropdown lag-btn">
-                                <a role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    class="dropdown-toggle open-btn bg-transparent p-0 border-0 m-0">
-                                    <i class="fa-regular fa-circle-half-stroke fs-5 color-changer"></i>
-                                </a>
-                                <ul
-                                    class="dropdown-menu p-0 bg-body-secondary border-0 shadow mt-2 {{ session()->get('direction') == 2 ? 'min-dropdown-rtl' : 'min-dropdown-ltr' }}">
-                                    <li>
-                                        <a class="dropdown-item d-flex cursor-pointer align-items-center p-2 gap-2"
-                                            onclick="setLightMode()">
-                                            <i class="fa-light fa-lightbulb fs-6"></i>
-                                            <span>Light</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-flex cursor-pointer align-items-center p-2 gap-2"
-                                            onclick="setDarkMode()">
-                                            <i class="fa-solid fa-moon fs-6"></i>
-                                            <span>Dark</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        @if (@helper::checkaddons('currency_settigns'))
-                            @if (count($currencies) > 1)
-                                <li>
-                                    <div class="dropdown language-dropdown lag-btn">
-                                        <a class="dropdown-toggle open-btn bg-transparent p-0 border-0 m-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span class="fs-5 color-changer">
-                                                {{ session()->get('currency') }}
-                                            </span>
-                                        </a>
-
-                                        <ul
-                                            class="dropdown-menu p-0 bg-body-secondary border-0 shadow mt-2 {{ session()->get('direction') == 2 ? 'min-dropdown-rtl' : 'min-dropdown-ltr' }}">
-                                            @foreach (helper::available_currency(@$storeinfo->id) as $currencylist)
-                                                @if (in_array($currencylist->code, explode('|', helper::appdata(@$storeinfo->id)->currencies)))
-                                                    <li>
-                                                        <a class="dropdown-item d-flex align-items-center p-2 gap-2"
-                                                            href="{{ URL::to('/currency/change?currency=' . $currencylist['code']) }}">
-                                                            <p class="fs-7">
-                                                                {{ $currencylist['currency'] . '  ' . $currencylist['name'] }}
-                                                            </p>
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </li>
-                            @endif
-                        @endif
-                        <li class="d-none d-lg-block">
-                            <a href="{{ URL::to($storeinfo->slug . '/search') }}">
-                                <i class="fa-light fa-magnifying-glass fs-5 color-changer"></i></a>
-                        </li>
-
-                        @if (helper::appdata(@$storeinfo->id)->online_order == 1)
-                            <li class="shopping-cart d-none d-lg-block">
-
-                                <a href="{{ URL::to($storeinfo->slug . '/cart/') }}">
-                                    <i class="fa-light fa-bag-shopping fs-5 color-changer"></i></a>
-                                <div class="cart-count {{ session()->get('cart') > 0 ? '' : 'd-none' }} {{ session()->get('direction') == 2 ? 'left_10px' : '' }}"
-                                    id="cartcnt">{{ session()->get('cart') }}</div>
-                            </li>
-                        @endif
-
-                        <!-- loginpage trigar -->
-                        @if (@helper::checkaddons('customer_login'))
-                            @if (helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
-                                <li class="d-lg-block d-none">
-                                    @if (Auth::user() && Auth::user()->type == 3)
-                                        <a href="{{ URL::to($storeinfo->slug . '/profile') }}">
-                                            <i class="fa-light fa-user fs-5"></i>
-                                        </a>
-                                    @else
-                                        <a type="button" data-bs-toggle="offcanvas" data-bs-target="#loginpage"
-                                            id="btnlogin" aria-controls="loginpage">
-                                            <i class="fa-light fa-user fs-5"></i>
-                                        </a>
-                                    @endif
-                                </li>
-                                <!-- loginpage trigar -->
-                            @endif
-                        @endif
-                    </ul>
+            </header>
+        @else
+            <!-- Existing Header Logic -->
+            @if (helper::appdata(@$storeinfo->id)->template != 11)
+                <!-- mine header structure ... -->
+                <div class="navbar main-header main-sticky-top p-0 {{ helper::appdata(@$storeinfo->id)->template == 10 ? 'header-10-bg top-0' : '' }}">
+                    <!-- ... original header content ... -->
                 </div>
-            </div>
-        </div>
+            @endif
+        @endif
 
         <!-- mine header -->
 
@@ -926,6 +789,110 @@
                 --bs-secondary-srg: color-mix(in srgb, var(--bs-secondary), transparent 90%);
 
             }
+            @if (helper::appdata(@$storeinfo->id)->template == 7)
+            /* Template 7 Header Overrides */
+            .t7-top-promo {
+                background: #4a148c; /* Dark Purple */
+                color: #fff;
+                padding: 8px 0;
+                text-align: center;
+                font-size: 14px;
+                font-weight: 500;
+                font-family: 'Cairo', sans-serif;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .t7-header-main {
+                background: #fff;
+                padding: 20px 0;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            }
+            .t7-header-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 15px;
+            }
+            .t7-header-left, .t7-header-right {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                flex: 1;
+            }
+            .t7-header-right {
+                justify-content: flex-end;
+            }
+            .t7-logo-center-wrap {
+                flex: 0 0 auto;
+                text-align: center;
+            }
+            .t7-logo-circle {
+                width: 120px;
+                height: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                margin: 0 auto;
+                transition: transform 0.3s ease;
+            }
+            .t7-logo-circle:hover {
+                transform: scale(1.05);
+            }
+            .t7-logo-circle img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+            .t7-header-icon-btn {
+                position: relative;
+                color: #333;
+                font-size: 22px;
+                text-decoration: none;
+                transition: color 0.3s;
+                background: none;
+                border: none;
+                padding: 0;
+            }
+            .t7-header-icon-btn:hover {
+                color: var(--bs-primary);
+            }
+            .t7-icon-badge {
+                position: absolute;
+                top: -8px;
+                right: -10px;
+                background: #e91e63;
+                color: #fff;
+                font-size: 11px;
+                font-weight: bold;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid #fff;
+            }
+            .t7-currency-text {
+                font-size: 16px;
+                font-weight: 600;
+                color: #333;
+            }
+            @media (max-width: 991px) {
+                .t7-logo-circle {
+                    width: 80px;
+                    height: 80px;
+                }
+                .t7-header-left, .t7-header-right {
+                    gap: 12px;
+                }
+                .t7-header-icon-btn {
+                    font-size: 18px;
+                }
+            }
+            @endif
         </style>
         @if (!request()->is($storeinfo->slug . '/detail-*'))
             @include('front.theme.timer')

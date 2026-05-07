@@ -1,11 +1,13 @@
 <div class="col-lg-7 col-md-10 mx-auto my-5 text-center">
 
+    @if (helper::appdata($storeinfo->id)->template != 7)
     <div class="col-md-6 mx-auto">
 
         <img src="{{ helper::image_path(helper::appdata($storeinfo->id)->no_data_image) }}" alt="cart empty image"
             class="w-100 mb-5 object-fit-over">
 
     </div>
+    @endif
 
     <h2 class="cart-title color-changer border-0 {{ session()->get('direction') == '2' ? 'text-right' : '' }}">
 

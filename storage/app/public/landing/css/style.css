@@ -2850,9 +2850,9 @@ ol.breadcrumb {
     color: #aab8c5 !important;
 }
 
-.dark body .breadcrumb-item+.breadcrumb-item::before {
+/* .dark body .breadcrumb-item+.breadcrumb-item::before {
     color: #aab8c5 !important;
-}
+} */
 
 .dark body .cms-section p {
     color: #FFF;

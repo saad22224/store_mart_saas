@@ -1,14 +1,15 @@
-@include('front.theme.header')
+<?php echo $__env->make('front.theme.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <section class="breadcrumb-sec bg-change-mode">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item text-dark"><a class="text-dark color-changer"
-                        href="{{ URL::to($storeinfo->slug . '/') }}">{{ trans('labels.home') }}</a>
+                        href="<?php echo e(URL::to($storeinfo->slug . '/')); ?>"><?php echo e(trans('labels.home')); ?></a>
                 </li>
-                <li class="text-muted breadcrumb-item {{ session()->get('direction') == 2 ? 'rtl' : '' }} text-dark active"
+                <li class="text-muted breadcrumb-item <?php echo e(session()->get('direction') == 2 ? 'rtl' : ''); ?> text-dark active"
                     aria-current="page">
-                    {{ trans('labels.product_detail') }}
+                    <?php echo e(trans('labels.product_detail')); ?>
+
                 </li>
             </ol>
         </nav>
@@ -17,24 +18,24 @@
 
 <section>
     <div class="container">
-        @if ($item_check != null)
+        <?php if($item_check != null): ?>
             <div class="row g-4 g-md-5 view-product">
                 <div class="col-md-5 mb-sm-5 mb-3">
                     <div class="card card-bg h-100 overflow-hidden rounded-0 border-0 position-relative">
                         <!-- new big-view -->
 
                         <div class="sp-wrap ">
-                            @foreach ($getitem['multi_image'] as $key => $image)
-                                <a href="{{ $image->image_url }}"><img src="{{ helper::image_path($image->image) }}"
+                            <?php $__currentLoopData = $getitem['multi_image']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e($image->image_url); ?>"><img src="<?php echo e(helper::image_path($image->image)); ?>"
                                         alt=""></a>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                         <!-- new big-view -->
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="card-body p-0 text-left">
-                        @php
+                        <?php
                             if ($getitem->top_deals == 1 && helper::top_deals($storeinfo->id) != null) {
                                 if (@helper::top_deals($storeinfo->id)->offer_type == 1) {
                                     if ($getitem['variation']->count() > 0) {
@@ -89,75 +90,78 @@
                                 $off =
                                     $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
                             }
-                        @endphp
-                        @if ($off > 0)
-                            <span class="badge text-bg-primary border fs-7 mb-2" id="offer">{{ $off }}%
-                                {{ trans('labels.off') }}</span>
-                        @endif
+                        ?>
+                        <?php if($off > 0): ?>
+                            <span class="badge text-bg-primary border fs-7 mb-2" id="offer"><?php echo e($off); ?>%
+                                <?php echo e(trans('labels.off')); ?></span>
+                        <?php endif; ?>
 
                         <p class="pro-title color-changer fs-4 fw-600 mb-sm-3 mb-2" id="item_name">
-                            {{ $getitem->item_name }}</p>
+                            <?php echo e($getitem->item_name); ?></p>
                         <!-- category name and rating star -->
                         <div class="d-flex align-items-center justify-content-between mb-0">
                             <p id="laodertext" class="d-none laodertext"></p>
                             <div class="d-flex flex-wrap align-items-center product-detail-price">
 
-                                @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
+                                <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
 
                                     <p class="pro-text color-changer pricing detail_item_price">
-                                        {{ helper::currency_formate($price, $storeinfo->id, $getitem->currency) }}
+                                        <?php echo e(helper::currency_formate($price, $storeinfo->id, $getitem->currency)); ?>
+
                                     </p>
-                                    @if ($original_price > $price)
+                                    <?php if($original_price > $price): ?>
                                         <del
                                             class="card-text pro-org-value text-muted pricing mb-0 px-1 detail_original_price">
-                                            {{ helper::currency_formate($original_price, $storeinfo->id, $getitem->currency) }}
-                                            {{-- {{ dd(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)) }} --}}
-                                        </del>
-                                    @endif
-                                @endif
+                                            <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)); ?>
 
-                                @if ($getitem->has_variants == 2)
-                                    @if ($getitem->is_available == 2 || $getitem->is_deleted == 1)
-                                        <h3 class="text-danger">{{ trans('labels.not_available') }}</h3>
-                                    @endif
-                                @else
+                                            
+                                        </del>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
+                                <?php if($getitem->has_variants == 2): ?>
+                                    <?php if($getitem->is_available == 2 || $getitem->is_deleted == 1): ?>
+                                        <h3 class="text-danger"><?php echo e(trans('labels.not_available')); ?></h3>
+                                    <?php endif; ?>
+                                <?php else: ?>
                                     <h3 class="text-danger" id="detail_not_available_text"></h3>
-                                @endif
+                                <?php endif; ?>
                             </div>
 
                             <!-- rating star -->
-                            @if (@helper::checkaddons('product_reviews'))
-                                @if (helper::appdata($storeinfo->id)->product_ratting_switch == 1)
+                            <?php if(@helper::checkaddons('product_reviews')): ?>
+                                <?php if(helper::appdata($storeinfo->id)->product_ratting_switch == 1): ?>
                                     <ul class="d-flex bg-gray px-2 py-1 rounded-2 align-items-center p-0 m-0 cursor-pointer"
                                         tooltip="View"
-                                        onclick="rattingmodal('{{ $getitem->id }}','{{ $getitem->vendor_id }}','{{ $getitem->item_name }}')">
+                                        onclick="rattingmodal('<?php echo e($getitem->id); ?>','<?php echo e($getitem->vendor_id); ?>','<?php echo e($getitem->item_name); ?>')">
                                         <li class="d-flex align-items-center gap-1">
                                             <i class="fa-solid fa-star text-warning fs-7"></i>
                                             <div id="ratting-div" class="fs-7 fw-semibold">
                                                 <p class="px-1 avg-ratting">
-                                                    {{ number_format($getitem->ratings_average, 1) }}
+                                                    <?php echo e(number_format($getitem->ratings_average, 1)); ?>
+
                                                 </p>
                                             </div>
                                         </li>
                                     </ul>
-                                @endif
-                            @endif
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
 
-                        @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
+                        <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
                             <p id="tax" class="responcive-tax text-left mb-1">
 
-                                @if ($getitem->tax != null && $getitem->tax != '')
-                                    <span class="text-danger fs-7"> {{ trans('labels.exclusive_taxes') }} </span>
-                                @else
-                                    <span class="text-success fs-7"> {{ trans('labels.inclusive_taxes') }}</span>
-                                @endif
+                                <?php if($getitem->tax != null && $getitem->tax != ''): ?>
+                                    <span class="text-danger fs-7"> <?php echo e(trans('labels.exclusive_taxes')); ?> </span>
+                                <?php else: ?>
+                                    <span class="text-success fs-7"> <?php echo e(trans('labels.inclusive_taxes')); ?></span>
+                                <?php endif; ?>
 
                             </p>
-                        @endif
-                        @if (@Helper::checkaddons('fake_view'))
-                            @if (Helper::appdata($storeinfo->id)->product_fake_view == 1)
-                                @php
+                        <?php endif; ?>
+                        <?php if(@Helper::checkaddons('fake_view')): ?>
+                            <?php if(Helper::appdata($storeinfo->id)->product_fake_view == 1): ?>
+                                <?php
 
                                     $var = ['{eye}', '{count}'];
                                     $newvar = [
@@ -173,122 +177,130 @@
                                         $newvar,
                                         Helper::appdata($storeinfo->id)->fake_view_message,
                                     );
-                                @endphp
+                                ?>
                                 <div class="d-flex gap-1 align-items-center blink_me mb-2">
-                                    <p class="fw-600 text-success m-0">{!! $fake_view !!}</p>
+                                    <p class="fw-600 text-success m-0"><?php echo $fake_view; ?></p>
                                 </div>
-                            @endif
-                        @endif
+                            <?php endif; ?>
+                        <?php endif; ?>
 
                         <div
-                            class=" border-bottom pb-3 {{ $getitem->sku != null || $getitem->stock_management == 1 || $getitem->attchment_url != null || $getitem->attchment_name != null ? 'd-block' : 'd-none' }}">
+                            class=" border-bottom pb-3 <?php echo e($getitem->sku != null || $getitem->stock_management == 1 || $getitem->attchment_url != null || $getitem->attchment_name != null ? 'd-block' : 'd-none'); ?>">
                             <div class="meta-content bg-gray bg-changer p-3 mt-3 rounded-2">
-                                @if ($getitem->sku != '')
+                                <?php if($getitem->sku != ''): ?>
                                     <div class="sku-wrapper product_meta py-1"><span
-                                            class="fs-7 fw-semibold color-changer">{{ trans('labels.sku') }}:
-                                        </span><span class="text-muted fs-7">{{ $getitem->sku }}</span>
+                                            class="fs-7 fw-semibold color-changer"><?php echo e(trans('labels.sku')); ?>:
+                                        </span><span class="text-muted fs-7"><?php echo e($getitem->sku); ?></span>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
-                                @if ($getitem->has_variants == 2 && $getitem->stock_management == 1)
+                                <?php if($getitem->has_variants == 2 && $getitem->stock_management == 1): ?>
                                     <div class="sku-wrapper product_meta" id="stock">
-                                        <span class="fs-7 fw-semibold color-changer">{{ trans('labels.stock') }}:
+                                        <span class="fs-7 fw-semibold color-changer"><?php echo e(trans('labels.stock')); ?>:
                                         </span>
-                                        @if ($getitem->qty > 0)
-                                            <span class="text-success fs-7">{{ $getitem->qty }}
-                                                {{ trans('labels.in_stock') }}</span>
-                                        @else
-                                            <span class="text-danger fs-7"> {{ trans('labels.out_of_stock') }} </span>
-                                        @endif
+                                        <?php if($getitem->qty > 0): ?>
+                                            <span class="text-success fs-7"><?php echo e($getitem->qty); ?>
+
+                                                <?php echo e(trans('labels.in_stock')); ?></span>
+                                        <?php else: ?>
+                                            <span class="text-danger fs-7"> <?php echo e(trans('labels.out_of_stock')); ?> </span>
+                                        <?php endif; ?>
                                     </div>
-                                @elseif ($getitem->has_variants == 1)
+                                <?php elseif($getitem->has_variants == 1): ?>
                                     <div class="sku-wrapper product_meta" id="stock">
-                                        <span class="fs-7 color-changer">{{ trans('labels.stock') }}: </span>
+                                        <span class="fs-7 color-changer"><?php echo e(trans('labels.stock')); ?>: </span>
                                         <span class="fs-7 text-muted" id="detail_out_of_stock"></span>
                                     </div>
-                                @endif
-                                @if ($getitem->attchment_url != '' && $getitem->attchment_url != null)
+                                <?php endif; ?>
+                                <?php if($getitem->attchment_url != '' && $getitem->attchment_url != null): ?>
                                     <div>
-                                        @if ($getitem->attchment_name != '' && $getitem->attchment_name != null)
-                                            <a href="{{ $getitem->attchment_url }}" target="_blank">
+                                        <?php if($getitem->attchment_name != '' && $getitem->attchment_name != null): ?>
+                                            <a href="<?php echo e($getitem->attchment_url); ?>" target="_blank">
                                                 <p class="fs-7 d-flex align-items-center color-changer gap-2"><i
                                                         class="fa-light fa-file fs-6"></i>
-                                                    {{ $getitem->attchment_name }}</p>
+                                                    <?php echo e($getitem->attchment_name); ?></p>
                                             </a>
-                                        @else
-                                            <a href="{{ $getitem->attchment_url }}" target="_blank">
+                                        <?php else: ?>
+                                            <a href="<?php echo e($getitem->attchment_url); ?>" target="_blank">
                                                 <p class="fs-7 d-flex align-items-center gap-2 color-changer"><i
                                                         class="fa-light fa-file fs-6"></i>
-                                                    {{ trans('labels.click_here') }}</p>
+                                                    <?php echo e(trans('labels.click_here')); ?></p>
                                             </a>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
-                                @endif
-                                @if (@helper::otherappdata(@$storeinfo->id)->estimated_delivery_on_off == 1)
+                                <?php endif; ?>
+                                <?php if(@helper::otherappdata(@$storeinfo->id)->estimated_delivery_on_off == 1): ?>
                                     <div class="sku-wrapper product_meta py-1">
                                         <span
-                                            class="fs-7 fw-semibold color-changer">{{ trans('labels.estimated_delivery') }}
+                                            class="fs-7 fw-semibold color-changer"><?php echo e(trans('labels.estimated_delivery')); ?>
+
                                             :</span>
                                         <span class="text-muted fs-7">
-                                            {{ helper::otherappdata(@$storeinfo->id)->days_of_estimated_delivery }}
-                                            {{ trans('labels.days') }}
+                                            <?php echo e(helper::otherappdata(@$storeinfo->id)->days_of_estimated_delivery); ?>
+
+                                            <?php echo e(trans('labels.days')); ?>
+
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
 
-                        @if ($getitem->has_variants == 1)
+                        <?php if($getitem->has_variants == 1): ?>
                             <div class="product-variations-wrapper">
                                 <div class="size-variation detail_size_variation" id="detail_variation">
 
-                                    @for ($i = 0; $i < count($getitem->variants_json); $i++)
+                                    <?php for($i = 0; $i < count($getitem->variants_json); $i++): ?>
                                         <h6 class="fw-semibold color-changer mt-3" for="">
-                                            {{ $getitem->variants_json[$i]['variant_name'] }}</h6>
+                                            <?php echo e($getitem->variants_json[$i]['variant_name']); ?></h6>
                                         <div class="d-flex flex-wrap gap-2 border-bottom pb-3 mt-3">
-                                            @for ($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++)
+                                            <?php for($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++): ?>
                                                 <label
-                                                    class="checkbox-inline check{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}"
-                                                    id="check_{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}"
-                                                    for="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
+                                                    class="checkbox-inline check<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>"
+                                                    id="check_<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>-<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>"
+                                                    for="<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>-<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>">
                                                     <input type="checkbox" class="" name="skills"
-                                                        {{ $t == 0 ? 'checked' : '' }}
-                                                        value="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}"
-                                                        id="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
-                                                    {{ $getitem->variants_json[$i]['variant_options'][$t] }}
+                                                        <?php echo e($t == 0 ? 'checked' : ''); ?>
+
+                                                        value="<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>"
+                                                        id="<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_name'])); ?>-<?php echo e(str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t])); ?>">
+                                                    <?php echo e($getitem->variants_json[$i]['variant_options'][$t]); ?>
+
                                                 </label>
-                                            @endfor
+                                            <?php endfor; ?>
                                         </div>
-                                    @endfor
+                                    <?php endfor; ?>
 
                                 </div>
                             </div>
-                        @endif
-                        @if (count($getitem['extras']) > 0)
+                        <?php endif; ?>
+                        <?php if(count($getitem['extras']) > 0): ?>
                             <div class="woo_pr_color flex_inline_center my-3 border-bottom pb-3">
                                 <div class="woo_colors_list text-left">
                                     <span id="extras">
-                                        <h6 class="extra-title fw-semibold color-changer">{{ trans('labels.extras') }}
+                                        <h6 class="extra-title fw-semibold color-changer"><?php echo e(trans('labels.extras')); ?>
+
                                         </h6>
                                         <ul class="list-unstyled extra-food m-0">
                                             <div id="pricelist">
-                                                @foreach ($getitem['extras'] as $key => $extras)
+                                                <?php $__currentLoopData = $getitem['extras']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $extras): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <li class="mb-2"><input type="checkbox" name="addons[]"
-                                                            extras_name="{{ $extras->name }}" class="Checkbox"
-                                                            value="{{ $extras->id }}" price="{{ $extras->price }}">
-                                                        <p class="color-changer">{{ $extras->name }} :
-                                                            {{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}
+                                                            extras_name="<?php echo e($extras->name); ?>" class="Checkbox"
+                                                            value="<?php echo e($extras->id); ?>" price="<?php echo e($extras->price); ?>">
+                                                        <p class="color-changer"><?php echo e($extras->name); ?> :
+                                                            <?php echo e(helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency)); ?>
+
                                                         </p>
                                                     </li>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </ul>
                                     </span>
 
                                 </div>
                             </div>
-                        @endif
-                        @if ($getitem->top_deals == 1 && helper::top_deals($storeinfo->id) != null)
+                        <?php endif; ?>
+                        <?php if($getitem->top_deals == 1 && helper::top_deals($storeinfo->id) != null): ?>
                             <div id="eapps-countdown-timer-1"
                                 class="countdown rounded eapps-countdown-timer-align-center  eapps-countdown-timer-finish-button-show   eapps-countdown-timer-style-combined eapps-countdown-timer-style-blocks eapps-countdown-timer-position-bar eapps-countdown-timer-area-clickable eapps-countdown-timer-has-background">
                                 <div class="eapps-countdown-timer-container">
@@ -312,77 +324,77 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
-                        @if ($getitem->is_available != 2 || $getitem->is_deleted == 1)
+                        <?php if($getitem->is_available != 2 || $getitem->is_deleted == 1): ?>
                             <div class="row g-md-3 g-2 py-3" id="detail_plus_minus">
-                                @if (helper::appdata($storeinfo->id)->online_order == 1)
+                                <?php if(helper::appdata($storeinfo->id)->online_order == 1): ?>
                                     <div class="col-xl-3 col-6">
                                         <div
                                             class="input-group qty-input2 col-md-auto col-12 responsive-margin m-0 rounded-2">
                                             <button class="btn p-0 change-qty-1" id="minus" data-type="minus"
-                                                data-item_id="{{ $getitem->id }}"
+                                                data-item_id="<?php echo e($getitem->id); ?>"
                                                 onclick="changeqty($(this).attr('data-item_id'),'minus')"
                                                 value="minus value"><i class="fa fa-minus"></i>
                                             </button>
                                             <input type="number"
-                                                class="border text-center bg-transparent color-changer item_qty_{{ $getitem->id }}"
+                                                class="border text-center bg-transparent color-changer item_qty_<?php echo e($getitem->id); ?>"
                                                 name="number" value="1" readonly="">
                                             <button class="btn p-0 change-qty-1" id="plus"
-                                                data-item_id="{{ $getitem->id }}"
+                                                data-item_id="<?php echo e($getitem->id); ?>"
                                                 onclick="changeqty($(this).attr('data-item_id'),'plus')"
                                                 data-type="plus" value="plus value"><i class="fa fa-plus"></i>
                                             </button>
                                         </div>
                                     </div>
-                                @endif
-                                @if (isset($storeinfo) && $storeinfo->whatsapp)
-                                  {{-- {{ dd($storeinfo->whatsapp) }} --}}
+                                <?php endif; ?>
+                                <?php if(isset($storeinfo) && $storeinfo->whatsapp): ?>
+                                  
                                     <div class="col-xl-3 col-6">
-                                        <a href="https://api.whatsapp.com/send?phone={{ $storeinfo->whatsapp }}&text={{ urlencode($getitem->item_name) }}"
+                                        <a href="https://api.whatsapp.com/send?phone=<?php echo e($storeinfo->whatsapp); ?>&text=<?php echo e(urlencode($getitem->item_name)); ?>"
                                             class="btn btn-enquir m-0 add-btn px-0 w-100 h-100" id="enquiries"
                                             target="_blank">
                                             <i
-                                                class="fa-brands fa-whatsapp fs-5 {{ session()->get('direction') == 2 ? 'glyphicon' : '' }}"></i>
-                                            <span class="px-1">{{ trans('labels.enquiries') }}</span>
+                                                class="fa-brands fa-whatsapp fs-5 <?php echo e(session()->get('direction') == 2 ? 'glyphicon' : ''); ?>"></i>
+                                            <span class="px-1"><?php echo e(trans('labels.enquiries')); ?></span>
                                         </a>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
-                                @if (helper::appdata($storeinfo->id)->online_order == 1)
+                                <?php if(helper::appdata($storeinfo->id)->online_order == 1): ?>
                                     <div class="col-xl-3 col-6">
                                         <button
-                                            class="btn btn-store m-0 add-btn px-0 w-100 addtocart h-100 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                            class="btn btn-store m-0 add-btn px-0 w-100 addtocart h-100 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
                                             onclick="AddtoCart('0')">
-                                            <span class="px-1">{{ trans('labels.add_to_cart') }}</span>
+                                            <span class="px-1"><?php echo e(trans('labels.add_to_cart')); ?></span>
                                         </button>
                                     </div>
                                     <div class="col-xl-3 col-6">
-                                        @if (@helper::checkaddons('customer_login'))
-                                            @if (helper::appdata($storeinfo->id)->checkout_login_required == 1)
+                                        <?php if(@helper::checkaddons('customer_login')): ?>
+                                            <?php if(helper::appdata($storeinfo->id)->checkout_login_required == 1): ?>
                                                 <button
-                                                    class="btn btn-store-outline m-0 px-0 add-btn w-100 buynow h-100 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
-                                                    @if (helper::appdata($storeinfo->id)->is_checkout_login_required == 1) onclick="login()" @else onclick="AddtoCart('1')" @endif>
-                                                    <span class="px-1">{{ trans('labels.buy_now') }}</span>
+                                                    class="btn btn-store-outline m-0 px-0 add-btn w-100 buynow h-100 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
+                                                    <?php if(helper::appdata($storeinfo->id)->is_checkout_login_required == 1): ?> onclick="login()" <?php else: ?> onclick="AddtoCart('1')" <?php endif; ?>>
+                                                    <span class="px-1"><?php echo e(trans('labels.buy_now')); ?></span>
                                                 </button>
-                                            @else
+                                            <?php else: ?>
                                                 <button
-                                                    class="btn btn-store-outline m-0 px-0 add-btn w-100 buynow h-100 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                                    class="btn btn-store-outline m-0 px-0 add-btn w-100 buynow h-100 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
                                                     onclick="AddtoCart('1')">
-                                                    <span class="px-1">{{ trans('labels.buy_now') }}</span>
+                                                    <span class="px-1"><?php echo e(trans('labels.buy_now')); ?></span>
                                                 </button>
-                                            @endif
-                                        @else
+                                            <?php endif; ?>
+                                        <?php else: ?>
                                             <button
-                                                class="btn btn-store-outline m-0 px-0 add-btn w-100 buynow h-100 {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                                class="btn btn-store-outline m-0 px-0 add-btn w-100 buynow h-100 <?php echo e($getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : ''); ?>"
                                                 onclick="AddtoCart('1')">
-                                                <span class="px-1">{{ trans('labels.buy_now') }}</span>
+                                                <span class="px-1"><?php echo e(trans('labels.buy_now')); ?></span>
                                             </button>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <div
                             class="d-flex border-top flex-wrap pt-3 gap-sm-2 gap-3 justify-content-between w-100 mb-3">
@@ -390,15 +402,15 @@
                                 class="d-flex gap-sm-5 gap-2 justify-content-between align-items-center col-sm-auto col-12">
                                 <div>
 
-                                    @if (@helper::checkaddons('customer_login'))
-                                        @if (helper::appdata($storeinfo->id)->checkout_login_required == 1)
+                                    <?php if(@helper::checkaddons('customer_login')): ?>
+                                        <?php if(helper::appdata($storeinfo->id)->checkout_login_required == 1): ?>
 
                                             <p class="fs-7 d-flex align-items-center">
 
-                                                <a onclick="managefavorite('{{ $getitem->id }}',{{ $storeinfo->id }},'{{ URL::to(@$storeinfo->slug . '/managefavorite') }}')"
-                                                    class="btn-sm btn-Wishlist cursor-pointer {{ session()->get('direction') == 2 ? 'me-auto' : 'ms-auto' }}">
-                                                    @if (Auth::user() && Auth::user()->type == 3)
-                                                        @php
+                                                <a onclick="managefavorite('<?php echo e($getitem->id); ?>',<?php echo e($storeinfo->id); ?>,'<?php echo e(URL::to(@$storeinfo->slug . '/managefavorite')); ?>')"
+                                                    class="btn-sm btn-Wishlist cursor-pointer <?php echo e(session()->get('direction') == 2 ? 'me-auto' : 'ms-auto'); ?>">
+                                                    <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                                        <?php
 
                                                             $favorite = helper::ceckfavorite(
                                                                 $getitem->id,
@@ -406,58 +418,59 @@
                                                                 Auth::user()->id,
                                                             );
 
-                                                        @endphp
-                                                        @if (!empty($favorite) && $favorite->count() > 0)
+                                                        ?>
+                                                        <?php if(!empty($favorite) && $favorite->count() > 0): ?>
                                                             <i class="fa-solid fa-heart"></i>
-                                                        @else
+                                                        <?php else: ?>
                                                             <i class="fa-regular fa-heart"></i>
-                                                        @endif
-                                                    @else
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
                                                         <i class="fa-regular fa-heart"></i>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </a>
                                                 <span
-                                                    class="color-changer mx-2">{{ trans('labels.add_to_wishlist') }}</span>
+                                                    class="color-changer mx-2"><?php echo e(trans('labels.add_to_wishlist')); ?></span>
                                             </p>
 
-                                        @endif
-                                    @endif
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 </div>
 
                             </div>
                             <div>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
-                                    @if ($getitem->video_url != '' && $getitem->video_url != null)
-                                        <a href="{{ $getitem->video_url }}" class=" rounded-circle prod-social m-0"
+                                    <?php if($getitem->video_url != '' && $getitem->video_url != null): ?>
+                                        <a href="<?php echo e($getitem->video_url); ?>" class=" rounded-circle prod-social m-0"
                                             tooltip="Video" id="btn-video" target="_blank">
                                             <i class="fa-regular fa-video fs-7"></i></a>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if (helper::appdata($storeinfo->id)->google_review != '' && helper::appdata($storeinfo->id)->google_review != null)
-                                        <a href="{{ helper::appdata($storeinfo->id)->google_review }}"
+                                    <?php if(helper::appdata($storeinfo->id)->google_review != '' && helper::appdata($storeinfo->id)->google_review != null): ?>
+                                        <a href="<?php echo e(helper::appdata($storeinfo->id)->google_review); ?>"
                                             target="_blank" tooltip="Review"
                                             class=" rounded-circle prod-social fs-7">
                                             <i class="fa-regular fa-star"></i></a>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
-                        @if (@helper::checkaddons('frequently_bought_together'))
-                            @if (count($frequently_bought_items) > 0)
+                        <?php if(@helper::checkaddons('frequently_bought_together')): ?>
+                            <?php if(count($frequently_bought_items) > 0): ?>
                                 <div class="row g-2 my-2 border-top pt-2" id="frequently_bought_items_section">
                                     <div class="col-12 mb-3">
                                         <h4 class="section-title color-changer line-1 m-0">
-                                            {{ trans('labels.frequently_together') }}
+                                            <?php echo e(trans('labels.frequently_together')); ?>
+
                                         </h4>
                                         <div class="pt-2">
                                             <p class="fs-7 pages_subtitle text-muted line-1">
-                                                {{ trans('labels.frequently_bought_items_description') }}</p>
+                                                <?php echo e(trans('labels.frequently_bought_items_description')); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="item h-100">
                                             <div class="card border h-100">
-                                                <img src="{{ helper::image_path($getitem['product_image']->image) }}"
+                                                <img src="<?php echo e(helper::image_path($getitem['product_image']->image)); ?>"
                                                     class="card-img-top object frequently_img" height="230"
                                                     alt="...">
                                                 <div class="woo_product_caption card-body">
@@ -465,43 +478,47 @@
                                                         <div
                                                             class="d-flex justify-content-between align-items-center mb-2">
                                                             <p class="text-muted fs-8 mb-0">
-                                                                {{ $getitem['category_info']->name }}
+                                                                <?php echo e($getitem['category_info']->name); ?>
+
                                                             </p>
-                                                            @if (@helper::checkaddons('product_reviews'))
+                                                            <?php if(@helper::checkaddons('product_reviews')): ?>
                                                                 <h6 class="fs-8 product_rating d-flex gap-1">
                                                                     <i class="fa fa-star filled text-warning"></i>
                                                                     <span class="color-changer">
-                                                                        {{ number_format(@$getitem->ratings_average, 1) }}
+                                                                        <?php echo e(number_format(@$getitem->ratings_average, 1)); ?>
+
                                                                     </span>
                                                                 </h6>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </div>
                                                         <a
-                                                            href="{{ URL::to($storeinfo->slug . '/detail-' . $getitem->slug) }}">
+                                                            href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $getitem->slug)); ?>">
                                                             <h5 class="color-changer text-dark fw-600 line-2 fs-7">
-                                                                {{ $getitem->item_name }}</h5>
+                                                                <?php echo e($getitem->item_name); ?></h5>
                                                         </a>
                                                     </div>
                                                     <div class="woo_price mt-3">
                                                         <div class="d-flex align-items-center flex-wrap gap-1">
                                                             <h6
                                                                 class="color-changer fw-600 fs-7 detail_item_price mb-0">
-                                                                {{ helper::currency_formate($price, $getitem->vendor_id, $getitem->currency) }}
+                                                                <?php echo e(helper::currency_formate($price, $getitem->vendor_id, $getitem->currency)); ?>
+
                                                             </h6>
-                                                            @if ($original_price > 0 && $original_price > $price)
+                                                            <?php if($original_price > 0 && $original_price > $price): ?>
                                                                 <del
                                                                     class="text-muted fw-500 fs-8 detail_original_price">
-                                                                    {{ helper::currency_formate($original_price, $getitem->vendor_id, $getitem->currency) }}
+                                                                    <?php echo e(helper::currency_formate($original_price, $getitem->vendor_id, $getitem->currency)); ?>
+
                                                                 </del>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach ($frequently_bought_items as $key => $frequently_bought_item)
-                                        @php
+                                    <?php $__currentLoopData = $frequently_bought_items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $frequently_bought_item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php
                                             if (
                                                 $frequently_bought_item->top_deals == 1 &&
                                                 helper::top_deals($storeinfo->id) != null
@@ -568,21 +585,21 @@
                                                         ? number_format(100 - ($fbtprice * 100) / $fbtoriginal_price, 1)
                                                         : 0;
                                             }
-                                        @endphp
+                                        ?>
                                         <div class="col-md-4">
                                             <div class="item h-100">
                                                 <div class="card h-100 border">
                                                     <div class="position-relative">
-                                                        <img src="{{ helper::image_path($frequently_bought_item['product_image']->image) }}"
-                                                            class="card-img-top object frequently_img image_opacity_{{ $frequently_bought_item->id }}"
+                                                        <img src="<?php echo e(helper::image_path($frequently_bought_item['product_image']->image)); ?>"
+                                                            class="card-img-top object frequently_img image_opacity_<?php echo e($frequently_bought_item->id); ?>"
                                                             height="230" alt="..." style="opacity: 0.6;">
                                                         <div
-                                                            class="position-absolute top-0 {{ session()->get('direction') == 2 ? 'start-0' : 'end-0' }} p-1 d-flex justify-content-center align-items-center">
+                                                            class="position-absolute top-0 <?php echo e(session()->get('direction') == 2 ? 'start-0' : 'end-0'); ?> p-1 d-flex justify-content-center align-items-center">
                                                             <input type="checkbox"
-                                                                frequently_bought_items-price="{{ $fbtprice }}"
-                                                                frequently_bought_items-id="{{ $frequently_bought_item->id }}"
-                                                                onclick="add_frequently_product('{{ $getitem->id }}')"
-                                                                class="form-check-input m-0 checkbox-custom-padding cursor-pointer frequently_bought_items_chk_{{ $getitem->id }}">
+                                                                frequently_bought_items-price="<?php echo e($fbtprice); ?>"
+                                                                frequently_bought_items-id="<?php echo e($frequently_bought_item->id); ?>"
+                                                                onclick="add_frequently_product('<?php echo e($getitem->id); ?>')"
+                                                                class="form-check-input m-0 checkbox-custom-padding cursor-pointer frequently_bought_items_chk_<?php echo e($getitem->id); ?>">
                                                         </div>
                                                     </div>
                                                     <div class="woo_product_caption card-body">
@@ -590,33 +607,37 @@
                                                             <div
                                                                 class="d-flex justify-content-between align-items-center mb-2">
                                                                 <p class="text-muted fs-8 mb-0">
-                                                                    {{ $frequently_bought_item['category_info']->name }}
+                                                                    <?php echo e($frequently_bought_item['category_info']->name); ?>
+
                                                                 </p>
-                                                                @if (@helper::checkaddons('product_reviews'))
+                                                                <?php if(@helper::checkaddons('product_reviews')): ?>
                                                                     <h6 class="fs-8 product_rating d-flex gap-1">
                                                                         <i class="fa fa-star filled text-warning"></i>
                                                                         <span class="color-changer">
-                                                                            {{ number_format($frequently_bought_item->ratings_average, 1) }}
+                                                                            <?php echo e(number_format($frequently_bought_item->ratings_average, 1)); ?>
+
                                                                         </span>
                                                                     </h6>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </div>
                                                             <a
-                                                                href="{{ URL::to($storeinfo->slug . '/detail-' . $frequently_bought_item->slug) }}">
+                                                                href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $frequently_bought_item->slug)); ?>">
                                                                 <h5 class="color-changer text-dark fw-600 line-2 fs-7">
-                                                                    {{ $frequently_bought_item->item_name }}</h5>
+                                                                    <?php echo e($frequently_bought_item->item_name); ?></h5>
                                                             </a>
                                                         </div>
                                                         <div class="woo_price mt-3">
                                                             <div class="d-flex align-items-center flex-wrap gap-1">
                                                                 <h6 class="color-changer fw-600 fs-7 mb-0 ">
-                                                                    {{ helper::currency_formate($fbtprice, $getitem->vendor_id, $frequently_bought_item->currency) }}
+                                                                    <?php echo e(helper::currency_formate($fbtprice, $getitem->vendor_id, $frequently_bought_item->currency)); ?>
+
                                                                 </h6>
-                                                                @if ($fbtoriginal_price > 0 && $fbtoriginal_price > $fbtprice)
+                                                                <?php if($fbtoriginal_price > 0 && $fbtoriginal_price > $fbtprice): ?>
                                                                     <del class="text-muted fw-500 fs-8">
-                                                                        {{ helper::currency_formate($fbtoriginal_price, $getitem->vendor_id, $frequently_bought_item->currency) }}
+                                                                        <?php echo e(helper::currency_formate($fbtoriginal_price, $getitem->vendor_id, $frequently_bought_item->currency)); ?>
+
                                                                     </del>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </div>
                                                         </div>
 
@@ -624,16 +645,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                     <div
                                         class="d-flex justify-content-between align-items-center py-3 mt-3 gap-3 border-top flex-wrap">
                                         <div class="d-flex flex-wrap align-items-center gap-3 d-none"
                                             id="addon_section">
                                             <div class="">
-                                                <p class="fs-7 text-muted mb-0">1 {{ trans('labels.product') }}</p>
+                                                <p class="fs-7 text-muted mb-0">1 <?php echo e(trans('labels.product')); ?></p>
                                                 <p class="color-changer fs-6 fw-600 detail_item_price">
-                                                    {{ helper::currency_formate($price, $getitem->vendor_id, $getitem->currency) }}
+                                                    <?php echo e(helper::currency_formate($price, $getitem->vendor_id, $getitem->currency)); ?>
+
                                                 </p>
                                             </div>
                                             <i class="fa-solid fa-plus fs-6 color-changer"></i>
@@ -643,50 +665,51 @@
                                             </div>
                                             <i class="fa-regular fa-equals fs-6 color-changer"></i>
                                             <div>
-                                                <p class="fs-7 text-muted mb-0">{{ trans('labels.total') }}</p>
+                                                <p class="fs-7 text-muted mb-0"><?php echo e(trans('labels.total')); ?></p>
                                                 <p class="color-changer fs-6 fw-600" id="total_price"></p>
                                             </div>
                                         </div>
                                         <div class="color-changer" id="addons_display_error">
-                                            {{ trans('messages.please_add_at_least_addon_item_to_proceed') }}</div>
+                                            <?php echo e(trans('messages.please_add_at_least_addon_item_to_proceed')); ?></div>
                                         <div class="col-lg-3">
                                             <button class="btn btn-store m-0 px-0 w-100 h-100  " id="addon_cart_btn"
                                                 onclick="addonaddtocart('0','addon_add_cart')" disabled>
-                                                <div id="total_product">{{ trans('labels.add_to_cart') }}
+                                                <div id="total_product"><?php echo e(trans('labels.add_to_cart')); ?>
+
                                                 </div>
                                                 <div class="loader d-none" id="addon_cart_loader"></div>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            @endif
-                        @endif
-                        @include('front.service-trusted')
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <?php echo $__env->make('front.service-trusted', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                         <input type="hidden" name="vendor" id="overview_vendor"
-                            value="{{ $getitem->vendor_id }}">
-                        <input type="hidden" name="item_id" id="overview_item_id" value="{{ $getitem->id }}">
+                            value="<?php echo e($getitem->vendor_id); ?>">
+                        <input type="hidden" name="item_id" id="overview_item_id" value="<?php echo e($getitem->id); ?>">
                         <input type="hidden" name="item_name" id="overview_item_name"
-                            value="{{ $getitem->item_name }}">
+                            value="<?php echo e($getitem->item_name); ?>">
                         <input type="hidden" name="item_image" id="overview_item_image"
-                            value="{{ @$getitem['product_image']->image }}">
+                            value="<?php echo e(@$getitem['product_image']->image); ?>">
                         <input type="hidden" name="item_min_order" id="item_min_order"
-                            value="{{ $getitem->min_order }}">
+                            value="<?php echo e($getitem->min_order); ?>">
                         <input type="hidden" name="item_max_order" id="item_max_order"
-                            value="{{ $getitem->max_order }}">
+                            value="<?php echo e($getitem->max_order); ?>">
                         <input type="hidden" name="item_price" id="overview_item_price"
-                            value="{{ $price }}">
+                            value="<?php echo e($price); ?>">
                         <input type="hidden" name="item_original_price" id="overview_item_original_price"
-                            value ="{{ $original_price }}">
-                        <input type="hidden" name="tax" id="tax_val" value="{{ $getitem->tax }}">
+                            value ="<?php echo e($original_price); ?>">
+                        <input type="hidden" name="tax" id="tax_val" value="<?php echo e($getitem->tax); ?>">
                         <input type="hidden" name="variants_name" id="variants_name">
                         <input type="hidden" name="stock_management" id="stock_management"
-                            value="{{ $getitem->stock_management }}">
+                            value="<?php echo e($getitem->stock_management); ?>">
                     </div>
                 </div>
-            @else
-                @include('front.no_data')
-        @endif
+            <?php else: ?>
+                <?php echo $__env->make('front.no_data', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -694,98 +717,100 @@
     <div class="container">
         <div class="product-view mt-3" id="review-tab">
             <ul class="nav nav-pills py-3 border-bottom border-top gap-3" id="pills-tab" role="tablist">
-                @if ($getitem->description != '')
+                <?php if($getitem->description != ''): ?>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" href="javascript:void(0)" data-bs-toggle="pill"
                             data-bs-target="#description" aria-selected="false"
-                            role="tab">{{ trans('labels.description') }}</a>
+                            role="tab"><?php echo e(trans('labels.description')); ?></a>
                     </li>
-                @endif
-                @if (@helper::checkaddons('product_inquiry'))
+                <?php endif; ?>
+                <?php if(@helper::checkaddons('product_inquiry')): ?>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" href="javascript:void(0)" data-bs-toggle="pill"
                             data-bs-target="#pills-product_inquiry" aria-selected="false"
-                            role="tab">{{ trans('labels.product_inquiry') }}</a>
+                            role="tab"><?php echo e(trans('labels.product_inquiry')); ?></a>
                     </li>
-                @endif
-                {{-- @if (@helper::checkaddons('question_answer'))
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="javascript:void(0)" data-bs-toggle="pill"
-                            data-bs-target="#pills-quastions" aria-selected="false"
-                            role="tab">{{ trans('labels.quastions_ans') }}</a>
-                    </li>
-                @endif --}}
+                <?php endif; ?>
+                
             </ul>
         </div>
         <div class="tab-content mt-3 pb-3 border-bottom" id="pills-tabContent">
-            @if ($getitem->description != '')
+            <?php if($getitem->description != ''): ?>
                 <div class="tab-pane fade active show" id="description" role="tabpanel"
                     aria-labelledby="description-tab">
                     <div class="card sevirce-trued">
                         <div class="card-body cms-section">
                             <p class="fw-500 fs-15">
-                                {!! $getitem->description !!}
+                                <?php echo $getitem->description; ?>
+
                             </p>
                         </div>
                     </div>
                 </div>
-            @endif
-            @if (@helper::checkaddons('product_inquiry'))
+            <?php endif; ?>
+            <?php if(@helper::checkaddons('product_inquiry')): ?>
                 <div class="tab-pane fade show" id="pills-product_inquiry" role="tabpanel"
                     aria-labelledby="pills-product_inquiry-tab">
                     <div class="card sevirce-trued">
                         <div class="card-body">
-                            <form action="{{ URL::to('product_inquiry') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $getitem->id }}">
-                                <input type="hidden" name="vendor_id" value="{{ $getitem->vendor_id }}">
+                            <form action="<?php echo e(URL::to('product_inquiry')); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
+                                <input type="hidden" name="product_id" value="<?php echo e($getitem->id); ?>">
+                                <input type="hidden" name="vendor_id" value="<?php echo e($getitem->vendor_id); ?>">
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="first_name" class="form-label d-flex gap-1">
-                                            {{ trans('labels.first_name') }}
+                                            <?php echo e(trans('labels.first_name')); ?>
+
                                             <div aria-hidden="true" class="text-danger">*</div>
                                         </label>
                                         <input type="text" class="form-control fs-7 input-h" id="first_name"
-                                            name="first_name" placeholder="{{ trans('labels.first_name') }}"
+                                            name="first_name" placeholder="<?php echo e(trans('labels.first_name')); ?>"
                                             required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="last_name" class="form-label d-flex gap-1">
-                                            {{ trans('labels.last_name') }}
+                                            <?php echo e(trans('labels.last_name')); ?>
+
                                             <div aria-hidden="true" class="text-danger">*</div>
                                         </label>
                                         <input type="text" class="form-control fs-7 input-h" name="last_name"
-                                            placeholder="{{ trans('labels.last_name') }}" id="last_name" required>
+                                            placeholder="<?php echo e(trans('labels.last_name')); ?>" id="last_name" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="form-label d-flex gap-1">
-                                            {{ trans('labels.email') }}
+                                            <?php echo e(trans('labels.email')); ?>
+
                                             <div aria-hidden="true" class="text-danger">*</div>
                                         </label>
                                         <input type="email" class="form-control fs-7 input-h" id="email"
-                                            name="email" placeholder="{{ trans('labels.email') }}" required>
+                                            name="email" placeholder="<?php echo e(trans('labels.email')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="mobile" class="form-label d-flex gap-1">
-                                            {{ trans('labels.mobile') }}
+                                            <?php echo e(trans('labels.mobile')); ?>
+
                                             <div aria-hidden="true" class="text-danger">*</div>
                                         </label>
                                         <input type="text" class="form-control fs-7 input-h number" name="mobile"
-                                            placeholder="{{ trans('labels.mobile') }}" id="mobile" required>
+                                            placeholder="<?php echo e(trans('labels.mobile')); ?>" id="mobile" required>
                                     </div>
                                     <div class="col-12">
                                         <label for="message" class="form-label d-flex gap-1">
-                                            {{ trans('labels.comment') }}
+                                            <?php echo e(trans('labels.comment')); ?>
+
                                             <div aria-hidden="true" class="text-danger">*</div>
                                         </label>
-                                        <p class="fs-8 mb-1 text-muted">{{ trans('labels.note') }}
-                                            {{ trans('messages.product_inquiry_note') }}</p>
-                                        <textarea class="form-control fs-7 m-0" id="message" placeholder="{{ trans('labels.textarea') }}" name="message"
+                                        <p class="fs-8 mb-1 text-muted"><?php echo e(trans('labels.note')); ?>
+
+                                            <?php echo e(trans('messages.product_inquiry_note')); ?></p>
+                                        <textarea class="form-control fs-7 m-0" id="message" placeholder="<?php echo e(trans('labels.textarea')); ?>" name="message"
                                             rows="3" required></textarea>
                                     </div>
                                     <div class="col-12">
                                         <button type="submit" class="btn btn-secondary py-2 px-5 fs-15 fw-500 m-0">
-                                            {{ trans('labels.submit') }}
+                                            <?php echo e(trans('labels.submit')); ?>
+
                                         </button>
                                     </div>
                                 </div>
@@ -793,8 +818,8 @@
                         </div>
                     </div>
                 </div>
-            @endif
-            @if (@helper::checkaddons('question_answer'))
+            <?php endif; ?>
+            <?php if(@helper::checkaddons('question_answer')): ?>
                 <div class="tab-pane fade" id="pills-quastions" role="tabpanel"
                     aria-labelledby="pills-product_inquiry-tab">
                     <div class="card sevirce-trued">
@@ -802,58 +827,60 @@
                             <div
                                 class="d-flex align-items-center justify-content-between gap-2 mb-2 pb-2 border-bottom">
                                 <p class="fs-7 line-1 color-changer">
-                                    {{ trans('labels.have_doubts_regarding_this_product') }}</p>
+                                    <?php echo e(trans('labels.have_doubts_regarding_this_product')); ?></p>
                                 <div class="col-auto">
                                     <a type="button" class="w-100 fw-600 text-primary color-changer rounded-0 p-0"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#qustions_answer">{{ trans('labels.post_your_question') }}</a>
+                                        data-bs-target="#qustions_answer"><?php echo e(trans('labels.post_your_question')); ?></a>
                                 </div>
                             </div>
-                            @if (count($question_answer) > 0)
-                                @foreach ($question_answer as $item)
+                            <?php if(count($question_answer) > 0): ?>
+                                <?php $__currentLoopData = $question_answer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="border-bottom p-2">
-                                        <h6 class="fs-7 fw-600 line-2 color-changer">{{ $item->question }}
+                                        <h6 class="fs-7 fw-600 line-2 color-changer"><?php echo e($item->question); ?>
+
                                         </h6>
-                                        <p class="fs-13  text-muted">{{ $item->answer }}
+                                        <p class="fs-13  text-muted"><?php echo e($item->answer); ?>
+
                                         </p>
                                     </div>
-                                @endforeach
-                            @else
-                                @include('admin.layout.no_data')
-                            @endif
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php else: ?>
+                                <?php echo $__env->make('admin.layout.no_data', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            <?php endif; ?>
 
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-@if (@helper::checkaddons('sticky_cart_bar'))
-    @include('front.view-cart-bar')
-@endif
-@if ($relateditem->count() > 0)
+<?php if(@helper::checkaddons('sticky_cart_bar')): ?>
+    <?php echo $__env->make('front.view-cart-bar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php endif; ?>
+<?php if($relateditem->count() > 0): ?>
     <section class="my-5">
         <div class="container">
-            <h4 class="m-0 fw-600 text-dark color-changer">{{ trans('labels.related_product') }}</h4>
+            <h4 class="m-0 fw-600 text-dark color-changer"><?php echo e(trans('labels.related_product')); ?></h4>
             <div class="related-product recipe-card owl-carousel owl-theme product-prev-sec">
-                @foreach ($relateditem as $key => $item)
+                <?php $__currentLoopData = $relateditem; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="item">
                         <div class="col custom-product-column">
                             <div class="pro-box box-shadow-none">
                                 <div class="pro-img ">
-                                    <a href="{{ URL::to($storeinfo->slug . '/detail-' . $item->slug) }}">
-                                        @if (@$item['product_image']->image == null)
-                                            <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}"
+                                    <a href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $item->slug)); ?>">
+                                        <?php if(@$item['product_image']->image == null): ?>
+                                            <img src="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png')); ?>"
                                                 alt="product image">
-                                        @else
-                                            <img src="{{ @helper::image_path($item['product_image']->image) }}"
+                                        <?php else: ?>
+                                            <img src="<?php echo e(@helper::image_path($item['product_image']->image)); ?>"
                                                 alt="product image">
-                                        @endif
+                                        <?php endif; ?>
                                     </a>
                                     <div class="sale-heart">
-                                        @php
+                                        <?php
                                             if ($item->top_deals == 1 && helper::top_deals($storeinfo->id) != null) {
                                                 if (@helper::top_deals($storeinfo->id)->offer_type == 1) {
                                                     if ($item['variation']->count() > 0) {
@@ -916,18 +943,19 @@
                                                         ? number_format(100 - ($rprice * 100) / $roriginal_price, 1)
                                                         : 0;
                                             }
-                                        @endphp
-                                        @if ($off > 0)
-                                            <div class="sale-label-on">{{ $off }}%
-                                                {{ trans('labels.off') }}
+                                        ?>
+                                        <?php if($off > 0): ?>
+                                            <div class="sale-label-on"><?php echo e($off); ?>%
+                                                <?php echo e(trans('labels.off')); ?>
+
                                             </div>
-                                        @endif
-                                        @if (@helper::checkaddons('customer_login'))
-                                            @if (helper::appdata($storeinfo->id)->checkout_login_required == 1)
-                                                <a onclick="managefavorite('{{ $item->id }}',{{ $storeinfo->id }},'{{ URL::to(@$storeinfo->slug . '/managefavorite') }}')"
-                                                    class="btn-sm btn-Wishlist cursor-pointer {{ session()->get('direction') == 2 ? 'me-auto' : 'ms-auto' }}">
-                                                    @if (Auth::user() && Auth::user()->type == 3)
-                                                        @php
+                                        <?php endif; ?>
+                                        <?php if(@helper::checkaddons('customer_login')): ?>
+                                            <?php if(helper::appdata($storeinfo->id)->checkout_login_required == 1): ?>
+                                                <a onclick="managefavorite('<?php echo e($item->id); ?>',<?php echo e($storeinfo->id); ?>,'<?php echo e(URL::to(@$storeinfo->slug . '/managefavorite')); ?>')"
+                                                    class="btn-sm btn-Wishlist cursor-pointer <?php echo e(session()->get('direction') == 2 ? 'me-auto' : 'ms-auto'); ?>">
+                                                    <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                                        <?php
 
                                                             $favorite = helper::ceckfavorite(
                                                                 $item->id,
@@ -935,106 +963,108 @@
                                                                 Auth::user()->id,
                                                             );
 
-                                                        @endphp
-                                                        @if (!empty($favorite) && $favorite->count() > 0)
+                                                        ?>
+                                                        <?php if(!empty($favorite) && $favorite->count() > 0): ?>
                                                             <i class="fa-solid fa-heart"></i>
-                                                        @else
+                                                        <?php else: ?>
                                                             <i class="fa-regular fa-heart"></i>
-                                                        @endif
-                                                    @else
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
                                                         <i class="fa-regular fa-heart"></i>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </a>
-                                            @endif
-                                        @endif
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="product-details-wrap">
                                     <div class="product-details-inner  mb-2 line-2">
-                                        <a href="{{ URL::to($storeinfo->slug . '/detail-' . $item->slug) }}">
+                                        <a href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $item->slug)); ?>">
                                             <h4 id="itemname"
-                                                class="color-changer text-dark {{ session()->get('direction') == 2 ? 'text-right' : '' }}">
-                                                {{ $item->item_name }}</h4>
+                                                class="color-changer text-dark <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
+                                                <?php echo e($item->item_name); ?></h4>
                                         </a>
                                     </div>
                                 </div>
                                 <div class="pro-footer">
                                     <div class="d-flex justify-content-between">
-                                        @if (@helper::checkaddons('product_reviews'))
-                                            @if (helper::appdata($storeinfo->id)->product_ratting_switch == 1)
+                                        <?php if(@helper::checkaddons('product_reviews')): ?>
+                                            <?php if(helper::appdata($storeinfo->id)->product_ratting_switch == 1): ?>
                                                 <p class="m-0 rating-star d-inline cursor-pointer"
-                                                    onclick="rattingmodal('{{ $item->id }}','{{ $storeinfo->id }}','{{ $item->item_name }}')">
+                                                    onclick="rattingmodal('<?php echo e($item->id); ?>','<?php echo e($storeinfo->id); ?>','<?php echo e($item->item_name); ?>')">
                                                     <i class="fa-solid fa-star text-warning"></i>
                                                     <span
-                                                        class="px-1 color-changer">{{ number_format($item->ratings_average, 1) }}</span>
+                                                        class="px-1 color-changer"><?php echo e(number_format($item->ratings_average, 1)); ?></span>
                                                 </p>
-                                            @endif
-                                        @endif
-                                        @if ($item->stock_management == 1)
-                                            @if (helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1)
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        <?php if($item->stock_management == 1): ?>
+                                            <?php if(helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1): ?>
                                                 <div class="out-stock">
                                                     <span class="out-stock-indicator-dot"></span>
                                                     <p class="out-stock-text m-0">
-                                                        {{ trans('labels.out_of_stock') }}</p>
+                                                        <?php echo e(trans('labels.out_of_stock')); ?></p>
                                                 </div>
-                                            @else
+                                            <?php else: ?>
                                                 <div class="in-stock">
                                                     <span class="in-stock-indicator-dot"></span>
                                                     <p class="in-stock-text m-0">
-                                                        {{ trans('labels.in_stock') }}</p>
+                                                        <?php echo e(trans('labels.in_stock')); ?></p>
                                                 </div>
-                                            @endif
-                                        @endif
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     </div>
 
 
                                     <div class="d-flex align-items-baseline flex-wrap gap-1">
                                         <p class="pro-pricing color-changer line-1">
-                                            {{ helper::currency_formate($rprice, $storeinfo->id, $item->currency) }}
+                                            <?php echo e(helper::currency_formate($rprice, $storeinfo->id, $item->currency)); ?>
+
                                         </p>
-                                        @if ($roriginal_price > $rprice)
+                                        <?php if($roriginal_price > $rprice): ?>
                                             <p class="pro-pricing pro-org-value line-1 m-0">
-                                                {{ helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency) }}
+                                                <?php echo e(helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency)); ?>
+
                                             </p>
-                                        @endif
+                                        <?php endif; ?>
 
                                     </div>
                                     <button class="btn btn-sm m-0 py-1 w-100 btn-content rounded-5"
-                                        id="verifybtn{{ $key }}"
-                                        onclick="GetProductOverview('{{ $item->slug }}',this.id)">{{ helper::appdata($storeinfo->id)->online_order == 1 ? trans('labels.add_to_cart') : trans('labels.view') }}</button>
+                                        id="verifybtn<?php echo e($key); ?>"
+                                        onclick="GetProductOverview('<?php echo e($item->slug); ?>',this.id)"><?php echo e(helper::appdata($storeinfo->id)->online_order == 1 ? trans('labels.add_to_cart') : trans('labels.view')); ?></button>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </section>
-@endif
-@if (@helper::checkaddons('recent_view_product'))
-    @if (@helper::otherappdata(@$storeinfo->id)->recent_view_product == 1)
-        @if (count($recentProducts) > 0)
+<?php endif; ?>
+<?php if(@helper::checkaddons('recent_view_product')): ?>
+    <?php if(@helper::otherappdata(@$storeinfo->id)->recent_view_product == 1): ?>
+        <?php if(count($recentProducts) > 0): ?>
             <section class="my-5">
                 <div class="container">
-                    <h4 class="m-0 fw-600 text-dark color-changer">{{ trans('labels.recent_view_product') }}</h4>
+                    <h4 class="m-0 fw-600 text-dark color-changer"><?php echo e(trans('labels.recent_view_product')); ?></h4>
                     <div class="related-product recipe-card owl-carousel owl-theme product-prev-sec">
-                        @foreach ($recentProducts as $key => $item)
+                        <?php $__currentLoopData = $recentProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="item">
                                 <div class="col custom-product-column">
                                     <div class="pro-box box-shadow-none">
                                         <div class="pro-img ">
-                                            <a href="{{ URL::to($storeinfo->slug . '/detail-' . $item->slug) }}">
-                                                @if (@$item['product_image']->image == null)
-                                                    <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}"
+                                            <a href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $item->slug)); ?>">
+                                                <?php if(@$item['product_image']->image == null): ?>
+                                                    <img src="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png')); ?>"
                                                         alt="product image">
-                                                @else
-                                                    <img src="{{ @helper::image_path($item['product_image']->image) }}"
+                                                <?php else: ?>
+                                                    <img src="<?php echo e(@helper::image_path($item['product_image']->image)); ?>"
                                                         alt="product image">
-                                                @endif
+                                                <?php endif; ?>
                                             </a>
                                             <div class="sale-heart">
-                                                @php
+                                                <?php
                                                     if (
                                                         $item->top_deals == 1 &&
                                                         helper::top_deals($storeinfo->id) != null
@@ -1110,18 +1140,19 @@
                                                                 )
                                                                 : 0;
                                                     }
-                                                @endphp
-                                                @if ($off > 0)
-                                                    <div class="sale-label-on">{{ $off }}%
-                                                        {{ trans('labels.off') }}
+                                                ?>
+                                                <?php if($off > 0): ?>
+                                                    <div class="sale-label-on"><?php echo e($off); ?>%
+                                                        <?php echo e(trans('labels.off')); ?>
+
                                                     </div>
-                                                @endif
-                                                @if (@helper::checkaddons('customer_login'))
-                                                    @if (helper::appdata($storeinfo->id)->checkout_login_required == 1)
-                                                        <a onclick="managefavorite('{{ $item->id }}',{{ $storeinfo->id }},'{{ URL::to(@$storeinfo->slug . '/managefavorite') }}')"
-                                                            class="btn-sm btn-Wishlist cursor-pointer {{ session()->get('direction') == 2 ? 'me-auto' : 'ms-auto' }}">
-                                                            @if (Auth::user() && Auth::user()->type == 3)
-                                                                @php
+                                                <?php endif; ?>
+                                                <?php if(@helper::checkaddons('customer_login')): ?>
+                                                    <?php if(helper::appdata($storeinfo->id)->checkout_login_required == 1): ?>
+                                                        <a onclick="managefavorite('<?php echo e($item->id); ?>',<?php echo e($storeinfo->id); ?>,'<?php echo e(URL::to(@$storeinfo->slug . '/managefavorite')); ?>')"
+                                                            class="btn-sm btn-Wishlist cursor-pointer <?php echo e(session()->get('direction') == 2 ? 'me-auto' : 'ms-auto'); ?>">
+                                                            <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                                                <?php
 
                                                                     $favorite = helper::ceckfavorite(
                                                                         $item->id,
@@ -1129,85 +1160,87 @@
                                                                         Auth::user()->id,
                                                                     );
 
-                                                                @endphp
-                                                                @if (!empty($favorite) && $favorite->count() > 0)
+                                                                ?>
+                                                                <?php if(!empty($favorite) && $favorite->count() > 0): ?>
                                                                     <i class="fa-solid fa-heart"></i>
-                                                                @else
+                                                                <?php else: ?>
                                                                     <i class="fa-regular fa-heart"></i>
-                                                                @endif
-                                                            @else
+                                                                <?php endif; ?>
+                                                            <?php else: ?>
                                                                 <i class="fa-regular fa-heart"></i>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </a>
-                                                    @endif
-                                                @endif
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="product-details-wrap">
                                             <div class="product-details-inner  mb-2 line-2">
-                                                <a href="{{ URL::to($storeinfo->slug . '/detail-' . $item->slug) }}">
+                                                <a href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $item->slug)); ?>">
                                                     <h4 id="itemname"
-                                                        class="color-changer text-dark {{ session()->get('direction') == 2 ? 'text-right' : '' }}">
-                                                        {{ $item->item_name }}</h4>
+                                                        class="color-changer text-dark <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?>">
+                                                        <?php echo e($item->item_name); ?></h4>
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="pro-footer">
                                             <div class="d-flex justify-content-between">
-                                                @if (@helper::checkaddons('product_reviews'))
-                                                    @if (helper::appdata($storeinfo->id)->product_ratting_switch == 1)
+                                                <?php if(@helper::checkaddons('product_reviews')): ?>
+                                                    <?php if(helper::appdata($storeinfo->id)->product_ratting_switch == 1): ?>
                                                         <p class="m-0 rating-star d-inline cursor-pointer"
-                                                            onclick="rattingmodal('{{ $item->id }}','{{ $storeinfo->id }}','{{ $item->item_name }}')">
+                                                            onclick="rattingmodal('<?php echo e($item->id); ?>','<?php echo e($storeinfo->id); ?>','<?php echo e($item->item_name); ?>')">
                                                             <i class="fa-solid fa-star text-warning"></i>
                                                             <span
-                                                                class="px-1 color-changer">{{ number_format($item->ratings_average, 1) }}</span>
+                                                                class="px-1 color-changer"><?php echo e(number_format($item->ratings_average, 1)); ?></span>
                                                         </p>
-                                                    @endif
-                                                @endif
-                                                @if ($item->stock_management == 1)
-                                                    @if (helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1)
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                                <?php if($item->stock_management == 1): ?>
+                                                    <?php if(helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1): ?>
                                                         <div class="out-stock">
                                                             <span class="out-stock-indicator-dot"></span>
                                                             <p class="out-stock-text m-0">
-                                                                {{ trans('labels.out_of_stock') }}</p>
+                                                                <?php echo e(trans('labels.out_of_stock')); ?></p>
                                                         </div>
-                                                    @else
+                                                    <?php else: ?>
                                                         <div class="in-stock">
                                                             <span class="in-stock-indicator-dot"></span>
                                                             <p class="in-stock-text m-0">
-                                                                {{ trans('labels.in_stock') }}</p>
+                                                                <?php echo e(trans('labels.in_stock')); ?></p>
                                                         </div>
-                                                    @endif
-                                                @endif
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                             </div>
 
 
                                             <div class="d-flex align-items-baseline flex-wrap gap-1">
                                                 <p class="pro-pricing color-changer line-1">
-                                                    {{ helper::currency_formate($rprice, $storeinfo->id, $item->currency) }}
+                                                    <?php echo e(helper::currency_formate($rprice, $storeinfo->id, $item->currency)); ?>
+
                                                 </p>
-                                                @if ($roriginal_price > $rprice)
+                                                <?php if($roriginal_price > $rprice): ?>
                                                     <p class="pro-pricing pro-org-value line-1 m-0">
-                                                        {{ helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency) }}
+                                                        <?php echo e(helper::currency_formate($roriginal_price, $storeinfo->id, $item->currency)); ?>
+
                                                     </p>
-                                                @endif
+                                                <?php endif; ?>
 
                                             </div>
                                             <button class="btn btn-sm m-0 py-1 w-100 btn-content rounded-5"
-                                                id="verifybtn{{ $key }}"
-                                                onclick="GetProductOverview('{{ $item->slug }}',this.id)">{{ helper::appdata($storeinfo->id)->online_order == 1 ? trans('labels.add_to_cart') : trans('labels.view') }}</button>
+                                                id="verifybtn<?php echo e($key); ?>"
+                                                onclick="GetProductOverview('<?php echo e($item->slug); ?>',this.id)"><?php echo e(helper::appdata($storeinfo->id)->online_order == 1 ? trans('labels.add_to_cart') : trans('labels.view')); ?></button>
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </section>
-        @endif
-    @endif
-@endif
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>
 
 <!-- question answer  Modal -->
 <div class="modal fade" id="qustions_answer" tabindex="-1" aria-labelledby="qustions_answerLabel"
@@ -1216,49 +1249,53 @@
         <div class="modal-content">
             <div class="modal-header justify-content-between">
                 <h1 class="modal-title fs-5 fw-600 m-0 color-changer" id="qustions_answer">
-                    {{ trans('labels.ask_a_question') }}</h1>
+                    <?php echo e(trans('labels.ask_a_question')); ?></h1>
                 <button type="button" class="bg-transparent border-0 m-0" data-bs-dismiss="modal"
                     aria-label="Close">
                     <i class="fa-regular fa-xmark fs-4 color-changer"></i>
                 </button>
             </div>
-            <form action="{{ URL::to($storeinfo->slug . '/product_question_answer') }}" method="post"
+            <form action="<?php echo e(URL::to($storeinfo->slug . '/product_question_answer')); ?>" method="post"
                 class="border-top ">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="question_answer_item_slug" id="question_answer_item_slug"
-                    value="{{ $storeinfo->slug }}">
-                <input type="hidden" name="question_answer_item_id" value="{{ $getitem->id }}">
+                    value="<?php echo e($storeinfo->slug); ?>">
+                <input type="hidden" name="question_answer_item_id" value="<?php echo e($getitem->id); ?>">
                 <div class="modal-body">
                     <div class="d-flex align-items-center gap-2">
                         <div>
-                            <img src="{{ helper::image_path($getitem['product_image']->image) }}" alt=""
+                            <img src="<?php echo e(helper::image_path($getitem['product_image']->image)); ?>" alt=""
                                 class="rounded" height="110px" width="110px">
                         </div>
                         <div class="w-100">
                             <h6 class="line-2 fs-15 fw-500 color-changer">
-                                {{ @$getitem->item_name }}
+                                <?php echo e(@$getitem->item_name); ?>
+
                             </h6>
                             <div class="d-flex gap-1 flex-wrap align-items-center">
                                 <p class="pro-text fs-7 detail_item_price">
-                                    {{ helper::currency_formate($price, $storeinfo->id, $getitem->currency) }}
+                                    <?php echo e(helper::currency_formate($price, $storeinfo->id, $getitem->currency)); ?>
+
                                 </p>
-                                @if ($original_price > $price)
+                                <?php if($original_price > $price): ?>
                                     <del
                                         class="card-text pro-org-value text-muted fs-8 mb-0 px-1 detail_original_price">
-                                        {{ helper::currency_formate($original_price, $storeinfo->id, $getitem->currency) }}
+                                        <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $getitem->currency)); ?>
+
                                     </del>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
 
                     <div>
                         <label for="exampleFormControlTextarea1" class="form-label d-flex gap-1 mt-2">
-                            {{ trans('labels.your_question') }}
+                            <?php echo e(trans('labels.your_question')); ?>
+
                             <div aria-hidden="true" class="text-danger">*</div>
                         </label>
-                        <input type="hidden" name="id" value="{{ @$service->id }}">
-                        <input type="hidden" name="product_id" value="{{ @$product->id }}">
+                        <input type="hidden" name="id" value="<?php echo e(@$service->id); ?>">
+                        <input type="hidden" name="product_id" value="<?php echo e(@$product->id); ?>">
                         <textarea class="form-control m-0 fs-7" id="question" name="question" placeholder="Your Questions" rows="3"
                             required=""></textarea>
                     </div>
@@ -1275,8 +1312,8 @@
 </div>
 
 <!-- newsletter -->
-@include('front.newsletter')
-@include('front.theme.footer')
+<?php echo $__env->make('front.newsletter', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('front.theme.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <script>
     function add_frequently_product(id) {
@@ -1301,17 +1338,18 @@
             var subtotal = parseFloat(item_price) + parseFloat(addonstotal);
             $('#addons_display_error').addClass("d-none");
             $('#addon_section').removeClass("d-none");
-            $('#total_product').text("{{ trans('labels.add') }} " + (checkedCount + 1) +
-                " {{ trans('labels.item_to_cart') }}");
-            $('#total_addon').text(checkedCount + " {{ trans('labels.addon') }}");
-            $('#addon_total').text(currency_formate(addonstotal, "{{ $getitem->currency }}"));
-            $('#total_price').text(currency_formate(subtotal, "{{ $getitem->currency }}"));
+            $('#total_product').text("<?php echo e(trans('labels.add')); ?> " + (checkedCount + 1) +
+                " <?php echo e(trans('labels.item_to_cart')); ?>");
+            $('#total_addon').text(checkedCount + " <?php echo e(trans('labels.addon')); ?>");
+            $('#addon_total').text(currency_formate(addonstotal, "<?php echo e($getitem->currency); ?>"));
+            $('#total_price').text(currency_formate(subtotal, "<?php echo e($getitem->currency); ?>"));
             $("#addon_cart_btn").prop('disabled', false);
         } else {
             $('#addon_section').addClass("d-none");
             $('#addons_display_error').removeClass("d-none");
-            $('#total_product').text("{{ trans('labels.add_to_cart') }}");
+            $('#total_product').text("<?php echo e(trans('labels.add_to_cart')); ?>");
             $("#addon_cart_btn").prop('disabled', true);
         }
     }
 </script>
+<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/detail.blade.php ENDPATH**/ ?>

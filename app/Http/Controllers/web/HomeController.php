@@ -152,7 +152,7 @@ class HomeController extends Controller
     public function show(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        $getitem = Item::where('cat_id', '=', $request->id)->where('is_available', '1')->where('vendor_id', @$storeinfo->id)->orderBy('reorder_id', 'ASC')->paginate(9)->onEachSide(0);
+        $getitem = Item::where('cat_id', '=', $request->id)->where('is_available', '1')->where('vendor_id', @$storeinfo->id)->orderBy('reorder_id', 'ASC')->paginate(15)->onEachSide(0);
         $settingdata = Settings::where('vendor_id', $storeinfo->id)->select('template')->first();
         $cartitems = Cart::select('id', 'item_id', 'item_name', 'item_image', 'item_price', 'extras_name', 'extras_price', 'qty', 'price', 'tax', 'variants_id', 'variants_name')
             ->where('vendor_id', @$storeinfo->id);
@@ -1437,7 +1437,7 @@ class HomeController extends Controller
                 $itemlist = $itemlist->orderBy('ratings_average');
             }
         }
-        $itemlist = $itemlist->groupBy('items.id')->orderBy('items.reorder_id')->paginate(1)->onEachSide(0);
+        $itemlist = $itemlist->groupBy('items.id')->orderBy('items.reorder_id')->paginate(15)->onEachSide(0);
         return view('front.search', compact('storeinfo', 'category', 'itemlist'));
     }
 

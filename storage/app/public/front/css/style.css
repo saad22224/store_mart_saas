@@ -8239,11 +8239,11 @@ ol.breadcrumb {
 
 
 
-.breadcrumb-item.rtl+.breadcrumb-item::before {
+/* .breadcrumb-item.rtl+.breadcrumb-item::before {
   float: right !important;
   padding-left: var(--bs-breadcrumb-item-padding-x) !important;
   padding-right: unset !important;
-}
+} */
 
 .breadcrumb-item+.breadcrumb-item.rtl::before {
   float: right;
@@ -10259,9 +10259,9 @@ input {
   color: #000;
 }
 
-.dark body .breadcrumb-item+.breadcrumb-item::before {
+/* .dark body .breadcrumb-item+.breadcrumb-item::before {
   color: var(--bs-white);
-}
+} */
 
 .dark body .form-control,
 .dark body .form-select,

@@ -6,127 +6,410 @@
 ?>
 
 <style>
-:root { --t7-primary: <?php echo e($primaryColor); ?>; --t7-primary-light: <?php echo e($primaryColor); ?>18; }
+    :root {
+        --t7-primary: <?php echo e($primaryColor); ?>;
+        --t7-primary-light: <?php echo e($primaryColor); ?>18;
+    }
 
-/* ── Banner ── */
-.furniture_home .item img.banner-bg { width:100%; height:420px; object-fit:cover; }
-@media(max-width:576px){ .furniture_home .item img.banner-bg{ height:220px; } }
+    /* ── Banner ── */
+    .furniture_home .item img.banner-bg {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+    }
 
-/* ── Category Circles ── */
-.t7-cats-section { background:#fff; padding:40px 0 30px; }
-.t7-cats-title {
-  font-size: 2.8rem; font-weight: 800; color: #222;
-  font-family: 'Cairo', sans-serif;
-  position: relative; display: inline-block; margin-bottom: 30px;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-}
-.t7-cats-title::after {
-  content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
-  width: 80px; height: 5px; background: var(--t7-primary); border-radius: 10px;
-}
-/* wrap: center items, allow wrapping on small screens */
-.t7-cats-grid {
-  display:flex; flex-wrap:wrap; justify-content:center;
-  gap:28px 20px; padding:10px 0;
-}
-.t7-cat-item {
-  text-align:center; min-width:140px; max-width:160px;
-  cursor:pointer; text-decoration:none;
-  transition:transform .25s;
-}
-.t7-cat-item:hover { transform:translateY(-5px); }
-.t7-cat-img-wrap {
-  width: 160px; height: 160px; border-radius: 50%; overflow: hidden; margin: 0 auto;
-  background: #fff;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  border: 5px solid #fff;
-  outline: 1px solid #eee;
-  transition: all 0.3s ease;
-}
-.t7-cat-item:hover .t7-cat-img-wrap {
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-  transform: translateY(-5px);
-  outline: 2px solid var(--t7-primary);
-}
-.t7-cat-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
-.t7-cat-placeholder {
-  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-  background:var(--t7-primary-light); font-size:40px; color:var(--t7-primary);
-}
-.t7-cat-name {
-  margin-top:12px; font-size:15px; font-weight:700;
-  color:#333; font-family:'Cairo','Tajawal',sans-serif;
-  max-width:150px; margin-left:auto; margin-right:auto;
-  line-height:1.4; word-break:break-word;
-}
-/* mobile: scroll horizontally on very small screens */
-@media(max-width:480px){
-  .t7-cats-grid { flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding-bottom:8px; }
-  .t7-cats-grid::-webkit-scrollbar{ display:none; }
-  .t7-cat-item { min-width:120px; }
-  .t7-cat-img-wrap { width:110px; height:110px; }
-}
+    @media(max-width:576px) {
+        .furniture_home .item img.banner-bg {
+            height: 220px;
+        }
+    }
 
-/* ── Section titles ── */
-.t7-section-title { font-size:1.6rem; font-weight:700; color:#222; position:relative; display:inline-block; margin-bottom:4px; }
-.t7-section-title::after { content:''; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); width:50px; height:3px; background:var(--t7-primary); border-radius:2px; }
-.t7-subtitle { color:#888; font-size:.9rem; margin-top:10px; }
+    /* ── Category Circles ── */
+    .t7-cats-section {
+        background: #fff;
+        padding: 40px 0 30px;
+    }
 
-/* ── Product cards ── */
-.t7-pro-card { border-radius:14px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.07); background:#fff; transition:transform .3s,box-shadow .3s; border:none; }
-.t7-pro-card:hover { transform:translateY(-6px); box-shadow:0 14px 36px rgba(0,0,0,.14); }
-.t7-pro-img-wrap { position:relative; overflow:hidden; }
-.t7-pro-img-wrap img { width:100%; height:200px; object-fit:cover; transition:transform .4s; }
-.t7-pro-card:hover .t7-pro-img-wrap img { transform:scale(1.06); }
-.t7-badge-off { position:absolute; top:10px; left:10px; background:var(--t7-primary); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
-.t7-wish-btn { position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; background:#fff; border:none; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 10px rgba(0,0,0,.12); transition:.3s; cursor:pointer; }
-.t7-wish-btn:hover { background:var(--t7-primary); color:#fff; }
-.t7-cart-btn { position:absolute; bottom:10px; right:10px; width:34px; height:34px; border-radius:50%; background:var(--t7-primary); color:#fff; border:none; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 10px rgba(0,0,0,.2); transition:.3s; cursor:pointer; opacity:0; }
-.t7-pro-card:hover .t7-cart-btn { opacity:1; }
-.t7-item-name { font-size:.9rem; font-weight:600; color:#222; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-.t7-price-main { color:var(--t7-primary); font-weight:700; font-size:1rem; }
-.t7-price-old { color:#aaa; text-decoration:line-through; font-size:.8rem; margin-right:6px; }
-.t7-rating-star { color:#FFC107; font-size:11px; }
+    .t7-cats-title {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #222;
+        font-family: 'Cairo', sans-serif;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
 
-/* ── View-all button ── */
-.t7-view-all {
-  border: 1.5px solid #8e24aa; /* Purple border like the image button */
-  color: #8e24aa;
-  background: transparent;
-  border-radius: 8px;
-  padding: 10px 45px;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: 'Cairo', sans-serif;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-decoration: none;
-}
-.t7-view-all:hover {
-  background: #8e24aa;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(142, 36, 170, 0.2);
-}
+    .t7-cats-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 5px;
+        background: var(--t7-primary);
+        border-radius: 10px;
+    }
 
-/* ── Promo banners ── */
-.t7-promo-wrap { border-radius:16px; overflow:hidden; }
-.t7-promo-wrap img { width:100%; height:220px; object-fit:cover; transition:transform .4s; }
-.t7-promo-wrap:hover img { transform:scale(1.04); }
+    /* wrap: center items, allow wrapping on small screens */
+    .t7-cats-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 28px 20px;
+        padding: 10px 0;
+    }
 
-/* ── Testimonials ── */
-.t7-testimonial { background:#fff; border-radius:18px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,.07); transition:.3s; position:relative; overflow:hidden; }
-.t7-testimonial::before { content:'\201C'; font-size:80px; color:var(--t7-primary); opacity:.12; position:absolute; top:-10px; left:14px; font-family:serif; line-height:1; }
-.t7-testimonial:hover { transform:translateY(-4px); box-shadow:0 12px 36px rgba(0,0,0,.12); }
+    .t7-cat-item {
+        text-align: center;
+        min-width: 140px;
+        max-width: 160px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform .25s;
+    }
 
-/* ── Animations ── */
-@keyframes t7FadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-.t7-fade-up { animation:t7FadeUp .6s ease both; }
-.t7-fade-up:nth-child(2){animation-delay:.1s} .t7-fade-up:nth-child(3){animation-delay:.2s} .t7-fade-up:nth-child(4){animation-delay:.3s}
+    .t7-cat-item:hover {
+        transform: translateY(-5px);
+    }
 
-/* ── Category tabs modern ── */
-.t7-tab-btn { border:1.5px solid #eee; background:#f9f9f9; color:#555; border-radius:50px; padding:7px 20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:.3s; white-space:nowrap; }
-.t7-tab-btn:hover,.t7-tab-btn.active { background:var(--t7-primary); color:#fff; border-color:var(--t7-primary); }
+    .t7-cat-img-wrap {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        background: #fff;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: 5px solid #fff;
+        outline: 1px solid #eee;
+        transition: all 0.3s ease;
+    }
+
+    .t7-cat-item:hover .t7-cat-img-wrap {
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+        outline: 2px solid var(--t7-primary);
+    }
+
+    .t7-cat-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .t7-cat-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--t7-primary-light);
+        font-size: 40px;
+        color: var(--t7-primary);
+    }
+
+    .t7-cat-name {
+        margin-top: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #333;
+        font-family: 'Cairo', 'Tajawal', sans-serif;
+        max-width: 150px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+    /* mobile: scroll horizontally on very small screens */
+    @media(max-width:480px) {
+        .t7-cats-grid {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            justify-content: flex-start;
+            scrollbar-width: none;
+            padding-bottom: 8px;
+        }
+
+        .t7-cats-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .t7-cat-item {
+            min-width: 120px;
+        }
+
+        .t7-cat-img-wrap {
+            width: 110px;
+            height: 110px;
+        }
+    }
+
+    /* ── Section titles ── */
+    .t7-section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #222;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+
+    .t7-section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 3px;
+        background: var(--t7-primary);
+        border-radius: 2px;
+    }
+
+    .t7-subtitle {
+        color: #888;
+        font-size: .9rem;
+        margin-top: 10px;
+    }
+
+    /* ── Product cards ── */
+    .t7-pro-card {
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, .07);
+        background: #fff;
+        transition: transform .3s, box-shadow .3s;
+        border: none;
+    }
+
+    .t7-pro-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 36px rgba(0, 0, 0, .14);
+    }
+
+    .t7-pro-img-wrap {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .t7-pro-img-wrap img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform .4s;
+    }
+
+    .t7-pro-card:hover .t7-pro-img-wrap img {
+        transform: scale(1.06);
+    }
+
+    .t7-badge-off {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: var(--t7-primary);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .t7-wish-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #fff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+        transition: .3s;
+        cursor: pointer;
+    }
+
+    .t7-wish-btn:hover {
+        background: var(--t7-primary);
+        color: #fff;
+    }
+
+    .t7-cart-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--t7-primary);
+        color: #fff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+        transition: .3s;
+        cursor: pointer;
+        opacity: 0;
+    }
+
+    .t7-pro-card:hover .t7-cart-btn {
+        opacity: 1;
+    }
+
+    .t7-item-name {
+        font-size: .9rem;
+        font-weight: 600;
+        color: #222;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .t7-price-main {
+        color: var(--t7-primary);
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .t7-price-old {
+        color: #aaa;
+        text-decoration: line-through;
+        font-size: .8rem;
+        margin-right: 6px;
+    }
+
+    .t7-rating-star {
+        color: #FFC107;
+        font-size: 11px;
+    }
+
+    /* ── View-all button ── */
+    .t7-view-all {
+        border: 1.5px solid #8e24aa;
+        /* Purple border like the image button */
+        color: #8e24aa;
+        background: transparent;
+        border-radius: 8px;
+        padding: 10px 45px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'Cairo', sans-serif;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .t7-view-all:hover {
+        background: #8e24aa;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(142, 36, 170, 0.2);
+    }
+
+    /* ── Promo banners ── */
+    .t7-promo-wrap {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .t7-promo-wrap img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform .4s;
+    }
+
+    .t7-promo-wrap:hover img {
+        transform: scale(1.04);
+    }
+
+    /* ── Testimonials ── */
+    .t7-testimonial {
+        background: #fff;
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, .07);
+        transition: .3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .t7-testimonial::before {
+        content: '\201C';
+        font-size: 80px;
+        color: var(--t7-primary);
+        opacity: .12;
+        position: absolute;
+        top: -10px;
+        left: 14px;
+        font-family: serif;
+        line-height: 1;
+    }
+
+    .t7-testimonial:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, .12);
+    }
+
+    /* ── Animations ── */
+    @keyframes t7FadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px)
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .t7-fade-up {
+        animation: t7FadeUp .6s ease both;
+    }
+
+    .t7-fade-up:nth-child(2) {
+        animation-delay: .1s
+    }
+
+    .t7-fade-up:nth-child(3) {
+        animation-delay: .2s
+    }
+
+    .t7-fade-up:nth-child(4) {
+        animation-delay: .3s
+    }
+
+    /* ── Category tabs modern ── */
+    .t7-tab-btn {
+        border: 1.5px solid #eee;
+        background: #f9f9f9;
+        color: #555;
+        border-radius: 50px;
+        padding: 7px 20px;
+        font-size: .85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: .3s;
+        white-space: nowrap;
+    }
+
+    .t7-tab-btn:hover,
+    .t7-tab-btn.active {
+        background: var(--t7-primary);
+        color: #fff;
+        border-color: var(--t7-primary);
+    }
 </style>
 
 <?php if($sliders->count() > 0): ?>
@@ -166,35 +449,38 @@
 
 
 <?php if($allCategories->count() > 0): ?>
-<section class="t7-cats-section">
-  <div class="container">
-    <div class="text-center mb-4">
-      <h2 class="t7-cats-title">التصنيفات</h2>
-      <p class="t7-subtitle">اكتشف أفضل المجموعات المختارة بعناية لتناسب ذوقك الرفيع</p>
-    </div>
+    <section class="t7-cats-section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="t7-cats-title">التصنيفات</h2>
+                <p class="t7-subtitle">اكتشف أفضل المجموعات المختارة بعناية لتناسب ذوقك الرفيع</p>
+            </div>
 
-    <div class="t7-cats-grid">
+            <div class="t7-cats-grid">
 
-      <?php $__currentLoopData = $allCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <a href="<?php echo e(URL::to($storeinfo->slug . '/search?category=' . $cat->slug)); ?>" class="t7-cat-item">
-          <div class="t7-cat-img-wrap">
-            <?php if(!empty($cat->image) && $cat->image !== 'default.png'): ?>
-              <img src="<?php echo e(helper::image_path($cat->image)); ?>" alt="<?php echo e($cat->name); ?>" loading="lazy">
-            <?php else: ?>
-              <div class="t7-cat-placeholder"><i class="fa-solid fa-tag" style="font-size:40px"></i></div>
-            <?php endif; ?>
-          </div>
-          <div class="t7-cat-name"><?php echo e($cat->name); ?></div>
-        </a>
-      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-    </div>
+                <?php $__currentLoopData = $allCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <a href="<?php echo e(URL::to($storeinfo->slug . '/search?category=' . $cat->slug)); ?>" class="t7-cat-item">
+                        <div class="t7-cat-img-wrap">
+                            <?php if(!empty($cat->image) && $cat->image !== 'default.png'): ?>
+                                <img src="<?php echo e(helper::image_path($cat->image)); ?>" alt="<?php echo e($cat->name); ?>"
+                                    loading="lazy">
+                            <?php else: ?>
+                                <div class="t7-cat-placeholder"><i class="fa-solid fa-tag" style="font-size:40px"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="t7-cat-name"><?php echo e($cat->name); ?></div>
+                    </a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
 
-    
-    <div class="text-center mt-4">
-      <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>" class="t7-view-all"><?php echo e(trans('labels.view_more')); ?></a>
-    </div>
-  </div>
-</section>
+            
+            <div class="text-center mt-4">
+                <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>"
+                    class="t7-view-all"><?php echo e(trans('labels.view_more')); ?></a>
+            </div>
+        </div>
+    </section>
 <?php endif; ?>
 
 
@@ -205,7 +491,8 @@
         <section class="my-5 pro-7-sec">
             <div class="container">
                 <div class="sec-header mb-4">
-                    <h4 class="main-title-7 mb-2 color-changer main-title text-center"><?php echo e(trans('labels.selling_product')); ?></h4>
+                    <h4 class="main-title-7 mb-2 color-changer main-title text-center">
+                        <?php echo e(trans('labels.selling_product')); ?></h4>
                     <p class="m-0 line-2 fs-15 text-center mb-2 fw-500 text-muted">
                         <?php echo e(trans('labels.selling_product_subtitle')); ?></p>
                 </div>
@@ -425,7 +712,8 @@
     <section class="pro-7-sec my-sm-5 my-3">
         <div class="container">
             <div class="sec-header mb-4">
-                <h4 class="main-title-7 mb-2 color-changer main-title text-center"><?php echo e(trans('labels.featured_products')); ?></h4>
+                <h4 class="main-title-7 mb-2 color-changer main-title text-center">
+                    <?php echo e(trans('labels.featured_products')); ?></h4>
                 <p class="m-0 line-2 fs-15 text-center mb-2 fw-500 text-muted">
                     <?php echo e(trans('labels.featured_products_subtitle')); ?></p>
             </div>
@@ -436,14 +724,20 @@
                             if ($item->top_deals == 1 && helper::top_deals($storeinfo->id) != null) {
                                 if (@helper::top_deals($storeinfo->id)->offer_type == 1) {
                                     if ($item['variation']->count() > 0) {
-                                        if ($item['variation'][0]->price > @helper::top_deals($storeinfo->id)->offer_amount) {
-                                            $price = $item['variation'][0]->price - @helper::top_deals($storeinfo->id)->offer_amount;
+                                        if (
+                                            $item['variation'][0]->price >
+                                            @helper::top_deals($storeinfo->id)->offer_amount
+                                        ) {
+                                            $price =
+                                                $item['variation'][0]->price -
+                                                @helper::top_deals($storeinfo->id)->offer_amount;
                                         } else {
                                             $price = $item['variation'][0]->price;
                                         }
                                     } else {
                                         if ($item->item_price > @helper::top_deals($storeinfo->id)->offer_amount) {
-                                            $price = $item->item_price - @helper::top_deals($storeinfo->id)->offer_amount;
+                                            $price =
+                                                $item->item_price - @helper::top_deals($storeinfo->id)->offer_amount;
                                         } else {
                                             $price = $item->item_price;
                                         }
@@ -452,11 +746,13 @@
                                     if ($item['variation']->count() > 0) {
                                         $price =
                                             $item['variation'][0]->price -
-                                            $item['variation'][0]->price * (@helper::top_deals($storeinfo->id)->offer_amount / 100);
+                                            $item['variation'][0]->price *
+                                                (@helper::top_deals($storeinfo->id)->offer_amount / 100);
                                     } else {
                                         $price =
                                             $item->item_price -
-                                            $item->item_price * (@helper::top_deals($storeinfo->id)->offer_amount / 100);
+                                            $item->item_price *
+                                                (@helper::top_deals($storeinfo->id)->offer_amount / 100);
                                     }
                                 }
                                 if ($item['variation']->count() > 0) {
@@ -464,7 +760,8 @@
                                 } else {
                                     $original_price = $item->item_price;
                                 }
-                                $off = $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
+                                $off =
+                                    $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
                             } else {
                                 if ($item['variation']->count() > 0) {
                                     $price = $item['variation'][0]->price;
@@ -473,7 +770,8 @@
                                     $price = $item->item_price;
                                     $original_price = $item->item_original_price;
                                 }
-                                $off = $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
+                                $off =
+                                    $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
                             }
                         ?>
                         <div class="col">
@@ -496,7 +794,8 @@
                                     </a>
 
                                     <?php if($off > 0): ?>
-                                        <div class="offer-7 rounded-0 ltr"><?php echo e($off); ?>% <?php echo e(trans('labels.off')); ?></div>
+                                        <div class="offer-7 rounded-0 ltr"><?php echo e($off); ?>%
+                                            <?php echo e(trans('labels.off')); ?></div>
                                     <?php endif; ?>
                                     <ul class="outer-functional">
                                         <?php if(@helper::checkaddons('customer_login')): ?>
@@ -506,7 +805,11 @@
                                                         onclick="managefavorite('<?php echo e($item->id); ?>',<?php echo e($storeinfo->id); ?>,'<?php echo e(URL::to(@$storeinfo->slug . '/managefavorite')); ?>')">
                                                         <?php if(Auth::user() && Auth::user()->type == 3): ?>
                                                             <?php
-                                                                $favorite = helper::ceckfavorite($item->id, $storeinfo->id, Auth::user()->id);
+                                                                $favorite = helper::ceckfavorite(
+                                                                    $item->id,
+                                                                    $storeinfo->id,
+                                                                    Auth::user()->id,
+                                                                );
                                                             ?>
                                                             <?php if(!empty($favorite) && $favorite->count() > 0): ?>
                                                                 <i class="fa-solid fa-heart"></i>
@@ -539,12 +842,14 @@
                                             <p class="m-0 pro-rating cursor-pointer"
                                                 onclick="rattingmodal('<?php echo e($item->id); ?>','<?php echo e($storeinfo->id); ?>','<?php echo e($item->item_name); ?>')">
                                                 <i class="fa-solid fa-star text-warning"></i>
-                                                <span class="px-1 color-changer"><?php echo e(number_format($item->ratings_average, 1)); ?></span>
+                                                <span
+                                                    class="px-1 color-changer"><?php echo e(number_format($item->ratings_average, 1)); ?></span>
                                             </p>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <a href="<?php echo e(URL::to($storeinfo->slug . '/detail-' . $item->slug)); ?>">
-                                        <h4 id="itemname" class="title mb-2 color-changer text-dark line-2"><?php echo e($item->item_name); ?></h4>
+                                        <h4 id="itemname" class="title mb-2 color-changer text-dark line-2">
+                                            <?php echo e($item->item_name); ?></h4>
                                     </a>
                                 </div>
                                 <div class="card-footer px-0 bg-transparent border-0">
@@ -578,7 +883,8 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center my-4">
-                <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>" class="t7-view-all"><?php echo e(trans('labels.view_more')); ?></a>
+                <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>"
+                    class="t7-view-all"><?php echo e(trans('labels.view_more')); ?></a>
             </div>
         </div>
     </section>
@@ -591,11 +897,13 @@
             <div class="row g-3">
                 <div class="col-lg-6">
                     <div class="sec-header">
-                        <h4 class="line-1 mb-2 color-changer fs-5"><?php echo e(helper::appdata($storeinfo->id)->whoweare_title); ?>
+                        <h4 class="line-1 mb-2 color-changer fs-5">
+                            <?php echo e(helper::appdata($storeinfo->id)->whoweare_title); ?>
 
                         </h4>
                     </div>
-                    <h3 class="line-2 main-title color-changer fw-600"><?php echo e(helper::appdata($storeinfo->id)->whoweare_subtitle); ?></h3>
+                    <h3 class="line-2 main-title color-changer fw-600">
+                        <?php echo e(helper::appdata($storeinfo->id)->whoweare_subtitle); ?></h3>
                     <p class="m-0 text-muted line-3 fs-15"><?php echo e(helper::appdata($storeinfo->id)->whoweare_description); ?>
 
                     </p>
@@ -645,7 +953,8 @@
         <section class="mb-5 pro-7-sec">
             <div class="container">
                 <div class="sec-header mb-4">
-                    <h4 class="main-title-7 mb-2 color-changer main-title text-center"><?php echo e(trans('labels.top_rated_product')); ?></h4>
+                    <h4 class="main-title-7 mb-2 color-changer main-title text-center">
+                        <?php echo e(trans('labels.top_rated_product')); ?></h4>
                     <p class="m-0 line-2 fs-15 text-center mb-2 fw-500 text-muted">
                         <?php echo e(trans('labels.top_rated_product_subtitle')); ?></p>
                 </div>
@@ -872,7 +1181,8 @@
         <section class="storereview-sec mb-lg-5 mb-4">
             <div class="container">
                 <div class="sec-header mb-4">
-                    <h4 class="main-title-7 mb-2 color-changer main-title text-center"><?php echo e(trans('labels.testimonials')); ?></h4>
+                    <h4 class="main-title-7 mb-2 color-changer main-title text-center">
+                        <?php echo e(trans('labels.testimonials')); ?></h4>
                     <p class="m-0 line-2 fs-15 text-center mb-2 fw-500 text-muted">
                         <?php echo e(trans('labels.testimonials_subtitle')); ?></p>
                 </div>
@@ -886,7 +1196,9 @@
                                             <img src="<?php echo e(helper::image_path($item->image)); ?>" alt="">
                                         </div>
                                         <div class="px-3">
-                                            <h5 class="line-1 color-changer mb-1 review_title"><?php echo e($item->name); ?></h5>
+                                            <h5 class="line-1 color-changer mb-1 review_title"><?php echo e($item->name); ?>
+
+                                            </h5>
                                             <p class="review_date text-muted fs-7">
                                                 <?php echo e(helper::date_format($item->created_at, $storeinfo->id)); ?></p>
                                         </div>
@@ -931,7 +1243,8 @@
         ?>
         <div class="container">
             <div class="sec-header mb-4">
-                <h4 class="main-title-7 mb-2 color-changer main-title text-center"><?php echo e(trans('labels.our_latest_blogs')); ?></h4>
+                <h4 class="main-title-7 mb-2 color-changer main-title text-center">
+                    <?php echo e(trans('labels.our_latest_blogs')); ?></h4>
                 <p class="m-0 line-2 fs-15 text-center mb-2 fw-500 text-muted">
                     <?php echo e(trans('labels.our_latest_blogs_subtitle')); ?></p>
             </div>

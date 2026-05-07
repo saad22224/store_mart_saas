@@ -624,6 +624,27 @@
                     </marquee>
                 </div>
             </div>
+            @if (helper::getsociallinks(@$storeinfo->id)->count() > 0)
+                <div class="t7-mobile-social d-lg-none">
+                    <div class="container">
+                        <ul class="t7-mobile-social-list">
+                            @foreach (helper::getsociallinks(@$storeinfo->id) as $links)
+                                <li>
+                                    @if ($links->icon == '<i class="fa-solid fa-phone"></i>')
+                                        <a href="tel:{{ $links->link }}" class="t7-mobile-social-link" aria-label="social-phone">
+                                            {!! $links->icon !!}
+                                        </a>
+                                    @else
+                                        <a href="{{ $links->link }}" target="_blank" class="t7-mobile-social-link" aria-label="social-link">
+                                            {!! $links->icon !!}
+                                        </a>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
             
             <header class="t7-header-main sticky-top">
                 <div class="t7-header-container">
@@ -879,6 +900,38 @@
                 font-size: 16px;
                 font-weight: 600;
                 color: #333;
+            }
+            .t7-mobile-social {
+                background: #fff;
+                border-bottom: 1px solid #f0f0f0;
+                padding: 8px 0;
+            }
+            .t7-mobile-social-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+            .t7-mobile-social-link {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: #fff;
+                background: var(--bs-primary);
+                border: 1px solid var(--bs-primary);
+                transition: .2s ease;
+            }
+            .t7-mobile-social-link:hover {
+                color: var(--bs-primary);
+                background: #fff;
+                border-color: var(--bs-primary);
             }
             @media (max-width: 991px) {
                 .t7-logo-circle {

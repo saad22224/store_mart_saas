@@ -628,6 +628,29 @@
                     </marquee>
                 </div>
             </div>
+            <?php if(helper::getsociallinks(@$storeinfo->id)->count() > 0): ?>
+                <div class="t7-mobile-social d-lg-none">
+                    <div class="container">
+                        <ul class="t7-mobile-social-list">
+                            <?php $__currentLoopData = helper::getsociallinks(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li>
+                                    <?php if($links->icon == '<i class="fa-solid fa-phone"></i>'): ?>
+                                        <a href="tel:<?php echo e($links->link); ?>" class="t7-mobile-social-link" aria-label="social-phone">
+                                            <?php echo $links->icon; ?>
+
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="<?php echo e($links->link); ?>" target="_blank" class="t7-mobile-social-link" aria-label="social-link">
+                                            <?php echo $links->icon; ?>
+
+                                        </a>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </ul>
+                    </div>
+                </div>
+            <?php endif; ?>
             
             <header class="t7-header-main sticky-top">
                 <div class="t7-header-container">
@@ -883,6 +906,38 @@
                 font-size: 16px;
                 font-weight: 600;
                 color: #333;
+            }
+            .t7-mobile-social {
+                background: #fff;
+                border-bottom: 1px solid #f0f0f0;
+                padding: 8px 0;
+            }
+            .t7-mobile-social-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+            .t7-mobile-social-link {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: #fff;
+                background: var(--bs-primary);
+                border: 1px solid var(--bs-primary);
+                transition: .2s ease;
+            }
+            .t7-mobile-social-link:hover {
+                color: var(--bs-primary);
+                background: #fff;
+                border-color: var(--bs-primary);
             }
             @media (max-width: 991px) {
                 .t7-logo-circle {

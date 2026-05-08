@@ -85,12 +85,7 @@
                 <i class="fa-solid fa-cart-shopping"></i><span class="nav-text "><?php echo e(trans('labels.orders')); ?></span>
             </a>
         </li>
-        <li class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_report') == 1 ? 'd-block' : 'd-none'); ?>">
-            <a class="nav-link rounded d-flex d-flex <?php echo e(request()->is('admin/report*') ? 'active' : ''); ?>"
-                href="<?php echo e(URL::to('/admin/report')); ?>" aria-expanded="false">
-                <i class="fa-solid fa-chart-mixed"></i><span class="nav-text "><?php echo e(trans('labels.report')); ?></span>
-            </a>
-        </li>
+        
     <?php endif; ?>
     <?php if(Auth::user()->type == 1 ||
             (Auth::user()->type == 4 && Auth::user()->vendor_id == 1) ||
@@ -148,22 +143,8 @@
                             <i class="fa-solid fa-circle-small"></i><?php echo e(trans('labels.categories')); ?></span>
                     </a>
                 </li>
-                <li
-                    class="av-item ps-4 mb-1 <?php echo e(helper::check_menu($role_id, 'role_tax') == 1 ? 'd-block' : 'd-none'); ?>">
-                    <a class="nav-link rounded  <?php echo e(request()->is('admin/tax*') ? 'active' : ''); ?>" aria-current="page"
-                        href="<?php echo e(URL::to('/admin/tax')); ?>">
-                        <span class="d-flex align-items-center multimenu-menu-indicator">
-                            <i class="fa-solid fa-circle-small"></i><?php echo e(trans('labels.tax')); ?></span>
-
-                    </a>
-                </li>
-                <li
-                    class="av-item ps-4 mb-1 <?php echo e(helper::check_menu($role_id, 'role_global_extras') == 1 ? 'd-block' : 'd-none'); ?>">
-                    <a class="nav-link rounded  <?php echo e(request()->is('admin/extras*') ? 'active' : ''); ?>"
-                        aria-current="page" href="<?php echo e(URL::to('admin/extras')); ?>">
-                        <span class="d-flex align-items-center multimenu-menu-indicator">
-                            <i class="fa-solid fa-circle-small"></i><?php echo e(trans('labels.global_extras')); ?></span>
-                    </a>
+                
+                
                 </li>
 
                 <li
@@ -176,44 +157,10 @@
                         </span>
                     </a>
                 </li>
-                <?php if(@helper::checkaddons('question_answer')): ?>
-                    <li
-                        class="nav-item ps-4 mb-1 <?php echo e(helper::check_menu($role_id, 'role_product_question_answer') == 1 ? 'd-block' : 'd-none'); ?>">
-                        <a class="nav-link rounded <?php echo e(request()->is('admin/question_answer*') ? 'active' : ''); ?>"
-                            aria-current="page" href="<?php echo e(URL::to('/admin/question_answer')); ?>">
-                            <span class="d-flex align-items-center multimenu-menu-indicator">
-                                <i class="fa-solid fa-circle-small"></i><?php echo e(trans('labels.product_question_answer')); ?>
+                
 
-                                <?php if(env('Environment') == 'sendbox'): ?>
-                                    <small class="badge bg-danger"><?php echo e(trans('labels.addon')); ?></small>
-                                <?php endif; ?>
-                            </span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-
-                <?php if(@helper::checkaddons('product_import')): ?>
-                    <li
-                        class="nav-item ps-4 mb-1 <?php echo e(helper::check_menu($role_id, 'role_import_product') == 1 ? 'd-block' : 'd-none'); ?>">
-                        <a class="nav-link rounded <?php echo e(request()->is('admin/products/import') || request()->is('admin/media*') ? 'active' : ''); ?>"
-                            aria-current="page" href="<?php echo e(URL::to('/admin/products/import')); ?>">
-                            <span class="d-flex align-items-center multimenu-menu-indicator">
-                                <i class="fa-solid fa-circle-small"></i><?php echo e(trans('labels.product_upload')); ?>
-
-                            </span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-                <li
-                    class="av-item ps-4 mb-1 <?php echo e(helper::check_menu($role_id, 'role_shipping_management') == 1 ? 'd-block' : 'd-none'); ?>">
-                    <a class="nav-link rounded  <?php echo e(request()->is('admin/shipping*') ? 'active' : ''); ?>"
-                        aria-current="page" href="<?php echo e(URL::to('admin/shipping')); ?>">
-                        <span class="d-flex align-items-center multimenu-menu-indicator">
-                            <i class="fa-solid fa-circle-small"></i><?php echo e(trans('labels.shipping_management')); ?>
-
-                        </span>
-                    </a>
-                </li>
+                
+                
             </ul>
         </li>
 
@@ -295,69 +242,7 @@
                 </li>
             </ul>
         </li>
-        <?php if(@helper::checkaddons('subscription')): ?>
-            <?php if(@helper::checkaddons('coupon')): ?>
-                <?php
-                    $checkplan = App\Models\Transaction::where('vendor_id', $vendor_id)->orderByDesc('id')->first();
-
-                    if ($user->allow_without_subscription == 1) {
-                        $coupons = 1;
-                    } else {
-                        $coupons = @$checkplan->coupons;
-                    }
-                ?>
-                <?php if($coupons == 1): ?>
-                    <li
-                        class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_coupons') == 1 ? 'd-block' : 'd-none'); ?>">
-                        <a class="nav-link rounded d-flex <?php echo e(request()->is('admin/coupons*') ? 'active' : ''); ?>"
-                            href="<?php echo e(URL::to('/admin/coupons')); ?>" aria-expanded="false">
-                            <i class="fa-solid fa-badge-percent"></i>
-                            <p class="w-100 d-flex justify-content-between">
-                                <span class="nav-text "><?php echo e(trans('labels.coupons')); ?></span>
-                                <?php if(env('Environment') == 'sendbox'): ?>
-                                    <span
-                                        class="badge badge bg-danger float-right mr-1 mt-1"><?php echo e(trans('labels.addon')); ?></span>
-                                <?php endif; ?>
-                            </p>
-                        </a>
-                    </li>
-                <?php endif; ?>
-            <?php endif; ?>
-        <?php else: ?>
-            <?php if(@helper::checkaddons('coupon')): ?>
-                <li
-                    class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_coupons') == 1 ? 'd-block' : 'd-none'); ?>">
-                    <a class="nav-link rounded d-flex <?php echo e(request()->is('admin/coupons*') ? 'active' : ''); ?>"
-                        href="<?php echo e(URL::to('/admin/coupons')); ?>" aria-expanded="false">
-                        <i class="fa-solid fa-badge-percent"></i>
-                        <p class="w-100 d-flex justify-content-between">
-                            <span class="nav-text "><?php echo e(trans('labels.coupons')); ?></span>
-                            <?php if(env('Environment') == 'sendbox'): ?>
-                                <span
-                                    class="badge badge bg-danger float-right mr-1 mt-1"><?php echo e(trans('labels.addon')); ?></span>
-                            <?php endif; ?>
-                        </p>
-                    </a>
-                </li>
-            <?php endif; ?>
-        <?php endif; ?>
-
-        <?php if(@helper::checkaddons('top_deals')): ?>
-            <li
-                class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_top_deals') == 1 ? 'd-block' : 'd-none'); ?>">
-                <a class="nav-link d-flex rounded <?php echo e(request()->is('admin/top_deals') ? 'active' : ''); ?>"
-                    aria-current="page" href="<?php echo e(URL::to('/admin/top_deals')); ?>">
-                    <i class="fa-solid fa-badge-percent"></i>
-                    <p class="w-100 d-flex justify-content-between">
-                        <span class="nav-text "><?php echo e(trans('labels.top_deals')); ?></span>
-                        <?php if(env('Environment') == 'sendbox'): ?>
-                            <span
-                                class="badge badge bg-danger float-right mr-1 mt-1"><?php echo e(trans('labels.addon')); ?></span>
-                        <?php endif; ?>
-                    </p>
-                </a>
-            </li>
-        <?php endif; ?>
+        
 
         <?php if(@helper::checkaddons('firebase_notification')): ?>
             <li

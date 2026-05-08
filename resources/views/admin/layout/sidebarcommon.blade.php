@@ -85,12 +85,12 @@
                 <i class="fa-solid fa-cart-shopping"></i><span class="nav-text ">{{ trans('labels.orders') }}</span>
             </a>
         </li>
-        <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_report') == 1 ? 'd-block' : 'd-none' }}">
+        {{-- <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_report') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link rounded d-flex d-flex {{ request()->is('admin/report*') ? 'active' : '' }}"
                 href="{{ URL::to('/admin/report') }}" aria-expanded="false">
                 <i class="fa-solid fa-chart-mixed"></i><span class="nav-text ">{{ trans('labels.report') }}</span>
             </a>
-        </li>
+        </li> --}}
     @endif
     @if (Auth::user()->type == 1 ||
             (Auth::user()->type == 4 && Auth::user()->vendor_id == 1) ||
@@ -148,7 +148,7 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.categories') }}</span>
                     </a>
                 </li>
-                <li
+                {{-- <li
                     class="av-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_tax') == 1 ? 'd-block' : 'd-none' }}">
                     <a class="nav-link rounded  {{ request()->is('admin/tax*') ? 'active' : '' }}" aria-current="page"
                         href="{{ URL::to('/admin/tax') }}">
@@ -156,14 +156,14 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.tax') }}</span>
 
                     </a>
-                </li>
-                <li
+                </li> --}}
+                {{-- <li
                     class="av-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_global_extras') == 1 ? 'd-block' : 'd-none' }}">
                     <a class="nav-link rounded  {{ request()->is('admin/extras*') ? 'active' : '' }}"
                         aria-current="page" href="{{ URL::to('admin/extras') }}">
                         <span class="d-flex align-items-center multimenu-menu-indicator">
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.global_extras') }}</span>
-                    </a>
+                    </a> --}}
                 </li>
 
                 <li
@@ -175,7 +175,7 @@
                         </span>
                     </a>
                 </li>
-                @if (@helper::checkaddons('question_answer'))
+                {{-- @if (@helper::checkaddons('question_answer'))
                     <li
                         class="nav-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_product_question_answer') == 1 ? 'd-block' : 'd-none' }}">
                         <a class="nav-link rounded {{ request()->is('admin/question_answer*') ? 'active' : '' }}"
@@ -188,9 +188,9 @@
                             </span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
-                @if (@helper::checkaddons('product_import'))
+                {{-- @if (@helper::checkaddons('product_import'))
                     <li
                         class="nav-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_import_product') == 1 ? 'd-block' : 'd-none' }}">
                         <a class="nav-link rounded {{ request()->is('admin/products/import') || request()->is('admin/media*') ? 'active' : '' }}"
@@ -200,8 +200,8 @@
                             </span>
                         </a>
                     </li>
-                @endif
-                <li
+                @endif --}}
+                {{-- <li
                     class="av-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_shipping_management') == 1 ? 'd-block' : 'd-none' }}">
                     <a class="nav-link rounded  {{ request()->is('admin/shipping*') ? 'active' : '' }}"
                         aria-current="page" href="{{ URL::to('admin/shipping') }}">
@@ -209,7 +209,7 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.shipping_management') }}
                         </span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 
@@ -287,7 +287,7 @@
                 </li>
             </ul>
         </li>
-        @if (@helper::checkaddons('subscription'))
+        {{-- @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('coupon'))
                 @php
                     $checkplan = App\Models\Transaction::where('vendor_id', $vendor_id)->orderByDesc('id')->first();
@@ -349,7 +349,7 @@
                     </p>
                 </a>
             </li>
-        @endif
+        @endif --}}
 
         @if (@helper::checkaddons('firebase_notification'))
             <li

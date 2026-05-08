@@ -152,6 +152,13 @@ class PlanPricingController extends Controller
         } else {
             $pixel = "2";
         }
+        $tax_report = $request->tax_report == "on" ? 1 : 2;
+        $reports = $request->reports == "on" ? 1 : 2;
+        $global_addons = $request->global_addons == "on" ? 1 : 2;
+        $product_qa = $request->product_qa == "on" ? 1 : 2;
+        $bulk_import = $request->bulk_import == "on" ? 1 : 2;
+        $shipping_management = $request->shipping_management == "on" ? 1 : 2;
+        $top_deals = $request->top_deals == "on" ? 1 : 2;
         $saveplan = new PricingPlan();
         $saveplan->name = $request->plan_name;
         $saveplan->themes_id = "0";
@@ -193,6 +200,13 @@ class PlanPricingController extends Controller
         $saveplan->whatsapp_message = $whatsapp_message;
         $saveplan->telegram_message = $telegram_message;
         $saveplan->pixel = $pixel;
+        $saveplan->tax_report = $tax_report;
+        $saveplan->reports = $reports;
+        $saveplan->global_addons = $global_addons;
+        $saveplan->product_qa = $product_qa;
+        $saveplan->bulk_import = $bulk_import;
+        $saveplan->shipping_management = $shipping_management;
+        $saveplan->top_deals = $top_deals;
         $saveplan->themes_id = $request->themecheckbox != "" && $request->themecheckbox != null ? implode("|", $request->themecheckbox) : $request->themecheckbox;
         $saveplan->vendor_id = $request->vendors != "" && $request->vendors != null ? implode("|", $request->vendors) : $request->vendors;
         $saveplan->save();
@@ -306,6 +320,12 @@ class PlanPricingController extends Controller
         } else {
             $pixel = "2";
         }
+        $tax_report = $request->tax_report == "on" ? 1 : 2;
+        $global_addons = $request->global_addons == "on" ? 1 : 2;
+        $product_qa = $request->product_qa == "on" ? 1 : 2;
+        $bulk_import = $request->bulk_import == "on" ? 1 : 2;
+        $shipping_management = $request->shipping_management == "on" ? 1 : 2;
+        $top_deals = $request->top_deals == "on" ? 1 : 2;
         $exitplan = PricingPlan::where('price', '0')->count();
         if ($exitplan > 1 && $request->plan_price == '0') {
             return redirect('admin/plan/edit-' . $id)->with('error', trans('messages.already_exist_plan'));
@@ -351,6 +371,13 @@ class PlanPricingController extends Controller
             $editplan->whatsapp_message = $whatsapp_message;
             $editplan->telegram_message = $telegram_message;
             $editplan->pixel = $pixel;
+            $editplan->tax_report = $tax_report;
+            $editplan->reports = $reports;
+            $editplan->global_addons = $global_addons;
+            $editplan->product_qa = $product_qa;
+            $editplan->bulk_import = $bulk_import;
+            $editplan->shipping_management = $shipping_management;
+            $editplan->top_deals = $top_deals;
             $editplan->themes_id = $request->themecheckbox != "" && $request->themecheckbox != null ? implode("|", $request->themecheckbox) : $request->themecheckbox;
             $editplan->vendor_id = $request->vendors != "" && $request->vendors != null ? implode("|", $request->vendors) : $request->vendors;
             $editplan->update();
@@ -438,6 +465,13 @@ class PlanPricingController extends Controller
             $transaction->telegram_message = $plan->telegram_message;
             $transaction->themes_id = $plan->themes_id;
             $transaction->pixel = $plan->pixel;
+            $transaction->tax_report = $plan->tax_report;
+            $transaction->reports = $plan->reports;
+            $transaction->global_addons = $plan->global_addons;
+            $transaction->product_qa = $plan->product_qa;
+            $transaction->bulk_import = $plan->bulk_import;
+            $transaction->shipping_management = $plan->shipping_management;
+            $transaction->top_deals = $plan->top_deals;
             $transaction->features = $plan->features;
             $transaction->transaction_number = Str::upper(Str::random(8));
             $transaction->save();
@@ -572,6 +606,12 @@ class PlanPricingController extends Controller
             $transaction->status = "2";
             $transaction->themes_id = $plan->themes_id;
             $transaction->pixel = $plan->pixel;
+            $transaction->tax_report = $plan->tax_report;
+            $transaction->global_addons = $plan->global_addons;
+            $transaction->product_qa = $plan->product_qa;
+            $transaction->bulk_import = $plan->bulk_import;
+            $transaction->shipping_management = $plan->shipping_management;
+            $transaction->top_deals = $plan->top_deals;
             $transaction->purchase_date = date("Y-m-d h:i:sa");
             $transaction->features = $plan->features;
             $transaction->transaction_number = Str::upper(Str::random(8));
@@ -681,6 +721,13 @@ class PlanPricingController extends Controller
             $transaction->whatsapp_message = $plan->whatsapp_message;
             $transaction->telegram_message = $plan->telegram_message;
             $transaction->pixel = $plan->pixel;
+            $transaction->tax_report = $plan->tax_report;
+            $transaction->reports = $plan->reports;
+            $transaction->global_addons = $plan->global_addons;
+            $transaction->product_qa = $plan->product_qa;
+            $transaction->bulk_import = $plan->bulk_import;
+            $transaction->shipping_management = $plan->shipping_management;
+            $transaction->top_deals = $plan->top_deals;
             $transaction->features = $plan->features;
             $transaction->transaction_number = Str::upper(Str::random(8));
             $transaction->save();

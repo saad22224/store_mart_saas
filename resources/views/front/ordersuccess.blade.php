@@ -98,31 +98,25 @@
                                     $whatsapp_message = @$checkplan->whatsapp_message;
                                 }
                             @endphp
-                            @if ($whatsapp_message == 1 && @whatsapp_helper::whatsapp_message_config($storeinfo->id)->order_created == 1)
-                                @if (@whatsapp_helper::whatsapp_message_config($storeinfo->id)->message_type == 2)
-                                    <a href="https://api.whatsapp.com/send?phone={{ @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number }}&text={{ $whmessage }}"
-                                        target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
-                                        <i class="fab fa-whatsapp mx-2"></i>
-                                        {{ trans('labels.whatsapp_message') }}
-                                    </a>
-                                @endif
+                            @if ($whatsapp_message == 1)
+                                <a href="https://api.whatsapp.com/send?phone={{ $storeinfo->whatsapp ?? $storeinfo->mobile }}&text={{ $whmessage }}"
+                                    target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
+                                    <i class="fab fa-whatsapp mx-2"></i>
+                                    {{ trans('labels.whatsapp_message') }}
+                                </a>
                             @endif
                         @endif
                     @else
                         @if (@helper::checkaddons('whatsapp_message'))
-                            @if (@whatsapp_helper::whatsapp_message_config($storeinfo->id)->order_created == 1)
-                                @if (@whatsapp_helper::whatsapp_message_config($storeinfo->id)->message_type == 2)
-                                    <a href="https://api.whatsapp.com/send?phone={{ @whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number }}&text={{ $whmessage }}"
-                                        target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
-                                        <i class="fab fa-whatsapp mx-2"></i>
-                                        {{ trans('labels.whatsapp_message') }}
-                                    </a>
-                                @endif
-                            @endif
+                            <a href="https://api.whatsapp.com/send?phone={{ $storeinfo->whatsapp ?? $storeinfo->mobile }}&text={{ $whmessage }}"
+                                target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
+                                <i class="fab fa-whatsapp mx-2"></i>
+                                {{ trans('labels.whatsapp_message') }}
+                            </a>
                         @endif
                     @endif
 
-                    @if (@helper::checkaddons('subscription'))
+                    {{-- @if (@helper::checkaddons('subscription'))
                         @if (@helper::checkaddons('telegram_message'))
                             @php
                                 $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
@@ -149,7 +143,7 @@
                                     <i class="fab fa-telegram mx-2"></i>{{ trans('labels.telegram_message') }}</a>
                             @endif
                         @endif
-                    @endif
+                    @endif --}}
 
                 </div>
             </div>

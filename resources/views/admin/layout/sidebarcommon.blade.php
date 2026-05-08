@@ -7,6 +7,7 @@
         $vendor_id = Auth::user()->id;
     }
     $user = App\Models\User::where('id', $vendor_id)->first();
+    $checkplan = App\Models\Transaction::where('vendor_id', $vendor_id)->orderByDesc('id')->first();
 @endphp
 <ul class="navbar-nav">
     <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_dashboard') == 1 ? 'd-block' : 'd-none' }}">
@@ -85,12 +86,14 @@
                 <i class="fa-solid fa-cart-shopping"></i><span class="nav-text ">{{ trans('labels.orders') }}</span>
             </a>
         </li>
-        {{-- <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_report') == 1 ? 'd-block' : 'd-none' }}">
+        @if ($user->allow_without_subscription == 1 || @$checkplan->reports == 1)
+        <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_report') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link rounded d-flex d-flex {{ request()->is('admin/report*') ? 'active' : '' }}"
                 href="{{ URL::to('/admin/report') }}" aria-expanded="false">
                 <i class="fa-solid fa-chart-mixed"></i><span class="nav-text ">{{ trans('labels.report') }}</span>
             </a>
-        </li> --}}
+        </li>
+        @endif
     @endif
     @if (Auth::user()->type == 1 ||
             (Auth::user()->type == 4 && Auth::user()->vendor_id == 1) ||
@@ -148,7 +151,8 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.categories') }}</span>
                     </a>
                 </li>
-                {{-- <li
+                @if ($user->allow_without_subscription == 1 || @$checkplan->tax_report == 1)
+                <li
                     class="av-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_tax') == 1 ? 'd-block' : 'd-none' }}">
                     <a class="nav-link rounded  {{ request()->is('admin/tax*') ? 'active' : '' }}" aria-current="page"
                         href="{{ URL::to('/admin/tax') }}">
@@ -156,15 +160,18 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.tax') }}</span>
 
                     </a>
-                </li> --}}
-                {{-- <li
+                </li>
+                @endif
+                @if ($user->allow_without_subscription == 1 || @$checkplan->global_addons == 1)
+                <li
                     class="av-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_global_extras') == 1 ? 'd-block' : 'd-none' }}">
                     <a class="nav-link rounded  {{ request()->is('admin/extras*') ? 'active' : '' }}"
                         aria-current="page" href="{{ URL::to('admin/extras') }}">
                         <span class="d-flex align-items-center multimenu-menu-indicator">
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.global_extras') }}</span>
-                    </a> --}}
+                    </a>
                 </li>
+                @endif
 
                 <li
                     class="nav-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_products') == 1 ? 'd-block' : 'd-none' }}">
@@ -175,7 +182,7 @@
                         </span>
                     </a>
                 </li>
-                {{-- @if (@helper::checkaddons('question_answer'))
+                @if (@helper::checkaddons('question_answer') && ($user->allow_without_subscription == 1 || @$checkplan->product_qa == 1))
                     <li
                         class="nav-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_product_question_answer') == 1 ? 'd-block' : 'd-none' }}">
                         <a class="nav-link rounded {{ request()->is('admin/question_answer*') ? 'active' : '' }}"
@@ -188,9 +195,9 @@
                             </span>
                         </a>
                     </li>
-                @endif --}}
+                @endif
 
-                {{-- @if (@helper::checkaddons('product_import'))
+               @if (@helper::checkaddons('product_import') && ($user->allow_without_subscription == 1 || @$checkplan->bulk_import == 1))
                     <li
                         class="nav-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_import_product') == 1 ? 'd-block' : 'd-none' }}">
                         <a class="nav-link rounded {{ request()->is('admin/products/import') || request()->is('admin/media*') ? 'active' : '' }}"
@@ -200,8 +207,9 @@
                             </span>
                         </a>
                     </li>
-                @endif --}}
-                {{-- <li
+                @endif 
+           @if ($user->allow_without_subscription == 1 || @$checkplan->shipping_management == 1)
+           <li
                     class="av-item ps-4 mb-1 {{ helper::check_menu($role_id, 'role_shipping_management') == 1 ? 'd-block' : 'd-none' }}">
                     <a class="nav-link rounded  {{ request()->is('admin/shipping*') ? 'active' : '' }}"
                         aria-current="page" href="{{ URL::to('admin/shipping') }}">
@@ -209,7 +217,8 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.shipping_management') }}
                         </span>
                     </a>
-                </li> --}}
+                </li> 
+            @endif
             </ul>
         </li>
 
@@ -287,11 +296,9 @@
                 </li>
             </ul>
         </li>
-        {{-- @if (@helper::checkaddons('subscription'))
+        @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('coupon'))
                 @php
-                    $checkplan = App\Models\Transaction::where('vendor_id', $vendor_id)->orderByDesc('id')->first();
-
                     if ($user->allow_without_subscription == 1) {
                         $coupons = 1;
                     } else {
@@ -334,7 +341,7 @@
             @endif
         @endif
 
-        @if (@helper::checkaddons('top_deals'))
+        @if (@helper::checkaddons('top_deals') && ($user->allow_without_subscription == 1 || @$checkplan->top_deals == 1))
             <li
                 class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_top_deals') == 1 ? 'd-block' : 'd-none' }}">
                 <a class="nav-link d-flex rounded {{ request()->is('admin/top_deals') ? 'active' : '' }}"
@@ -349,7 +356,7 @@
                     </p>
                 </a>
             </li>
-        @endif --}}
+        @endif
 
         @if (@helper::checkaddons('firebase_notification'))
             <li
@@ -388,7 +395,7 @@
                 </a>
             </li>
         @endif
-        @if ($user->allow_without_subscription != 1)
+        @if ($user->allow_without_subscription != 1 and Auth::user()->type != 2 )
             <li
                 class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_pricing_plans') == 1 ? 'd-block' : 'd-none' }}">
                 <a class="nav-link rounded d-flex {{ request()->is('admin/plan*') ? 'active' : '' }}"

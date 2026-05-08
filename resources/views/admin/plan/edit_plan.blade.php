@@ -409,6 +409,55 @@
                                             </div>
                                         </div>
                                     @endif
+                                    
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-check-input" type="checkbox" name="reports" id="reports" @if ($editplan->reports == '1') checked @endif>
+                                            <label class="form-check-label" for="reports">{{ trans('labels.report') }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-check-input" type="checkbox" name="tax_report" id="tax_report" @if ($editplan->tax_report == '1') checked @endif>
+                                            <label class="form-check-label" for="tax_report">{{ trans('labels.tax') }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-check-input" type="checkbox" name="global_addons" id="global_addons" @if ($editplan->global_addons == '1') checked @endif>
+                                            <label class="form-check-label" for="global_addons">{{ trans('labels.global_extras') }}</label>
+                                        </div>
+                                    </div>
+                                    @if (@helper::checkaddons('question_answer'))
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <input class="form-check-input" type="checkbox" name="product_qa" id="product_qa" @if ($editplan->product_qa == '1') checked @endif>
+                                                <label class="form-check-label" for="product_qa">{{ trans('labels.product_question_answer') }}</label>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if (@helper::checkaddons('product_import'))
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <input class="form-check-input" type="checkbox" name="bulk_import" id="bulk_import" @if ($editplan->bulk_import == '1') checked @endif>
+                                                <label class="form-check-label" for="bulk_import">{{ trans('labels.product_upload') }}</label>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-check-input" type="checkbox" name="shipping_management" id="shipping_management" @if ($editplan->shipping_management == '1') checked @endif>
+                                            <label class="form-check-label" for="shipping_management">{{ trans('labels.shipping_management') }}</label>
+                                        </div>
+                                    </div>
+                                    @if (@helper::checkaddons('top_deals'))
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <input class="form-check-input" type="checkbox" name="top_deals" id="top_deals" @if ($editplan->top_deals == '1') checked @endif>
+                                                <label class="form-check-label" for="top_deals">{{ trans('labels.top_deals') }}</label>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-12">

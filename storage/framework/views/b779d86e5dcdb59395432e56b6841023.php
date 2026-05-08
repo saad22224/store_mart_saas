@@ -99,60 +99,27 @@
                                     $whatsapp_message = @$checkplan->whatsapp_message;
                                 }
                             ?>
-                            <?php if($whatsapp_message == 1 && @whatsapp_helper::whatsapp_message_config($storeinfo->id)->order_created == 1): ?>
-                                <?php if(@whatsapp_helper::whatsapp_message_config($storeinfo->id)->message_type == 2): ?>
-                                    <a href="https://api.whatsapp.com/send?phone=<?php echo e(@whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number); ?>&text=<?php echo e($whmessage); ?>"
-                                        target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
-                                        <i class="fab fa-whatsapp mx-2"></i>
-                                        <?php echo e(trans('labels.whatsapp_message')); ?>
+                            <?php if($whatsapp_message == 1): ?>
+                                <a href="https://api.whatsapp.com/send?phone=<?php echo e($storeinfo->whatsapp ?? $storeinfo->mobile); ?>&text=<?php echo e($whmessage); ?>"
+                                    target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
+                                    <i class="fab fa-whatsapp mx-2"></i>
+                                    <?php echo e(trans('labels.whatsapp_message')); ?>
 
-                                    </a>
-                                <?php endif; ?>
+                                </a>
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if(@helper::checkaddons('whatsapp_message')): ?>
-                            <?php if(@whatsapp_helper::whatsapp_message_config($storeinfo->id)->order_created == 1): ?>
-                                <?php if(@whatsapp_helper::whatsapp_message_config($storeinfo->id)->message_type == 2): ?>
-                                    <a href="https://api.whatsapp.com/send?phone=<?php echo e(@whatsapp_helper::whatsapp_message_config($storeinfo->id)->whatsapp_number); ?>&text=<?php echo e($whmessage); ?>"
-                                        target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
-                                        <i class="fab fa-whatsapp mx-2"></i>
-                                        <?php echo e(trans('labels.whatsapp_message')); ?>
+                            <a href="https://api.whatsapp.com/send?phone=<?php echo e($storeinfo->whatsapp ?? $storeinfo->mobile); ?>&text=<?php echo e($whmessage); ?>"
+                                target="_blank" class="btn btn-store btn-whatsapp mb-3 mb-md-0">
+                                <i class="fab fa-whatsapp mx-2"></i>
+                                <?php echo e(trans('labels.whatsapp_message')); ?>
 
-                                    </a>
-                                <?php endif; ?>
-                            <?php endif; ?>
+                            </a>
                         <?php endif; ?>
                     <?php endif; ?>
 
-                    <?php if(@helper::checkaddons('subscription')): ?>
-                        <?php if(@helper::checkaddons('telegram_message')): ?>
-                            <?php
-                                $checkplan = App\Models\Transaction::where('vendor_id', $storeinfo->id)
-                                    ->orderByDesc('id')
-                                    ->first();
-                                $user = App\Models\User::where('id', $storeinfo->id)->first();
-                                if (@$user->allow_without_subscription == 1) {
-                                    $telegram_message = 1;
-                                } else {
-                                    $telegram_message = @$checkplan->telegram_message;
-                                }
-                            ?>
-                            <?php if($telegram_message == 1 && helper::telegramdata($storeinfo->id)->order_created == 1): ?>
-                                <a href="<?php echo e(URL::to($storeinfo->slug . '/telegram/' . $order_number . '')); ?>"
-                                    class="btn btn-store btn-telegram mx-md-2 mb-3 mb-md-0">
-                                    <i class="fab fa-telegram mx-2"></i><?php echo e(trans('labels.telegram_message')); ?></a>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <?php if(@helper::checkaddons('telegram_message')): ?>
-                            <?php if(helper::telegramdata($storeinfo->id)->order_created == 1): ?>
-                                <a href="<?php echo e(URL::to($storeinfo->slug . '/telegram/' . $order_number . '')); ?>"
-                                    class="btn btn-store btn-telegram mx-md-2 mb-3 mb-md-0">
-                                    <i class="fab fa-telegram mx-2"></i><?php echo e(trans('labels.telegram_message')); ?></a>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endif; ?>
+                    
 
                 </div>
             </div>

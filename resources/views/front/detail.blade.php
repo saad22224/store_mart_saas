@@ -343,7 +343,7 @@
                                             class="btn btn-enquir m-0 add-btn px-0 w-100 h-100" id="enquiries"
                                             target="_blank">
                                             <i
-                                                class="fa-brands fa-whatsapp fs-5 {{ session()->get('direction') == 2 ? 'glyphicon' : '' }}"></i>
+                                                class="fa-brands fa-whatsapp fs-5"></i>
                                             <span class="px-1">{{ trans('labels.enquiries') }}</span>
                                         </a>
                                     </div>

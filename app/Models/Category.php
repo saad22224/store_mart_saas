@@ -9,5 +9,6 @@ class Category extends Model
 {
     use HasFactory;
     protected $table = 'categories';
+    protected $fillable = ['reorder_id', 'vendor_id', 'name', 'slug', 'image', 'is_available', 'is_deleted'];
   
 }

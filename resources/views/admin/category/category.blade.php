@@ -38,6 +38,7 @@
                                         @endif
                                     @endif
                                     <td>{{ trans('labels.srno') }}</td>
+                                    <td>{{ trans('labels.image') }}</td>
                                     <td>{{ trans('labels.category') }}</td>
                                     <td>{{ trans('labels.status') }}</td>
                                     <td>{{ trans('labels.created_date') }}</td>
@@ -56,6 +57,9 @@
                                             <td><input type="checkbox" class="row-checkbox form-check-input checkbox-style" value="{{ $category->id }}"></td>
                                         @endif
                                         <td>@php echo $i++ @endphp</td>
+                                        <td>
+                                            <img src="{{ helper::image_path($category->image) }}" class="img-fluid rounded-circle" style="height: 50px; width: 50px; object-fit: cover;">
+                                        </td>
                                         <td>{{ $category->name }}</td>
                                         <td>
                                             @if ($category->is_available == '1')

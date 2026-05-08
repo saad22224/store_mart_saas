@@ -152,7 +152,7 @@ class HomeController extends Controller
     public function show(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        $getitem = Item::where('cat_id', '=', $request->id)->where('is_available', '1')->where('vendor_id', @$storeinfo->id)->orderBy('reorder_id', 'ASC')->paginate(15)->onEachSide(0);
+        $getitem = Item::whereRaw("FIND_IN_SET(?, replace(cat_id, '|', ','))", [$request->id])->where('is_available', '1')->where('vendor_id', @$storeinfo->id)->orderBy('reorder_id', 'ASC')->paginate(15)->onEachSide(0);
         $settingdata = Settings::where('vendor_id', $storeinfo->id)->select('template')->first();
         $cartitems = Cart::select('id', 'item_id', 'item_name', 'item_image', 'item_price', 'extras_name', 'extras_price', 'qty', 'price', 'tax', 'variants_id', 'variants_name')
             ->where('vendor_id', @$storeinfo->id);
@@ -1398,22 +1398,18 @@ class HomeController extends Controller
         if ($staticValue == 'topdeals') {
             $itemlist = Item::with(['variation', 'extras', 'product_image', 'multi_image'])
                 ->select('items.*', DB::raw('ROUND(AVG(testimonials.star),1) as ratings_average'))
-                ->join('categories', 'categories.id', 'items.cat_id')
                 ->leftjoin('testimonials', 'testimonials.item_id', 'items.id')
                 ->where('items.top_deals', 1)
                 ->where('items.vendor_id', @$storeinfo->id)
                 ->where('items.is_available', '1')
-                ->where('items.is_deleted', '2')
-                ->where('categories.is_available', '1');
+                ->where('items.is_deleted', '2');
         } else {
             $itemlist = Item::with(['variation', 'extras', 'product_image', 'multi_image'])
                 ->select('items.*', DB::raw('ROUND(AVG(testimonials.star),1) as ratings_average'))
-                ->join('categories', 'categories.id', 'items.cat_id')
                 ->leftjoin('testimonials', 'testimonials.item_id', 'items.id')
                 ->where('items.vendor_id', @$storeinfo->id)
                 ->where('items.is_available', '1')
-                ->where('items.is_deleted', '2')
-                ->where('categories.is_available', '1');
+                ->where('items.is_deleted', '2');
         }
 
         if ($request->has('category') && $request->category != null) {

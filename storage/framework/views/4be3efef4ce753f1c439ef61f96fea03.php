@@ -79,6 +79,18 @@
                 --bs-secondary: <?php echo e(helper::appdata($storeinfo->id)->secondary_color . '10'); ?>;
             <?php endif; ?>
         }
+        body {
+            font-family: 'Cairo', sans-serif !important;
+        }
+        h1, h2, h3, h4, h5, h6, .color-changer, .nav-link, .btn {
+            font-family: 'Cairo', sans-serif !important;
+        }
+        i, .fa, .fas, .far, .fal, .fa-solid, .fa-regular, .fa-light, [class^="fa-"]:not(.fa-brands):not(.fab), [class*=" fa-"]:not(.fa-brands):not(.fab) {
+            font-family: "Font Awesome 6 Pro", "Font Awesome 6 Free", sans-serif !important;
+        }
+        .fa-brands, .fab {
+            font-family: "Font Awesome 6 Brands" !important;
+        }
     </style>
     <!-- PWA  -->
     <?php if(@helper::checkaddons('subscription')): ?>

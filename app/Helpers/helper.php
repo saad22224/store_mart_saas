@@ -224,6 +224,18 @@ class helper
             if (file_exists(storage_path('app/public/media/' . $image))) {
                 $path = url(env('ASSETPATHURL') . 'media/' . $image);
             }
+            if (file_exists(storage_path('app/public/category/' . $image))) {
+                $path = url(env('ASSETPATHURL') . 'category/' . $image);
+            }
+        }
+        if (Str::contains($image, 'cat-')) {
+            if (file_exists(storage_path('app/public/admin-assets/images/category/' . $image))) {
+                $path = url(env('ASSETPATHURL') . 'admin-assets/images/category/' . $image);
+            }
+            // Fallback for direct public/category if needed
+            if (file_exists(storage_path('app/public/category/' . $image))) {
+                $path = url(env('ASSETPATHURL') . 'category/' . $image);
+            }
         }
         if (Str::contains($image, 'banner') || Str::contains($image, 'promotion-')) {
             if (file_exists(storage_path('app/public/admin-assets/images/banners/' . $image))) {
@@ -1006,6 +1018,19 @@ class helper
             $dummyCategory->slug = 'product-' . $vendor_id;
             $dummyCategory->is_available = 1;
             $dummyCategory->is_deleted = 2;
+            
+            // Default image for dummy category
+            $dummyCatImage = 'item-' . uniqid() . '.jpeg';
+            if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
+                if (!file_exists(storage_path('app/public/category/'))) {
+                    mkdir(storage_path('app/public/category/'), 0777, true);
+                }
+                copy(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'), storage_path('app/public/category/' . $dummyCatImage));
+                $dummyCategory->image = $dummyCatImage;
+            } else {
+                $dummyCategory->image = 'default.png';
+            }
+            
             $dummyCategory->save();
 
             if (!file_exists(storage_path('app/public/item/'))) {

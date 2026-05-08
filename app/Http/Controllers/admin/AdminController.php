@@ -277,18 +277,53 @@ class AdminController extends Controller
     public function onboarding_save_categories(Request $request)
     {
         $vendor_id = Auth::user()->id;
-        $names = $request->categories;
-        if (!empty($names) && is_array($names)) {
-            foreach ($names as $name) {
-                $name = trim($name);
+        $categories_data = $request->categories;
+        
+        if (!empty($categories_data) && is_array($categories_data)) {
+            foreach ($categories_data as $index => $data) {
+                $name = trim($data['name'] ?? '');
                 if (empty($name)) continue;
+                
                 $slug = \Illuminate\Support\Str::slug($name, '-');
                 $exists = \App\Models\Category::where('slug', $slug)->where('vendor_id', $vendor_id)->first();
+                
                 if (!$exists) {
                     $cat = new \App\Models\Category();
                     $cat->vendor_id = $vendor_id;
                     $cat->name = $name;
                     $cat->slug = $slug ?: $slug . '-' . uniqid();
+                    
+                    // Handle image
+                    $image_name = 'default.png';
+                    $file = $request->file("categories.$index.image");
+                    if ($file && $file instanceof \Illuminate\Http\UploadedFile) {
+                        $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+                        $image_name = $imageOptimizationService->upload($file, 'category');
+                    } elseif (!empty($data['img_url'])) {
+                        // For default categories, download and save
+                        $image_name = 'default.png'; 
+                        try {
+                            if (strpos($data['img_url'], 'http') === 0) {
+                                $image_name = 'cat-' . uniqid() . '.png';
+                                $dir = storage_path('app/public/admin-assets/images/category/');
+                                if (!file_exists($dir)) {
+                                    mkdir($dir, 0777, true);
+                                }
+                                
+                                $client = new \GuzzleHttp\Client();
+                                $response = $client->get($data['img_url'], ['verify' => false]);
+                                if ($response->getStatusCode() == 200) {
+                                    file_put_contents($dir . $image_name, $response->getBody());
+                                } else {
+                                    $image_name = 'default.png';
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            $image_name = 'default.png';
+                        }
+                    }
+                    
+                    $cat->image = $image_name;
                     $cat->save();
                 }
             }

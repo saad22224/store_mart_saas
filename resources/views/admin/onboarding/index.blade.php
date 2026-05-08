@@ -24,17 +24,26 @@
     .ob-ico-2{background:rgba(236,72,153,.15);color:#f472b6}
     .ob-ico-3{background:rgba(245,158,11,.15);color:#fbbf24}
 
-    /* Category chips */
-    .cat-grid{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}
-    .cat-chip{padding:.6rem 1.2rem;border-radius:12px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);color:#cbd5e1;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .25s;user-select:none}
-    .cat-chip:hover{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.08)}
-    .cat-chip.picked{background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(168,85,247,.15));border-color:#6366f1;color:#fff;box-shadow:0 0 12px rgba(99,102,241,.2)}
-    .cat-chip.picked::before{content:'✓ ';font-weight:800}
-    .cat-custom{display:flex;gap:.5rem;margin-bottom:1rem}
-    .cat-custom input{flex:1;padding:.6rem 1.2rem;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e2e8f0;font-size:.85rem}
-    .cat-custom input::placeholder{color:#64748b}
-    .cat-custom button{padding:.6rem 1.2rem;border-radius:12px;background:rgba(99,102,241,.2);border:1.5px solid rgba(99,102,241,.3);color:#a78bfa;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s}
-    .cat-custom button:hover{background:rgba(99,102,241,.3)}
+    /* Category Grid */
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:1.5rem;margin-bottom:2rem}
+    .cat-chip{display:flex;flex-direction:column;align-items:center;gap:.75rem;cursor:pointer;transition:all .3s;padding:10px;border-radius:16px}
+    .cat-img-box{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.05);border:2.5px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:all .3s;position:relative}
+    .cat-img-box img{width:100%;height:100%;object-fit:cover;transition:all .4s}
+    .cat-chip:hover .cat-img-box{border-color:rgba(99,102,241,.5);transform:translateY(-5px);box-shadow:0 8px 20px rgba(99,102,241,.2)}
+    .cat-chip.picked .cat-img-box{border-color:#6366f1;background:rgba(99,102,241,.15);box-shadow:0 0 20px rgba(99,102,241,.4)}
+    .cat-chip.picked .cat-img-box::after{content:'✓';position:absolute;top:0;right:0;width:24px;height:24px;background:#6366f1;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #1e293b}
+    .cat-name-lbl{color:#cbd5e1;font-size:.85rem;font-weight:700;text-align:center;transition:all .3s}
+    .cat-chip.picked .cat-name-lbl{color:#fff}
+
+    .cat-custom-wrap{background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.15);border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+    .cat-custom{display:flex;gap:.75rem;align-items:center}
+    .cat-custom-img-up{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.05);border:1.5px dashed rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#94a3b8;transition:all .2s;overflow:hidden;flex-shrink:0}
+    .cat-custom-img-up:hover{border-color:#6366f1;color:#6366f1;background:rgba(99,102,241,.1)}
+    .cat-custom-img-up img{width:100%;height:100%;object-fit:cover}
+    .cat-custom input{flex:1;padding:.75rem 1.25rem;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e2e8f0;font-size:.9rem}
+    .cat-custom input:focus{border-color:#6366f1;outline:none}
+    .cat-custom button{padding:.75rem 1.5rem;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .3s}
+    .cat-custom button:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(99,102,241,.3)}
 
     /* Settings rows */
     .set-row{margin-bottom:1.2rem}
@@ -54,6 +63,13 @@
     .ob-skip{color:#64748b;font-size:.82rem;text-decoration:none;cursor:pointer}
     .ob-skip:hover{color:#e2e8f0}
     .ob-saved{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .7rem;border-radius:8px;background:rgba(16,185,129,.15);color:#34d399;font-size:.75rem;font-weight:600}
+    /* Icon Fix - Broadest Possible */
+    i, .fa, .fas, .far, .fal, .fa-solid, .fa-regular, .fa-light, [class^="fa-"]:not(.fa-brands):not(.fab), [class*=" fa-"]:not(.fa-brands):not(.fab) { 
+        font-family: "Font Awesome 6 Pro", "Font Awesome 6 Free", sans-serif !important; 
+    }
+    .fa-brands, .fab {
+        font-family: "Font Awesome 6 Brands" !important;
+    }
     @media(max-width:640px){.ob-card{padding:1.5rem}.ob-h{font-size:1.1rem}.ob-line{width:20px}.cat-grid{gap:.4rem}.cat-chip{padding:.45rem .8rem;font-size:.78rem}}
 </style>
 
@@ -80,16 +96,49 @@
 
             <div class="cat-grid" id="catGrid">
                 @php
-                $defaultCats = ['ملابس رجالية','ملابس نسائية','أحذية','حقائب','إكسسوارات','إلكترونيات','هواتف','أجهزة منزلية','عطور','مستحضرات تجميل','ألعاب أطفال','أدوات مكتبية','رياضة','طعام ومشروبات','كتب'];
+                $defaultCats = [
+                    ['name' => 'ملابس رجالية', 'img' => 'https://img.icons8.com/color/144/t-shirt.png'],
+                    ['name' => 'ملابس نسائية', 'img' => 'https://img.icons8.com/color/144/dress.png'],
+                    ['name' => 'أحذية', 'img' => 'https://img.icons8.com/color/144/sneakers.png'],
+                    ['name' => 'حقائب اكسسوارات', 'img' => 'https://img.icons8.com/color/144/handbag.png'],
+                    ['name' => 'ساعات', 'img' => 'https://img.icons8.com/color/144/clock.png'],
+                    ['name' => 'مجوهرات', 'img' => 'https://img.icons8.com/color/144/diamond.png'],
+                    ['name' => 'إلكترونيات', 'img' => 'https://img.icons8.com/color/144/electronics.png'],
+                    ['name' => 'هواتف', 'img' => 'https://img.icons8.com/color/144/smartphone.png'],
+                    ['name' => 'لابتوب', 'img' => 'https://img.icons8.com/color/144/laptop.png'],
+                    ['name' => 'عطور', 'img' => 'https://img.icons8.com/color/144/perfume-bottle.png'],
+                    ['name' => 'مستحضرات تجميل', 'img' => 'https://img.icons8.com/color/144/makeup.png'],
+                    ['name' => 'طعام ومشروبات', 'img' => 'https://img.icons8.com/color/144/food-and-wine.png'],
+                    ['name' => 'أدوات منزلية', 'img' => 'https://img.icons8.com/color/144/home.png'],
+                    ['name' => 'أثاث', 'img' => 'https://img.icons8.com/color/144/sofa.png'],
+                    ['name' => 'ألعاب أطفال', 'img' => 'https://img.icons8.com/color/144/teddy-bear.png'],
+                    ['name' => 'نظارات', 'img' => 'https://img.icons8.com/color/144/glasses.png'],
+                    ['name' => 'مستلزمات حيوانات', 'img' => 'https://img.icons8.com/color/144/pet-commands-summon.png'],
+                    ['name' => 'رياضة', 'img' => 'https://img.icons8.com/color/144/basketball.png'],
+                    ['name' => 'كتب', 'img' => 'https://img.icons8.com/color/144/book.png'],
+                    ['name' => 'سيارات', 'img' => 'https://img.icons8.com/color/144/car.png'],
+                ];
                 @endphp
                 @foreach($defaultCats as $c)
-                <div class="cat-chip" onclick="toggleCat(this)" data-name="{{$c}}">{{$c}}</div>
+                <div class="cat-chip" onclick="toggleCat(this)" data-name="{{$c['name']}}" data-img="{{$c['img']}}">
+                    <div class="cat-img-box">
+                        <img src="{{$c['img']}}" alt="{{$c['name']}}">
+                    </div>
+                    <div class="cat-name-lbl">{{$c['name']}}</div>
+                </div>
                 @endforeach
             </div>
 
-            <div class="cat-custom">
-                <input type="text" id="customCat" placeholder="أضف قسم مخصص..." onkeypress="if(event.key==='Enter'){event.preventDefault();addCustom()}">
-                <button type="button" onclick="addCustom()"><i class="fa-solid fa-plus me-1"></i>أضف</button>
+            <div class="cat-custom-wrap">
+                <div class="cat-custom">
+                    <div class="cat-custom-img-up" onclick="document.getElementById('customCatImg').click()" title="ارفع صورة للقسم">
+                        <i class="fa-solid fa-camera" id="customCatIcon"></i>
+                        <img id="customCatPreview" style="display:none">
+                    </div>
+                    <input type="file" id="customCatImg" style="display:none" accept="image/*" onchange="previewCustomCat(this)">
+                    <input type="text" id="customCat" placeholder="أضف قسم مخصص..." onkeypress="if(event.key==='Enter'){event.preventDefault();addCustom()}">
+                    <button type="button" onclick="addCustom()"><i class="fa-solid fa-plus me-1"></i>أضف</button>
+                </div>
             </div>
 
             <span id="catSaved" class="ob-saved" style="display:none"><i class="fa-solid fa-check"></i> تم الحفظ</span>
@@ -198,6 +247,54 @@
     </div>
 </div>
 </div>
+
+<script>
+    function toggleCat(el){el.classList.toggle('picked');}
+    function previewCustomCat(input){
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('customCatPreview').src = e.target.result;
+                document.getElementById('customCatPreview').style.display = 'block';
+                document.getElementById('customCatIcon').style.display = 'none';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function addCustom(){
+        let inp=document.getElementById('customCat');
+        let v=inp.value.trim();
+        if(!v) { toastr.warning('يرجى إدخال اسم القسم'); return; }
+        
+        let imgInp = document.getElementById('customCatImg');
+        let imgSrc = document.getElementById('customCatPreview').src || 'https://img.icons8.com/color/144/categories.png';
+        
+        let grid = document.getElementById('catGrid');
+        let chip=document.createElement('div');
+        chip.className='cat-chip picked';
+        chip.dataset.name = v;
+        chip.dataset.img = imgSrc;
+        if(imgInp.files && imgInp.files[0]) {
+            chip._file = imgInp.files[0];
+        }
+        chip.onclick = function(){ toggleCat(this); };
+        
+        chip.innerHTML = `
+            <div class="cat-img-box">
+                <img src="${imgSrc}" alt="${v}">
+            </div>
+            <div class="cat-name-lbl">${v}</div>
+        `;
+        
+        grid.appendChild(chip);
+        inp.value='';
+        document.getElementById('customCatPreview').style.display = 'none';
+        document.getElementById('customCatPreview').src = '';
+        document.getElementById('customCatIcon').style.display = 'block';
+        imgInp.value = '';
+        toastr.success('تمت إضافة القسم');
+    }
+</script>
 @endsection
 
 @section('scripts')
@@ -222,31 +319,24 @@ function goStep(s) {
     }
 }
 
-function toggleCat(el){el.classList.toggle('picked');}
-
-function addCustom(){
-    let inp=document.getElementById('customCat');
-    let v=inp.value.trim();
-    if(!v)return;
-    let chip=document.createElement('div');
-    chip.className='cat-chip picked';
-    chip.setAttribute('data-name',v);
-    chip.textContent=v;
-    chip.setAttribute('onclick','toggleCat(this)');
-    document.getElementById('catGrid').appendChild(chip);
-    inp.value='';
-}
-
 function saveAndNext(currentStep){
     if(currentStep==1){
         let picked=document.querySelectorAll('#catGrid .cat-chip.picked');
-        let cats=[];
-        picked.forEach(c=>cats.push(c.dataset.name));
-        if(cats.length==0){toastr.warning('اختر قسم واحد على الأقل');return;}
+        if(picked.length==0){toastr.warning('اختر قسم واحد على الأقل');return;}
+        
+        let formData = new FormData();
+        picked.forEach((c, index) => {
+            formData.append('categories['+index+'][name]', c.dataset.name);
+            formData.append('categories['+index+'][img_url]', c.dataset.img || '');
+            if(c._file) {
+                formData.append('categories['+index+'][image]', c._file);
+            }
+        });
+        formData.append('_token', '{{ csrf_token() }}');
+
         fetch("{{ URL::to('admin/onboarding/save-categories') }}",{
             method:'POST',
-            headers:{'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}'},
-            body:JSON.stringify({categories:cats})
+            body:formData
         }).then(r=>r.json()).then(d=>{
             if(d.status==1){
                 let select = document.getElementById('prodCategory');

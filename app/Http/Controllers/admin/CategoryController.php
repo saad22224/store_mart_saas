@@ -51,6 +51,12 @@ class CategoryController extends Controller
         $savecategory->vendor_id = $vendor_id;
         $savecategory->name = $request->category_name;
         $savecategory->slug = $slug;
+        if ($request->hasFile('category_image')) {
+            $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+            $savecategory->image = $imageOptimizationService->upload($request->file('category_image'), 'category');
+        } else {
+            $savecategory->image = 'default.png';
+        }
         $savecategory->save();
         return redirect('admin/categories/')->with('success', trans('messages.success'));
     }
@@ -75,6 +81,10 @@ class CategoryController extends Controller
         }
         $editcategory = Category::where('slug', $request->slug)->first();
         $editcategory->name = $request->category_name;
+        if ($request->hasFile('category_image')) {
+            $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+            $editcategory->image = $imageOptimizationService->upload($request->file('category_image'), 'category');
+        }
         $editcategory->slug = $slug;
         $editcategory->update();
         return redirect('admin/categories')->with('success', trans('messages.success'));

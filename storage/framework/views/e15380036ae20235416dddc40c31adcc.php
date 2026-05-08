@@ -45,10 +45,23 @@
     <link rel="stylesheet" href="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/css/magnific/magnific-popup.min.css')); ?>">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
         :root {
             /* Color */
             --bs-primary: <?php echo e(helper::appdata('')->primary_color); ?>;
             --bs-secondary: <?php echo e(helper::appdata('')->secondary_color); ?>;
+        }
+        body {
+            font-family: 'Cairo', sans-serif !important;
+        }
+        h1, h2, h3, h4, h5, h6, .color-changer, .nav-link, .btn {
+            font-family: 'Cairo', sans-serif !important;
+        }
+        i, .fa, .fas, .far, .fal, .fa-solid, .fa-regular, .fa-light, [class^="fa-"]:not(.fa-brands):not(.fab), [class*=" fa-"]:not(.fa-brands):not(.fab) {
+            font-family: "Font Awesome 6 Pro", "Font Awesome 6 Free", sans-serif !important;
+        }
+        .fa-brands, .fab {
+            font-family: "Font Awesome 6 Brands" !important;
         }
     </style>
 </head>

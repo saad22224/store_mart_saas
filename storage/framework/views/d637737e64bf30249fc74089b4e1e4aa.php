@@ -149,8 +149,8 @@
                         <div class="t7-footer-icon">
                             <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="mailto:<?php echo e($storeinfo->email); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            <?php echo e($storeinfo->email); ?>
+                        <a href="mailto:<?php echo e(helper::appdata(@$storeinfo->id)->email); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            <?php echo e(helper::appdata(@$storeinfo->id)->email); ?>
 
                         </a>
                     </li>

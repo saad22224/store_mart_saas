@@ -147,8 +147,8 @@
                         <div class="t7-footer-icon">
                             <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="mailto:{{ $storeinfo->email }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            {{ $storeinfo->email }}
+                        <a href="mailto:{{ helper::appdata(@$storeinfo->id)->email }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            {{ helper::appdata(@$storeinfo->id)->email }}
                         </a>
                     </li>
                     <li>

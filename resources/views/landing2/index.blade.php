@@ -1146,8 +1146,10 @@
                         <a href="?lang=en" class="lang-option {{ $lang == 'en' ? 'active' : '' }}">🇬🇧 English</a>
                     </div>
                 </div>
-                
-                <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary hidden md:block">{{ @$translations['nav']['start_now'] ?? 'ابدأ الآن' }}</button>
+                <div class="hidden md:flex" style="gap: 0.5rem; align-items: center;">
+                    <button onclick="window.location.href = '{{ url('admin') }}'" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.55rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
+                </div>
                 <span class="material-symbols-outlined nav-hamburger" onclick="toggleMobileMenu()">menu</span>
             </div>
         </nav>
@@ -1176,6 +1178,11 @@
                 <a href="#why-us" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
                 <a href="#faq" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
                 <a href="#contact" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
+                
+                <div style="display:flex; flex-direction:column; gap: 1rem; width: 100%; max-width: 300px; margin-top: 1rem; align-items: stretch;">
+                    <button onclick="window.location.href = '{{ url('admin') }}'" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.8rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1.1rem; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
+                </div>
             </div>
             <button onclick="closeMobileMenu()" style="
                 position: absolute;

@@ -248,7 +248,7 @@
                                     <h6 class="m-0 fw-500 product-text-size">
                                         <span class="fw-500 mb-3"> {{ @$item->item_name }} @if ($item->variants_name != null)
                                                 - ({{ $item->variants_name }} :
-                                                {{$item->variants_price, $vendor_id}}
+                                                {{ $item->variants_price, $vendor_id }}
                                             @endif
                                         </span>
                                         @if ($item->extras_id != '')
@@ -262,7 +262,7 @@
                                             @foreach ($extras_id as $key => $addons)
                                                 <small>
                                                     <b class="text-muted">{{ $extras_name[$key] }}</b> :
-                                                    {{$extras_price[$key], $vendor_id}}
+                                                    {{ $extras_price[$key], $vendor_id }}
                                                     <br>
                                                 </small>
                                                 @php
@@ -294,7 +294,7 @@
                                 </td>
                                 <td class="py-2 pe-0 text-end">
                                     <p class="text-dark fw-500 line-1 m-0  product-text-size">
-                                        {{$total, $vendor_id}}
+                                        {{ $total, $vendor_id }}
                                     </p>
                                 </td>
                             </tr>
@@ -319,7 +319,7 @@
                         </td>
                         <td class="py-2 pe-0 text-end">
                             <p class="text-dark line-1 fw-500 m-0  product-text-size">
-                                {{$getorderdata->sub_total, $vendor_id}}
+                                {{ $getorderdata->sub_total, $vendor_id }}
                             </p>
                         </td>
                     </tr>
@@ -338,7 +338,7 @@
                                     </div>
                                     <div class="">
                                         <span class="txt-resept-font-size fw-500 text-uppercase text-end line-1">
-                                            {{$getorderdata->discount_amount, $vendor_id}}
+                                            {{ $getorderdata->discount_amount, $vendor_id }}
                                         </span>
                                     </div>
                                 </div>
@@ -355,7 +355,7 @@
                                             {{ @$tax_name[$key] }}
                                         </span>
                                         <span class="txt-resept-font-size fw-500 text-uppercase line-1 text-end">
-                                            {{@(float) $tax[$key], $vendor_id}}
+                                            {{ @(float) $tax[$key], $vendor_id }}
                                         </span>
                                     </div>
                                 @endforeach
@@ -370,7 +370,7 @@
                                     </span>
                                     <span class="txt-resept-font-size fw-500 text-uppercase line-1 text-end">
                                         @if ($getorderdata->delivery_charge > 0)
-                                        {{$getorderdata->delivery_charge, $vendor_id}}
+                                            {{ $getorderdata->delivery_charge, $vendor_id }}
                                         @else
                                             {{ trans('labels.free') }}
                                         @endif
@@ -384,7 +384,7 @@
             <div class="col-12 d-flex justify-content-between fw-600 text-dark underline-3 py-2">
                 <span class="fw-semibold product-text-size line-1">{{ trans('labels.total_amount') }}</span>
                 <span class="fw-semibold line-1 product-text-size">
-                    {{$getorderdata->grand_total, $vendor_id}}
+                    {{ $getorderdata->grand_total, $vendor_id }}
                 </span>
             </div>
             @if (@helper::checkaddons('vendor_tip'))
@@ -392,7 +392,7 @@
                     <div class="col-12 d-flex justify-content-between py-2">
                         <span class="fw-semibold product-text-size line-1">{{ trans('labels.tips') }}</span>
                         <span class="fw-semibold line-1 product-text-size">
-                            {{$getorderdata->tips, $getorderdata->vendor_id}}
+                            {{ $getorderdata->tips, $getorderdata->vendor_id }}
                         </span>
                     </div>
                 @endif

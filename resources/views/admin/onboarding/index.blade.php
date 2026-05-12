@@ -677,6 +677,13 @@
                                 placeholder="المدينة، الشارع">
                         </div>
                         <div class="col-md-12 set-row">
+                            <label>العملة *</label>
+                            <select id="setCurrency">
+                                <option value="ls" {{ @$settings->default_currency == 'ls' ? 'selected' : '' }}>ليرة سورية (ل.س)</option>
+                                <option value="usd" {{ @$settings->default_currency == 'usd' ? 'selected' : '' }}>دولار أمريكي ($)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 set-row">
                             <label>شعار المتجر (Logo)</label>
                             <input type="file" id="setLogo" accept="image/*">
                         </div>
@@ -886,6 +893,7 @@
                 let mobile = document.getElementById('setMobile').value;
                 let address = document.getElementById('setAddress').value;
                 let whatsapp = document.getElementById('setWhatsapp').value;
+                let currency = document.getElementById('setCurrency').value;
                 let logo = document.getElementById('setLogo').files[0];
 
                 if (!email || !mobile || !address) {
@@ -898,6 +906,7 @@
                 formData.append('mobile', mobile);
                 formData.append('address', address);
                 formData.append('whatsapp', whatsapp);
+                formData.append('currency', currency);
                 if (logo) formData.append('logo', logo);
                 formData.append('_token', '{{ csrf_token() }}');
 

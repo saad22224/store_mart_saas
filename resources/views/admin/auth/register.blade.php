@@ -311,9 +311,9 @@
                         <div class="form-step active" id="step1">
                             <div class="row">
                                 <div class="col-12 reg-form-group">
-                                    <label for="name">{{ trans('labels.name') }}<span class="text-danger">*</span></label>
+                                    <label for="name">{{ trans('labels.name') == 'Name' ? 'Store Name' : 'إسم المتجر' }}<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" value="{{ old('name') }}" id="name"
-                                        placeholder="{{ trans('labels.name') }}" required>
+                                        placeholder="{{ trans('labels.name') == 'Name' ? 'Store Name' : 'إسم المتجر' }}" required>
                                 </div>
                                 <div class="col-12 reg-form-group">
                                     <label for="email">{{ trans('labels.email') }}<span class="text-danger">*</span></label>
@@ -322,8 +322,22 @@
                                 </div>
                                 <div class="col-12 reg-form-group">
                                     <label for="mobile">{{ trans('labels.mobile') }}<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control mobile-number" name="mobile" value="{{ old('mobile') }}" id="mobile"
-                                        placeholder="{{ trans('labels.mobile') }}" required>
+                                    <div class="input-group" dir="ltr">
+                                        <select class="form-select" name="country_code" style="max-width: 120px; border-radius: 12px 0 0 12px;">
+                                            <option value="+963" selected>🇸🇾 +963</option>
+                                            <option value="+966">🇸🇦 +966</option>
+                                            <option value="+971">🇦🇪 +971</option>
+                                            <option value="+965">🇰🇼 +965</option>
+                                            <option value="+974">🇶🇦 +974</option>
+                                            <option value="+973">🇧🇭 +973</option>
+                                            <option value="+968">🇴🇲 +968</option>
+                                            <option value="+20">🇪🇬 +20</option>
+                                            <option value="+962">🇯🇴 +962</option>
+                                            <option value="+961">🇱🇧 +961</option>
+                                        </select>
+                                        <input type="text" class="form-control mobile-number" name="mobile" value="{{ old('mobile') }}" id="mobile"
+                                            placeholder="{{ trans('labels.mobile') }}" required style="border-radius: 0 12px 12px 0;">
+                                    </div>
                                 </div>
                                 <div class="col-12 reg-form-group">
                                     <label for="password">{{ trans('labels.password') }}<span class="text-danger">*</span></label>

@@ -87,7 +87,6 @@ class CurrencyController extends Controller
             return response()->json(['status' => 1, 'msg' => trans('messages.success')], 200);
         } catch (\Throwable $th) {
             return response()->json(['status' => 0, 'msg' => trans('messages.error')], 200);
-
         }
     }
 
@@ -280,10 +279,8 @@ class CurrencyController extends Controller
                 $currency->delete();
             }
             return response()->json(['status' => 1, 'msg' => trans('messages.success')], 200);
-           
         } catch (\Throwable $th) {
             return response()->json(['status' => 0, 'msg' => trans('messages.error')], 200);
-
         }
     }
     //-------------------------------------------- Currencies Add Edit Delete End -----------------------------------------------//

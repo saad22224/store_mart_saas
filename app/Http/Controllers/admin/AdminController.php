@@ -401,6 +401,7 @@ class AdminController extends Controller
             if ($request->has('email')) { $settings->email = $request->email; }
             if ($request->has('mobile')) { $settings->contact = $request->mobile; $settings->mobile = $request->mobile; }
             if ($request->has('address')) { $settings->address = $request->address; }
+            if ($request->has('currency')) { $settings->default_currency = $request->currency; }
             
             if ($request->hasFile('logo')) {
                 $file = $request->file('logo');

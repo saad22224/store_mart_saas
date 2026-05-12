@@ -30,7 +30,7 @@ class ProductController extends Controller
         } else {
             $vendor_id = Auth::user()->id;
         }
-        $getproductslist = Item::with('variation', 'category_info', 'product_image')->where('vendor_id',  $vendor_id)->where('is_deleted', 2)->orderBy('reorder_id')->get();
+        $getproductslist = Item::with('variation', 'category_info', 'product_image')->where('vendor_id',  $vendor_id)->where('is_deleted', 2)->orderByDesc('id')->get();
         return view('admin.product.product', compact('getproductslist'));
     }
     public function add(Request $request)

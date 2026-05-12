@@ -232,7 +232,7 @@
             <div class="d-flex align-items-center gap-2">
                 <span class="text-dark color-changer opacity-75 fs-7">Powered by</span>
                 <a href="<?php echo e(url('/')); ?>" target="_blank" class="d-flex align-items-center">
-                    <img src="<?php echo e(asset('public/images/matjarhub.png')); ?>" alt="matjarhub" style="height: 28px; object-fit: contain;">
+                    <img src="<?php echo e(asset('public/images/matjarhub.png')); ?>" alt="matjarhub" style="height: 75px; object-fit: contain;">
                 </a>
             </div>
         </div>

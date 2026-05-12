@@ -1001,10 +1001,12 @@
                                 </div>
                                 <div class="card-footer px-0 bg-transparent border-0">
                                     <p class="pro-pricing color-changer line-1 m-0">
-                                        {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
+                                        {{ helper::currency_formate($price, $storeinfo->id, helper::currencyinfo($storeinfo->id)->currency) }}
+                                        {{-- {{ dd($item->currency) }} --}}
+                                        {{-- {{ dd(helper::currencyinfo($storeinfo->id)) }} --}}
                                         @if ($original_price > $price)
                                             <span class="old-price">
-                                                {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
+                                                {{ helper::currency_formate($original_price, $storeinfo->id, helper::currencyinfo($storeinfo->id)->currency) }}
                                             </span>
                                         @endif
                                     </p>

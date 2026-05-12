@@ -1006,11 +1006,13 @@
                                 </div>
                                 <div class="card-footer px-0 bg-transparent border-0">
                                     <p class="pro-pricing color-changer line-1 m-0">
-                                        <?php echo e(helper::currency_formate($price, $storeinfo->id, $item->currency)); ?>
+                                        <?php echo e(helper::currency_formate($price, $storeinfo->id, helper::currencyinfo($storeinfo->id)->currency)); ?>
 
+                                        
+                                        
                                         <?php if($original_price > $price): ?>
                                             <span class="old-price">
-                                                <?php echo e(helper::currency_formate($original_price, $storeinfo->id, $item->currency)); ?>
+                                                <?php echo e(helper::currency_formate($original_price, $storeinfo->id, helper::currencyinfo($storeinfo->id)->currency)); ?>
 
                                             </span>
                                         <?php endif; ?>

@@ -282,7 +282,7 @@ class helper
     }
     public static function currency_formate($price, $vendor_id, $currency = null)
     {
-        return number_format($price, 0, '.', ',') . ' ل.س';
+        return number_format($price, 0, '.', ',') .  helper::currencyinfo($vendor_id)->currency;
     }
 
     public static function vendortime($vendor)
@@ -1018,7 +1018,7 @@ class helper
             $dummyCategory->slug = 'product-' . $vendor_id;
             $dummyCategory->is_available = 1;
             $dummyCategory->is_deleted = 2;
-            
+
             // Default image for dummy category
             $dummyCatImage = 'item-' . uniqid() . '.jpeg';
             if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
@@ -1030,7 +1030,7 @@ class helper
             } else {
                 $dummyCategory->image = 'default.png';
             }
-            
+
             $dummyCategory->save();
 
             if (!file_exists(storage_path('app/public/item/'))) {
@@ -1523,13 +1523,13 @@ class helper
     public static function emailconfigration($vendor_id)
     {
         $mailsettings = Settings::where('vendor_id', $vendor_id)->first();
-        
+
         // Always provide a fallback to the original config so we don't break the MailManager structure
         $defaultConfig = config('mail');
-        
+
         if ($mailsettings) {
             $driver = $mailsettings->mail_driver ?? 'smtp';
-            
+
             $defaultConfig['default'] = $driver;
             $defaultConfig['mailers'][$driver] = [
                 'transport' => $driver,
@@ -1546,7 +1546,7 @@ class helper
                 'name' => $mailsettings->mail_fromname,
             ];
         }
-        
+
         return $defaultConfig;
     }
     // display dynamic paymant name
@@ -1874,17 +1874,19 @@ class helper
     // get language list in athu pages.
     public static function currencyinfo($vendor_id)
     {
-        if (Cookie::get('code') == null) {
-            $currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first();
-            session()->put('currency', $currency->currency);
-        } else {
+        // if (Cookie::get('code') == null) {
+        //   dd($currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first()) ; 
+         $currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first(); 
+        //     session()->put('currency', $currency->currency);
+        // } else {
 
-            $currency = CurrencySettings::where('code', Cookie::get('code'))->first();
-            if (empty($currency)) {
-                $currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first();
-            }
-            session()->put('currency', $currency->currency);
-        }
+        //     $currency = CurrencySettings::where('code', Cookie::get('code'))->first();
+        //     if (empty($currency)) {
+        //         $currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first();
+        //     }
+        //     session()->put('currency', $currency->currency);
+        // }
         return $currency;
     }
+    
 }

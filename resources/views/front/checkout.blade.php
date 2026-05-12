@@ -661,8 +661,9 @@
                                     </div>
                                 @endif
                                 <p class="cart-total border-top text-success">{{ trans('labels.total_amount') }}
-                                    <span id="total_amount" class="text-success">
+                                    <span id="" class="text-success">
                                         {{ helper::currency_formate($grandtotal, $storeinfo->id) }}
+                                        {{-- {{dd(helper::currency_formate($grandtotal, $storeinfo->id) ) }} --}}
                                     </span>
                                 </p>
                             </div>

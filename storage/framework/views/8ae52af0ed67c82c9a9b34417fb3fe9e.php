@@ -484,6 +484,57 @@
                 padding: .45rem .8rem;
                 font-size: .78rem
             }
+
+            .ob-btn {
+                padding: .6rem 1rem;
+                font-size: .85rem;
+                width: 100%;
+                margin-top: .5rem;
+                text-align: center;
+                display: block;
+            }
+
+            .ob-btn-fin {
+                padding: .7rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-top: .5rem;
+                display: block;
+            }
+
+            .ob-p .d-flex.justify-content-between {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+
+            .ob-btn-bk {
+                margin-top: 0;
+            }
+            
+            .ob-p .d-flex.gap-3 {
+                flex-direction: column-reverse;
+                width: 100%;
+                gap: 0.5rem !important;
+            }
+
+            .cat-custom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cat-custom-img-up {
+                align-self: center;
+                margin-bottom: .5rem;
+            }
+
+            .cat-custom button {
+                width: 100%;
+            }
+
+            .ob-p form {
+                width: 100%;
+                margin: 0;
+            }
         }
     </style>
 
@@ -662,13 +713,53 @@
                         </div>
                         <div class="col-md-6 set-row">
                             <label>رقم الهاتف *</label>
-                            <input type="text" id="setMobile" value="<?php echo e(@$settings->mobile ?? ''); ?>"
-                                placeholder="0123456789">
+                            <div style="display: flex; gap: 0.5rem;">
+                                <select id="setMobileCode" style="width: 100px; flex-shrink: 0;" dir="ltr">
+                                    <option value="+963" selected>+963 🇸🇾</option>
+                                    <option value="+966">+966 🇸🇦</option>
+                                    <option value="+971">+971 🇦🇪</option>
+                                    <option value="+965">+965 🇰🇼</option>
+                                    <option value="+974">+974 🇶🇦</option>
+                                    <option value="+973">+973 🇧🇭</option>
+                                    <option value="+968">+968 🇴🇲</option>
+                                    <option value="+20">+20 🇪🇬</option>
+                                    <option value="+962">+962 🇯🇴</option>
+                                    <option value="+961">+961 🇱🇧</option>
+                                    <option value="+212">+212 🇲🇦</option>
+                                    <option value="+213">+213 🇩🇿</option>
+                                    <option value="+216">+216 🇹🇳</option>
+                                    <option value="+970">+970 🇵🇸</option>
+                                    <option value="+964">+964 🇮🇶</option>
+                                    <option value="+249">+249 🇸🇩</option>
+                                </select>
+                                <input type="text" id="setMobile" value="<?php echo e(@$settings->mobile ?? ''); ?>"
+                                    placeholder="0123456789" style="flex: 1;" dir="ltr">
+                            </div>
                         </div>
                         <div class="col-md-6 set-row">
                             <label>رقم الواتساب</label>
-                            <input type="text" id="setWhatsapp" value="<?php echo e(@Auth::user()->whatsapp ?? ''); ?>"
-                                placeholder="0123456789">
+                            <div style="display: flex; gap: 0.5rem;">
+                                <select id="setWhatsappCode" style="width: 100px; flex-shrink: 0;" dir="ltr">
+                                    <option value="+963" selected>+963 🇸🇾</option>
+                                    <option value="+966">+966 🇸🇦</option>
+                                    <option value="+971">+971 🇦🇪</option>
+                                    <option value="+965">+965 🇰🇼</option>
+                                    <option value="+974">+974 🇶🇦</option>
+                                    <option value="+973">+973 🇧🇭</option>
+                                    <option value="+968">+968 🇴🇲</option>
+                                    <option value="+20">+20 🇪🇬</option>
+                                    <option value="+962">+962 🇯🇴</option>
+                                    <option value="+961">+961 🇱🇧</option>
+                                    <option value="+212">+212 🇲🇦</option>
+                                    <option value="+213">+213 🇩🇿</option>
+                                    <option value="+216">+216 🇹🇳</option>
+                                    <option value="+970">+970 🇵🇸</option>
+                                    <option value="+964">+964 🇮🇶</option>
+                                    <option value="+249">+249 🇸🇩</option>
+                                </select>
+                                <input type="text" id="setWhatsapp" value="<?php echo e(@Auth::user()->whatsapp ?? ''); ?>"
+                                    placeholder="0123456789" style="flex: 1;" dir="ltr">
+                            </div>
                         </div>
                         <div class="col-md-6 set-row">
                             <label>العنوان *</label>
@@ -752,8 +843,12 @@
             }
 
             let imgInp = document.getElementById('customCatImg');
-            let imgSrc = document.getElementById('customCatPreview').src ||
-                'https://img.icons8.com/color/144/categories.png';
+            if (!imgInp.files || !imgInp.files[0]) {
+                toastr.warning('يرجى رفع صورة للقسم المخصص');
+                return;
+            }
+            
+            let imgSrc = document.getElementById('customCatPreview').src;
 
             let grid = document.getElementById('catGrid');
             let chip = document.createElement('div');
@@ -817,7 +912,25 @@
             }
         }
 
+        let isSaving = false;
         function saveAndNext(currentStep) {
+            if (isSaving) return;
+
+            let btn = document.querySelector(`#p${currentStep} .ob-btn-go`);
+            let originalText = btn.innerHTML;
+            
+            let setBtnLoading = () => {
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ...';
+                btn.disabled = true;
+                isSaving = true;
+            };
+
+            let resetBtn = () => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                isSaving = false;
+            };
+
             if (currentStep == 1) {
                 let picked = document.querySelectorAll('#catGrid .cat-chip.picked');
                 if (picked.length == 0) {
@@ -825,6 +938,7 @@
                     return;
                 }
 
+                setBtnLoading();
                 let formData = new FormData();
                 picked.forEach((c, index) => {
                     formData.append('categories[' + index + '][name]', c.dataset.name);
@@ -839,6 +953,7 @@
                     method: 'POST',
                     body: formData
                 }).then(r => r.json()).then(d => {
+                    resetBtn();
                     if (d.status == 1) {
                         let select = document.getElementById('prodCategory');
                         select.innerHTML = '<option value="">اختر القسم</option>';
@@ -854,8 +969,10 @@
                             s.style.display = 'none';
                             goStep(2);
                         }, 600);
+                    } else {
+                        toastr.error('حدث خطأ');
                     }
-                }).catch(() => toastr.error('حدث خطأ'));
+                }).catch(() => { toastr.error('حدث خطأ'); resetBtn(); });
             } else if (currentStep == 2) {
                 let name = document.getElementById('prodName').value;
                 let price = document.getElementById('prodPrice').value;
@@ -867,6 +984,7 @@
                     return;
                 }
 
+                setBtnLoading();
                 let formData = new FormData();
                 formData.append('item_name', name);
                 formData.append('item_price', price);
@@ -878,6 +996,7 @@
                     method: 'POST',
                     body: formData
                 }).then(r => r.json()).then(d => {
+                    resetBtn();
                     if (d.status == 1) {
                         let s = document.getElementById('prodSaved');
                         s.style.display = 'inline-flex';
@@ -885,13 +1004,17 @@
                             s.style.display = 'none';
                             goStep(3);
                         }, 600);
+                    } else {
+                        toastr.error('حدث خطأ');
                     }
-                }).catch(() => toastr.error('حدث خطأ'));
+                }).catch(() => { toastr.error('حدث خطأ'); resetBtn(); });
             } else if (currentStep == 3) {
                 let email = document.getElementById('setEmail').value;
-                let mobile = document.getElementById('setMobile').value;
+                let mobileVal = document.getElementById('setMobile').value.trim();
+                let whatsappVal = document.getElementById('setWhatsapp').value.trim();
+                let mobile = mobileVal ? (document.getElementById('setMobileCode').value + mobileVal) : '';
+                let whatsapp = whatsappVal ? (document.getElementById('setWhatsappCode').value + whatsappVal) : '';
                 let address = document.getElementById('setAddress').value;
-                let whatsapp = document.getElementById('setWhatsapp').value;
                 let currency = document.getElementById('setCurrency').value;
                 let logo = document.getElementById('setLogo').files[0];
 
@@ -900,6 +1023,7 @@
                     return;
                 }
 
+                setBtnLoading();
                 let formData = new FormData();
                 formData.append('email', email);
                 formData.append('mobile', mobile);
@@ -913,6 +1037,7 @@
                     method: 'POST',
                     body: formData
                 }).then(r => r.json()).then(d => {
+                    resetBtn();
                     if (d.status == 1) {
                         let s = document.getElementById('setSaved');
                         s.style.display = 'inline-flex';
@@ -920,8 +1045,10 @@
                             s.style.display = 'none';
                             goStep(4);
                         }, 600);
+                    } else {
+                        toastr.error('حدث خطأ');
                     }
-                }).catch(() => toastr.error('حدث خطأ'));
+                }).catch(() => { toastr.error('حدث خطأ'); resetBtn(); });
             }
         }
 

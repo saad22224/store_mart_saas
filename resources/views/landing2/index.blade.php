@@ -1111,7 +1111,7 @@
 
             <div style="display:flex;align-items:center;gap:1rem;">
                 {{-- Language Switcher --}}
-                <div class="lang-switcher" style="position:relative;">
+                <div class="lang-switcher hidden md:block" style="position:relative;">
                     <button type="button" class="lang-btn" onclick="toggleLangMenu()" style="
                         background: rgba(21, 172, 130, 0.1);
                         border: 1px solid rgba(21, 172, 130, 0.3);
@@ -1150,6 +1150,10 @@
                     <button onclick="window.location.href = '{{ url('admin') }}'" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.55rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
                     <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
                 </div>
+                
+                {{-- Mobile Login Button --}}
+                <button onclick="window.location.href = '{{ url('admin') }}'" class="md:hidden" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.4rem 1rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+
                 <span class="material-symbols-outlined nav-hamburger" onclick="toggleMobileMenu()">menu</span>
             </div>
         </nav>
@@ -1180,6 +1184,43 @@
                 <a href="#contact" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
                 
                 <div style="display:flex; flex-direction:column; gap: 1rem; width: 100%; max-width: 300px; margin-top: 1rem; align-items: stretch;">
+                    {{-- Mobile Language Switcher --}}
+                    <div class="lang-switcher-mobile" style="position:relative; width: 100%;">
+                        <button type="button" class="lang-btn-mobile" onclick="toggleMobileLangMenu()" style="
+                            width: 100%;
+                            background: rgba(21, 172, 130, 0.1);
+                            border: 1px solid rgba(21, 172, 130, 0.3);
+                            border-radius: 9999px;
+                            padding: 0.8rem 1.5rem;
+                            font-weight: 700;
+                            color: #15AC82;
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-family: 'Cairo', sans-serif;
+                            font-size: 1.1rem;
+                        ">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-symbols-outlined" style="font-size: 1.2rem;">language</span>
+                                <span>{{ $lang == 'ar' ? 'العربية' : 'English' }}</span>
+                            </div>
+                            <span class="material-symbols-outlined" style="font-size: 1rem;">expand_more</span>
+                        </button>
+                        <div id="mobileLangMenu" style="
+                            display: none;
+                            margin-top: 0.5rem;
+                            background: #F8FAFC;
+                            border-radius: 1rem;
+                            border: 1px solid rgba(226, 232, 240, 0.8);
+                            overflow: hidden;
+                            width: 100%;
+                        ">
+                            <a href="?lang=ar" class="lang-option {{ $lang == 'ar' ? 'active' : '' }}" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center;">🇸🇦 العربية</a>
+                            <a href="?lang=en" class="lang-option {{ $lang == 'en' ? 'active' : '' }}" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.5);">🇬🇧 English</a>
+                        </div>
+                    </div>
+
                     <button onclick="window.location.href = '{{ url('admin') }}'" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.8rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1.1rem; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
                     <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
                 </div>
@@ -1533,6 +1574,16 @@
         // Language menu toggle
         function toggleLangMenu() {
             const menu = document.getElementById('langMenu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        // Mobile Language menu toggle
+        function toggleMobileLangMenu() {
+            const menu = document.getElementById('mobileLangMenu');
             if (menu.style.display === 'none' || menu.style.display === '') {
                 menu.style.display = 'block';
             } else {

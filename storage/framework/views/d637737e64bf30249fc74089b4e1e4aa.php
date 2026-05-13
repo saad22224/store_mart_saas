@@ -121,6 +121,9 @@
                 .t7-footer-col-center { padding-inline: 1rem; }
                 .t7-footer-col-left { padding-inline-start: 2rem; }
             }
+            @media (max-width: 991px) {
+                .copy-right-sec { padding-bottom: 85px !important; }
+            }
         </style>
         <div class="row g-4 align-items-start justify-content-between">
             
@@ -158,8 +161,8 @@
                         <div class="t7-footer-icon">
                             <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="tel:<?php echo e($storeinfo->mobile); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            <?php echo e($storeinfo->mobile); ?>
+                        <a href="tel:<?php echo e(helper::appdata(@$storeinfo->id)->contact); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            <?php echo e(helper::appdata(@$storeinfo->id)->contact); ?>
 
                         </a>
                     </li>

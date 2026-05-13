@@ -251,6 +251,11 @@ class VendorController extends Controller
 
     public function register_vendor(Request $request)
     {
+        if ($request->has('country_code')) {
+            $request->merge([
+                'mobile' => $request->country_code . ltrim($request->mobile, '0')
+            ]);
+        }
 
         $validatoremail = Validator::make(['email' => $request->email], [
             'email' => [

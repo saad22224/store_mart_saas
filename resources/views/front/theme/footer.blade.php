@@ -224,7 +224,7 @@
 <div class="copy-right-sec bg-light bg-changer py-3 border-top">
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-            <p class="mb-0 text-dark color-changer opacity-75 text-center text-md-start">{{ helper::appdata($storeinfo->id)->copyright }}</p>
+            <p class="mb-0 text-dark color-changer opacity-75 text-center text-md-start">Copyright &copy; MatjarHub. All Rights Reserved</p>
             <div class="d-flex align-items-center gap-2">
                 <span class="text-dark color-changer opacity-75 fs-7">Powered by</span>
                 <a href="{{ url('/') }}" target="_blank" class="d-flex align-items-center">

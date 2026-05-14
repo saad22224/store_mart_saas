@@ -454,9 +454,9 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
 //  ------------------------------- ----------- -----------------------------------------   //
 
 Route::group(['namespace' => '', 'middleware' => 'landingMiddleware'], function () {
-    if (@helper::appdata('')->landing_page == 1) {
+    // if (@helper::appdata('')->landing_page == 2) {
         Route::get('/', [LandingHomeController::class, 'index']);
-    }
+    // }
     Route::post('/emailsubscribe', [LandingHomeController::class, 'emailsubscribe']);
     Route::post('/inquiry', [LandingHomeController::class, 'inquiry']);
     Route::post('/landing2/contact', [WebSettingsController::class, 'landing2_contact'])->name('landing2.contact');

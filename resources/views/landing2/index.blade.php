@@ -1105,9 +1105,89 @@
     fbq('track', 'PageView');
   </script>
   <!-- End Meta Pixel Code -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKTXTSENXZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YKTXTSENXZ');
+  </script>
 </head>
 
 <body>
+<!-- PWA Install Prompt Button -->
+    <div id="installBtn" style="display:none; opacity:0; transform: translateY(-150%); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);"
+        class="fixed top-4 left-0 right-0 mx-auto z-[100] flex items-center justify-between gap-2 md:gap-4 bg-white px-3 md:px-4 py-3 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 w-[92%] max-w-sm">
+        <div class="flex items-center gap-2 md:gap-3 overflow-hidden">
+            <div class="flex-shrink-0">
+                <img src="{{ helper::image_path(helper::appdata(1)->app_logo) }}" class="w-10 h-10 rounded-xl shadow-sm border border-gray-50 object-cover" alt="App Icon">
+            </div>
+            <div class="flex-1 min-w-0">
+                <h4 class="text-[13px] md:text-sm font-bold text-gray-900 leading-tight truncate" data-i18n="install.title">{{ helper::appdata(1)->app_name }}</h4>
+                <p class="text-[10px] md:text-xs text-gray-500 mt-0.5 truncate" data-i18n="install.desc">تثبيت التطبيق على جهازك</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
+            <button onclick="installApp()" class="bg-sky-600 text-white text-[11px] md:text-xs font-bold px-3 py-2 rounded-xl hover:bg-sky-700 transition-colors shadow-md shadow-sky-500/20 active:scale-95 whitespace-nowrap" data-i18n="install.btn">
+                تثبيت
+            </button>
+            <button onclick="hideInstallBtn()" class="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors active:scale-95 flex-shrink-0">
+                <i class="fas fa-times text-xs md:text-sm"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('👍 PWA beforeinstallprompt event fired!');
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                // Trigger reflow for animation
+                setTimeout(() => {
+                    installBtn.style.transform = 'translateY(0)';
+                    installBtn.style.opacity = '1';
+                }, 50);
+
+                // Auto-hide after 10 seconds
+                setTimeout(() => {
+                    hideInstallBtn();
+                }, 10000);
+            }
+        });
+
+        async function installApp() {
+            console.log('👍 Install button clicked');
+            if (!deferredPrompt) {
+                console.log('❌ No deferredPrompt saved.');
+                return;
+            }
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`👍 User choice outcome: ${outcome}`);
+            deferredPrompt = null;
+            hideInstallBtn();
+        }
+
+        function hideInstallBtn() {
+            console.log('👍 Hiding install button');
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.style.transform = 'translateY(-150%)';
+                installBtn.style.opacity = '0';
+                setTimeout(() => {
+                    installBtn.style.display = 'none';
+                }, 600);
+            }
+        }
+    </script>
 {{-- meta pixel --}}
  <noscript>
     <img height="1" width="1" style="display:none"
@@ -1737,6 +1817,10 @@
         @endif
     @endif
 
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/96590049969" target="_blank" style="position:fixed;bottom:20px;right:20px;background:#25D366;color:white;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:1000;text-decoration:none;transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+        <i class="fab fa-whatsapp" style="font-size:30px;"></i>
+    </a>
 </body>
 
 </html>

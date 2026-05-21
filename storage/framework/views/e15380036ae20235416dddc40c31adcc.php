@@ -64,9 +64,105 @@
             font-family: "Font Awesome 6 Brands" !important;
         }
     </style>
+  <meta name="theme-color" content="<?php echo e(helper::appdata('')->theme_color ?? '#ffffff'); ?>">
+  <meta name="background-color" content="<?php echo e(helper::appdata('')->background_color ?? '#ffffff'); ?>">
+  <link rel="apple-touch-icon" href="<?php echo e(helper::image_path(helper::appdata('')->app_logo)); ?>">
+  <link rel="manifest" href='data:application/manifest+json,{"name": "<?php echo e(helper::appdata('')->app_name); ?>","short_name": "<?php echo e(helper::appdata('')->app_name); ?>","icons": [{"src": "<?php echo e(helper::image_path(helper::appdata('')->app_logo)); ?>", "sizes": "512x512", "type": "image/png"}, {"src": "<?php echo e(helper::image_path(helper::appdata('')->app_logo)); ?>", "sizes": "1024x1024", "type": "image/png"}], "start_url": "<?php echo e(request()->url()); ?>","display": "standalone","prefer_related_applications":"false" }'>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKTXTSENXZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YKTXTSENXZ');
+  </script>
 </head>
 
 <body>
+    <!-- PWA Install Prompt Button -->
+    <style>
+        .pwa-prompt-container {
+            position: fixed; top: 1rem; left: 0; right: 0; margin-left: auto; margin-right: auto;
+            z-index: 10000; display: none; align-items: center; justify-content: space-between;
+            gap: 0.5rem; background-color: white; padding: 0.75rem 1rem; border-radius: 1rem;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.2); border: 1px solid #f3f4f6;
+            width: 92%; max-width: 24rem;
+            opacity: 0; transform: translateY(-150%); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .pwa-prompt-inner { display: flex; align-items: center; gap: 0.75rem; overflow: hidden; }
+        .pwa-prompt-img { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); object-fit: cover; }
+        .pwa-prompt-text { flex: 1; min-width: 0; }
+        .pwa-prompt-title { font-size: 0.875rem; font-weight: 700; color: #111827; line-height: 1.25; margin: 0; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pwa-prompt-desc { font-size: 0.75rem; color: #6b7280; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pwa-prompt-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+        .pwa-prompt-install { background-color: #0284c7; color: white; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 0.75rem; border-radius: 0.75rem; border: none; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.2); white-space: nowrap; }
+        .pwa-prompt-install:hover { background-color: #0369a1; }
+        .pwa-prompt-close { width: 1.75rem; height: 1.75rem; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: #f9fafb; color: #9ca3af; border: none; cursor: pointer; transition: all 0.2s; }
+        .pwa-prompt-close:hover { background-color: #e5e7eb; color: #374151; }
+    </style>
+    <div id="installBtn" class="pwa-prompt-container">
+        <div class="pwa-prompt-inner">
+            <div style="flex-shrink: 0;">
+                <img src="<?php echo e(helper::image_path(helper::appdata('')->app_logo)); ?>" class="pwa-prompt-img" alt="App Icon">
+            </div>
+            <div class="pwa-prompt-text">
+                <h4 class="pwa-prompt-title"><?php echo e(helper::appdata('')->app_name); ?></h4>
+                <p class="pwa-prompt-desc">تثبيت التطبيق على جهازك</p>
+            </div>
+        </div>
+        <div class="pwa-prompt-actions">
+            <button onclick="installApp()" class="pwa-prompt-install">
+                تثبيت
+            </button>
+            <button onclick="hideInstallBtn()" class="pwa-prompt-close">
+                <i class="fas fa-times" style="font-size: 0.75rem;"></i>
+            </button>
+        </div>
+    </div>
+    <script>
+        if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.register("<?php echo e(url('storage/app/public/sw.js')); ?>").then(function(reg) {
+                console.log("Service worker has been registered for scope: " + reg.scope);
+            }).catch(function(err) {
+                console.log("Service worker registration failed: ", err);
+            });
+        }
+        
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                setTimeout(() => {
+                    installBtn.style.transform = 'translateY(0)';
+                    installBtn.style.opacity = '1';
+                }, 50);
+                setTimeout(() => {
+                    hideInstallBtn();
+                }, 10000);
+            }
+        });
+        async function installApp() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            hideInstallBtn();
+        }
+        function hideInstallBtn() {
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.style.transform = 'translateY(-150%)';
+                installBtn.style.opacity = '0';
+                setTimeout(() => {
+                    installBtn.style.display = 'none';
+                }, 600);
+            }
+        }
+    </script>
     <?php
         if (Auth::user()->type == 4) {
             $vendor_id = Auth::user()->vendor_id;

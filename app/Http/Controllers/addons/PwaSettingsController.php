@@ -15,8 +15,30 @@ class PwaSettingsController extends Controller
         }
         $settingsdata = Settings::where('vendor_id', $vendor_id)->first();
         if ($request->hasfile('app_logo')) {
+            $file = $request->file('app_logo');
+            if (!$file->isValid()) {
+                return redirect()->back()->with('error', 'Upload Error: ' . $file->getErrorMessage());
+            }
+            
+            $path = $file->getRealPath() ?: $file->getPathname();
+            if (!$path || !file_exists($path)) {
+                return redirect()->back()->with('error', 'Path Error: Temp file does not exist. path=' . $path);
+            }
+
+            // try {
+            //     $size = @getimagesize($path);
+            //     if (!$size) {
+            //         return redirect()->back()->with('error', 'Image Error: Not a valid image format.');
+            //     }
+            //     if ($size[0] != 512 || $size[1] != 512) {
+            //         return redirect()->back()->withErrors(['app_logo' => 'يجب أن تكون مقاسات الصورة 512x512 بكسل. (المقاس المرفوع: ' . $size[0] . 'x' . $size[1] . ')'])->withInput();
+            //     }
+            // } catch (\Throwable $e) {
+            //     return redirect()->back()->with('error', 'Exception: ' . $e->getMessage());
+            // }
+
             $request->validate([
-                "app_logo"     => ['image','dimensions:width=512,height=512'],
+                "app_logo"     => ['image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
             ], [
                 "app_logo.image" => trans('messages.enter_image_file'),
             ]);

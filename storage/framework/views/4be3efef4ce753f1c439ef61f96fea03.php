@@ -145,9 +145,24 @@
             <?php echo $__env->make('front.pixel.pixel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <?php endif; ?>
     <?php endif; ?>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKTXTSENXZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YKTXTSENXZ');
+  </script>
 </head>
 
 <body>
+    <?php if(Auth::user() && Auth::user()->type == 2 && Auth::user()->id == @$storeinfo->id): ?>
+    <div style="background-color: #111827; color: #ffffff; text-align: center; padding: 0.5rem 1rem; font-size: 0.875rem; z-index: 999999; position: relative;">
+        أنت تتصفح متجرك الآن كمالك. 
+        <a href="<?php echo e(url('admin/dashboard')); ?>" style="color: #34d399; font-weight: 700; text-decoration: underline; margin-right: 0.5rem;">العودة للوحة التحكم</a>
+    </div>
+    <?php endif; ?>
     <div id="splash"></div>
 
     <!-- Age Modal -->

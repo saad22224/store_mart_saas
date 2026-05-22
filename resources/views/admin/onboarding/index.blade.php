@@ -984,6 +984,11 @@
                     toastr.warning('يرجى إدخال اسم وسعر المنتج');
                     return;
                 }
+                
+                if (!img) {
+                    toastr.warning('يرجى رفع صورة المنتج');
+                    return;
+                }
 
                 setBtnLoading();
                 let formData = new FormData();

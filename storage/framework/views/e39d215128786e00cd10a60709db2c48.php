@@ -25,10 +25,16 @@
                         <!-- new big-view -->
 
                         <div class="sp-wrap ">
-                            <?php $__currentLoopData = $getitem['multi_image']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a href="<?php echo e($image->image_url); ?>"><img src="<?php echo e(helper::image_path($image->image)); ?>"
-                                        alt=""></a>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php if(count($getitem['multi_image']) > 0): ?>
+                                <?php $__currentLoopData = $getitem['multi_image']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <a href="<?php echo e($image->image_url); ?>"><img src="<?php echo e(helper::image_path($image->image)); ?>"
+                                            alt=""></a>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php else: ?>
+                                <a href="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png')); ?>">
+                                    <img src="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png')); ?>" alt="">
+                                </a>
+                            <?php endif; ?>
                         </div>
                         <!-- new big-view -->
                     </div>

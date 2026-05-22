@@ -1337,21 +1337,41 @@
         return false;
     }
 
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    const isIos = () => {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        return /iphone|ipad|ipod/.test(userAgent);
+    };
+    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+    if (window.matchMedia('(display-mode: standalone)').matches || isInStandaloneMode()) {
         // If the app is installed, hide the install button or popup
         $('.pwa').addClass('d-none');
+        $('.mobile_drop_down').hide();
     } else {
         $('#close-btn').click(function() {
             $('.pwa').addClass('d-none');
+            $('.mobile_drop_down').hide();
         });
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             $('.mobile_drop_down').show();
             deferredPrompt = e;
         });
+        
+        if (isIos()) {
+            $('.mobile_drop_down').show();
+            $('.pwa').removeClass('d-none');
+        }
+
         const mobile_install_app = document.getElementById('mobile-install-app');
         if (mobile_install_app != null) {
             mobile_install_app.addEventListener('click', async () => {
+                if (isIos()) {
+                    alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                    $('.pwa').addClass('d-none');
+                    $('.mobile_drop_down').hide();
+                    return;
+                }
                 if (deferredPrompt !== null) {
                     deferredPrompt.prompt();
                     const {

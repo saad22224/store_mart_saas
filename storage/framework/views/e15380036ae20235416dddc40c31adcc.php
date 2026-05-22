@@ -130,6 +130,26 @@
         }
         
         let deferredPrompt;
+        const isIos = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        };
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        if (isIos() && !isInStandaloneMode()) {
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                setTimeout(() => {
+                    installBtn.style.transform = 'translateY(0)';
+                    installBtn.style.opacity = '1';
+                }, 50);
+                setTimeout(() => {
+                    hideInstallBtn();
+                }, 10000);
+            }
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -146,6 +166,11 @@
             }
         });
         async function installApp() {
+            if (isIos()) {
+                alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                hideInstallBtn();
+                return;
+            }
             if (!deferredPrompt) return;
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;

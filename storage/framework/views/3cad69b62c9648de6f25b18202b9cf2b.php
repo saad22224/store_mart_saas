@@ -1142,6 +1142,25 @@
 
     <script>
         let deferredPrompt;
+        const isIos = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        };
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        if (isIos() && !isInStandaloneMode()) {
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                setTimeout(() => {
+                    installBtn.style.transform = 'translateY(0)';
+                    installBtn.style.opacity = '1';
+                }, 50);
+                setTimeout(() => {
+                    hideInstallBtn();
+                }, 10000);
+            }
+        }
 
         window.addEventListener('beforeinstallprompt', (e) => {
             console.log('👍 PWA beforeinstallprompt event fired!');
@@ -1165,6 +1184,11 @@
 
         async function installApp() {
             console.log('👍 Install button clicked');
+            if (isIos()) {
+                alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                hideInstallBtn();
+                return;
+            }
             if (!deferredPrompt) {
                 console.log('❌ No deferredPrompt saved.');
                 return;
@@ -1800,12 +1824,27 @@
                 }
                 
                 let deferredPrompt;
+                const isIosDevice = () => {
+                    const userAgent = window.navigator.userAgent.toLowerCase();
+                    return /iphone|ipad|ipod/.test(userAgent);
+                };
+                const inStandalone = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+                if (window.matchMedia('(display-mode: standalone)').matches || inStandalone()) {
+                    document.getElementById('pwa-container').style.display = 'none';
+                }
+
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
                     deferredPrompt = e;
                 });
                 
                 document.getElementById('mobile-install-app')?.addEventListener('click', async () => {
+                    if (isIosDevice()) {
+                        alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                        document.getElementById('pwa-container').style.display = 'none';
+                        return;
+                    }
                     if (deferredPrompt) {
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;

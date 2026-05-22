@@ -24,10 +24,16 @@
                         <!-- new big-view -->
 
                         <div class="sp-wrap ">
-                            @foreach ($getitem['multi_image'] as $key => $image)
-                                <a href="{{ $image->image_url }}"><img src="{{ helper::image_path($image->image) }}"
-                                        alt=""></a>
-                            @endforeach
+                            @if (count($getitem['multi_image']) > 0)
+                                @foreach ($getitem['multi_image'] as $key => $image)
+                                    <a href="{{ $image->image_url }}"><img src="{{ helper::image_path($image->image) }}"
+                                            alt=""></a>
+                                @endforeach
+                            @else
+                                <a href="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}">
+                                    <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}" alt="">
+                                </a>
+                            @endif
                         </div>
                         <!-- new big-view -->
                     </div>

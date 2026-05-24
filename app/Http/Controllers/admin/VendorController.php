@@ -257,6 +257,8 @@ class VendorController extends Controller
             ]);
         }
 
+        \Illuminate\Support\Facades\Log::info('Vendor Register Request: ', $request->all());
+
         $validatoremail = Validator::make(['email' => $request->email], [
             'email' => [
                 'required',
@@ -270,12 +272,12 @@ class VendorController extends Controller
         $validatormobile = Validator::make(['mobile' => $request->mobile], [
             'mobile' => [
                 'required',
-                'numeric',
                 Rule::unique('users')->whereIn('type', [1, 2, 4])->where('is_deleted', 2),
             ]
         ]);
         if ($validatormobile->fails()) {
-            return redirect()->back()->with('error', trans('messages.unique_mobile'));
+            \Illuminate\Support\Facades\Log::error('Mobile Validation Failed: ', $validatormobile->errors()->toArray());
+            return redirect()->back()->with('error', trans('messages.unique_mobile') . ' - ' . json_encode($validatormobile->errors()->toArray()));
         }
         $validatorslug = Validator::make(['slug' => $request->slug], [
             'slug' => [

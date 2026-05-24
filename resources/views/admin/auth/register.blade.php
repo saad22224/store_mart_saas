@@ -291,14 +291,21 @@
                     {{-- Progress Steps --}}
                     <div class="step-progress">
                         <div class="step-indicator">
-                            <div class="step-circle active" id="stepCircle1">1</div>
-                            <span class="step-label active" id="stepLabel1">{{ trans('labels.basic_info') == 'labels.basic_info' ? 'البيانات الأساسية' : trans('labels.basic_info') }}</span>
+                            <div class="step-circle active" id="stepCircle0">1</div>
+                            <span class="step-label active" id="stepLabel0">الواتساب</span>
                         </div>
-                        <div class="step-connector" id="stepConnector">
+                        <div class="step-connector" id="stepConnector0">
                             <div class="fill"></div>
                         </div>
                         <div class="step-indicator">
-                            <div class="step-circle" id="stepCircle2">2</div>
+                            <div class="step-circle" id="stepCircle1">2</div>
+                            <span class="step-label" id="stepLabel1">{{ trans('labels.basic_info') == 'labels.basic_info' ? 'البيانات الأساسية' : trans('labels.basic_info') }}</span>
+                        </div>
+                        <div class="step-connector" id="stepConnector1">
+                            <div class="fill"></div>
+                        </div>
+                        <div class="step-indicator">
+                            <div class="step-circle" id="stepCircle2">3</div>
                             <span class="step-label" id="stepLabel2">{{ trans('labels.store_info') == 'labels.store_info' ? 'بيانات المتجر' : trans('labels.store_info') }}</span>
                         </div>
                     </div>
@@ -307,8 +314,47 @@
                     <form id="registerForm" method="POST" action="{{ URL::to('admin/register_vendor') }}">
                         @csrf
 
+                        {{-- ===== STEP 0: WhatsApp Verification ===== --}}
+                        <div class="form-step active" id="step0">
+                            <div class="row">
+                                <div class="col-12 reg-form-group">
+                                    <label for="mobile">رقم الواتساب<span class="text-danger">*</span></label>
+                                    <div class="input-group" dir="ltr">
+                                        <select class="form-select" id="country_code" style="max-width: 120px; border-radius: 12px 0 0 12px;">
+                                            <option value="+963" selected>🇸🇾 +963</option>
+                                            <option value="+966">🇸🇦 +966</option>
+                                            <option value="+971">🇦🇪 +971</option>
+                                            <option value="+965">🇰🇼 +965</option>
+                                            <option value="+974">🇶🇦 +974</option>
+                                            <option value="+973">🇧🇭 +973</option>
+                                            <option value="+968">🇴🇲 +968</option>
+                                            <option value="+20">🇪🇬 +20</option>
+                                            <option value="+962">🇯🇴 +962</option>
+                                            <option value="+961">🇱🇧 +961</option>
+                                        </select>
+                                        <input type="text" class="form-control mobile-number" name="mobile_input" value="{{ old('mobile') }}" id="mobile_input"
+                                            placeholder="{{ trans('labels.mobile') }}" required style="border-radius: 0 12px 12px 0;">
+                                    </div>
+                                    <input type="hidden" name="mobile" id="mobile_hidden">
+                                </div>
+                                <div class="col-12 reg-form-group d-none" id="otp_section">
+                                    <label for="otp">رمز التحقق (OTP)<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="otp" id="otp" placeholder="أدخل رمز التحقق المرسل للواتساب">
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="{{ URL::to('/admin') }}" class="btn btn-login-link flex-fill text-center">{{ trans('labels.login') }}</a>
+                                <button type="button" class="btn btn-step btn-next flex-fill" id="btn_send_otp" onclick="sendOtp()">
+                                    إرسال الرمز <i class="fa-solid fa-paper-plane ms-1"></i>
+                                </button>
+                                <button type="button" class="btn btn-step btn-submit flex-fill d-none" id="btn_verify_otp" onclick="verifyOtp()">
+                                    تحقق <i class="fa-solid fa-check ms-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
                         {{-- ===== STEP 1: Basic Info ===== --}}
-                        <div class="form-step active" id="step1">
+                        <div class="form-step" id="step1">
                             <div class="row">
                                 <div class="col-12 reg-form-group">
                                     <label for="name">{{ trans('labels.name') == 'Name' ? 'Store Name' : 'إسم المتجر' }}<span class="text-danger">*</span></label>
@@ -321,25 +367,6 @@
                                         placeholder="{{ trans('labels.email') }}" required>
                                 </div>
                                 <div class="col-12 reg-form-group">
-                                    <label for="mobile">{{ trans('labels.mobile') }}<span class="text-danger">*</span></label>
-                                    <div class="input-group" dir="ltr">
-                                        <select class="form-select" name="country_code" style="max-width: 120px; border-radius: 12px 0 0 12px;">
-                                            <option value="+963" selected>🇸🇾 +963</option>
-                                            <option value="+966">🇸🇦 +966</option>
-                                            <option value="+971">🇦🇪 +971</option>
-                                            <option value="+965">🇰🇼 +965</option>
-                                            <option value="+974">🇶🇦 +974</option>
-                                            <option value="+973">🇧🇭 +973</option>
-                                            <option value="+968">🇴🇲 +968</option>
-                                            <option value="+20">🇪🇬 +20</option>
-                                            <option value="+962">🇯🇴 +962</option>
-                                            <option value="+961">🇱🇧 +961</option>
-                                        </select>
-                                        <input type="text" class="form-control mobile-number" name="mobile" value="{{ old('mobile') }}" id="mobile"
-                                            placeholder="{{ trans('labels.mobile') }}" required style="border-radius: 0 12px 12px 0;">
-                                    </div>
-                                </div>
-                                <div class="col-12 reg-form-group">
                                     <label for="password">{{ trans('labels.password') }}<span class="text-danger">*</span></label>
                                     <div class="password-wrapper">
                                         <input type="password" class="form-control" name="password" value="{{ old('password') }}" id="password"
@@ -349,7 +376,9 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2 mt-3">
-                                <a href="{{ URL::to('/admin') }}" class="btn btn-login-link flex-fill text-center">{{ trans('labels.login') }}</a>
+                                <button type="button" class="btn btn-step btn-prev flex-fill" onclick="prevStep()">
+                                    <i class="fa-solid fa-arrow-{{ session()->get('direction') == 2 ? 'right' : 'left' }} me-1"></i> {{ trans('labels.previous') == 'labels.previous' ? 'السابق' : trans('labels.previous') }}
+                                </button>
                                 <button type="button" class="btn btn-step btn-next flex-fill" onclick="nextStep()">
                                     {{ trans('labels.next') == 'labels.next' ? 'التالي' : trans('labels.next') }} <i class="fa-solid fa-arrow-{{ session()->get('direction') == 2 ? 'left' : 'right' }} ms-1"></i>
                                 </button>
@@ -487,53 +516,149 @@
         @endif
     </script>
     <script>
-        let currentStep = 1;
+        let currentStep = 0;
+        let verifiedMobile = "";
+
+        function sendOtp() {
+            const countryCode = $('#country_code').val();
+            let mobileInput = $('#mobile_input').val();
+
+            if (!mobileInput.trim()) { toastr.error("رقم الواتساب مطلوب"); $('#mobile_input').focus(); return; }
+
+            // remove leading zero if exists
+            if (mobileInput.startsWith('0')) {
+                mobileInput = mobileInput.substring(1);
+            }
+
+            const fullMobile = countryCode + mobileInput;
+            $('#mobile_hidden').val(fullMobile);
+
+            // AJAX call to send OTP
+            $.ajax({
+                url: "{{ URL::to('admin/whatsapp-otp/send') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    mobile: fullMobile
+                },
+                success: function(response) {
+                    if(response.success) {
+                        toastr.success(response.message);
+                        $('#otp_section').removeClass('d-none');
+                        $('#btn_send_otp').addClass('d-none');
+                        $('#btn_verify_otp').removeClass('d-none');
+                        $('#mobile_input').attr('readonly', true);
+                        $('#country_code').attr('readonly', true).css('pointer-events', 'none');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    toastr.error("حدث خطأ أثناء الإرسال. تأكد من الرقم والمحاولة مرة أخرى.");
+                }
+            });
+        }
+
+        function verifyOtp() {
+            const otp = $('#otp').val();
+            const fullMobile = $('#mobile_hidden').val();
+
+            if (!otp.trim()) { toastr.error("رمز التحقق مطلوب"); $('#otp').focus(); return; }
+
+            // AJAX call to verify OTP
+            $.ajax({
+                url: "{{ URL::to('admin/whatsapp-otp/verify') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    mobile: fullMobile,
+                    otp: otp
+                },
+                success: function(response) {
+                    if(response.success) {
+                        toastr.success(response.message);
+                        verifiedMobile = fullMobile;
+                        currentStep = 1;
+                        updateSteps();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    toastr.error("حدث خطأ في التحقق.");
+                }
+            });
+        }
 
         function nextStep() {
-            // Validate step 1 fields
-            const name = document.getElementById('name');
-            const email = document.getElementById('email');
-            const mobile = document.getElementById('mobile');
-            const password = document.getElementById('password');
+            if (currentStep === 1) {
+                // Validate step 1 fields
+                const name = document.getElementById('name');
+                const email = document.getElementById('email');
+                const password = document.getElementById('password');
 
-            if (!name.value.trim()) { toastr.error("{{ trans('labels.name') }} {{ trans('messages.required') ?? 'مطلوب' }}"); name.focus(); return; }
-            if (!email.value.trim() || !email.checkValidity()) { toastr.error("{{ trans('labels.email') }} {{ trans('messages.required') ?? 'مطلوب' }}"); email.focus(); return; }
-            if (!mobile.value.trim()) { toastr.error("{{ trans('labels.mobile') }} {{ trans('messages.required') ?? 'مطلوب' }}"); mobile.focus(); return; }
-            if (!password.value.trim()) { toastr.error("{{ trans('labels.password') }} {{ trans('messages.required') ?? 'مطلوب' }}"); password.focus(); return; }
+                if (!name.value.trim()) { toastr.error("{{ trans('labels.name') }} {{ trans('messages.required') ?? 'مطلوب' }}"); name.focus(); return; }
+                if (!email.value.trim() || !email.checkValidity()) { toastr.error("{{ trans('labels.email') }} {{ trans('messages.required') ?? 'مطلوب' }}"); email.focus(); return; }
+                if (!password.value.trim()) { toastr.error("{{ trans('labels.password') }} {{ trans('messages.required') ?? 'مطلوب' }}"); password.focus(); return; }
 
-            currentStep = 2;
-            updateSteps();
+                currentStep = 2;
+                updateSteps();
+            }
         }
 
         function prevStep() {
-            currentStep = 1;
-            updateSteps();
+            if (currentStep > 0) {
+                currentStep--;
+                updateSteps();
+            }
         }
 
         function updateSteps() {
+            document.getElementById('step0').classList.remove('active');
             document.getElementById('step1').classList.remove('active');
             document.getElementById('step2').classList.remove('active');
             document.getElementById('step' + currentStep).classList.add('active');
 
+            const c0 = document.getElementById('stepCircle0');
             const c1 = document.getElementById('stepCircle1');
             const c2 = document.getElementById('stepCircle2');
+            
+            const l0 = document.getElementById('stepLabel0');
             const l1 = document.getElementById('stepLabel1');
             const l2 = document.getElementById('stepLabel2');
-            const conn = document.getElementById('stepConnector');
+            
+            const conn0 = document.getElementById('stepConnector0');
+            const conn1 = document.getElementById('stepConnector1');
 
-            if (currentStep === 1) {
+            // Reset all
+            c0.className = 'step-circle'; c1.className = 'step-circle'; c2.className = 'step-circle';
+            l0.className = 'step-label'; l1.className = 'step-label'; l2.className = 'step-label';
+            conn0.classList.remove('filled'); conn1.classList.remove('filled');
+            c0.innerHTML = '1'; c1.innerHTML = '2'; c2.innerHTML = '3';
+
+            if (currentStep === 0) {
+                c0.className = 'step-circle active';
+                l0.className = 'step-label active';
+            } else if (currentStep === 1) {
+                c0.className = 'step-circle completed';
                 c1.className = 'step-circle active';
-                c2.className = 'step-circle';
+                l0.className = 'step-label completed';
                 l1.className = 'step-label active';
-                l2.className = 'step-label';
-                conn.classList.remove('filled');
-                c1.innerHTML = '1';
-            } else {
+                conn0.classList.add('filled');
+                c0.innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else if (currentStep === 2) {
+                c0.className = 'step-circle completed';
                 c1.className = 'step-circle completed';
                 c2.className = 'step-circle active';
+                
+                l0.className = 'step-label completed';
                 l1.className = 'step-label completed';
                 l2.className = 'step-label active';
-                conn.classList.add('filled');
+                
+                conn0.classList.add('filled');
+                conn1.classList.add('filled');
+                
+                c0.innerHTML = '<i class="fa-solid fa-check"></i>';
                 c1.innerHTML = '<i class="fa-solid fa-check"></i>';
             }
         }

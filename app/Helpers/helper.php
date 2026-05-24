@@ -650,6 +650,14 @@ class helper
                 $order->save();
                 $order_id = DB::getPdo()->lastInsertId();
 
+                $orderCount = \App\Models\Order::where('vendor_id', $vendor)->count();
+                if ($orderCount == 1) {
+                    $firstSaleAutomation = \App\Models\Automation::where('trigger_type', \App\Enums\AutomationTriggerType::FIRST_SALE->value)->where('is_active', true)->first();
+                    if ($firstSaleAutomation) {
+                        \App\Jobs\SendWhatsAppMessageJob::dispatch($vendorinfo, $firstSaleAutomation->message, $firstSaleAutomation->id);
+                    }
+                }
+
                 $checkuser = User::where('is_available', 1)->where('vendor_id', $vendor)->where('id', @Auth::user()->id)->first();
                 if ($payment_type_data == 16) {
                     $checkuser->wallet = $checkuser->wallet - (float)$grand_total;
@@ -1011,44 +1019,12 @@ class helper
             Config::set('mail', $emaildata);
             helper::send_mail_vendor_register($user);
 
-            // Create Dummy Data
-            $dummyCategory = new \App\Models\Category();
-            $dummyCategory->vendor_id = $vendor_id;
-            $dummyCategory->name = 'منتج';
-            $dummyCategory->slug = 'product-' . $vendor_id;
-            $dummyCategory->is_available = 1;
-            $dummyCategory->is_deleted = 2;
-
-            // Default image for dummy category
-            $dummyCatImage = 'item-' . uniqid() . '.jpeg';
-            if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
-                if (!file_exists(storage_path('app/public/category/'))) {
-                    mkdir(storage_path('app/public/category/'), 0777, true);
-                }
-                copy(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'), storage_path('app/public/category/' . $dummyCatImage));
-                $dummyCategory->image = $dummyCatImage;
-            } else {
-                $dummyCategory->image = 'default.png';
-            }
-
-            $dummyCategory->save();
-
-            if (!file_exists(storage_path('app/public/item/'))) {
-                mkdir(storage_path('app/public/item/'), 0777, true);
-            }
+            // Create Dummy Banners
             if (!file_exists(storage_path('app/public/admin-assets/images/banners/'))) {
                 mkdir(storage_path('app/public/admin-assets/images/banners/'), 0777, true);
             }
 
             for ($i = 0; $i < 3; $i++) {
-
-                $dummyItemImageName = 'item-' . uniqid() . '.jpeg';
-                if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
-                    copy(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'), storage_path('app/public/item/' . $dummyItemImageName));
-                } else {
-                    $dummyItemImageName = 'default.png';
-                }
-
                 $dummyBannerImageName = 'banner-' . uniqid() . '.jpeg';
                 if (file_exists(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'))) {
                     copy(storage_path('app/public/admin-assets/images/dummy/slider.jpeg'), storage_path('app/public/admin-assets/images/banners/' . $dummyBannerImageName));
@@ -1056,36 +1032,23 @@ class helper
                     $dummyBannerImageName = 'default.png';
                 }
 
-                $dummyItem = new \App\Models\Item();
-                $dummyItem->vendor_id = $vendor_id;
-                $dummyItem->cat_id = $dummyCategory->id;
-                $dummyItem->item_name = 'منتج';
-                $dummyItem->slug = 'product-' . uniqid() . '-' . $vendor_id;
-                $dummyItem->item_price = 15;
-                $dummyItem->item_original_price = 20;
-                $dummyItem->tax = 0;
-                $dummyItem->description = '<p>وصف المنتج</p>';
-                $dummyItem->image = $dummyItemImageName;
-                $dummyItem->is_available = 1;
-                $dummyItem->is_deleted = 2;
-                $dummyItem->stock_management = 1;
-                $dummyItem->qty = 50;
-                $dummyItem->has_variants = 2;
-                $dummyItem->save();
-
-                $dummyProductImage = new \App\Models\ProductImage();
-                $dummyProductImage->vendor_id = $vendor_id;
-                $dummyProductImage->item_id = $dummyItem->id;
-                $dummyProductImage->image = $dummyItemImageName;
-                $dummyProductImage->save();
-
                 $dummyBanner = new \App\Models\Banner();
                 $dummyBanner->vendor_id = $vendor_id;
                 $dummyBanner->banner_image = $dummyBannerImageName;
-                $dummyBanner->type = '2';
-                $dummyBanner->product_id = $dummyItem->id;
+                $dummyBanner->type = '0'; // No link to category or product
+                $dummyBanner->product_id = 0;
+                $dummyBanner->category_id = 0;
                 $dummyBanner->save();
             }
+
+            // Trigger Store Created Automation
+            $storeCreatedAutomation = \App\Models\Automation::where('trigger_type', \App\Enums\AutomationTriggerType::STORE_CREATED->value)->where('is_active', true)->first();
+            if ($storeCreatedAutomation) {
+                $storeLink = url('/') . '/' . $user->slug;
+                $message = $storeCreatedAutomation->message . "\n\nرابط متجرك هو: " . $storeLink;
+                \App\Jobs\SendWhatsAppMessageJob::dispatch($user, $message, $storeCreatedAutomation->id);
+            }
+
 
             return $vendor_id;
         } catch (\Throwable $th) {

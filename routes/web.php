@@ -57,6 +57,8 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
     Route::post('checklogin-{logintype}', [AdminController::class, 'check_admin_login']);
     Route::get('register', [VendorController::class, 'register']);
     Route::post('register_vendor', [VendorController::class, 'register_vendor']);
+    Route::post('whatsapp-otp/send', [\App\Http\Controllers\admin\WhatsAppOtpController::class, 'sendOtp']);
+    Route::post('whatsapp-otp/verify', [\App\Http\Controllers\admin\WhatsAppOtpController::class, 'verifyOtp']);
     Route::get('forgot_password', [VendorController::class, 'forgot_password']);
     Route::post('send_password', [VendorController::class, 'send_password']);
     Route::post('/getcity', [VendorController::class, 'getcity']);

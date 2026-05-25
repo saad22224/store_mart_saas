@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 
 class WhatsAppService
 {
@@ -28,7 +29,17 @@ class WhatsAppService
     public function sendMessage(string $to, string $message): array
     {
         try {
-            $response = Http::timeout(10)
+            $throttleKey = 'global-whatsapp-api-limit';
+
+            // Wait until we are under the limit of 50 messages per second
+            while (RateLimiter::tooManyAttempts($throttleKey, 50)) {
+                usleep(200000); // Wait 100ms before checking again
+            }
+
+            // Register the attempt with a 1-second decay
+            RateLimiter::hit($throttleKey, 1);
+
+            $response = Http::timeout(20)
                 ->retry(3, 100)
                 ->post($this->baseUrl, [
                     'uid' => $this->uid,

@@ -654,7 +654,20 @@ class helper
                 if ($orderCount == 1) {
                     $firstSaleAutomation = \App\Models\Automation::where('trigger_type', \App\Enums\AutomationTriggerType::FIRST_SALE->value)->where('is_active', true)->first();
                     if ($firstSaleAutomation) {
-                        \App\Jobs\SendWhatsAppMessageJob::dispatch($vendorinfo, $firstSaleAutomation->message, $firstSaleAutomation->id);
+                        $alreadySent = \App\Models\AutomationLog::where('user_id', $vendorinfo->id)
+                            ->where('automation_id', $firstSaleAutomation->id)
+                            ->exists();
+                        if (!$alreadySent && !empty($vendorinfo->mobile)) {
+                            $whatsappService = app(\App\Services\WhatsAppService::class);
+                            $response = $whatsappService->sendMessage($vendorinfo->mobile, $firstSaleAutomation->message);
+                            if (isset($response['success']) && $response['success']) {
+                                \App\Models\AutomationLog::create([
+                                    'user_id' => $vendorinfo->id,
+                                    'automation_id' => $firstSaleAutomation->id,
+                                    'sent_at' => now(),
+                                ]);
+                            }
+                        }
                     }
                 }
 
@@ -1044,9 +1057,22 @@ class helper
             // Trigger Store Created Automation
             $storeCreatedAutomation = \App\Models\Automation::where('trigger_type', \App\Enums\AutomationTriggerType::STORE_CREATED->value)->where('is_active', true)->first();
             if ($storeCreatedAutomation) {
-                $storeLink = url('/') . '/' . $user->slug;
-                $message = $storeCreatedAutomation->message . "\n\nرابط متجرك هو: " . $storeLink;
-                \App\Jobs\SendWhatsAppMessageJob::dispatch($user, $message, $storeCreatedAutomation->id);
+                $alreadySent = \App\Models\AutomationLog::where('user_id', $user->id)
+                    ->where('automation_id', $storeCreatedAutomation->id)
+                    ->exists();
+                if (!$alreadySent && !empty($user->mobile)) {
+                    $storeLink = url('/') . '/' . $user->slug;
+                    $message = $storeCreatedAutomation->message . "\n\nرابط متجرك هو: " . $storeLink;
+                    $whatsappService = app(\App\Services\WhatsAppService::class);
+                    $response = $whatsappService->sendMessage($user->mobile, $message);
+                    if (isset($response['success']) && $response['success']) {
+                        \App\Models\AutomationLog::create([
+                            'user_id' => $user->id,
+                            'automation_id' => $storeCreatedAutomation->id,
+                            'sent_at' => now(),
+                        ]);
+                    }
+                }
             }
 
 

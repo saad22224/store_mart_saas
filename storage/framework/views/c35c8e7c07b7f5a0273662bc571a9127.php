@@ -537,6 +537,11 @@
             const fullMobile = countryCode + mobileInput;
             $('#mobile_hidden').val(fullMobile);
 
+            let btn = $('#btn_send_otp');
+            let originalContent = btn.html();
+            btn.html('<i class="fa-solid fa-spinner fa-spin ms-1"></i> جاري الإرسال...');
+            btn.prop('disabled', true);
+
             // AJAX call to send OTP
             $.ajax({
                 url: "<?php echo e(URL::to('admin/whatsapp-otp/send')); ?>",
@@ -546,6 +551,9 @@
                     mobile: fullMobile
                 },
                 success: function(response) {
+                    btn.html(originalContent);
+                    btn.prop('disabled', false);
+                    
                     if(response.success) {
                         toastr.success(response.message);
                         $('#otp_section').removeClass('d-none');
@@ -558,6 +566,8 @@
                     }
                 },
                 error: function(xhr) {
+                    btn.html(originalContent);
+                    btn.prop('disabled', false);
                     toastr.error("حدث خطأ أثناء الإرسال. تأكد من الرقم والمحاولة مرة أخرى.");
                 }
             });
@@ -569,6 +579,11 @@
 
             if (!otp.trim()) { toastr.error("رمز التحقق مطلوب"); $('#otp').focus(); return; }
 
+            let btn = $('#btn_verify_otp');
+            let originalContent = btn.html();
+            btn.html('<i class="fa-solid fa-spinner fa-spin ms-1"></i> جاري التحقق...');
+            btn.prop('disabled', true);
+
             // AJAX call to verify OTP
             $.ajax({
                 url: "<?php echo e(URL::to('admin/whatsapp-otp/verify')); ?>",
@@ -579,6 +594,9 @@
                     otp: otp
                 },
                 success: function(response) {
+                    btn.html(originalContent);
+                    btn.prop('disabled', false);
+
                     if(response.success) {
                         toastr.success(response.message);
                         verifiedMobile = fullMobile;
@@ -589,6 +607,8 @@
                     }
                 },
                 error: function(xhr) {
+                    btn.html(originalContent);
+                    btn.prop('disabled', false);
                     toastr.error("حدث خطأ في التحقق.");
                 }
             });

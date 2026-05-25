@@ -396,10 +396,12 @@ class AdminController extends Controller
     {
         $vendor_id = Auth::user()->id;
         $settings = \App\Models\Settings::where('vendor_id', $vendor_id)->first();
+        $user = \App\Models\User::where('id', $vendor_id)->first();
         
         if ($settings) {
-            if ($request->has('email')) { $settings->email = $request->email; }
-            if ($request->has('mobile')) { $settings->contact = $request->mobile; $settings->mobile = $request->mobile; }
+            if (empty($settings->email)) { $settings->email = $user->email; }
+            if (empty($settings->mobile)) { $settings->mobile = $user->mobile; $settings->contact = $user->mobile; }
+            
             if ($request->has('address')) { $settings->address = $request->address; }
             if ($request->has('currency')) { $settings->default_currency = $request->currency; }
             
@@ -412,12 +414,11 @@ class AdminController extends Controller
             $settings->update();
         }
 
-        if ($request->has('whatsapp')) {
-            $user = \App\Models\User::where('id', $vendor_id)->first();
-            if ($user) {
-                $user->whatsapp = $request->whatsapp;
-                $user->update();
+        if ($user) {
+            if (empty($user->whatsapp)) {
+                $user->whatsapp = $user->mobile;
             }
+            $user->update();
         }
 
         return response()->json(['status' => 1, 'msg' => trans('messages.success')]);

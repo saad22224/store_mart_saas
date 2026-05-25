@@ -706,62 +706,7 @@
                     <p class="ob-sub">أضف تفاصيل التواصل الخاصة بمتجرك عشان العملاء يوصلولك بسهولة.</p>
 
                     <div class="row">
-                        <div class="col-md-6 set-row">
-                            <label>البريد الإلكتروني *</label>
-                            <input type="email" id="setEmail" value="<?php echo e(@$settings->email ?? ''); ?>"
-                                placeholder="store@example.com">
-                        </div>
-                        <div class="col-md-6 set-row">
-                            <label>رقم الهاتف *</label>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <select id="setMobileCode" style="width: 100px; flex-shrink: 0;" dir="ltr">
-                                    <option value="+963" selected>+963 🇸🇾</option>
-                                    <option value="+966">+966 🇸🇦</option>
-                                    <option value="+971">+971 🇦🇪</option>
-                                    <option value="+965">+965 🇰🇼</option>
-                                    <option value="+974">+974 🇶🇦</option>
-                                    <option value="+973">+973 🇧🇭</option>
-                                    <option value="+968">+968 🇴🇲</option>
-                                    <option value="+20">+20 🇪🇬</option>
-                                    <option value="+962">+962 🇯🇴</option>
-                                    <option value="+961">+961 🇱🇧</option>
-                                    <option value="+212">+212 🇲🇦</option>
-                                    <option value="+213">+213 🇩🇿</option>
-                                    <option value="+216">+216 🇹🇳</option>
-                                    <option value="+970">+970 🇵🇸</option>
-                                    <option value="+964">+964 🇮🇶</option>
-                                    <option value="+249">+249 🇸🇩</option>
-                                </select>
-                                <input type="text" id="setMobile" value="<?php echo e(@$settings->mobile ?? ''); ?>"
-                                    placeholder="0123456789" style="flex: 1;" dir="ltr">
-                            </div>
-                        </div>
-                        <div class="col-md-6 set-row">
-                            <label>رقم الواتساب</label>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <select id="setWhatsappCode" style="width: 100px; flex-shrink: 0;" dir="ltr">
-                                    <option value="+963" selected>+963 🇸🇾</option>
-                                    <option value="+966">+966 🇸🇦</option>
-                                    <option value="+971">+971 🇦🇪</option>
-                                    <option value="+965">+965 🇰🇼</option>
-                                    <option value="+974">+974 🇶🇦</option>
-                                    <option value="+973">+973 🇧🇭</option>
-                                    <option value="+968">+968 🇴🇲</option>
-                                    <option value="+20">+20 🇪🇬</option>
-                                    <option value="+962">+962 🇯🇴</option>
-                                    <option value="+961">+961 🇱🇧</option>
-                                    <option value="+212">+212 🇲🇦</option>
-                                    <option value="+213">+213 🇩🇿</option>
-                                    <option value="+216">+216 🇹🇳</option>
-                                    <option value="+970">+970 🇵🇸</option>
-                                    <option value="+964">+964 🇮🇶</option>
-                                    <option value="+249">+249 🇸🇩</option>
-                                </select>
-                                <input type="text" id="setWhatsapp" value="<?php echo e(@Auth::user()->whatsapp ?? ''); ?>"
-                                    placeholder="0123456789" style="flex: 1;" dir="ltr">
-                            </div>
-                        </div>
-                        <div class="col-md-6 set-row">
+                        <div class="col-md-12 set-row">
                             <label>العنوان *</label>
                             <input type="text" id="setAddress" value="<?php echo e(@$settings->address ?? ''); ?>"
                                 placeholder="المدينة، الشارع">
@@ -1014,26 +959,18 @@
                     }
                 }).catch(() => { toastr.error('حدث خطأ'); resetBtn(); });
             } else if (currentStep == 3) {
-                let email = document.getElementById('setEmail').value;
-                let mobileVal = document.getElementById('setMobile').value.trim();
-                let whatsappVal = document.getElementById('setWhatsapp').value.trim();
-                let mobile = mobileVal ? (document.getElementById('setMobileCode').value + mobileVal) : '';
-                let whatsapp = whatsappVal ? (document.getElementById('setWhatsappCode').value + whatsappVal) : '';
                 let address = document.getElementById('setAddress').value;
                 let currency = document.getElementById('setCurrency').value;
                 let logo = document.getElementById('setLogo').files[0];
 
-                if (!email || !mobile || !address) {
+                if (!address) {
                     toastr.warning('يرجى ملء الحقول المطلوبة');
                     return;
                 }
 
                 setBtnLoading();
                 let formData = new FormData();
-                formData.append('email', email);
-                formData.append('mobile', mobile);
                 formData.append('address', address);
-                formData.append('whatsapp', whatsapp);
                 formData.append('currency', currency);
                 if (logo) formData.append('logo', logo);
                 formData.append('_token', '<?php echo e(csrf_token()); ?>');

@@ -642,7 +642,7 @@
         @endphp
         <!-- mine header -->
 
-        @if (helper::appdata(@$storeinfo->id)->template == 7)
+        @if (in_array(helper::appdata(@$storeinfo->id)->template, [7, 16]))
             <!-- Template 7 Modern Header -->
             <div class="t7-top-promo">
                 <div class="container">
@@ -837,7 +837,7 @@
                 --bs-secondary-srg: color-mix(in srgb, var(--bs-secondary), transparent 90%);
 
             }
-            @if (helper::appdata(@$storeinfo->id)->template == 7)
+            @if (in_array(helper::appdata(@$storeinfo->id)->template, [7, 16]))
             /* Template 7 Header Overrides */
             .t7-top-promo {
                 background: #4a148c; /* Dark Purple */

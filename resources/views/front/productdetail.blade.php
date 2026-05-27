@@ -247,22 +247,43 @@
                             <div class="size-variation modal_size_variation" id="modal_variation">
 
                                 @for ($i = 0; $i < count($getitem->variants_json); $i++)
-                                    <label class="fw-semibold form-label mt-3"
-                                        for="">{{ $getitem->variants_json[$i]['variant_name'] }}</label><br>
-                                    <div class="d-flex flex-wrap gap-2 border-bottom pb-3">
-                                        @for ($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++)
-                                            <label
-                                                class="checkbox-inline check{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }} {{ $t == 0 ? 'active' : '' }}"
-                                                id="check_{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}"
-                                                for="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
-                                                <input type="checkbox" class="" name="skills"
-                                                    {{ $t == 0 ? 'checked' : '' }}
-                                                    value="{{ $getitem->variants_json[$i]['variant_options'][$t] }}"
-                                                    id="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
-                                                {{ $getitem->variants_json[$i]['variant_options'][$t] }}
-                                            </label>
-                                        @endfor
-                                    </div>
+                                    @if(helper::is_restaurant_store($storeinfo->id))
+                                        <label class="fw-bold form-label mt-3 fs-6" for="">
+                                            <i class="fa-solid fa-pizza-slice text-primary me-1"></i>
+                                            {{ trans('labels.select_size') ?? 'Select Size' }} ({{ $getitem->variants_json[$i]['variant_name'] }})
+                                        </label><br>
+                                        <div class="d-flex flex-wrap gap-2 border-bottom pb-3 mt-2">
+                                            @for ($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++)
+                                                <label
+                                                    class="btn btn-outline-primary check{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }} {{ $t == 0 ? 'active' : '' }}"
+                                                    id="check_{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}"
+                                                    for="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
+                                                    <input type="checkbox" class="d-none" name="skills"
+                                                        {{ $t == 0 ? 'checked' : '' }}
+                                                        value="{{ $getitem->variants_json[$i]['variant_options'][$t] }}"
+                                                        id="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
+                                                    {{ $getitem->variants_json[$i]['variant_options'][$t] }}
+                                                </label>
+                                            @endfor
+                                        </div>
+                                    @else
+                                        <label class="fw-semibold form-label mt-3"
+                                            for="">{{ $getitem->variants_json[$i]['variant_name'] }}</label><br>
+                                        <div class="d-flex flex-wrap gap-2 border-bottom pb-3">
+                                            @for ($t = 0; $t < count($getitem->variants_json[$i]['variant_options']); $t++)
+                                                <label
+                                                    class="checkbox-inline check{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }} {{ $t == 0 ? 'active' : '' }}"
+                                                    id="check_{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}"
+                                                    for="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
+                                                    <input type="checkbox" class="" name="skills"
+                                                        {{ $t == 0 ? 'checked' : '' }}
+                                                        value="{{ $getitem->variants_json[$i]['variant_options'][$t] }}"
+                                                        id="{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_name']) }}-{{ str_replace(' ', '_', $getitem->variants_json[$i]['variant_options'][$t]) }}">
+                                                    {{ $getitem->variants_json[$i]['variant_options'][$t] }}
+                                                </label>
+                                            @endfor
+                                        </div>
+                                    @endif
                                 @endfor
                             </div>
                         </div>
@@ -270,27 +291,44 @@
 
                     @if (count($getitem['extras']) > 0)
                         <div class="woo_pr_color flex_inline_center my-3 border-bottom pb-3">
-                            <div class="woo_colors_list text-left">
+                            <div class="woo_colors_list text-left w-100">
                                 <span id="extras">
-                                    <h5 class="extra-title fw-semibold color-changer mb-2">
-                                        {{ trans('labels.extras') }}</h5>
+                                    <h5 class="extra-title fw-semibold color-changer mb-3">
+                                        @if(helper::is_restaurant_store($storeinfo->id))
+                                            <i class="fa-solid fa-plus-circle text-primary me-1"></i> {{ trans('labels.add_extras') ?? 'Add Extras' }}
+                                        @else
+                                            {{ trans('labels.extras') }}
+                                        @endif
+                                    </h5>
                                     <ul class="list-unstyled extra-food m-0">
                                         <div id="pricelist">
                                             @foreach ($getitem['extras'] as $key => $extras)
-                                                <li class="mb-2">
-                                                    <input type="checkbox" name="addons[]"
-                                                        extras_name="{{ $extras->name }}" class="Checkbox"
-                                                        value="{{ $extras->id }}" price="{{ $extras->price }}">
-                                                    <p class="color-changer">{{ $extras->name }} :
-                                                        {{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}
-                                                    </p>
-                                                </li>
+                                                @if(helper::is_restaurant_store($storeinfo->id))
+                                                    <li class="mb-3">
+                                                        <label class="d-flex align-items-center justify-content-between p-2 border rounded cursor-pointer shadow-sm">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="addons[]"
+                                                                    extras_name="{{ $extras->name }}" class="Checkbox"
+                                                                    value="{{ $extras->id }}" price="{{ $extras->price }}">
+                                                                <span class="color-changer fw-medium">{{ $extras->name }}</span>
+                                                            </div>
+                                                            <span class="text-success fw-bold">+{{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}</span>
+                                                        </label>
+                                                    </li>
+                                                @else
+                                                    <li class="mb-2">
+                                                        <input type="checkbox" name="addons[]"
+                                                            extras_name="{{ $extras->name }}" class="Checkbox"
+                                                            value="{{ $extras->id }}" price="{{ $extras->price }}">
+                                                        <p class="color-changer">{{ $extras->name }} :
+                                                            {{ helper::currency_formate($extras->price, $getitem->vendor_id, $getitem->currency) }}
+                                                        </p>
+                                                    </li>
+                                                @endif
                                             @endforeach
-
                                         </div>
                                     </ul>
                                 </span>
-
                             </div>
                         </div>
                     @endif
@@ -503,6 +541,7 @@
 
                     $('#modal_detail_item_price').text(currency_formate(parseFloat(data.price), data.currency));
                     $('#modal_overview_item_price').val(data.price);
+                    update_total_price();
                     $('#modal_offer').removeClass('d-none');
                     if (parseFloat(data.original_price) > parseFloat(data.price)) {
                         $('#modal_detail_original_price').text(currency_formate(parseFloat(data
@@ -564,5 +603,20 @@
             }
         });
 
+    }
+
+    $('#pricelist .Checkbox').change(function() {
+        update_total_price();
+    });
+
+    function update_total_price() {
+        var base_price = parseFloat($('#modal_overview_item_price').val()) || 0;
+        var extras_price = 0;
+        $('#pricelist .Checkbox:checked').each(function() {
+            extras_price += parseFloat($(this).attr('price')) || 0;
+        });
+        var total = base_price + extras_price;
+        var currency = $('#modal_currency').val();
+        $('#modal_detail_item_price').text(currency_formate(total, currency));
     }
 </script>

@@ -573,54 +573,45 @@
 
                     <div class="cat-grid" id="catGrid">
                         <?php
-                            $defaultCats = [
-                                ['name' => 'ملابس رجالية', 'img' => 'https://img.icons8.com/color/144/t-shirt.png'],
+                            $isRestaurant = helper::is_restaurant_store(Auth::user()->id);
 
-                                // تم التعديل
-                                [
-                                    'name' => 'ملابس نسائية',
-                                    'img' => 'https://img.icons8.com/color/144/womens-shirt.png',
-                                ],
-
-                                // // تم التعديل
-                                // ['name' => 'أحذية', 'img' => 'https://img.icons8.com/color/144/running-shoe.png'],
-
-                                // تم التعديل
-                                // [
-                                //     'name' => 'حقائب اكسسوارات',
-                                //     'img' => 'https://img.icons8.com/color/144/womans-handbag.png',
-                                // ],
-
-                                ['name' => 'ساعات', 'img' => 'https://img.icons8.com/color/144/clock.png'],
-                                ['name' => 'مجوهرات', 'img' => 'https://img.icons8.com/color/144/diamond.png'],
-                                ['name' => 'إلكترونيات', 'img' => 'https://img.icons8.com/color/144/electronics.png'],
-                                ['name' => 'هواتف', 'img' => 'https://img.icons8.com/color/144/smartphone.png'],
-                                ['name' => 'لابتوب', 'img' => 'https://img.icons8.com/color/144/laptop.png'],
-                                ['name' => 'عطور', 'img' => 'https://img.icons8.com/color/144/perfume-bottle.png'],
-
-                                // تم التعديل
-                                ['name' => 'مستحضرات تجميل', 'img' => 'https://img.icons8.com/color/144/lipstick.png'],
-
-                                [
-                                    'name' => 'طعام ومشروبات',
-                                    'img' => 'https://img.icons8.com/color/144/food-and-wine.png',
-                                ],
-
-                                ['name' => 'أدوات منزلية', 'img' => 'https://img.icons8.com/color/144/home.png'],
-                                ['name' => 'أثاث', 'img' => 'https://img.icons8.com/color/144/sofa.png'],
-                                ['name' => 'ألعاب أطفال', 'img' => 'https://img.icons8.com/color/144/teddy-bear.png'],
-                                ['name' => 'نظارات', 'img' => 'https://img.icons8.com/color/144/glasses.png'],
-
-                                // تم التعديل
-                                [
-                                    'name' => 'مستلزمات حيوانات',
-                                    'img' => 'https://img.icons8.com/color/144/dog.png',
-                                ],
-
-                                ['name' => 'رياضة', 'img' => 'https://img.icons8.com/color/144/basketball.png'],
-                                ['name' => 'كتب', 'img' => 'https://img.icons8.com/color/144/book.png'],
-                                ['name' => 'سيارات', 'img' => 'https://img.icons8.com/color/144/car.png'],
-                            ];
+                            if ($isRestaurant) {
+                                $defaultCats = [
+                                    ['name' => 'وجبات رئيسية', 'img' => 'https://img.icons8.com/color/144/cutlery.png'],
+                                    ['name' => 'مشروبات وعصائر', 'img' => 'https://img.icons8.com/color/144/coffee-to-go.png'],
+                                    ['name' => 'مقبلات', 'img' => 'https://img.icons8.com/color/144/nachos.png'],
+                                    ['name' => 'حلويات', 'img' => 'https://img.icons8.com/color/144/cupcake.png'],
+                                    ['name' => 'وجبات سريعة', 'img' => 'https://img.icons8.com/color/144/hamburger.png'],
+                                    ['name' => 'بيتزا', 'img' => 'https://img.icons8.com/color/144/pizza.png'],
+                                    ['name' => 'مشاوي', 'img' => 'https://img.icons8.com/color/144/kebab.png'],
+                                    ['name' => 'مأكولات بحرية', 'img' => 'https://img.icons8.com/color/144/crab.png'],
+                                    ['name' => 'سلطات', 'img' => 'https://img.icons8.com/color/144/salad.png'],
+                                    ['name' => 'شاورما', 'img' => 'https://img.icons8.com/color/144/wrap.png'],
+                                    ['name' => 'فطور', 'img' => 'https://img.icons8.com/color/144/pancakes.png'],
+                                    ['name' => 'معجنات', 'img' => 'https://img.icons8.com/color/144/croissant.png'],
+                                ];
+                            } else {
+                                $defaultCats = [
+                                    ['name' => 'ملابس رجالية', 'img' => 'https://img.icons8.com/color/144/t-shirt.png'],
+                                    ['name' => 'ملابس نسائية', 'img' => 'https://img.icons8.com/color/144/womens-shirt.png'],
+                                    ['name' => 'ساعات', 'img' => 'https://img.icons8.com/color/144/clock.png'],
+                                    ['name' => 'مجوهرات', 'img' => 'https://img.icons8.com/color/144/diamond.png'],
+                                    ['name' => 'إلكترونيات', 'img' => 'https://img.icons8.com/color/144/electronics.png'],
+                                    ['name' => 'هواتف', 'img' => 'https://img.icons8.com/color/144/smartphone.png'],
+                                    ['name' => 'لابتوب', 'img' => 'https://img.icons8.com/color/144/laptop.png'],
+                                    ['name' => 'عطور', 'img' => 'https://img.icons8.com/color/144/perfume-bottle.png'],
+                                    ['name' => 'مستحضرات تجميل', 'img' => 'https://img.icons8.com/color/144/lipstick.png'],
+                                    ['name' => 'طعام ومشروبات', 'img' => 'https://img.icons8.com/color/144/food-and-wine.png'],
+                                    ['name' => 'أدوات منزلية', 'img' => 'https://img.icons8.com/color/144/home.png'],
+                                    ['name' => 'أثاث', 'img' => 'https://img.icons8.com/color/144/sofa.png'],
+                                    ['name' => 'ألعاب أطفال', 'img' => 'https://img.icons8.com/color/144/teddy-bear.png'],
+                                    ['name' => 'نظارات', 'img' => 'https://img.icons8.com/color/144/glasses.png'],
+                                    ['name' => 'مستلزمات حيوانات', 'img' => 'https://img.icons8.com/color/144/dog.png'],
+                                    ['name' => 'رياضة', 'img' => 'https://img.icons8.com/color/144/basketball.png'],
+                                    ['name' => 'كتب', 'img' => 'https://img.icons8.com/color/144/book.png'],
+                                    ['name' => 'سيارات', 'img' => 'https://img.icons8.com/color/144/car.png'],
+                                ];
+                            }
                         ?>
                         <?php $__currentLoopData = $defaultCats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="cat-chip" onclick="toggleCat(this)" data-name="<?php echo e($c['name']); ?>"

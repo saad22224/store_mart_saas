@@ -953,8 +953,24 @@ class helper
             $data->order_prefix = 'PITS';
             $data->order_number_start = 1001;
             $data->firebase = '-';
-            $data->primary_color = '#E84393';   // Default rose – vendor can change from dashboard
-            $data->secondary_color = '#FF6BB5';
+            $storeCategory = \App\Models\StoreCategory::find($store);
+            $storeCatName = strtolower(trim($storeCategory->name ?? ''));
+            $isRestaurant = false;
+            
+            if (str_contains($storeCatName, 'restaurant') || str_contains($storeCatName, 'cafe') || 
+                str_contains($storeCatName, 'café') || str_contains($storeCatName, 'مطعم/ كافيه') || 
+                str_contains($storeCatName, 'كافيه')) {
+                $isRestaurant = true;
+            }
+
+            if ($isRestaurant) {
+                $data->primary_color = '#9d4300';
+                $data->secondary_color = '#944a23';
+            } else {
+                $data->primary_color = '#0284c7';
+                $data->secondary_color = '#0369a1';
+            }
+
             $data->contact_email_message = @$rec->contact_email_message ?? '';
             $data->new_order_invoice_email_message = @$rec->new_order_invoice_email_message ?? '';
             $data->vendor_new_order_email_message = @$rec->vendor_new_order_email_message ?? '';
@@ -971,11 +987,20 @@ class helper
             $data->product_type = $product_type;
             $data->shopify_store_url = '-';
             $data->shopify_access_token = '-';
-            $data->template = 7;   // Default to modern template-7
+            
+            $data->template = $isRestaurant ? 16 : 7;   // Default to modern template-7
             $data->save();
 
             // ── Auto-assign the basic free plan ──────────────────────────────────
-            $basicPlan = PricingPlan::where('price', 0)->where('is_available', 1)->first();
+            if ($isRestaurant) {
+                $basicPlan = PricingPlan::where('name', 'Free Restaurant Package')->where('is_available', 1)->first();
+            } else {
+                $basicPlan = PricingPlan::where('price', 0)->where('name',  'الباقة الأساسية')->where('is_available', 1)->first();
+            }
+            if (!$basicPlan) {
+                $basicPlan = PricingPlan::where('price', 0)->where('is_available', 1)->first();
+            }
+
             if ($basicPlan) {
                 User::where('id', $vendor_id)->update([
                     'plan_id'         => $basicPlan->id,
@@ -1018,6 +1043,7 @@ class helper
                 $freeTx->features           = $basicPlan->features;
                 $freeTx->save();
             }
+
             // ─────────────────────────────────────────────────────────────────────
 
             $otherdata = OtherSettings::where('vendor_id', '1')->first();
@@ -1878,4 +1904,25 @@ class helper
         return $currency;
     }
     
+    /**
+     * Check if a vendor's store belongs to restaurant/café category.
+     * Used to apply restaurant-specific UI and pricing logic (sizes + extras).
+     */
+    public static function is_restaurant_store($vendor_id): bool
+    {
+        $user = User::find($vendor_id);
+        if (!$user || !$user->store_id) {
+            return false;
+        }
+        $storeCategory = \App\Models\StoreCategory::find($user->store_id);
+        if (!$storeCategory) {
+            return false;
+        }
+        $name = strtolower(trim($storeCategory->name));
+        return str_contains($name, 'restaurant') ||
+               str_contains($name, 'cafe')       ||
+               str_contains($name, 'café')       ||
+               str_contains($name, 'مطعم')       ||
+               str_contains($name, 'كافيه');
+    }
 }

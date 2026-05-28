@@ -37,6 +37,7 @@ class WebSettingsController extends Controller
         $landingdata = LandingSettings::where('vendor_id', $vendor_id)->first();
         $funfacts = FunFact::where('vendor_id', $vendor_id)->get();
         return view('admin.landing.index', compact('settingdata', 'othersettingdata', 'theme', 'app', 'getfooterfeatures', 'landingdata', 'funfacts', 'getsociallinks'));
+        // dd($theme);
     }
     public function theme_settings(Request $request)
     {

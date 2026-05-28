@@ -150,6 +150,7 @@ class helper
             }
         }
         if (Str::contains($image, 'theme-')) {
+            // dd($image);
             if (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image))) {
                 $path = url(env('ASSETPATHURL') . 'admin-assets/images/theme/' . $image);
             }

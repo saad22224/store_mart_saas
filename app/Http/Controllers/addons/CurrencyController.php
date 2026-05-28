@@ -289,6 +289,16 @@ class CurrencyController extends Controller
     {
         $currency = CurrencySettings::where('code', $request->currency)->first();
         session()->put('currency', $currency->currency);
+        
+        if (Auth::check() && in_array(Auth::user()->type, [1, 2, 4])) {
+            $vendor_id = (Auth::user()->type == 4) ? Auth::user()->vendor_id : Auth::user()->id;
+            $settingdata = Settings::where('vendor_id', $vendor_id)->first();
+            if ($settingdata) {
+                $settingdata->default_currency = $request->currency;
+                $settingdata->save();
+            }
+        }
+
         return redirect()->back()->withCookie(cookie('code', $currency->code, 60 * 24 * 365));
     }
 }

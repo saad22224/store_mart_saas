@@ -80,6 +80,7 @@
 </head>
 
 <body>
+    @if(Auth::check() && Auth::user()->type == 2 && request()->is('admin/dashboard'))
     <!-- PWA Install Prompt Button -->
     <style>
         .pwa-prompt-container {
@@ -96,8 +97,8 @@
         .pwa-prompt-title { font-size: 0.875rem; font-weight: 700; color: #111827; line-height: 1.25; margin: 0; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .pwa-prompt-desc { font-size: 0.75rem; color: #6b7280; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .pwa-prompt-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
-        .pwa-prompt-install { background-color: #0284c7; color: white; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 0.75rem; border-radius: 0.75rem; border: none; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.2); white-space: nowrap; }
-        .pwa-prompt-install:hover { background-color: #0369a1; }
+        .pwa-prompt-install { background-color: #16a34a; color: white; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 0.75rem; border-radius: 0.75rem; border: none; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2); white-space: nowrap; }
+        .pwa-prompt-install:hover { background-color: #15803d; }
         .pwa-prompt-close { width: 1.75rem; height: 1.75rem; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: #f9fafb; color: #9ca3af; border: none; cursor: pointer; transition: all 0.2s; }
         .pwa-prompt-close:hover { background-color: #e5e7eb; color: #374151; }
     </style>
@@ -188,6 +189,7 @@
             }
         }
     </script>
+    @endif
     @php
         if (Auth::user()->type == 4) {
             $vendor_id = Auth::user()->vendor_id;

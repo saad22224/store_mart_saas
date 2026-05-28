@@ -69,7 +69,7 @@
 
             {{-- Description --}}
             @if(!empty($item->description))
-                <div class="t16-card-desc">{{ Str::limit(strip_tags($item->description), 80) }}</div>
+                <div class="t16-card-desc">{!! Str::limit(strip_tags($item->description), 80) !!}</div>
             @endif
 
             {{-- Rating --}}
@@ -125,6 +125,14 @@
                 <input type="hidden" id="{{ $uid }}_slug"    value="{{ $item->slug }}">
                 <input type="hidden" id="{{ $uid }}_qty"     value="{{ $cartQty }}">
 
+                @if($item->has_variants == 1)
+                    {{-- Variant product: go to detail page to choose variant --}}
+                    <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}"
+                       class="t16-add-btn" style="display:flex;text-decoration:none;">
+                        <i class="fa-regular fa-sliders" style="font-size:12px;"></i>
+                        {{ trans('labels.view') ?? 'الخيارات' }}
+                    </a>
+                @else
                 {{-- "Add" button: visible when qty=0 --}}
                 <button class="t16-add-btn"
                         id="{{ $uid }}_addbtn"
@@ -143,8 +151,9 @@
                     <span class="t16-qty-num"
                           id="{{ $uid }}_qtynum">{{ max(1, $cartQty) }}</span>
                     <button class="t16-qty-btn plus"
-                            onclick="t16Increment('{{ $item->id }}')">+</button>
+                            onclick="t16Increment('{{ $item->id }}')">⁺</button>
                 </div>
+                @endif
 
             @elseif($onlineOrder == 1 && $isOut)
                 <button class="t16-add-btn" style="opacity:.45;cursor:not-allowed;" disabled>

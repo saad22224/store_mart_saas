@@ -519,8 +519,10 @@ function allowNumbersOnly(e) {
   }
 }
 $('#variant_options').keypress(function (e) {
-  var txt = String.fromCharCode(e.which);
-  if (!txt.match(/[A-Za-z0-9|. ]/)) {
+  var code = e.which || e.keyCode;
+  // Allow: Arabic range (U+0600-U+06FF), pipe, letters, digits, spaces, dots
+  var txt = String.fromCharCode(code);
+  if (!txt.match(/[A-Za-z0-9\u0600-\u06FF|. ]/)) {
       return false;
   }
 });
@@ -528,7 +530,8 @@ $('#variant_options').keypress(function (e) {
 $('#variant_options').bind('paste', function() {
   setTimeout(function() { 
     var value = $('#variant_options').val();
-    var updated = value.replace(/[^A-Za-z0-9&. ]/g, '');
+    // Keep Arabic, Latin, digits, pipe, dot, space
+    var updated = value.replace(/[^A-Za-z0-9\u0600-\u06FF|. ]/g, '');
     $('#variant_options').val(updated);
    });
 });

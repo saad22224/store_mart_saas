@@ -1120,4 +1120,5 @@
 
     "recent_view_product" => "عرض المنتج مؤخراً",
     "It is a long established fact that a reader will be distracted layout." => "من الحقائق الراسخة أن تصميم الصفحة قد يشتت انتباه القارئ.",
+    'no_product_found'=> 'لا يوجد منتجات',
 ];

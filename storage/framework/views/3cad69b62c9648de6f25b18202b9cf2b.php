@@ -1131,7 +1131,7 @@
             </div>
         </div>
         <div class="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
-            <button onclick="installApp()" class="bg-sky-600 text-white text-[11px] md:text-xs font-bold px-3 py-2 rounded-xl hover:bg-sky-700 transition-colors shadow-md shadow-sky-500/20 active:scale-95 whitespace-nowrap" data-i18n="install.btn">
+            <button onclick="installApp()" class="bg-green-600 text-white text-[11px] md:text-xs font-bold px-3 py-2 rounded-xl hover:bg-green-700 transition-colors shadow-md shadow-green-500/20 active:scale-95 whitespace-nowrap" data-i18n="install.btn">
                 تثبيت
             </button>
             <button onclick="hideInstallBtn()" class="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors active:scale-95 flex-shrink-0">

@@ -964,8 +964,8 @@ class helper
             }
 
             if ($isRestaurant) {
-                $data->primary_color = '#9d4300';
-                $data->secondary_color = '#944a23';
+                $data->primary_color = '#ea580c';
+                $data->secondary_color = '#c2410c';
             } else {
                 $data->primary_color = '#0284c7';
                 $data->secondary_color = '#0369a1';

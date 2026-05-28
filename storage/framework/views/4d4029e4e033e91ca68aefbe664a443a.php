@@ -69,7 +69,7 @@
 
             
             <?php if(!empty($item->description)): ?>
-                <div class="t16-card-desc"><?php echo e(Str::limit(strip_tags($item->description), 80)); ?></div>
+                <div class="t16-card-desc"><?php echo Str::limit(strip_tags($item->description), 80); ?></div>
             <?php endif; ?>
 
             
@@ -129,6 +129,15 @@
                 <input type="hidden" id="<?php echo e($uid); ?>_slug"    value="<?php echo e($item->slug); ?>">
                 <input type="hidden" id="<?php echo e($uid); ?>_qty"     value="<?php echo e($cartQty); ?>">
 
+                <?php if($item->has_variants == 1): ?>
+                    
+                    <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>"
+                       class="t16-add-btn" style="display:flex;text-decoration:none;">
+                        <i class="fa-regular fa-sliders" style="font-size:12px;"></i>
+                        <?php echo e(trans('labels.view') ?? 'الخيارات'); ?>
+
+                    </a>
+                <?php else: ?>
                 
                 <button class="t16-add-btn"
                         id="<?php echo e($uid); ?>_addbtn"
@@ -148,8 +157,9 @@
                     <span class="t16-qty-num"
                           id="<?php echo e($uid); ?>_qtynum"><?php echo e(max(1, $cartQty)); ?></span>
                     <button class="t16-qty-btn plus"
-                            onclick="t16Increment('<?php echo e($item->id); ?>')">+</button>
+                            onclick="t16Increment('<?php echo e($item->id); ?>')">⁺</button>
                 </div>
+                <?php endif; ?>
 
             <?php elseif($onlineOrder == 1 && $isOut): ?>
                 <button class="t16-add-btn" style="opacity:.45;cursor:not-allowed;" disabled>

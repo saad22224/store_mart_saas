@@ -4,7 +4,7 @@
     <div class="form-group">
 
         <label for="variant_name" class="form-label">{{ __('Variant Name') }}</label>
-        <input class="form-control" name="variant_name" type="text" id="variant_name" placeholder="{{ __('Variant Name, i.e Size, Color etc') }}" onkeyup="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')">
+        <input class="form-control" name="variant_name" type="text" id="variant_name" placeholder="{{ __('Variant Name, i.e Size, Color etc') }}">
     </div>
     <div class="form-group">
         <label for="variant_options" class="form-label">{{ __('Variant Options') }}</label>

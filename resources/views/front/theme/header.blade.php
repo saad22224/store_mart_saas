@@ -689,9 +689,11 @@
                             @endif
                         @endif
                         
+                        @if (helper::appdata(@$storeinfo->id)->template != 16)
                         <a href="{{ URL::to($storeinfo->slug . '/search') }}" class="t7-header-icon-btn">
                             <i class="fa-light fa-magnifying-glass"></i>
                         </a>
+                        @endif
                     </div>
 
                     <!-- Center: Circular Logo -->
@@ -732,6 +734,64 @@
                     </div>
                 </div>
             </header>
+            
+            @if (helper::appdata(@$storeinfo->id)->template == 16)
+                <style>
+                    .t7-header-main {
+                        background: rgba(255, 255, 255, 0.98) !important;
+                        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05) !important;
+                        border-bottom: none !important;
+                        padding: 10px 0 !important;
+                    }
+                    .t7-header-icon-btn {
+                        background: #f6f3f2 !important;
+                        color: #584237 !important;
+                        border-radius: 12px !important;
+                        width: 42px !important; height: 42px !important;
+                        display: flex !important; align-items: center !important; justify-content: center !important;
+                        transition: all 0.3s !important;
+                        border: 1px solid #e0c0b1 !important;
+                    }
+                    .t7-header-icon-btn:hover {
+                        background: var(--t16-primary, #9d4300) !important;
+                        color: #fff !important;
+                        border-color: var(--t16-primary, #9d4300) !important;
+                    }
+                    .t7-logo-circle {
+                        border-radius: 15px !important;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+                        border: 2px solid #fff !important;
+                        overflow: hidden !important;
+                        display: flex !important;
+                        background: #fff !important;
+                        padding: 5px !important;
+                        width: 70px !important;
+                        height: 70px !important;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .t7-logo-circle img {
+                        border-radius: 10px !important;
+                        max-width: 100%;
+                        max-height: 100%;
+                        object-fit: contain;
+                    }
+                    .t7-top-promo {
+                        background: var(--t16-primary, #9d4300) !important;
+                        color: #fff !important;
+                        font-weight: 700 !important;
+                        font-size: 14px !important;
+                        padding: 6px 0 !important;
+                    }
+                    .t7-icon-badge {
+                        background: var(--t16-primary, #9d4300) !important;
+                        color: #fff !important;
+                        top: -5px !important;
+                        right: -5px !important;
+                        border: 2px solid #fff;
+                    }
+                </style>
+            @endif
         @else
             <!-- Existing Header Logic -->
             @if (helper::appdata(@$storeinfo->id)->template != 11)

@@ -588,7 +588,7 @@
                                     ['name' => 'مأكولات بحرية', 'img' => 'https://img.icons8.com/color/144/crab.png'],
                                     ['name' => 'سلطات', 'img' => 'https://img.icons8.com/color/144/salad.png'],
                                     ['name' => 'شاورما', 'img' => 'https://img.icons8.com/color/144/wrap.png'],
-                                    ['name' => 'فطور', 'img' => 'https://img.icons8.com/color/144/pancakes.png'],
+                                    // ['name' => 'فطور', 'img' => 'https://img.icons8.com/color/144/pancakes.png'],
                                     ['name' => 'معجنات', 'img' => 'https://img.icons8.com/color/144/croissant.png'],
                                 ];
                             } else {

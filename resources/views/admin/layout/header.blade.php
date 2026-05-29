@@ -85,9 +85,12 @@
                             <div class="lag-btn dropdown border-0 shadow-none login-lang">
                                 <a class="btn btn-sm btn-primary header-btn-icon dropdown-toggle" href="#"
                                     role="button" data-bs-toggle ="dropdown" aria-expanded="false">
-                                    <span class="fs-6 text-white">
-                                        {{ session()->get('currency') }}
-                                    </span>
+                                    <i class="fa-solid fa-money-bill-wave"></i>
+                                    @if(session()->get('currency'))
+                                        <span class="fs-6 text-white ms-1">
+                                            {{ session()->get('currency') }}
+                                        </span>
+                                    @endif
                                 </a>
                                 <ul
                                     class="dropdown-menu rounded mt-1 p-0 bg-body-secondary shadow border-0 overflow-hidden {{ session()->get('direction') == 2 ? 'min-dropdown-rtl' : 'min-dropdown-ltr' }}">

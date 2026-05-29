@@ -191,28 +191,31 @@
                                 <div>
                                     <h5 class="dash-welcome-name mb-1"><?php echo e(@Auth::user()->name); ?></h5>
                                     <p class="dash-welcome-desc mb-2"><?php echo e(trans('labels.dashboard_description')); ?></p>
-                                    <div class="dropdown" id="tour-quick-add">
-                                        <a class="btn btn-sm px-3 py-1 dropdown-toggle" href="#" role="button"
-                                            data-bs-toggle="dropdown"
-                                            style="background:#fff;color:var(--bs-primary);border-radius:8px;font-weight:700;font-size:.85rem;border:none;box-shadow:0 4px 10px rgba(0,0,0,0.1)">
-                                            <i class="fa-regular fa-plus me-1"></i> <?php echo e(trans('labels.quick_add')); ?>
+                                    <div class="d-flex flex-wrap gap-2 mt-2" id="tour-quick-add">
+                                        <a class="btn btn-sm px-3 py-2 <?php echo e(helper::check_menu(@Auth::user()->role_id, 'role_products') == 1 ? 'd-flex' : 'd-none'); ?> align-items-center"
+                                            href="<?php echo e(URL::to('/admin/products')); ?>"
+                                            style="background:#fff;color:var(--bs-primary);border-radius:8px;font-weight:700;font-size:.85rem;border:none;box-shadow:0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease;"
+                                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)';">
+                                            <i class="fa-solid fa-box me-2"></i> <?php echo e(trans('labels.products')); ?>
 
                                         </a>
-                                        <ul class="dropdown-menu fw-500 fs-7 text-dark"
-                                            style="border-radius:12px;overflow:hidden;border:none;box-shadow:0 10px 40px rgba(0,0,0,0.15)">
-                                            <li><a class="dropdown-item py-2 <?php echo e(helper::check_menu(@Auth::user()->role_id, 'role_products') == 1 ? 'd-block' : 'd-none'); ?>"
-                                                    href="<?php echo e(URL::to('/admin/products')); ?>"><i
-                                                        class="fa-solid fa-box me-2 text-muted"></i><?php echo e(trans('labels.products')); ?></a>
-                                            </li>
-                                            <li><a class="dropdown-item py-2 <?php echo e(helper::check_menu(@Auth::user()->role_id, 'role_categories') == 1 ? 'd-block' : 'd-none'); ?>"
-                                                    href="<?php echo e(URL::to('/admin/categories')); ?>"><i
-                                                        class="fa-solid fa-layer-group me-2 text-muted"></i><?php echo e(trans('labels.categories')); ?></a>
-                                            </li>
-                                            <li><a class="dropdown-item py-2 <?php echo e(helper::check_menu(@Auth::user()->role_id, 'role_settings') == 1 ? 'd-block' : 'd-none'); ?>"
-                                                    href="<?php echo e(URL::to('/admin/basic_settings')); ?>"><i
-                                                        class="fa-solid fa-gear me-2 text-muted"></i><?php echo e(trans('labels.basic_settings')); ?></a>
-                                            </li>
-                                        </ul>
+                                        <a class="btn btn-sm px-3 py-2 <?php echo e(helper::check_menu(@Auth::user()->role_id, 'role_categories') == 1 ? 'd-flex' : 'd-none'); ?> align-items-center"
+                                            href="<?php echo e(URL::to('/admin/categories')); ?>"
+                                            style="background:#fff;color:var(--bs-primary);border-radius:8px;font-weight:700;font-size:.85rem;border:none;box-shadow:0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease;"
+                                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)';">
+                                            <i class="fa-solid fa-layer-group me-2"></i> <?php echo e(trans('labels.categories')); ?>
+
+                                        </a>
+                                        <a class="btn btn-sm px-3 py-2 <?php echo e(helper::check_menu(@Auth::user()->role_id, 'role_settings') == 1 ? 'd-flex' : 'd-none'); ?> align-items-center"
+                                            href="<?php echo e(URL::to('/admin/basic_settings')); ?>"
+                                            style="background:#fff;color:var(--bs-primary);border-radius:8px;font-weight:700;font-size:.85rem;border:none;box-shadow:0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease;"
+                                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.15)';"
+                                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.1)';">
+                                            <i class="fa-solid fa-gear me-2"></i> <?php echo e(trans('labels.basic_settings')); ?>
+
+                                        </a>
                                     </div>
                                 </div>
                             </div>

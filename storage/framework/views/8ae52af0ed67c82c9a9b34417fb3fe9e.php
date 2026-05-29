@@ -587,7 +587,7 @@
                                     ['name' => 'مأكولات بحرية', 'img' => 'https://img.icons8.com/color/144/crab.png'],
                                     ['name' => 'سلطات', 'img' => 'https://img.icons8.com/color/144/salad.png'],
                                     ['name' => 'شاورما', 'img' => 'https://img.icons8.com/color/144/wrap.png'],
-                                    ['name' => 'فطور', 'img' => 'https://img.icons8.com/color/144/pancakes.png'],
+                                    // ['name' => 'فطور', 'img' => 'https://img.icons8.com/color/144/pancakes.png'],
                                     ['name' => 'معجنات', 'img' => 'https://img.icons8.com/color/144/croissant.png'],
                                 ];
                             } else {
@@ -604,12 +604,12 @@
                                     ['name' => 'طعام ومشروبات', 'img' => 'https://img.icons8.com/color/144/food-and-wine.png'],
                                     ['name' => 'أدوات منزلية', 'img' => 'https://img.icons8.com/color/144/home.png'],
                                     ['name' => 'أثاث', 'img' => 'https://img.icons8.com/color/144/sofa.png'],
-                                    ['name' => 'ألعاب أطفال', 'img' => 'https://img.icons8.com/color/144/teddy-bear.png'],
-                                    ['name' => 'نظارات', 'img' => 'https://img.icons8.com/color/144/glasses.png'],
-                                    ['name' => 'مستلزمات حيوانات', 'img' => 'https://img.icons8.com/color/144/dog.png'],
-                                    ['name' => 'رياضة', 'img' => 'https://img.icons8.com/color/144/basketball.png'],
-                                    ['name' => 'كتب', 'img' => 'https://img.icons8.com/color/144/book.png'],
-                                    ['name' => 'سيارات', 'img' => 'https://img.icons8.com/color/144/car.png'],
+                                    // ['name' => 'ألعاب أطفال', 'img' => 'https://img.icons8.com/color/144/teddy-bear.png'],
+                                    // ['name' => 'نظارات', 'img' => 'https://img.icons8.com/color/144/glasses.png'],
+                                    // ['name' => 'مستلزمات حيوانات', 'img' => 'https://img.icons8.com/color/144/dog.png'],
+                                    // ['name' => 'رياضة', 'img' => 'https://img.icons8.com/color/144/basketball.png'],
+                                    // ['name' => 'كتب', 'img' => 'https://img.icons8.com/color/144/book.png'],
+                                    // ['name' => 'سيارات', 'img' => 'https://img.icons8.com/color/144/car.png'],
                                 ];
                             }
                         ?>

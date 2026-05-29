@@ -86,10 +86,13 @@
                             <div class="lag-btn dropdown border-0 shadow-none login-lang">
                                 <a class="btn btn-sm btn-primary header-btn-icon dropdown-toggle" href="#"
                                     role="button" data-bs-toggle ="dropdown" aria-expanded="false">
-                                    <span class="fs-6 text-white">
-                                        <?php echo e(session()->get('currency')); ?>
+                                    <i class="fa-solid fa-money-bill-wave"></i>
+                                    <?php if(session()->get('currency')): ?>
+                                        <span class="fs-6 text-white ms-1">
+                                            <?php echo e(session()->get('currency')); ?>
 
-                                    </span>
+                                        </span>
+                                    <?php endif; ?>
                                 </a>
                                 <ul
                                     class="dropdown-menu rounded mt-1 p-0 bg-body-secondary shadow border-0 overflow-hidden <?php echo e(session()->get('direction') == 2 ? 'min-dropdown-rtl' : 'min-dropdown-ltr'); ?>">

@@ -825,7 +825,7 @@ class helper
                 }
             }
             $rec = Settings::where('vendor_id', '1')->first();
-            date_default_timezone_set(@$rec->timezone ?? 'Asia/Kolkata');
+            // date_default_timezone_set(@$rec->timezone ?? 'Asia/Kolkata');
             $logintype = "normal";
             if ($google_id != "") {
                 $logintype = "google";

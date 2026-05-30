@@ -150,16 +150,22 @@
                         <div class="t7-footer-icon">
                             <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="mailto:{{ helper::appdata(@$storeinfo->id)->email }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            {{ helper::appdata(@$storeinfo->id)->email }}
+                        @php
+                            $store = App\Models\User::where('id' , $storeinfo->id)->first();
+                            // dd($store);
+                            $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
+                            $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
+                        @endphp
+                        <a href="mailto:{{ $storeEmail}}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            {{  $storeEmail }}
                         </a>
                     </li>
                     <li>
                         <div class="t7-footer-icon">
                             <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="tel:{{ helper::appdata(@$storeinfo->id)->contact }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            {{ helper::appdata(@$storeinfo->id)->contact }}
+                        <a href="tel:{{ $storePhone }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            {{ $storePhone }}
                         </a>
                     </li>
                     @php

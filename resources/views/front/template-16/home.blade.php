@@ -12,16 +12,18 @@
     /* ── CSS variables ── */
     :root {
         --t16-primary:        {{ $primaryColor }};
-        --t16-primary-light:  {{ $primaryColor }}22;
+        --t16-primary-light:  {{ $primaryColor }}15;
+        --t16-primary-gradient: linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $primaryColor }}dd 100%);
         --t16-surface:        #fcf9f8;
-        --t16-bg:             #fcf9f8;
+        --t16-bg:             linear-gradient(180deg, #faf8f6 0%, #f5f2ef 100%);
         --t16-on-surface:     #1c1b1b;
         --t16-muted:          #584237;
         --t16-border:         #e0c0b1;
         --t16-card:           #ffffff;
-        --t16-radius:         0.75rem;
-        --t16-shadow:         0 4px 12px rgba(49,48,48,.07);
-        --t16-shadow-hover:   0 14px 36px rgba(49,48,48,.14);
+        --t16-radius:         1.25rem;
+        --t16-shadow:         0 8px 24px rgba(49,48,48,.08);
+        --t16-shadow-hover:   0 20px 48px rgba(49,48,48,.16);
+        --t16-accent:         #ff6b35;
     }
 
     /* ── Scrollbar hide ── */
@@ -33,44 +35,70 @@
         position:relative; overflow:hidden;
         border-radius:var(--t16-radius);
         background:#f0eded;
+        box-shadow:0 12px 40px rgba(0,0,0,.12);
+    }
+    .t16-slider-wrap::before {
+        content:'';
+        position:absolute;
+        inset:0;
+        background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.4) 100%);
+        z-index:5;
+        pointer-events:none;
     }
     .t16-slider-wrap img.t16-slide-img {
-        width:100%; height:280px; object-fit:cover;
+        width:100%; height:350px; object-fit:cover;
         display:block;
+        transition:transform .6s ease;
+    }
+    .t16-slider-wrap:hover img.t16-slide-img {
+        transform:scale(1.05);
     }
     @media(max-width:576px){
-        .t16-slider-wrap img.t16-slide-img { height:180px; }
+        .t16-slider-wrap img.t16-slide-img { height:220px; }
+    }
+
+    /* ── Slider arrows hover effect ── */
+    .t16-slider-arrow:hover {
+        background:rgba(255,255,255,.5) !important;
+        transform:translateY(-50%) scale(1.1) !important;
     }
 
     /* ── Sticky category tabs ── */
     .t16-tabs-bar {
         position:sticky; top:64px; z-index:40;
-        background:rgba(252,249,248,.95);
-        backdrop-filter:blur(10px);
-        padding:14px 0;
+        background:rgba(255,255,255,.95);
+        backdrop-filter:blur(16px);
+        padding:18px 0;
+        box-shadow:0 4px 20px rgba(0,0,0,.04);
     }
     .t16-tab-scroll {
-        display:flex; gap:10px;
+        display:flex; gap:12px;
         overflow-x:auto;
-        padding-bottom:4px;
+        padding-bottom:6px;
     }
     .t16-tab-btn {
         white-space:nowrap;
-        padding:8px 22px;
+        padding:10px 24px;
         border-radius:999px;
-        border:1.5px solid var(--t16-border);
-        background:#f6f3f2;
+        border:2px solid var(--t16-border);
+        background:#f8f6f4;
         color:var(--t16-muted);
-        font-size:.85rem; font-weight:600;
+        font-size:.9rem; font-weight:600;
         cursor:pointer;
-        transition:.25s;
+        transition:.3s cubic-bezier(.4,0,.2,1);
         flex-shrink:0;
+        box-shadow:0 2px 8px rgba(0,0,0,.04);
     }
-    .t16-tab-btn:hover,
+    .t16-tab-btn:hover {
+        transform:translateY(-2px);
+        box-shadow:0 6px 16px rgba(0,0,0,.08);
+    }
     .t16-tab-btn.active {
-        background:var(--t16-primary);
+        background:var(--t16-primary-gradient);
         color:#fff;
-        border-color:var(--t16-primary);
+        border-color:transparent;
+        transform:translateY(-2px);
+        box-shadow:0 8px 20px rgba(0,0,0,.15);
     }
 
     /* ── Product grid ── */
@@ -88,35 +116,41 @@
         background:var(--t16-card);
         border-radius:var(--t16-radius);
         overflow:hidden;
-        display:flex; gap:14px;
-        padding:14px;
+        display:flex; gap:16px;
+        padding:16px;
         box-shadow:var(--t16-shadow);
-        transition:box-shadow .3s;
+        transition:all .4s cubic-bezier(.4,0,.2,1);
+        border:1px solid rgba(0,0,0,.04);
     }
-    .t16-card:hover { box-shadow:var(--t16-shadow-hover); }
+    .t16-card:hover {
+        box-shadow:var(--t16-shadow-hover);
+        transform:translateY(-4px);
+        border-color:rgba(0,0,0,.08);
+    }
 
     .t16-card-img {
-        width:110px; height:110px;
-        border-radius:.5rem;
+        width:120px; height:120px;
+        border-radius:1rem;
         overflow:hidden; flex-shrink:0;
         background:#f0eded;
+        box-shadow:0 4px 12px rgba(0,0,0,.08);
     }
     .t16-card-img img {
         width:100%; height:100%; object-fit:cover;
-        transition:transform .4s;
+        transition:transform .5s cubic-bezier(.4,0,.2,1);
     }
-    .t16-card:hover .t16-card-img img { transform:scale(1.07); }
+    .t16-card:hover .t16-card-img img { transform:scale(1.1); }
 
     .t16-card-body { display:flex; flex-direction:column; justify-content:space-between; flex-grow:1; }
 
     .t16-card-name {
         font-size:.95rem; font-weight:600; color:var(--t16-on-surface);
-        display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+        display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
         margin-bottom:4px;
     }
     .t16-card-desc {
         font-size:.8rem; color:var(--t16-muted);
-        display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+        display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
     }
     .t16-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
 
@@ -124,27 +158,33 @@
     .t16-old-price { font-size:.8rem; color:#aaa; text-decoration:line-through; margin-right:4px; }
 
     /* Qty stepper */
-    .t16-qty { display:flex; align-items:center; gap:6px; }
+    .t16-qty { display:flex; align-items:center; gap:8px; }
     .t16-qty-btn {
-        width:30px; height:30px; border-radius:50%;
-        border:1.5px solid var(--t16-border);
+        width:34px; height:34px; border-radius:50%;
+        border:2px solid var(--t16-border);
         background:#fff; color:var(--t16-muted);
         display:flex; align-items:center; justify-content:center;
-        cursor:pointer; transition:.2s; font-size:16px; line-height:1;
+        cursor:pointer; transition:.3s; font-size:18px; line-height:1;
+        box-shadow:0 2px 8px rgba(0,0,0,.06);
     }
-    .t16-qty-btn.plus { background:var(--t16-primary); color:#fff; border-color:var(--t16-primary); }
+    .t16-qty-btn:hover { border-color:var(--t16-primary); color:var(--t16-primary); }
+    .t16-qty-btn.plus { background:var(--t16-primary-gradient); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(0,0,0,.15); }
     .t16-qty-btn:active { transform:scale(.9); }
-    .t16-qty-num { width:22px; text-align:center; font-weight:700; font-size:.9rem; }
+    .t16-qty-num { width:28px; text-align:center; font-weight:700; font-size:1rem; color:var(--t16-on-surface); }
 
     /* Add to cart button (for items at qty=0) */
     .t16-add-btn {
-        display:flex; align-items:center; gap:6px;
-        background:var(--t16-primary); color:#fff;
+        display:flex; align-items:center; gap:8px;
+        background:var(--t16-primary-gradient); color:#fff;
         border:none; border-radius:999px;
-        padding:7px 16px; font-size:.8rem; font-weight:600;
-        cursor:pointer; transition:.25s;
+        padding:10px 18px; font-size:.85rem; font-weight:600;
+        cursor:pointer; transition:.3s;
+        box-shadow:0 4px 12px rgba(0,0,0,.12);
     }
-    .t16-add-btn:hover { opacity:.88; }
+    .t16-add-btn:hover {
+        transform:translateY(-2px);
+        box-shadow:0 8px 20px rgba(0,0,0,.18);
+    }
     .t16-add-btn:active { transform:scale(.95); }
 
     /* Off badge */
@@ -189,6 +229,76 @@
         from { opacity:0; transform:translateY(10px); }
         to   { opacity:1; transform:translateY(0); }
     }
+
+    /* ── Footer override for template-16 ── */
+    .footer-sec2 {
+        background: linear-gradient(180deg, var(--t16-primary) 0%, color-mix(in srgb, var(--t16-primary) 85%, #000 15%) 100%) !important;
+        border-top: none !important;
+        box-shadow: 0 -10px 40px rgba(0,0,0,.12);
+    }
+    .copy-right-sec {
+        background: color-mix(in srgb, var(--t16-primary) 80%, #000 20%) !important;
+        border-top: 1px solid rgba(255,255,255,.12) !important;
+    }
+    .t7-footer-icon {
+        background: rgba(255,255,255,.15) !important;
+        border: 1px solid rgba(255,255,255,.2) !important;
+    }
+    .t7-footer-social a {
+        background: rgba(255,255,255,.12) !important;
+        border: 1px solid rgba(255,255,255,.25) !important;
+        transition: .3s !important;
+    }
+    .t7-footer-social a:hover {
+        background: rgba(255,255,255,.25) !important;
+        transform: translateY(-2px) !important;
+    }
+    .t7-footer-menu a:hover {
+        color: #fff !important;
+        opacity: 1 !important;
+        transform: translateX(-4px) !important;
+    }
+    .t7-footer-newsletter .input-group {
+        border: 2px solid rgba(255,255,255,.25) !important;
+        background: rgba(255,255,255,.1) !important;
+    }
+    .t7-footer-newsletter .btn-store {
+        background: #fff !important;
+        color: var(--t16-primary) !important;
+        font-weight: 700 !important;
+        transition: .3s !important;
+    }
+    .t7-footer-newsletter .btn-store:hover {
+        transform: scale(1.02) !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,.2) !important;
+    }
+
+    /* ── Additional animations & effects ── */
+    @keyframes t16Pulse {
+        0%, 100% { box-shadow: 0 0 0 0 var(--t16-primary); opacity: .8; }
+        50% { box-shadow: 0 0 0 10px var(--t16-primary); opacity: 0; }
+    }
+    @keyframes t16Float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    /* ── Category badge animation ── */
+    .t16-off-badge {
+        animation: t16Pulse 2s infinite;
+    }
+
+    /* ── Enhance empty state ── */
+    .t16-empty {
+        background: linear-gradient(135deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.8) 100%);
+        border-radius: var(--t16-radius);
+        border: 2px dashed var(--t16-border);
+    }
+
+    /* ── Header overlap fix ── */
+    body {
+        background: var(--t16-bg);
+    }
 </style>
 
 {{-- ═══════════════ HERO SLIDER ═══════════════ --}}
@@ -223,27 +333,29 @@
 
             {{-- Dots --}}
             @if($sliders->count() > 1)
-                <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:8px;">
+                <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 16px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:30px;">
                     @foreach($sliders as $di => $dot)
                         <button onclick="t16GoSlide({{ $di }})" data-t16dot="{{ $di }}"
-                                style="width:10px;height:10px;border-radius:50%;border:none;background:#fff;
-                                       opacity:{{ $di===0?'1':'.45' }};cursor:pointer;transition:.3s;padding:0;"></button>
+                                style="width:12px;height:12px;border-radius:50%;border:none;background:#fff;
+                                       opacity:{{ $di===0?'1':'.4' }};cursor:pointer;transition:.3s;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.1);"></button>
                     @endforeach
                 </div>
                 {{-- Arrows --}}
-                <button onclick="t16MoveSlide(-1)"
-                        style="position:absolute;left:10px;top:50%;transform:translateY(-50%);z-index:30;
-                               width:36px;height:36px;border-radius:50%;border:none;
-                               background:rgba(255,255,255,.25);backdrop-filter:blur(6px);
-                               color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
-                    <i class="fa-solid fa-chevron-left"></i>
+                <button onclick="t16MoveSlide(-1)" class="t16-slider-arrow"
+                        style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:30;
+                               width:48px;height:48px;border-radius:50%;border:none;
+                               background:rgba(255,255,255,.35);backdrop-filter:blur(12px);
+                               color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+                               transition:.3s;box-shadow:0 8px 24px rgba(0,0,0,.15);">
+                    <i class="fa-solid fa-chevron-left" style="font-size:18px;"></i>
                 </button>
-                <button onclick="t16MoveSlide(1)"
-                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:30;
-                               width:36px;height:36px;border-radius:50%;border:none;
-                               background:rgba(255,255,255,.25);backdrop-filter:blur(6px);
-                               color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
-                    <i class="fa-solid fa-chevron-right"></i>
+                <button onclick="t16MoveSlide(1)" class="t16-slider-arrow"
+                        style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:30;
+                               width:48px;height:48px;border-radius:50%;border:none;
+                               background:rgba(255,255,255,.35);backdrop-filter:blur(12px);
+                               color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+                               transition:.3s;box-shadow:0 8px 24px rgba(0,0,0,.15);">
+                    <i class="fa-solid fa-chevron-right" style="font-size:18px;"></i>
                 </button>
             @endif
         @else
@@ -352,7 +464,7 @@
     };
     window.t16GoSlide = function(i) { show(i); reset(); };
 
-    function auto() { timer = setInterval(function(){ show((current+1) % slides.length); }, 5000); }
+    function auto() { timer = setInterval(function(){ show((current+1) % slides.length); }, 4000); }
     function reset(){ clearInterval(timer); auto(); }
     if (slides.length > 1) auto();
 })();

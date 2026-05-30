@@ -964,10 +964,10 @@ class helper
                 $isRestaurant = true;
             }
 
-            if ($isRestaurant) {
-                $data->primary_color = '#ea580c';
-                $data->secondary_color = '#c2410c';
-            } else {
+       if ($isRestaurant) {
+    $data->primary_color = '#C19A6B'; // لاتيه
+    $data->secondary_color = '#4A2C2A'; // بني غامق
+} else {
                 $data->primary_color = '#0284c7';
                 $data->secondary_color = '#0369a1';
             }

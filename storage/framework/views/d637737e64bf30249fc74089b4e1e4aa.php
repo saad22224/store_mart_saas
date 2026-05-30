@@ -152,8 +152,14 @@
                         <div class="t7-footer-icon">
                             <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="mailto:<?php echo e(helper::appdata(@$storeinfo->id)->email); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            <?php echo e(helper::appdata(@$storeinfo->id)->email); ?>
+                        <?php
+                            $store = App\Models\User::where('id' , $storeinfo->id)->first();
+                            // dd($store);
+                            $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
+                            $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
+                        ?>
+                        <a href="mailto:<?php echo e($storeEmail); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            <?php echo e($storeEmail); ?>
 
                         </a>
                     </li>
@@ -161,8 +167,8 @@
                         <div class="t7-footer-icon">
                             <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
                         </div>
-                        <a href="tel:<?php echo e(helper::appdata(@$storeinfo->id)->contact); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            <?php echo e(helper::appdata(@$storeinfo->id)->contact); ?>
+                        <a href="tel:<?php echo e($storePhone); ?>" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
+                            <?php echo e($storePhone); ?>
 
                         </a>
                     </li>

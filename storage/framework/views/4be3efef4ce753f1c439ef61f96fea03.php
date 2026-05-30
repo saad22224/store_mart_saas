@@ -600,16 +600,22 @@
             <div class="d-none d-lg-block">
                 <nav class="top-header border-bottom">
                     <div class="container">
+                      <?php
+                            $store = App\Models\User::where('id' , $storeinfo->id)->first();
+                            // dd($store);
+                            $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
+                            $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
+                        ?>
                         <div class="d-flex align-items-center mobile-header">
                             <div class="col-md-6 p-0 ">
                                 <div class="header-contact">
-                                    <a href="tel:<?php echo e(helper::appdata(@$storeinfo->id)->contact); ?>" target="_blank"
+                                    <a href="tel:<?php echo e($storePhone); ?>" target="_blank"
                                         class="color-changer"><i class="fa-light fa-phone-flip"></i><span
-                                            class="mx-2"><?php echo e(helper::appdata(@$storeinfo->id)->contact); ?></span></a>
-
-                                    <a href="mailto:<?php echo e(helper::appdata(@$storeinfo->id)->email); ?>" target="_blank"
+                                            class="mx-2"><?php echo e($storePhone); ?></span></a>
+      
+                                    <a href="mailto:<?php echo e($storeEmail); ?>" target="_blank"
                                         class="color-changer"><i class="fa-light fa-envelope"></i><span
-                                            class="mx-2"><?php echo e(helper::appdata(@$storeinfo->id)->email); ?></span></a>
+                                            class="mx-2"><?php echo e($storeEmail); ?></span></a>
                                 </div>
                             </div>
                             <div class="col-md-6 p-0 ">

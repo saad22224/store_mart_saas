@@ -50,6 +50,18 @@
     $uid = 't16_' . $item->id;
 ?>
 
+<style>
+    /* ── Product card specific animations ── */
+    #t16card_<?php echo e($item->id); ?> {
+        animation: t16CardEntrance .5s ease both;
+        animation-delay: <?php echo e((is_numeric($key) ? ($key % 10) : (crc32($key) % 10)) * 0.05); ?>s;
+    }
+    @keyframes t16CardEntrance {
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+</style>
+
 <div class="t16-card" id="t16card_<?php echo e($item->id); ?>">
 
     

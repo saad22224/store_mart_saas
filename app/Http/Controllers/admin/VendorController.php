@@ -118,6 +118,9 @@ class VendorController extends Controller
             ) {
                 $userplan->delete();
                 $plan = PricingPlan::where('id', $request->plan)->first();
+                $usersetting = Settings::where('vendor_id', $edituser->id)->first();
+                $usersetting->template = $plan->themes_id[0];
+                $usersetting->save();
                 $edituser->plan_id = $plan->id;
                 $edituser->purchase_amount = $plan->price;
                 $edituser->purchase_date = date("Y-m-d h:i:sa");
@@ -165,6 +168,8 @@ class VendorController extends Controller
                 $transaction->days = $plan->days;
                 $transaction->custom_domain = $plan->custom_domain;
                 $transaction->themes_id = $plan->themes_id;
+
+
                 $transaction->google_analytics = $plan->google_analytics;
                 $transaction->pos = $plan->pos;
                 $transaction->vendor_app = $plan->vendor_app;

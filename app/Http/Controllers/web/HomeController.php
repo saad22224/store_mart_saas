@@ -53,8 +53,8 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        // $settingdata = Settings::where('vendor_id', @$storeinfo->id)->select('template')->first();
-        $settingdata = Transaction::where('vendor_id', @$storeinfo->id)->select('themes_id')->first();
+        $settingdata = Settings::where('vendor_id', @$storeinfo->id)->select('template')->first();
+        // $settingdata = Transaction::where('vendor_id', @$storeinfo->id)->select('themes_id')->first();
         // dd($settingdata);
 
         $bestsellingitems = Item::with(['variation', 'extras', 'product_image', 'multi_image'])
@@ -130,7 +130,7 @@ class HomeController extends Controller
         if ($request->is($request->vendor . '/pwa')) {
             return view('front.themepwa', compact('bestsellingitems', 'getitem', 'toprateditems', 'storeinfo', 'bannerimage1', 'bannerimage2', 'cartdata', 'whowearedata', 'sliders', 'testimonials'));
         } else {
-            return view('front.template-' . $settingdata->themes_id . '.home', compact('bestsellingitems', 'getitem', 'toprateditems', 'storeinfo', 'bannerimage1', 'bannerimage2', 'cartdata', 'whowearedata', 'sliders', 'testimonials'));
+            return view('front.template-' . $settingdata->template . '.home', compact('bestsellingitems', 'getitem', 'toprateditems', 'storeinfo', 'bannerimage1', 'bannerimage2', 'cartdata', 'whowearedata', 'sliders', 'testimonials'));
         }
     }
     public function privacyshow(Request $request)

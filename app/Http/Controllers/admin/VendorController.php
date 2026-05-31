@@ -109,12 +109,19 @@ class VendorController extends Controller
             $edit_image->move(storage_path('app/public/admin-assets/images/profile/'), $profileImage);
             $edituser->image = $profileImage;
         }
+        $userplan =    Transaction::where('vendor_id', $edituser->id)->first();
+
         if (!isset($request->allow_store_subscription)) {
-            if ($request->plan != null && !empty($request->plan)) {
+            if (
+                $request->plan != null && !empty($request->plan) && $request->plan
+                != $userplan->plan_id
+            ) {
+                $userplan->delete();
                 $plan = PricingPlan::where('id', $request->plan)->first();
                 $edituser->plan_id = $plan->id;
                 $edituser->purchase_amount = $plan->price;
                 $edituser->purchase_date = date("Y-m-d h:i:sa");
+
                 $transaction = new Transaction();
                 $transaction->vendor_id = $edituser->id;
                 $transaction->plan_id = $plan->id;
@@ -123,7 +130,6 @@ class VendorController extends Controller
                 $transaction->transaction_number = Str::upper(Str::random(8));
                 $transaction->payment_id = "";
                 $transaction->amount = $plan->price;
-
                 $tax_amount = [];
                 $tax_name = [];
                 $totaltax = 0;
@@ -325,7 +331,7 @@ class VendorController extends Controller
             session()->put('user_login', 1);
             session()->put('new_vendor', true);
             $newuser = User::select('id', 'name', 'email', 'mobile', 'image')->where('id', $data)->first();
-  
+
             Auth::login($newuser);
             return redirect('admin/onboarding')->with('success', trans('messages.success'));
         }

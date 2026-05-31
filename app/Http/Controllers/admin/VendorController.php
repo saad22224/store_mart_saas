@@ -119,7 +119,10 @@ class VendorController extends Controller
                 $userplan->delete();
                 $plan = PricingPlan::where('id', $request->plan)->first();
                 $usersetting = Settings::where('vendor_id', $edituser->id)->first();
-                $usersetting->template = $plan->themes_id[0];
+                // dd($plan->themes_id[0]);
+                $firstTheme = explode('|', $plan->themes_id)[0];
+
+                $usersetting->template = $firstTheme;
                 $usersetting->save();
                 $edituser->plan_id = $plan->id;
                 $edituser->purchase_amount = $plan->price;

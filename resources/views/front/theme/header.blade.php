@@ -747,7 +747,7 @@
                         background: rgba(255, 255, 255, 0.98) !important;
                         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05) !important;
                         border-bottom: none !important;
-                        padding: 10px 0 !important;
+                        padding: 6px 0 !important;
                     }
                     .t7-header-icon-btn {
                         background: #f6f3f2 !important;
@@ -771,8 +771,8 @@
                         display: flex !important;
                         background: #fff !important;
                         padding: 5px !important;
-                        width: 70px !important;
-                        height: 70px !important;
+                        width: 64px !important;
+                        height: 64px !important;
                         align-items: center;
                         justify-content: center;
                     }

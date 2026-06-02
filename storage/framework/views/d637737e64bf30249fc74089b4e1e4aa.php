@@ -1,3 +1,163 @@
+<?php if(helper::appdata(@$storeinfo->id)->template == 16): ?>
+<style>
+    .t16-footer-features {
+        background:#fff;
+        border-top:1px solid rgba(0,0,0,.05);
+        padding:18px 0;
+    }
+    .t16-footer-feature-grid {
+        display:grid;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:12px;
+    }
+    .t16-footer-feature {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        background:#fcf9f8;
+        border:1px solid rgba(157,67,0,.12);
+        border-radius:14px;
+        padding:14px;
+        min-width:0;
+    }
+    .t16-footer-feature-icon {
+        width:42px;
+        height:42px;
+        flex:0 0 42px;
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#fff;
+        background:linear-gradient(135deg, <?php echo e(helper::appdata($storeinfo->id)->primary_color ?? '#9d4300'); ?>, color-mix(in srgb, <?php echo e(helper::appdata($storeinfo->id)->primary_color ?? '#9d4300'); ?> 82%, #000));
+    }
+    .t16-footer-feature h6,
+    .t16-footer-feature p { overflow:hidden; text-overflow:ellipsis; }
+    .t16-footer {
+        --t16-footer-primary: <?php echo e(helper::appdata($storeinfo->id)->primary_color ?? '#9d4300'); ?>;
+        position:relative;
+        overflow:hidden;
+        background:
+            linear-gradient(135deg, color-mix(in srgb, var(--t16-footer-primary) 82%, #1f120a) 0%, #24150e 100%);
+        color:#fff;
+        padding:36px 0 28px;
+    }
+    .t16-footer-card {
+        height:100%;
+        background:rgba(255,255,255,.1);
+        border:1px solid rgba(255,255,255,.18);
+        border-radius:18px;
+        padding:20px;
+        box-shadow:0 18px 45px rgba(0,0,0,.12);
+        backdrop-filter:blur(12px);
+        min-width:0;
+    }
+    .t16-footer-title {
+        font-size:1rem;
+        font-weight:800;
+        margin-bottom:14px;
+        color:#fff;
+    }
+    .t16-footer-links,
+    .t16-footer-contact {
+        list-style:none;
+        margin:0;
+        padding:0;
+        display:grid;
+        gap:10px;
+    }
+    .t16-footer a,
+    .t16-footer span,
+    .t16-footer p {
+        color:rgba(255,255,255,.82);
+        overflow-wrap:anywhere;
+    }
+    .t16-footer a {
+        text-decoration:none;
+        transition:.2s ease;
+    }
+    .t16-footer a:hover { color:#fff; }
+    .t16-footer-contact li {
+        display:flex;
+        align-items:center;
+        gap:10px;
+        min-width:0;
+    }
+    .t16-footer-icon,
+    .t16-footer-social a {
+        width:36px;
+        height:36px;
+        flex:0 0 36px;
+        border-radius:12px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(255,255,255,.14);
+        border:1px solid rgba(255,255,255,.22);
+        color:#fff;
+    }
+    .t16-footer-newsletter .input-group {
+        border-radius:14px;
+        overflow:hidden;
+        background:rgba(255,255,255,.12);
+        border:1px solid rgba(255,255,255,.2);
+    }
+    .t16-footer-newsletter .form-control {
+        border:0;
+        box-shadow:none;
+        background:transparent;
+        color:#fff !important;
+    }
+    .t16-footer-newsletter .form-control::placeholder {
+        color:rgba(255,255,255,.68);
+    }
+    .t16-footer-newsletter .btn-store {
+        background:#fff !important;
+        color:var(--t16-footer-primary) !important;
+        border:0 !important;
+        font-weight:800;
+    }
+    .t16-footer-social {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin-top:14px;
+    }
+    .copy-right-sec.t16-copy {
+        background:#160d09 !important;
+        border-top:1px solid rgba(255,255,255,.1) !important;
+    }
+    .copy-right-sec.t16-copy .color-changer,
+    .copy-right-sec.t16-copy .text-dark { color:#fff !important; }
+    @media(max-width:991px){
+        .t16-footer-feature-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .t16-footer { padding-bottom:95px; }
+        .t16-footer-card { padding:16px; border-radius:16px; }
+        .t16-footer .row { --bs-gutter-x:.75rem; --bs-gutter-y:.75rem; }
+        .copy-right-sec.t16-copy { padding-bottom:85px !important; }
+    }
+    @media(max-width:420px){
+        .t16-footer-feature { padding:12px; align-items:flex-start; }
+        .t16-footer-feature-icon { width:36px; height:36px; flex-basis:36px; }
+    }
+</style>
+
+<section class="t16-footer-features">
+    <div class="container">
+        <div class="t16-footer-feature-grid">
+            <?php $__currentLoopData = helper::footer_features(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="t16-footer-feature">
+                    <div class="t16-footer-feature-icon"><?php echo $feature->icon; ?></div>
+                    <div class="min-w-0">
+                        <h6 class="fw-700 color-changer m-0"><?php echo e($feature->title); ?></h6>
+                        <p class="fs-7 text-muted fw-normal line-2 mb-0"><?php echo e($feature->description); ?></p>
+                    </div>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+    </div>
+</section>
+<?php else: ?>
 <section class="product-service mb-5 mb-lg-0">
     <div class="py-4 bg-light bg-changer">
         <div class="container">
@@ -36,8 +196,74 @@
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- footer -->
+<?php if(helper::appdata(@$storeinfo->id)->template == 16): ?>
+<?php
+    $store = App\Models\User::where('id' , $storeinfo->id)->first();
+    $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
+    $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
+    $city = \App\Models\City::find(@$storeinfo->city_id);
+    $country = \App\Models\Country::find(@$storeinfo->country_id);
+    $location = [];
+    if($city) $location[] = $city->city;
+    if($country) $location[] = $country->name;
+    $location_text = implode(', ', $location);
+?>
+<footer class="t16-footer">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-lg-4 col-6">
+                <div class="t16-footer-card">
+                    <h5 class="t16-footer-title"><?php echo e(trans('labels.pages') == 'labels.pages' ? 'Pages' : trans('labels.pages')); ?></h5>
+                    <ul class="t16-footer-links">
+                        <li><a href="<?php echo e(URL::to($storeinfo->slug . '/contact')); ?>"><?php echo e(trans('labels.contact_us')); ?></a></li>
+                        <li><a href="<?php echo e(URL::to($storeinfo->slug . '/privacypolicy')); ?>"><?php echo e(trans('labels.privacy_policy')); ?></a></li>
+                        <li><a href="<?php echo e(URL::to($storeinfo->slug . '/refund_policy')); ?>"><?php echo e(trans('labels.refund_policy')); ?> - <?php echo e(trans('labels.terms_condition')); ?></a></li>
+                        <li><a href="<?php echo e(URL::to($storeinfo->slug . '/aboutus')); ?>"><?php echo e(trans('labels.about_us')); ?></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-6">
+                <div class="t16-footer-card">
+                    <h5 class="t16-footer-title"><?php echo e(trans('labels.contact_info') == 'labels.contact_info' ? (app()->getLocale() == 'ar' ? 'معلومات الاتصال' : 'Contact info') : trans('labels.contact_info')); ?></h5>
+                    <ul class="t16-footer-contact">
+                        <li><span class="t16-footer-icon"><i class="fa-regular fa-envelope"></i></span><a href="mailto:<?php echo e($storeEmail); ?>" dir="ltr"><?php echo e($storeEmail); ?></a></li>
+                        <li><span class="t16-footer-icon"><i class="fa-solid fa-phone"></i></span><a href="tel:<?php echo e($storePhone); ?>" dir="ltr"><?php echo e($storePhone); ?></a></li>
+                        <li><span class="t16-footer-icon"><i class="fa-solid fa-location-dot"></i></span>
+                            <?php if(!empty($location_text)): ?>
+                                <span><?php echo e($location_text); ?></span>
+                            <?php else: ?>
+                                <a href="https://www.google.com/maps/place/<?php echo e(helper::appdata($storeinfo->id)->address); ?>" target="_blank"><?php echo e(empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address); ?></a>
+                            <?php endif; ?>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <div class="t16-footer-card">
+                    <h5 class="t16-footer-title"><?php echo e(trans('labels.newslatter') == 'labels.newslatter' ? 'Newsletter' : trans('labels.newslatter')); ?></h5>
+                    <form action="<?php echo e(URL::to(@$storeinfo->slug . '/subscribe')); ?>" method="post" class="t16-footer-newsletter">
+                        <?php echo csrf_field(); ?>
+                        <div class="input-group">
+                            <input type="email" class="form-control footer-input" name="subscribe_email" placeholder="<?php echo e(trans('labels.email')); ?>" required>
+                            <button type="submit" class="btn btn-store px-3"><?php echo e(trans('labels.subscribe') == 'labels.subscribe' ? 'Subscribe' : trans('labels.subscribe')); ?></button>
+                        </div>
+                    </form>
+                    <?php if(helper::getsociallinks($storeinfo->id)->count() > 0): ?>
+                        <div class="t16-footer-social">
+                            <?php $__currentLoopData = helper::getsociallinks($storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e($links->link); ?>" target="_blank" aria-label="social-link"><?php echo $links->icon; ?></a>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<?php else: ?>
 <footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
     <div class="container">
         <style>
@@ -232,9 +458,10 @@
         </div>
     </div>
 </footer>
+<?php endif; ?>
 
 <!-- copy-right-sec -->
-<div class="copy-right-sec bg-light bg-changer py-3 border-top">
+<div class="copy-right-sec bg-light bg-changer py-3 border-top <?php echo e(helper::appdata(@$storeinfo->id)->template == 16 ? 't16-copy' : ''); ?>">
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
             <p class="mb-0 text-dark color-changer opacity-75 text-center text-md-start">Copyright &copy; MatjarHub. All Rights Reserved</p>

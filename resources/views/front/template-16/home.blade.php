@@ -65,16 +65,20 @@
 
     /* ── Sticky category tabs ── */
     .t16-tabs-bar {
-        position:sticky; top:64px; z-index:40;
-        background:rgba(255,255,255,.95);
-        backdrop-filter:blur(16px);
-        padding:18px 0;
-        box-shadow:0 4px 20px rgba(0,0,0,.04);
+        position:sticky; top:0; z-index:1050;
+        background:#fff;
+        padding:8px 0;
+        box-shadow:0 8px 22px rgba(0,0,0,.08);
+        border-radius:0 0 18px 18px;
+    }
+    .t16-tabs-inner {
+        position:relative;
     }
     .t16-tab-scroll {
         display:flex; gap:12px;
         overflow-x:auto;
-        padding-bottom:6px;
+        padding:2px 0;
+        scroll-behavior:smooth;
     }
     .t16-tab-btn {
         white-space:nowrap;
@@ -99,6 +103,35 @@
         border-color:transparent;
         transform:translateY(-2px);
         box-shadow:0 8px 20px rgba(0,0,0,.15);
+    }
+    .t16-cat-reveal {
+        display:none;
+        width:46px;
+        height:32px;
+        border:0;
+        border-radius:999px;
+        background:
+            linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,0) 35%),
+            var(--t16-primary-gradient);
+        color:#fff;
+        align-items:center;
+        justify-content:center;
+        margin-bottom:0;
+        box-shadow:0 8px 18px rgba(0,0,0,.16);
+        transition:.25s ease;
+    }
+    .t16-cat-reveal i {
+        font-size:15px;
+        line-height:1;
+    }
+    .t16-cat-reveal:hover {
+        transform:translateY(-1px);
+        box-shadow:0 10px 22px rgba(0,0,0,.2);
+    }
+    .t16-cat-reveal-wrap {
+        display:none;
+        direction:ltr;
+        justify-content:flex-start;
     }
 
     /* ── Product grid ── */
@@ -299,10 +332,32 @@
     body {
         background: var(--t16-bg);
     }
+    @media(max-width:991px){
+        .t7-top-promo { padding:3px 0 !important; line-height:1.4 !important; }
+        .t7-mobile-social { padding:4px 0 !important; }
+        .t7-header-main { padding:6px 0 !important; }
+        .t7-logo-circle { width:56px !important; height:56px !important; padding:4px !important; }
+        .t7-header-icon-btn { width:38px !important; height:38px !important; }
+        .t7-header-left, .t7-header-right { gap:8px !important; }
+        .t16-tabs-bar { top:0; padding:6px 0; }
+        .t16-tab-scroll { flex-wrap:nowrap; overflow-y:hidden; }
+        .t16-cat-reveal-wrap {
+            display:flex;
+            position:static;
+            transform:none;
+            pointer-events:auto;
+        }
+        .t16-cat-reveal { display:inline-flex; }
+    }
+    @media(max-width:576px){
+        .t16-hero-container { margin-top:10px !important; padding-left:10px !important; padding-right:10px !important; }
+        .t16-menu-section { margin-top:12px !important; padding-left:10px !important; padding-right:10px !important; }
+        .t16-tab-btn { padding:8px 16px; font-size:.82rem; }
+    }
 </style>
 
 {{-- ═══════════════ HERO SLIDER ═══════════════ --}}
-<div class="container-fluid px-3 px-md-4 mt-4" style="max-width:1280px;margin-left:auto;margin-right:auto;">
+<div class="container-fluid px-3 px-md-4 mt-3 t16-hero-container" style="max-width:1280px;margin-left:auto;margin-right:auto;">
     <div class="t16-slider-wrap" id="t16HeroSlider">
         @if($sliders->count() > 0)
             @foreach($sliders as $si => $slider)
@@ -367,12 +422,18 @@
 </div>
 
 {{-- ═══════════════ MENU SECTION: TABS + PRODUCTS ═══════════════ --}}
-<section style="max-width:1280px;margin:0 auto;padding:0 16px;" class="mt-4">
+<section style="max-width:1280px;margin:0 auto;padding:0 16px;" class="mt-3 t16-menu-section">
 
     {{-- ── Sticky Tab Bar ── --}}
     @if($allCategories->count() > 0)
     <div class="t16-tabs-bar">
-        <div class="t16-tab-scroll t16-hide-scroll">
+        <div class="t16-tabs-inner">
+        <div class="t16-cat-reveal-wrap">
+            <button class="t16-cat-reveal" type="button" onclick="t16ScrollCategories()" aria-label="Scroll categories">
+                <i class="fa-solid {{ session()->get('direction') == 2 ? 'fa-arrow-left-long' : 'fa-arrow-right-long' }}"></i>
+            </button>
+        </div>
+        <div class="t16-tab-scroll t16-hide-scroll" id="t16CategoryTabs">
             {{-- "All" tab --}}
             <button class="t16-tab-btn active"
                     data-t16tab="all"
@@ -386,6 +447,7 @@
                     {{ $cat->name }}
                 </button>
             @endforeach
+        </div>
         </div>
     </div>
     @endif
@@ -476,6 +538,14 @@ window.t16SwitchTab = function(tabId, btn) {
     document.querySelectorAll('.t16-tab-pane').forEach(function(p){ p.classList.remove('active'); });
     var pane = document.getElementById('t16-pane-' + tabId);
     if (pane) pane.classList.add('active');
+};
+
+window.t16ScrollCategories = function() {
+    var tabs = document.getElementById('t16CategoryTabs');
+    if (!tabs) return;
+    var isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+    var step = Math.max(160, Math.floor(tabs.clientWidth * 0.75));
+    tabs.scrollBy({ left: isRtl ? -step : step, behavior: 'smooth' });
 };
 
 /* ══════════════════════════════════════════════════════

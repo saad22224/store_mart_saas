@@ -109,14 +109,14 @@ class VendorController extends Controller
             $edit_image->move(storage_path('app/public/admin-assets/images/profile/'), $profileImage);
             $edituser->image = $profileImage;
         }
-        $userplan =    Transaction::where('vendor_id', $edituser->id)->first();
+        $userplan =  Transaction::where('vendor_id', $edituser->id)->first() ?? null;
 
         if (!isset($request->allow_store_subscription)) {
             if (
                 $request->plan != null && !empty($request->plan) && $request->plan
-                != $userplan->plan_id
+                != $userplan?->plan_id
             ) {
-                $userplan->delete();
+                $userplan?->delete();
                 $plan = PricingPlan::where('id', $request->plan)->first();
                 $usersetting = Settings::where('vendor_id', $edituser->id)->first();
                 // dd($plan->themes_id[0]);

@@ -73,21 +73,26 @@
     }
     .t16-tabs-inner {
         position:relative;
+        display:flex;
+        align-items:center;
     }
     .t16-tab-scroll {
         display:flex; gap:12px;
         overflow-x:auto;
-        padding:2px 0;
+        padding:4px 0;
         scroll-behavior:smooth;
+        flex:1;
+        padding-inline-end: 60px; /* Space to scroll past the absolute arrow */
+        padding-inline-start: 16px;
     }
     .t16-tab-btn {
         white-space:nowrap;
-        padding:10px 24px;
+        padding:8px 24px;
         border-radius:999px;
-        border:2px solid var(--t16-border);
-        background:#f8f6f4;
-        color:var(--t16-muted);
-        font-size:.9rem; font-weight:600;
+        border:1px solid rgba(0,0,0,0.06);
+        background:#fff;
+        color:#555;
+        font-size:.95rem; font-weight:600;
         cursor:pointer;
         transition:.3s cubic-bezier(.4,0,.2,1);
         flex-shrink:0;
@@ -95,43 +100,53 @@
     }
     .t16-tab-btn:hover {
         transform:translateY(-2px);
-        box-shadow:0 6px 16px rgba(0,0,0,.08);
+        box-shadow:0 4px 12px rgba(0,0,0,.06);
     }
     .t16-tab-btn.active {
         background:var(--t16-primary-gradient);
         color:#fff;
         border-color:transparent;
         transform:translateY(-2px);
-        box-shadow:0 8px 20px rgba(0,0,0,.15);
+        box-shadow:0 6px 16px var(--t16-primary-light);
     }
     .t16-cat-reveal {
         display:none;
-        width:46px;
-        height:32px;
+        width:38px;
+        height:38px;
         border:0;
-        border-radius:999px;
-        background:
-            linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,0) 35%),
-            var(--t16-primary-gradient);
-        color:#fff;
+        border-radius:50%;
+        background:#fff;
+        color:var(--t16-primary);
         align-items:center;
         justify-content:center;
         margin-bottom:0;
-        box-shadow:0 8px 18px rgba(0,0,0,.16);
-        transition:.25s ease;
+        box-shadow:0 2px 6px rgba(0,0,0,.06);
+        border:1px solid rgba(0,0,0,0.05);
+        transition:.3s ease;
+        flex-shrink:0;
     }
     .t16-cat-reveal i {
-        font-size:15px;
+        font-size:16px;
         line-height:1;
     }
     .t16-cat-reveal:hover {
-        transform:translateY(-1px);
-        box-shadow:0 10px 22px rgba(0,0,0,.2);
+        transform:scale(1.05);
+        box-shadow:0 4px 12px rgba(0,0,0,.1);
+        color:#fff;
+        background:var(--t16-primary-gradient);
+        border-color:transparent;
     }
     .t16-cat-reveal-wrap {
         display:none;
-        direction:ltr;
-        justify-content:flex-start;
+        position:absolute;
+        top:0;
+        bottom:0;
+        align-items:center;
+        z-index:10;
+        <?php echo e(session()->get('direction') == 2 ? 'left:0;' : 'right:0;'); ?>
+
+        background: <?php echo e(session()->get('direction') == 2 ? 'linear-gradient(90deg, #fff 40%, rgba(255,255,255,0) 100%)' : 'linear-gradient(270deg, #fff 40%, rgba(255,255,255,0) 100%)'); ?>;
+        padding: <?php echo e(session()->get('direction') == 2 ? '0 30px 0 10px' : '0 10px 0 30px'); ?>;
     }
 
     /* ── Product grid ── */
@@ -343,8 +358,6 @@
         .t16-tab-scroll { flex-wrap:nowrap; overflow-y:hidden; }
         .t16-cat-reveal-wrap {
             display:flex;
-            position:static;
-            transform:none;
             pointer-events:auto;
         }
         .t16-cat-reveal { display:inline-flex; }
@@ -352,7 +365,15 @@
     @media(max-width:576px){
         .t16-hero-container { margin-top:10px !important; padding-left:10px !important; padding-right:10px !important; }
         .t16-menu-section { margin-top:12px !important; padding-left:10px !important; padding-right:10px !important; }
-        .t16-tab-btn { padding:8px 16px; font-size:.82rem; }
+        .t16-tab-scroll { gap:8px; padding-inline-start: 10px; padding-inline-end: 50px; }
+        .t16-tab-btn { 
+            padding:6px 18px; 
+            font-size:.85rem; 
+            box-shadow:0 2px 6px rgba(0,0,0,0.05);
+            border:1px solid rgba(0,0,0,0.04);
+        }
+        .t16-cat-reveal { width:34px; height:34px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        .t16-cat-reveal i { font-size:14px; }
     }
 </style>
 

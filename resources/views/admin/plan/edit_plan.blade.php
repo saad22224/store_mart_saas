@@ -469,24 +469,25 @@
                                     @endif
                                     @php $planthemes = explode('|', $editplan->themes_id); @endphp
                                     @php
-                                        $checktheme = @helper::checkthemeaddons('theme_');
-                                        $themes = [];
-                                        foreach ($checktheme as $ttlthemes) {
-                                            array_push(
-                                                $themes,
-                                                str_replace('theme_', '', $ttlthemes->unique_identifier),
-                                            );
-                                        }
+                                        // $checktheme = @helper::checkthemeaddons('theme_');
+                                        // $themes = [];
+                                        // foreach ($checktheme as $ttlthemes) {
+                                        //     array_push(
+                                        //         $themes,
+                                        //         str_replace('theme_', '', $ttlthemes->unique_identifier),
+                                        //     );
+                                        // }
+                                         $themes = App\Models\Theme::all();
                                     @endphp
                                     <ul class="theme-selection row row-cols-xl-6 row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2 g-2">
                                         @foreach ($themes as $key => $item)
                                         <div class="col">
                                             <li class="m-0 w-100">
                                                 <input type="checkbox" name="themecheckbox[]"
-                                                    id="template{{ $item }}" value="{{ $item }}"
-                                                    {{ in_array($item, $planthemes) ? 'checked' : '' }}>
-                                                <label for="template{{ $item }}">
-                                                    <img src="{{ helper::image_path('theme-' . $item . '.png') }}">
+                                                    id="template{{ $item->id }}" value="{{ $item }}"
+                                                    {{ in_array($item->id, $planthemes) ? 'checked' : '' }}>
+                                                <label for="template{{ $item->id }}">
+                                                     <img loading="lazy" src="{{ asset('storage/app/public/admin-assets/images/theme/' .  $item->image) }}">
                                                 </label>
                                             </li>
                                         </div>

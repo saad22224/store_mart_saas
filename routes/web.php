@@ -22,6 +22,7 @@ use App\Http\Controllers\addons\included\BlogController;
 use App\Http\Controllers\addons\QuestionAnswerController;
 use App\Http\Controllers\admin\VendorController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\ShippingCompanyController;
 use App\Http\Controllers\admin\OtherPagesController;
 use App\Http\Controllers\admin\SystemAddonsController;
 use App\Http\Controllers\admin\FeaturesController;
@@ -202,6 +203,17 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
                 Route::get('delete-{id}', [VendorController::class, 'deletevendor']);
             });
 
+            // Shipping Companies
+            Route::group(['prefix' => 'shipping-companies'], function () {
+                Route::get('/', [ShippingCompanyController::class, 'index']);
+                Route::get('/add', [ShippingCompanyController::class, 'add']);
+                Route::post('/save', [ShippingCompanyController::class, 'save']);
+                Route::get('/edit-{id}', [ShippingCompanyController::class, 'edit']);
+                Route::post('/update-{id}', [ShippingCompanyController::class, 'update']);
+                Route::get('/change_status-{id}/{status}', [ShippingCompanyController::class, 'change_status']);
+                Route::get('/delete-{id}', [ShippingCompanyController::class, 'delete']);
+            });
+
             // PLAN
             Route::group(['prefix' => 'plan'], function () {
                 Route::post('reorder_plan', [PlanPricingController::class, 'reorder_plan']);
@@ -308,6 +320,9 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
             });
             // ORDERS
             Route::get('/report', [OrderController::class, 'index']);
+
+            Route::get('/my-shipping-companies', [ShippingCompanyController::class, 'vendorSettings']);
+            Route::post('/my-shipping-companies/save', [ShippingCompanyController::class, 'saveVendorSettings']);
 
             Route::group(['prefix' => 'orders'], function () {
                 Route::get('/', [OrderController::class, 'index']);

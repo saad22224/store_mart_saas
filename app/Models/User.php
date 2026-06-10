@@ -47,4 +47,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(AutomationLog::class);
     }
+
+    public function shippingCompanies()
+    {
+        return $this->belongsToMany(ShippingCompany::class, 'shipping_company_vendor', 'vendor_id', 'shipping_company_id')
+            ->withTimestamps();
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(self::class, 'vendor_id');
+    }
 }

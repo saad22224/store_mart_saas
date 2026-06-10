@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Mail\OrderConfirmation;
+use App\Events\OrderCreated;
 
 use App\Models\Item;
 use App\Models\Settings;
@@ -720,6 +721,8 @@ class helper
                     $OrderPro->qty = $value['qty'];
                     $OrderPro->save();
                 }
+
+                OrderCreated::dispatch($order->fresh(['details', 'vendor']));
 
                 if ($user_id != "" || $user_id != null) {
                     if ($buynow == 1) {

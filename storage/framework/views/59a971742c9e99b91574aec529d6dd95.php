@@ -86,6 +86,12 @@
                 <i class="fa-solid fa-cart-shopping"></i><span class="nav-text "><?php echo e(trans('labels.orders')); ?></span>
             </a>
         </li>
+        <li class="nav-item mb-2 fs-7">
+            <a class="nav-link rounded d-flex <?php echo e(request()->is('admin/my-shipping-companies*') ? 'active' : ''); ?>"
+                href="<?php echo e(URL::to('/admin/my-shipping-companies')); ?>" aria-expanded="false">
+                <i class="fa-solid fa-truck-fast"></i><span class="nav-text ">شركات الشحن الخاصة بمتجري</span>
+            </a>
+        </li>
         <?php if($user->allow_without_subscription == 1 || @$checkplan->reports == 1): ?>
         <li class="nav-item mb-2 fs-7 <?php echo e(helper::check_menu($role_id, 'role_report') == 1 ? 'd-block' : 'd-none'); ?>">
             <a class="nav-link rounded d-flex d-flex <?php echo e(request()->is('admin/report*') ? 'active' : ''); ?>"
@@ -109,6 +115,12 @@
             <a class="nav-link rounded d-flex <?php echo e(request()->is('admin/users*') ? 'active' : ''); ?>" aria-current="page"
                 href="<?php echo e(URL::to('admin/users')); ?>">
                 <i class="fa-solid fa-user-plus"></i> <span class=""><?php echo e(trans('labels.users')); ?></span>
+            </a>
+        </li>
+        <li class="nav-item mb-2 fs-7">
+            <a class="nav-link rounded d-flex <?php echo e(request()->is('admin/shipping-companies*') ? 'active' : ''); ?>" aria-current="page"
+                href="<?php echo e(URL::to('admin/shipping-companies')); ?>">
+                <i class="fa-solid fa-truck-fast"></i> <span class="">شركات الشحن</span>
             </a>
         </li>
     <?php endif; ?>

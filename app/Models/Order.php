@@ -14,4 +14,14 @@ class Order extends Model
     {
         return $this->hasOne('App\Models\User', 'id', 'vendor_id')->select('id', 'name');
     }
+
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(OrderDetails::class, 'order_id');
+    }
 }

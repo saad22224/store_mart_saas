@@ -1111,4 +1111,5 @@
     "recent_view_product" => "Recent View Product",
     "It is a long established fact that a reader will be distracted layout." => "It is a long established fact that a reader will be distracted layout.",
      'no_product_found'=> 'no products found',
+     'import_from_instagram' => 'Import from Instagram',
 ];

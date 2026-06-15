@@ -85,6 +85,9 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
         Route::post('onboarding/save-settings', [AdminController::class, 'onboarding_save_settings']);
         Route::post('onboarding/complete', [AdminController::class, 'onboarding_complete']);
         Route::post('onboarding/clear-session', [AdminController::class, 'onboarding_clear_session']);
+        // Instagram Import
+        Route::post('instagram/fetch', [\App\Http\Controllers\admin\InstagramController::class, 'fetch']);
+        Route::post('instagram/import', [\App\Http\Controllers\admin\InstagramController::class, 'import']);
         // SETTINGS
         Route::get('settings', [SettingsController::class, 'settings_index']);
         Route::post('settings/update', [SettingsController::class, 'settings_update']);

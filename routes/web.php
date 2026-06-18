@@ -568,6 +568,7 @@ Route::group(['namespace' => "front", 'prefix' => $prefix, 'middleware' => 'Fron
     Route::get('/cancel-order/{order_number}', [HomeController::class, 'cancelorder']);
 
     Route::get('/search', [HomeController::class, 'productseacrh']);
+    Route::get('/category/{slug}', [HomeController::class, 'categorypage']);
 
     Route::post('/postreview', [HomeController::class, 'postreview']);
     Route::middleware('UserMiddleware')->group(function () {

@@ -157,6 +157,8 @@
         </div>
     </div>
 </section>
+@elseif (helper::appdata(@$storeinfo->id)->template == 17)
+    <!-- No features section for template 17 -->
 @else
 <section class="product-service mb-5 mb-lg-0">
     <div class="py-4 bg-light bg-changer">
@@ -261,6 +263,8 @@
         </div>
     </div>
 </footer>
+@elseif (helper::appdata(@$storeinfo->id)->template == 17)
+    @include('front.template-17.layout.footer')
 @else
 <footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
     <div class="container">

@@ -123,6 +123,11 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->video_url = $request->video_url;
         $product->is_imported = 2;
+        $classifications = $request->product_classifications ?? [];
+        $product->is_new_arrival = in_array('is_new_arrival', $classifications) ? 1 : 0;
+        $product->is_best_selling = in_array('is_best_selling', $classifications) ? 1 : 0;
+        $product->is_exclusive = in_array('is_exclusive', $classifications) ? 1 : 0;
+        $product->top_deals = in_array('top_deals', $classifications) ? 1 : 0;
         if ($request->has_variants == 1) {
             $product->variants_json = $request->hiddenVariantOptions;
         } else {
@@ -355,6 +360,11 @@ class ProductController extends Controller
 
             $product->description = $request->description;
             $product->video_url = $request->video_url;
+            $classifications = $request->product_classifications ?? [];
+            $product->is_new_arrival = in_array('is_new_arrival', $classifications) ? 1 : 0;
+            $product->is_best_selling = in_array('is_best_selling', $classifications) ? 1 : 0;
+            $product->is_exclusive = in_array('is_exclusive', $classifications) ? 1 : 0;
+            $product->top_deals = in_array('top_deals', $classifications) ? 1 : 0;
             if ($request->has_variants == 1) {
                 $product->attribute = $request->attribute;
             } else {

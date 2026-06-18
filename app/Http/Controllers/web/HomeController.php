@@ -1439,6 +1439,28 @@ class HomeController extends Controller
         return view('front.search', compact('storeinfo', 'category', 'itemlist'));
     }
 
+    public function categorypage(Request $request)
+    {
+        $slug = $request->slug;
+        $storeinfo = helper::storeinfo($request->vendor);
+        $category = Category::where('slug', $slug)->where('vendor_id', @$storeinfo->id)->where('is_available', '1')->where('is_deleted', '2')->first();
+        if (!$category) {
+            abort(404);
+        }
+        $getcategory = Category::where('vendor_id', @$storeinfo->id)->where('is_available', '1')->where('is_deleted', '2')->orderBy('reorder_id')->get();
+        $products = Item::with(['variation', 'extras', 'product_image', 'multi_image'])
+            ->select('items.*', DB::raw('ROUND(AVG(testimonials.star),1) as ratings_average'))
+            ->leftjoin('testimonials', 'testimonials.item_id', 'items.id')
+            ->where('items.vendor_id', @$storeinfo->id)
+            ->where('items.is_available', '1')
+            ->where('items.is_deleted', '2')
+            ->where(DB::Raw("FIND_IN_SET($category->id, replace(items.cat_id, '|', ','))"), '>', 0)
+            ->groupBy('items.id')
+            ->orderBy('items.reorder_id')
+            ->paginate(15)->onEachSide(0);
+        return view('front.template-17.category', compact('storeinfo', 'category', 'getcategory', 'products'));
+    }
+
     public function deletepassword(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);

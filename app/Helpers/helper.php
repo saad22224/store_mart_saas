@@ -1604,6 +1604,30 @@ class helper
         return $getcategory;
     }
     // item count category wise mobile modal
+    public static function get_new_arrivals($vendor_id, $limit = 8)
+    {
+        $products = Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $vendor_id)->where('is_new_arrival', 1)->where('is_available', 1)->where('is_deleted', 2)->orderByDesc('id')->take($limit)->get();
+        if ($products->isEmpty()) {
+            return Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $vendor_id)->where('is_available', 1)->where('is_deleted', 2)->orderByDesc('id')->take($limit)->get();
+        }
+        return $products;
+    }
+    public static function get_best_sellers($vendor_id, $limit = 8)
+    {
+        $products = Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $vendor_id)->where('is_best_selling', 1)->where('is_available', 1)->where('is_deleted', 2)->orderByDesc('id')->take($limit)->get();
+        if ($products->isEmpty()) {
+            return Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $vendor_id)->where('is_available', 1)->where('is_deleted', 2)->orderByDesc('id')->take($limit)->get();
+        }
+        return $products;
+    }
+    public static function get_exclusive_offers($vendor_id, $limit = 8)
+    {
+        $products = Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $vendor_id)->where('is_exclusive', 1)->where('is_available', 1)->where('is_deleted', 2)->orderByDesc('id')->take($limit)->get();
+        if ($products->isEmpty()) {
+            return Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $vendor_id)->where('is_available', 1)->where('is_deleted', 2)->orderByDesc('id')->take($limit)->get();
+        }
+        return $products;
+    }
     public static function getitems($vendor_id)
     {
         $getitem = Item::with(['variation', 'extras'])->where('vendor_id', @$vendor_id)->where('is_available', '1')->orderBy('reorder_id', 'ASC')->get();

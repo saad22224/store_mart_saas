@@ -592,7 +592,7 @@
     <main id="main-content">
 
         <!-- navbar -->
-        @if (helper::appdata(@$storeinfo->id)->template != 11)
+        @if (!in_array(helper::appdata(@$storeinfo->id)->template, [11, 17]))
             <div class="d-none d-lg-block">
                 <nav class="top-header border-bottom">
                     <div class="container">
@@ -798,6 +798,8 @@
                     }
                 </style>
             @endif
+        @elseif (helper::appdata(@$storeinfo->id)->template == 17)
+            @include('front.template-17.layout.header')
         @else
             <!-- Existing Header Logic -->
             @if (helper::appdata(@$storeinfo->id)->template != 11)

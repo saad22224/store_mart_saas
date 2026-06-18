@@ -5,6 +5,9 @@
     } else {
         $vendor_id = Auth::user()->id;
     }
+    // Retrieve the vendor and check its store category through the relationship
+    $vendor = \App\Models\User::with('store_category')->find($vendor_id);
+    $is_restaurant = $vendor && $vendor->store_category && $vendor->store_category->name == 'مطعم/ كافيه';
 @endphp
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -108,6 +111,18 @@
                                         </div>
                                     </div>
                                 @endif
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">{{ trans('labels.product_classifications') }}</label>
+                                        <select class="form-control selectpicker" name="product_classifications[]" multiple data-live-search="true" title="{{ trans('labels.select') }}">
+                                            <option value="top_deals" {{ $getproductdata->top_deals ? 'selected' : '' }}>{{ trans('labels.featured_product') }}</option>
+                                            <option value="is_new_arrival" {{ $getproductdata->is_new_arrival ? 'selected' : '' }}>{{ trans('labels.new_arrival') }}</option>
+                                            <option value="is_best_selling" {{ $getproductdata->is_best_selling ? 'selected' : '' }}>{{ trans('labels.best_seller') }}</option>
+                                            <option value="is_exclusive" {{ $getproductdata->is_exclusive ? 'selected' : '' }}>{{ trans('labels.exclusive_offer') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="col-form-label">{{ trans('labels.attachment_name') }} </label>
@@ -136,11 +151,12 @@
                                     <label class="form-label">{{ trans('labels.description') }}</label>
                                     <textarea class="form-control" id="ckeditor" name="description">{!! $getproductdata->description !!}</textarea>
                                 </div>
+                                @if($is_restaurant)
                                 <div
                                     class="col-12 border-bottom py-2 my-2 d-flex flex-wrap justify-content-between align-items-center">
                                     <div class="form-group">
                                         <label for="has_extras"
-                                            class="col-form-label">{{ trans('labels.product_has_extras') }}</label>
+                                            class="col-form-label">{{ trans('labels.product_has_addons') }}</label>
                                         <div class="col-md-12">
                                             <div class="form-check-inline">
                                                 <input class="form-check-input me-0 has_extras" type="radio"
@@ -245,45 +261,74 @@
                                     <div id="global-extras"></div>
                                     <div id="more_editextras_fields"></div>
                                 </div>
+                                @endif
+                                @if($is_restaurant)
+                                {{-- Restaurant: show yes/no has_variants radio --}}
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="has_variants"
-                                            class="col-form-label">{{ trans('labels.product_has_variation') }}</label>
+                                        <label for="has_variants" class="col-form-label">{{ trans('labels.product_has_variation') }}</label>
                                         <div class="col-md-12">
-
                                             <div class="form-check-inline">
                                                 <input class="form-check-input me-0 has_variants" type="radio"
                                                     name="has_variants" id="no" value="2" checked
                                                     @if ($getproductdata->has_variants == 2) checked @endif>
-                                                <label class="form-check-label"
-                                                    for="no">{{ trans('labels.no') }}</label>
+                                                <label class="form-check-label" for="no">{{ trans('labels.no') }}</label>
                                             </div>
                                             <div class="form-check-inline">
                                                 <input class="form-check-input me-0 has_variants" type="radio"
                                                     name="has_variants" id="yes" value="1"
                                                     @if ($getproductdata->has_variants == 1) checked @endif>
-                                                <label class="form-check-label"
-                                                    for="yes">{{ trans('labels.yes') }}</label>
+                                                <label class="form-check-label" for="yes">{{ trans('labels.yes') }}</label>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
+                                @else
+                                {{-- Non-restaurant: hidden field, value auto-set to 1 when variants exist --}}
+                                <input type="hidden" name="has_variants" id="has_variants_hidden"
+                                    value="{{ $getproductdata->has_variants }}">
+                                @endif
                                 @if ($getproductdata->has_variants == 1 && count($getproductdata['variation']) > 0)
                                     <div
                                         class="col-md-6 {{ session()->get('direction') == 2 ? 'text-start' : 'text-end' }}">
+                                        @if($is_restaurant)
                                         <button class="btn btn-secondary get-variants" type="button"
                                             dataa-url="{{ URL::to('admin/products/variants/edit', $getproductdata->id) }}">
-                                            <i class="fa-sharp fa-solid fa-plus"></i>
+                                            <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_variation') }}
                                         </button>
+                                        @else
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <button class="btn btn-secondary get-variants-size" type="button"
+                                                dataa-url="{{ URL::to('admin/products/variants/edit', $getproductdata->id) }}">
+                                                <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_size') }}
+                                            </button>
+                                            <button class="btn btn-secondary get-variants-color" type="button"
+                                                dataa-url="{{ URL::to('admin/products/variants/edit', $getproductdata->id) }}">
+                                                <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_color') }}
+                                            </button>
+                                        </div>
+                                        @endif
                                     </div>
                                 @else
                                     <div
                                         class="col-md-6 {{ session()->get('direction') == 2 ? 'text-start' : 'text-end' }}">
+                                        @if($is_restaurant)
                                         <button class="btn btn-secondary" type="button" id="btn_addvariants"
                                             onclick="addvariantModal()">
-                                            <i class="fa-sharp fa-solid fa-plus"></i>
+                                            <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_variation') }}
                                         </button>
+                                        @else
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <button class="btn btn-secondary" type="button" id="btn_add_size"
+                                                onclick="commonModalSize()">
+                                                <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_size') }}
+                                            </button>
+                                            <button class="btn btn-secondary" type="button" id="btn_add_color"
+                                                onclick="commonModalColor()">
+                                                <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_color') }}
+                                            </button>
+                                        </div>
+                                        @endif
                                     </div>
                                 @endif
 
@@ -786,7 +831,47 @@
 
             $.get(data_url, {}, function(data) {
                 $('#commonModal .modal-body').html(data);
+                $('#variant_name').prop('readonly', false);
             });
+        });
+
+        $(document).on('click', '.get-variants-size', function(e) {
+            $("#commonModal .modal-title").html('{{ trans('labels.add_size') }}');
+            $("#commonModal .modal-dialog").addClass('modal-md');
+            $("#commonModal").modal('show');
+            var data_url = $(this).attr('dataa-url');
+
+            $.get(data_url, {}, function(data) {
+                $('#commonModal .modal-body').html(data);
+                $('#variant_name').val("Size").prop('readonly', true);
+            });
+        });
+
+        $(document).on('click', '.get-variants-color', function(e) {
+            $("#commonModal .modal-title").html('{{ trans('labels.add_color') }}');
+            $("#commonModal .modal-dialog").addClass('modal-md');
+            $("#commonModal").modal('show');
+            var data_url = $(this).attr('dataa-url');
+
+            $.get(data_url, {}, function(data) {
+                $('#commonModal .modal-body').html(data);
+                $('#variant_name').val("Color").prop('readonly', true);
+            });
+        });
+
+        function commonModalSize() {
+            $('#variant_name').val("Size").prop('readonly', true);
+            $("#addvariantModal").modal("show");
+        }
+        
+        function commonModalColor() {
+            $('#variant_name').val("Color").prop('readonly', true);
+            $("#addvariantModal").modal("show");
+        }
+
+        $('#addvariantModal').on('hidden.bs.modal', function () {
+            $('#variant_name').val("").prop('readonly', false);
+            $('#variant_options').val("");
         });
 
         $(document).on('click', '.add-variants', function(e) {
@@ -822,10 +907,16 @@
                         $('.variant-table').html(data.varitantHTML);
                         $('#variant_card').removeClass('d-none');
                         $("#commonModal").modal('hide');
+                        // For non-restaurant stores: update hidden has_variants to 1 and trigger UI update
+                        if ($('#has_variants_hidden').length) {
+                            $('#has_variants_hidden').val('1');
+                            check_variation_validation(1);
+                        }
                     }
                 })
             }
         });
+
     </script>
     <script>
         function validation(value, id) {

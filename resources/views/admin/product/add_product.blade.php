@@ -5,6 +5,9 @@
     } else {
         $vendor_id = Auth::user()->id;
     }
+    // Retrieve the vendor and check its store category through the relationship
+    $vendor = \App\Models\User::with('store_category')->find($vendor_id);
+    $is_restaurant = $vendor && $vendor->store_category && $vendor->store_category->name == 'مطعم/ كافيه';
 @endphp
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -115,6 +118,18 @@
                                     </div>
                                 @endif
                             @endif
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">{{ trans('labels.product_classifications') }}</label>
+                                    <select class="form-control selectpicker" name="product_classifications[]" multiple data-live-search="true" title="{{ trans('labels.select') }}">
+                                        <option value="top_deals" {{ old('top_deals') ? 'selected' : '' }}>{{ trans('labels.featured_product') }}</option>
+                                        <option value="is_new_arrival" {{ old('is_new_arrival') ? 'selected' : '' }}>{{ trans('labels.new_arrival') }}</option>
+                                        <option value="is_best_selling" {{ old('is_best_selling') ? 'selected' : '' }}>{{ trans('labels.best_seller') }}</option>
+                                        <option value="is_exclusive" {{ old('is_exclusive') ? 'selected' : '' }}>{{ trans('labels.exclusive_offer') }}</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">{{ trans('labels.attachment_name') }} </label>
@@ -144,12 +159,13 @@
 
                             </div>
 
+                            @if($is_restaurant)
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12 d-flex flex-wrap justify-content-between align-items-center">
                                         <div class="form-group">
                                             <label for="has_extras"
-                                                class="form-label">{{ trans('labels.product_has_extras') }}</label>
+                                                class="form-label">{{ trans('labels.product_has_addons') }}</label>
                                             <div class="col-md-12">
                                                 <div class="form-check-inline">
                                                     <input class="form-check-input me-0 has_extras" type="radio"
@@ -165,7 +181,6 @@
                                                     <label class="form-check-label"
                                                         for="extras_yes">{{ trans('labels.yes') }}</label>
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-center col-sm-auto col-12 mb-sm-0 mb-2">
@@ -185,33 +200,8 @@
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div id="extras">
-                                        {{-- <div class="row m-0">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="form-label">{{ trans('labels.name') }} <span
-                                                            class="text-danger">
-                                                            * </span></label>
-                                                    <input type="text" class="form-control" name="extras_name[]" required
-                                                        placeholder="{{ trans('labels.name') }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="form-label">{{ trans('labels.price') }} <span
-                                                            class="text-danger">
-                                                            * </span></label>
-                                                    <div class="d-flex">
-                                                        <input type="text" class="form-control numbers_only"
-                                                            name="extras_price[]" placeholder="{{ trans('labels.price') }}"
-                                                            required>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> --}}
                                         @if (!empty($globalextras) && $globalextras->count() > 0)
                                             <div id="global-extras"></div>
                                         @endif
@@ -219,36 +209,49 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
 
+                            @if($is_restaurant)
+                            {{-- Restaurant/Cafe: show yes/no variant radio + add variation button --}}
                             <div class="col-12 d-flex align-items-center justify-content-between">
                                 <div class="form-group">
-                                    <label for="has_variants"
-                                        class="form-label">{{ trans('labels.product_has_variation') }}</label>
+                                    <label for="has_variants" class="form-label">{{ trans('labels.product_has_variation') }}</label>
                                     <div class="col-md-12">
                                         <div class="form-check-inline">
                                             <input class="form-check-input me-0 has_variants" type="radio"
                                                 name="has_variants" id="no" value="2" checked
                                                 @if (old('has_variants') == 2) checked @endif>
-                                            <label class="form-check-label"
-                                                for="no">{{ trans('labels.no') }}</label>
+                                            <label class="form-check-label" for="no">{{ trans('labels.no') }}</label>
                                         </div>
                                         <div class="form-check-inline">
                                             <input class="form-check-input me-0 has_variants" type="radio"
                                                 name="has_variants" id="yes" value="1"
                                                 @if (old('has_variants') == 1) checked @endif>
-                                            <label class="form-check-label"
-                                                for="yes">{{ trans('labels.yes') }}</label>
+                                            <label class="form-check-label" for="yes">{{ trans('labels.yes') }}</label>
                                         </div>
-
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" type="button" id="btn_addvariants"
-                                    onclick="commonModal()">
-                                    <i class="fa-sharp fa-solid fa-plus"></i>
+                                <button class="btn btn-secondary" type="button" id="btn_addvariants" onclick="commonModal()">
+                                    <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_variation') }}
                                 </button>
                             </div>
+                            @else
+                            {{-- Non-restaurant: no radio, just size/color buttons. has_variants hidden = 1 when a variant is added --}}
+                            <input type="hidden" name="has_variants" id="has_variants_hidden" value="2">
+                            <div class="col-12 d-flex align-items-center justify-content-between">
+                                <label class="form-label mb-0">{{ trans('labels.variants') }}</label>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-secondary" type="button" id="btn_add_size" onclick="commonModalSize()">
+                                        <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_size') }}
+                                    </button>
+                                    <button class="btn btn-secondary" type="button" id="btn_add_color" onclick="commonModalColor()">
+                                        <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_color') }}
+                                    </button>
+                                </div>
+                            </div>
+                            @endif
 
-                            <div class="col-12 dn @if ($errors->has('variants_name.*') || $errors->has('variants_price.*')) dn @endif @if (old('variants') == 2) d-flex @endif"
+                            <div class="col-12 {{ !$is_restaurant ? '' : 'dn' }} @if ($errors->has('variants_name.*') || $errors->has('variants_price.*')) dn @endif @if (old('variants') == 2) d-flex @endif"
                                 id="price_row">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -428,6 +431,22 @@
         var placehodername = "{{ trans('labels.name') }}";
         var placeholderprice = "{{ trans('labels.price') }}";
         var page = "add";
+
+        function commonModalSize() {
+            $('#variant_name').val("Size").prop('readonly', true);
+            $("#commonModal").modal("show");
+        }
+        
+        function commonModalColor() {
+            $('#variant_name').val("Color").prop('readonly', true);
+            $("#commonModal").modal("show");
+        }
+        
+        // Ensure variant name is cleared when opening regular modal
+        $('#commonModal').on('hidden.bs.modal', function () {
+            $('#variant_name').val("").prop('readonly', false);
+            $('#variant_options').val("");
+        });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.12.1/ckeditor.js"></script>
     <script>
@@ -467,11 +486,15 @@
                         $('.variant-table').html(data.varitantHTML);
                         $('#variant_card').removeClass('d-none');
                         $("#commonModal").modal('hide');
+                        // For non-restaurant stores: update hidden has_variants to 1 and trigger UI update
+                        if ($('#has_variants_hidden').length) {
+                            $('#has_variants_hidden').val('1');
+                            check_variation_validation(1);
+                        }
                     }
                 })
             }
         });
-
 
     </script>
 

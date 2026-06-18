@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(self::class, 'vendor_id');
     }
+
+    public function store_category()
+    {
+        return $this->belongsTo(StoreCategory::class, 'store_id');
+    }
 }

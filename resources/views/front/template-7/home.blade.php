@@ -610,7 +610,7 @@
             <div class="t7-cats-grid">
 
                 @foreach ($allCategories as $cat)
-                    <a href="{{ URL::to($storeinfo->slug . '/search?category=' . $cat->slug) }}" class="t7-cat-item">
+                    <a href="{{ URL::to(@$storeinfo->slug . '/category/' . $cat->slug) }}" class="t7-cat-item">
                         <div class="t7-cat-img-wrap">
                             @if (!empty($cat->image) && $cat->image !== 'default.png')
                                 <img src="{{ helper::image_path($cat->image) }}" alt="{{ $cat->name }}"

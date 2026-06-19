@@ -6,7 +6,7 @@ class Item extends Model
 {
     use HasFactory;
     protected $table = 'items';
-    protected $fillable = ['vendor_id','cat_id','item_name','item_price','slug','item_original_price','tax','description','image','video_url','sku','attchment_name','attchment_file','video_url','stock_management','min_order','max_order','low_qty','qty', 'dollar_price', 'currency'];
+    protected $fillable = ['vendor_id','cat_id','item_name','item_price','slug','item_original_price','tax','description','image','video_url','sku','attchment_name','attchment_file','stock_management','min_order','max_order','low_qty','qty', 'dollar_price', 'currency', 'colors'];
     public function extras()
     {
         return $this->hasMany('App\Models\Extra', 'item_id', 'id')->select('id', 'name', 'price', 'item_id');

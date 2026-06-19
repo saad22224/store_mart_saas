@@ -4,27 +4,53 @@
         border-bottom: 1px solid #e9e9e9;
         font-family: 'Inter', 'Cairo', sans-serif;
         position: relative;
-        z-index: 20;
+        z-index: 999;
         width: 100%;
         max-width: 100%;
-        overflow-x: clip;
+        transition: all 0.3s ease;
+    }
+
+    .smart-header-fixed {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-bottom-color: transparent !important;
+        animation: smartSlideDown 0.4s ease forwards;
+        z-index: 1000 !important;
+    }
+
+    @keyframes smartSlideDown {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(0); }
+    }
+
+    .smart-header-fixed .vela-header-inner {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .smart-header-fixed .vela-logo img {
+        max-width: 160px;
+        max-height: 48px;
     }
 
     body {
-        overflow-x: hidden;
+        /* overflow removed to prevent internal vertical scrollbars */
     }
 
     .vela-home,
     .vela-category-page {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden;
     }
 
     .vela-header-inner {
         max-width: 1200px;
         margin: 0 auto;
         padding: 30px 32px 20px;
+        transition: all 0.3s ease;
     }
 
     .vela-header-top {
@@ -87,24 +113,26 @@
         max-width: 220px;
         max-height: 58px;
         object-fit: contain;
+        transition: all 0.3s ease;
     }
 
     .vela-header-icon,
     .vela-mobile-menu-btn {
-        width: 34px;
-        height: 34px;
+        width: 42px;
+        height: 42px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         border: 0;
-        background: transparent;
+        background: #f7f7f7;
+        border-radius: 50%;
         color: #111;
         font-size: 0;
         line-height: 1;
         text-decoration: none;
         position: relative;
         padding: 0;
-        transition: color .2s ease, transform .2s ease;
+        transition: all .2s ease;
     }
 
     .vela-mobile-menu-btn {
@@ -113,24 +141,25 @@
 
     .vela-header-icon:hover,
     .vela-mobile-menu-btn:hover {
-        color: #111;
-        transform: translateY(-1px);
+        background: #ececec;
+        color: #000;
+        transform: translateY(-2px);
     }
 
     .vela-cart-badge {
-        min-width: 16px;
-        height: 16px;
-        padding: 0 5px;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
         border-radius: 999px;
-        background: #f7a9be;
+        background: #111;
         color: #fff;
         border: 2px solid #fff;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 800;
-        line-height: 12px;
+        line-height: 16px;
         position: absolute;
-        top: -3px;
-        right: 0;
+        top: -4px;
+        right: -4px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -412,13 +441,13 @@
 
             <div class="vela-header-right">
                 <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>" class="vela-header-icon" aria-label="<?php echo e(trans('labels.search')); ?>">
-                    <span class="vela-icon-search" aria-hidden="true"></span>
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 18px;"></i>
                 </a>
 
                 <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
                     <a href="<?php echo e(URL::to($storeinfo->slug . '/cart/')); ?>" class="vela-header-icon" aria-label="<?php echo e(trans('labels.cart')); ?>">
-                        <span class="vela-icon-bag" aria-hidden="true"></span>
-                        <span class="vela-cart-badge" id="cartcnt"><?php echo e($cartCount); ?></span>
+                          <i class="fa-solid fa-cart-shopping" style="font-size: 18px;"></i>
+                          <span class="vela-cart-badge" id="cartcnt"><?php echo e($cartCount); ?></span>
                     </a>
                 <?php endif; ?>
             </div>
@@ -466,4 +495,32 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const header = document.querySelector(".vela-header");
+        const body = document.body;
+        
+        if (header) {
+            const headerHeight = header.offsetHeight;
+            let isSticky = false;
+
+            window.addEventListener("scroll", function() {
+                if (window.scrollY > 120) {
+                    if (!isSticky) {
+                        header.classList.add("smart-header-fixed");
+                        body.style.paddingTop = headerHeight + "px";
+                        isSticky = true;
+                    }
+                } else {
+                    if (isSticky) {
+                        header.classList.remove("smart-header-fixed");
+                        body.style.paddingTop = "0";
+                        isSticky = false;
+                    }
+                }
+            });
+        }
+    });
+</script>
 <?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/template-17/layout/header.blade.php ENDPATH**/ ?>

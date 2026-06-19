@@ -1137,4 +1137,8 @@
      'exclusive_offers' => 'Exclusive Offers',
      'shop_by_category' => 'Shop by Category',
      'featured_products_label' => 'Featured Products',
+     'offers_discounts' => 'OFFERS & DISCOUNTS',
+     'offers_desc' => 'Our store provides high-quality products at competitive prices, with numerous offers and discounts available on all products year-round.',
+     'customer_reviews' => 'CUSTOMER REVIEWS 4.8/5',
+     'reviews_desc' => 'Customer satisfaction is our primary goal. We believe you will find the products that best meet your needs.',
 ];

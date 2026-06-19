@@ -1,4 +1,4 @@
-<div class="product-card2" data-aos="fade-up" data-aos-duration="800">
+<div class="product-card2">
     <div class="product-image-container2">
         @if($product->item_original_price > $product->item_price)
             @php

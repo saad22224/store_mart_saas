@@ -153,8 +153,8 @@
                         <div class="vela-feature-icon">
                             <i class="fa-solid fa-ticket"></i>
                         </div>
-                        <h4 class="vela-feature-title">OFFERS & DISCOUNTS</h4>
-                        <p class="vela-feature-desc">Our store provides high-quality products at competitive prices, with numerous offers and discounts available on all products year-round.</p>
+                        <h4 class="vela-feature-title">{{ trans('labels.offers_discounts') == 'labels.offers_discounts' ? 'OFFERS & DISCOUNTS' : trans('labels.offers_discounts') }}</h4>
+                        <p class="vela-feature-desc">{{ trans('labels.offers_desc') == 'labels.offers_desc' ? 'Our store provides high-quality products at competitive prices, with numerous offers and discounts available on all products year-round.' : trans('labels.offers_desc') }}</p>
                     </div>
                 </div>
                 <div class="col-lg-5 col-md-6">
@@ -162,8 +162,8 @@
                         <div class="vela-feature-icon">
                             <i class="fa-solid fa-comment-dots"></i>
                         </div>
-                        <h4 class="vela-feature-title">CUSTOMER REVIEWS 4.8/5</h4>
-                        <p class="vela-feature-desc">Customer satisfaction is our primary goal. We believe you will find the products that best meet your needs.</p>
+                        <h4 class="vela-feature-title">{{ trans('labels.customer_reviews') == 'labels.customer_reviews' ? 'CUSTOMER REVIEWS 4.8/5' : trans('labels.customer_reviews') }}</h4>
+                        <p class="vela-feature-desc">{{ trans('labels.reviews_desc') == 'labels.reviews_desc' ? 'Customer satisfaction is our primary goal. We believe you will find the products that best meet your needs.' : trans('labels.reviews_desc') }}</p>
                     </div>
                 </div>
             @endif

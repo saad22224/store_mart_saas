@@ -718,6 +718,7 @@ class helper
                     $OrderPro->variants_name = $value['variants_name'];
                     $OrderPro->variants_price = $value['variants_price'];
                     $OrderPro->attribute = $value['attribute'];
+                    $OrderPro->color_choice = $value['color_choice'] ?? null;
                     $OrderPro->qty = $value['qty'];
                     $OrderPro->save();
                 }

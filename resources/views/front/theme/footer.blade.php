@@ -1039,6 +1039,7 @@
             var min_order = $('#modal_item_min_order').val();
             var max_order = $('#modal_item_max_order').val();
             var stock_management = $('#modal_stock_management').val();
+            var color_choice = $('input[name="color_choice"]:checked').val() || null;
         } else {
             var vendor = $('#overview_vendor').val();
             var item_id = $('#overview_item_id').val();
@@ -1052,6 +1053,7 @@
             var min_order = $('#item_min_order').val();
             var max_order = $('#item_max_order').val();
             var stock_management = $('#stock_management').val();
+            var color_choice = $('input[name="color_choice"]:checked').val() || null;
 
         }
         var extras_id = ($('.Checkbox:checked').map(function() {
@@ -1091,6 +1093,7 @@
                 min_order: min_order,
                 max_order: max_order,
                 stock_management: stock_management,
+                color_choice: color_choice,
                 buynow: buynow,
             },
             method: 'POST', //Post method,
@@ -1165,6 +1168,7 @@
             var min_order = $('#modal_item_min_order').val();
             var max_order = $('#modal_item_max_order').val();
             var stock_management = $('#modal_stock_management').val();
+            var color_choice = $('input[name="color_choice"]:checked').val() || null;
         } else {
             var vendor = $('#overview_vendor').val();
             var item_id = $('#overview_item_id').val();
@@ -1178,6 +1182,7 @@
             var min_order = $('#item_min_order').val();
             var max_order = $('#item_max_order').val();
             var stock_management = $('#stock_management').val();
+            var color_choice = $('input[name="color_choice"]:checked').val() || null;
 
         }
         var extras_id = ($('.Checkbox:checked').map(function() {
@@ -1232,6 +1237,7 @@
                 min_order: min_order,
                 max_order: max_order,
                 stock_management: stock_management,
+                color_choice: color_choice,
                 buynow: buynow,
                 frequently_bought_items: frequently_bought_items,
             },
@@ -1440,10 +1446,12 @@
             if ($('#viewproduct-over').is(':visible')) {
                 var variants_name = $('#modal_variants_name').val();
                 var stock_management = $('#modal_stock_management').val();
+            var color_choice = $('input[name="color_choice"]:checked').val() || null;
                 $('.change-qty-2').prop('disabled', true);
             } else {
                 var variants_name = $('#variants_name').val();
                 var stock_management = $('#stock_management').val();
+            var color_choice = $('input[name="color_choice"]:checked').val() || null;
                 $('.change-qty-1').prop('disabled', true);
             }
             $.ajax({
@@ -1458,6 +1466,7 @@
                     vendor_id: "{{ $storeinfo->id }}",
                     variants_name: variants_name,
                     stock_management: stock_management,
+                color_choice: color_choice,
                 },
                 method: 'POST',
                 success: function(response) {

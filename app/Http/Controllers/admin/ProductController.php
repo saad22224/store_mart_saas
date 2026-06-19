@@ -145,6 +145,7 @@ class ProductController extends Controller
             $product->min_order = "";
             $product->max_order = "";
         }
+        $product->colors = $request->colors;
 
         $product->attchment_name = $request->attachment_name;
         if ($request->has('attachment_file')) {
@@ -382,6 +383,7 @@ class ProductController extends Controller
                 $product->min_order = "";
                 $product->max_order = "";
             }
+            $product->colors = $request->colors;
             $product->attchment_name = $request->attachment_name;
 
             if ($request->has('attachment_file')) {

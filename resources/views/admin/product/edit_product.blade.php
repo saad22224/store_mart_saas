@@ -116,11 +116,18 @@
                                     <div class="form-group">
                                         <label class="form-label">{{ trans('labels.product_classifications') }}</label>
                                         <select class="form-control selectpicker" name="product_classifications[]" multiple data-live-search="true" title="{{ trans('labels.select') }}">
-                                            <option value="top_deals" {{ $getproductdata->top_deals ? 'selected' : '' }}>{{ trans('labels.featured_product') }}</option>
-                                            <option value="is_new_arrival" {{ $getproductdata->is_new_arrival ? 'selected' : '' }}>{{ trans('labels.new_arrival') }}</option>
-                                            <option value="is_best_selling" {{ $getproductdata->is_best_selling ? 'selected' : '' }}>{{ trans('labels.best_seller') }}</option>
-                                            <option value="is_exclusive" {{ $getproductdata->is_exclusive ? 'selected' : '' }}>{{ trans('labels.exclusive_offer') }}</option>
+                                            <option value="top_deals" {{ $getproductdata->top_deals == 1 ? 'selected' : '' }}>{{ trans('labels.featured_product') }}</option>
+                                            <option value="is_new_arrival" {{ $getproductdata->is_new_arrival == 1 ? 'selected' : '' }}>{{ trans('labels.new_arrival') }}</option>
+                                            <option value="is_best_selling" {{ $getproductdata->is_best_selling == 1 ? 'selected' : '' }}>{{ trans('labels.best_seller') }}</option>
+                                            <option value="is_exclusive" {{ $getproductdata->is_exclusive == 1 ? 'selected' : '' }}>{{ trans('labels.exclusive_offer') }}</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">{{ trans('labels.colors') }} ({{ trans('labels.optional') }})</label>
+                                        <input type="text" class="form-control" name="colors" id="colors" placeholder="{{ trans('labels.colors_placeholder', ['default' => 'e.g. Red, Blue, Green']) }}" value="{{ $getproductdata->colors }}">
+                                        <small class="text-muted">{{ trans('labels.colors_help', ['default' => 'Enter colors separated by commas']) }}</small>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -302,10 +309,6 @@
                                                 dataa-url="{{ URL::to('admin/products/variants/edit', $getproductdata->id) }}">
                                                 <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_size') }}
                                             </button>
-                                            <button class="btn btn-secondary get-variants-color" type="button"
-                                                dataa-url="{{ URL::to('admin/products/variants/edit', $getproductdata->id) }}">
-                                                <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_color') }}
-                                            </button>
                                         </div>
                                         @endif
                                     </div>
@@ -322,10 +325,6 @@
                                             <button class="btn btn-secondary" type="button" id="btn_add_size"
                                                 onclick="commonModalSize()">
                                                 <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_size') }}
-                                            </button>
-                                            <button class="btn btn-secondary" type="button" id="btn_add_color"
-                                                onclick="commonModalColor()">
-                                                <i class="fa-sharp fa-solid fa-plus"></i> {{ trans('labels.add_color') }}
                                             </button>
                                         </div>
                                         @endif
@@ -847,25 +846,8 @@
             });
         });
 
-        $(document).on('click', '.get-variants-color', function(e) {
-            $("#commonModal .modal-title").html('{{ trans('labels.add_color') }}');
-            $("#commonModal .modal-dialog").addClass('modal-md');
-            $("#commonModal").modal('show');
-            var data_url = $(this).attr('dataa-url');
-
-            $.get(data_url, {}, function(data) {
-                $('#commonModal .modal-body').html(data);
-                $('#variant_name').val("Color").prop('readonly', true);
-            });
-        });
-
         function commonModalSize() {
             $('#variant_name').val("Size").prop('readonly', true);
-            $("#addvariantModal").modal("show");
-        }
-        
-        function commonModalColor() {
-            $('#variant_name').val("Color").prop('readonly', true);
             $("#addvariantModal").modal("show");
         }
 
@@ -891,7 +873,7 @@
             }
 
             if (isValid) {
-
+                $.ajax({
                     url: form.attr('action'),
                     datType: 'json',
                     data: {
@@ -948,8 +930,7 @@
             })
 
             function updateToDatabase(idString) {
-
-
+                $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

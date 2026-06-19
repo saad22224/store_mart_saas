@@ -352,7 +352,7 @@
                         <div class="col-lg-9 col-md-12">
                             <div class="row g-4">
                                 @foreach($best_sellers as $product)
-                                    <div class="col-lg-4 col-md-6 col-6">
+                                    <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
                                         @include('front.template-17.partials.product_card', ['product' => $product])
                                     </div>
                                 @endforeach
@@ -390,7 +390,7 @@
                         <div class="col-lg-9 col-md-12">
                             <div class="row g-4">
                                 @foreach($featured_products as $product)
-                                    <div class="col-lg-4 col-md-6 col-6">
+                                    <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
                                         @include('front.template-17.partials.product_card', ['product' => $product])
                                     </div>
                                 @endforeach
@@ -411,7 +411,7 @@
                     </div>
                     <div class="row g-4">
                         @foreach($new_arrivals as $product)
-                            <div class="col-lg-3 col-md-6 col-6">
+                            <div class="col-lg-3 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
                                 @include('front.template-17.partials.product_card', ['product' => $product])
                             </div>
                         @endforeach
@@ -430,7 +430,7 @@
                     </div>
                     <div class="row g-4">
                         @foreach($exclusive_offers as $product)
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
                             <a href="{{ URL::to(@$storeinfo->slug.'/detail-'.$product->slug) }}" style="display:block; border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 3/4; background: #f8f8f8;">
                                 <img src="{{ helper::image_path($product->image) }}" alt="{{ $product->item_name }}" style="width:100%; height: 100%; object-fit:cover; transition: transform 0.4s ease;">
                             </a>

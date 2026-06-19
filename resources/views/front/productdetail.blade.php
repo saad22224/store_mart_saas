@@ -289,6 +289,29 @@
                         </div>
                     @endif
 
+                    @if ($getitem->colors)
+                        @php
+                            $colors = explode(',', $getitem->colors);
+                        @endphp
+                        <div class="product-colors-wrapper mb-3 border-bottom pb-3">
+                            <label class="fw-semibold form-label mt-3">{{ trans('labels.color') ?? 'Color' }}</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach($colors as $index => $color)
+                                    @php $color = trim($color); @endphp
+                                    <label class="btn btn-outline-primary check_color {{ $index == 0 ? 'active' : '' }}" 
+                                           id="check_color_{{ str_replace(' ', '_', $color) }}" 
+                                           for="color_{{ str_replace(' ', '_', $color) }}">
+                                        <input type="radio" class="d-none color-selection" name="color_choice" 
+                                               {{ $index == 0 ? 'checked' : '' }} 
+                                               value="{{ $color }}" 
+                                               id="color_{{ str_replace(' ', '_', $color) }}">
+                                        {{ $color }}
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     @if (count($getitem['extras']) > 0)
                         <div class="woo_pr_color flex_inline_center my-3 border-bottom pb-3">
                             <div class="woo_colors_list text-left w-100">
@@ -604,6 +627,11 @@
         });
 
     }
+
+    $('.color-selection').on('change', function() {
+        $('.check_color').removeClass('active');
+        $(this).parent('label').addClass('active');
+    });
 
     $('#pricelist .Checkbox').change(function() {
         update_total_price();

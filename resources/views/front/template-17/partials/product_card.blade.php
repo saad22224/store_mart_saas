@@ -29,7 +29,7 @@
                         <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
                     </a>
                 @else
-                    <a href="javascript:void(0)" onclick="addtocart('{{ $product->id }}', '{{ $product->item_name }}', '{{ $product->item_price }}', '{{ $product->image }}', '{{ $product->tax }}', '1', '{{ $product->item_price }}')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
+                    <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
                         <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
                     </a>
                 @endif

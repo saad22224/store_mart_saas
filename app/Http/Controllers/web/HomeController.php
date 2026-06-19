@@ -258,7 +258,8 @@ class HomeController extends Controller
     {
         $quantity = $variant_id = 0;
         $item = Item::where('id', $request->item_id)->first();
-        $variant = Variants::where('item_id', $request->item_id)->where('name', implode('|', str_replace('_', ' ', $request->name)))->first();
+        $variant_name = is_array($request->name) ? implode('|', str_replace('_', ' ', $request->name)) : '';
+        $variant = Variants::where('item_id', $request->item_id)->where('name', $variant_name)->first();
         $topdeals = helper::top_deals($request->vendor_id);
         $quantity = @$variant->qty - (isset($cart[@$variant->id]['qty']) ? $cart[@$variant->id]['qty'] : 0);
 

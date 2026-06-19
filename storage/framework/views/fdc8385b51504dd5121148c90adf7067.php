@@ -31,7 +31,7 @@
                         <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
                     </a>
                 <?php else: ?>
-                    <a href="javascript:void(0)" onclick="addtocart('<?php echo e($product->id); ?>', '<?php echo e($product->item_name); ?>', '<?php echo e($product->item_price); ?>', '<?php echo e($product->image); ?>', '<?php echo e($product->tax); ?>', '1', '<?php echo e($product->item_price); ?>')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
+                    <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
                         <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
                     </a>
                 <?php endif; ?>

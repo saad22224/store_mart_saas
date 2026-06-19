@@ -132,22 +132,23 @@
 <section class="vela-footer-top">
     <div class="container">
         <div class="row g-4 justify-content-center">
-            @php 
+            <?php 
                 $features = helper::footer_features(@$storeinfo->id); 
-            @endphp
-            @if(count($features) > 0)
-                @foreach ($features->take(2) as $feature)
+            ?>
+            <?php if(count($features) > 0): ?>
+                <?php $__currentLoopData = $features->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="col-lg-5 col-md-6">
                     <div class="vela-feature-card">
                         <div class="vela-feature-icon">
-                            {!! $feature->icon !!}
+                            <?php echo $feature->icon; ?>
+
                         </div>
-                        <h4 class="vela-feature-title">{{ $feature->title }}</h4>
-                        <p class="vela-feature-desc">{{ $feature->description }}</p>
+                        <h4 class="vela-feature-title"><?php echo e($feature->title); ?></h4>
+                        <p class="vela-feature-desc"><?php echo e($feature->description); ?></p>
                     </div>
                 </div>
-                @endforeach
-            @else
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php else: ?>
                 <div class="col-lg-5 col-md-6">
                     <div class="vela-feature-card">
                         <div class="vela-feature-icon">
@@ -166,17 +167,17 @@
                         <p class="vela-feature-desc">Customer satisfaction is our primary goal. We believe you will find the products that best meet your needs.</p>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
 <!-- Pink Footer Section -->
-@php
+<?php
     $store = App\Models\User::where('id' , $storeinfo->id)->first();
     $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
     $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
-@endphp
+?>
 <footer class="vela-footer-main">
     <div class="container">
         <div class="row g-4">
@@ -187,22 +188,23 @@
                     <li>
                         <div class="vela-contact-icon"><i class="fa-solid fa-location-dot"></i></div>
                         <div>
-                            <strong>{{ trans('labels.address') == 'labels.address' ? 'Address' : trans('labels.address') }}:</strong> 
-                            {{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}
+                            <strong><?php echo e(trans('labels.address') == 'labels.address' ? 'Address' : trans('labels.address')); ?>:</strong> 
+                            <?php echo e(empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address); ?>
+
                         </div>
                     </li>
                     <li>
                         <div class="vela-contact-icon"><i class="fa-solid fa-phone"></i></div>
                         <div>
-                            <strong>{{ trans('labels.mobile') == 'labels.mobile' ? 'Phone' : trans('labels.mobile') }}:</strong> 
-                            <a href="tel:{{ $storePhone }}" style="color: inherit; text-decoration: none;" dir="ltr">{{ $storePhone }}</a>
+                            <strong><?php echo e(trans('labels.mobile') == 'labels.mobile' ? 'Phone' : trans('labels.mobile')); ?>:</strong> 
+                            <a href="tel:<?php echo e($storePhone); ?>" style="color: inherit; text-decoration: none;" dir="ltr"><?php echo e($storePhone); ?></a>
                         </div>
                     </li>
                     <li>
                         <div class="vela-contact-icon"><i class="fa-solid fa-envelope"></i></div>
                         <div>
-                            <strong>{{ trans('labels.email') == 'labels.email' ? 'Email' : trans('labels.email') }}:</strong> 
-                            <a href="mailto:{{ $storeEmail }}" style="color: inherit; text-decoration: none;">{{ $storeEmail }}</a>
+                            <strong><?php echo e(trans('labels.email') == 'labels.email' ? 'Email' : trans('labels.email')); ?>:</strong> 
+                            <a href="mailto:<?php echo e($storeEmail); ?>" style="color: inherit; text-decoration: none;"><?php echo e($storeEmail); ?></a>
                         </div>
                     </li>
                 </ul>
@@ -210,36 +212,37 @@
 
             <!-- Column 2: Categories -->
             <div class="col-lg-3 col-md-4 col-6">
-                <h5 class="vela-footer-title">{{ trans('labels.categories') == 'labels.categories' ? 'Categories' : trans('labels.categories') }}</h5>
+                <h5 class="vela-footer-title"><?php echo e(trans('labels.categories') == 'labels.categories' ? 'Categories' : trans('labels.categories')); ?></h5>
                 <ul class="vela-footer-links">
-                    @foreach(helper::getcategory($storeinfo->id)->take(5) as $cat)
-                        <li><a href="{{ URL::to(@$storeinfo->slug.'/category/'.$cat->slug) }}">{{ $cat->name }}</a></li>
-                    @endforeach
+                    <?php $__currentLoopData = helper::getcategory($storeinfo->id)->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><a href="<?php echo e(URL::to(@$storeinfo->slug.'/category/'.$cat->slug)); ?>"><?php echo e($cat->name); ?></a></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
 
             <!-- Column 3: Pages -->
             <div class="col-lg-3 col-md-4 col-6">
-                <h5 class="vela-footer-title">{{ trans('labels.pages') == 'labels.pages' ? 'Pages' : trans('labels.pages') }}</h5>
+                <h5 class="vela-footer-title"><?php echo e(trans('labels.pages') == 'labels.pages' ? 'Pages' : trans('labels.pages')); ?></h5>
                 <ul class="vela-footer-links">
-                    <li><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}">{{ trans('labels.privacy_policy') }}</a></li>
-                    <li><a href="{{ URL::to($storeinfo->slug . '/contact') }}">{{ trans('labels.contact_us') }}</a></li>
-                    <li><a href="{{ URL::to($storeinfo->slug . '/terms_condition') }}">{{ trans('labels.terms_condition') }}</a></li>
-                    <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}">{{ trans('labels.refund_policy') }}</a></li>
+                    <li><a href="<?php echo e(URL::to($storeinfo->slug . '/privacypolicy')); ?>"><?php echo e(trans('labels.privacy_policy')); ?></a></li>
+                    <li><a href="<?php echo e(URL::to($storeinfo->slug . '/contact')); ?>"><?php echo e(trans('labels.contact_us')); ?></a></li>
+                    <li><a href="<?php echo e(URL::to($storeinfo->slug . '/terms_condition')); ?>"><?php echo e(trans('labels.terms_condition')); ?></a></li>
+                    <li><a href="<?php echo e(URL::to($storeinfo->slug . '/refund_policy')); ?>"><?php echo e(trans('labels.refund_policy')); ?></a></li>
                 </ul>
             </div>
 
             <!-- Column 4: Social Media -->
-            <div class="col-lg-2 col-md-4 col-12 d-flex flex-column {{ session()->get('direction') == 2 ? 'align-items-start' : 'align-items-end' }}">
-                @if (helper::getsociallinks($storeinfo->id)->count() > 0)
+            <div class="col-lg-2 col-md-4 col-12 d-flex flex-column <?php echo e(session()->get('direction') == 2 ? 'align-items-start' : 'align-items-end'); ?>">
+                <?php if(helper::getsociallinks($storeinfo->id)->count() > 0): ?>
                     <div class="vela-social-icons">
-                        @foreach (helper::getsociallinks($storeinfo->id) as $links)
-                            <a href="{{ $links->link }}" target="_blank" aria-label="social-link">
-                                {!! $links->icon !!}
+                        <?php $__currentLoopData = helper::getsociallinks($storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e($links->link); ?>" target="_blank" aria-label="social-link">
+                                <?php echo $links->icon; ?>
+
                             </a>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
 
         </div>
@@ -257,3 +260,4 @@
 /* Hide the default copyright section that's included in front.theme.footer */
 .copy-right-sec { display: none !important; }
 </style>
+<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/template-17/layout/footer.blade.php ENDPATH**/ ?>

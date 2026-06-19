@@ -1,68 +1,73 @@
 <div class="product-card2" data-aos="fade-up" data-aos-duration="800">
     <div class="product-image-container2">
-        @if($product->item_original_price > $product->item_price)
-            @php
+        <?php if($product->item_original_price > $product->item_price): ?>
+            <?php
                 $discount = round((($product->item_original_price - $product->item_price) / $product->item_original_price) * 100);
-            @endphp
+            ?>
             <div class="discount-badge">
-                Discount {{ $discount }}%
+                Discount <?php echo e($discount); ?>%
             </div>
-        @elseif($product->top_deals)
+        <?php elseif($product->top_deals): ?>
             <div class="discount-badge" style="background: #ff3c3c;">
-                {{ trans('labels.top_deals') == 'labels.top_deals' ? 'Hot' : trans('labels.top_deals') }}
-            </div>
-        @elseif($product->is_new_arrival)
-            <div class="discount-badge" style="background: #000;">
-                {{ trans('labels.new_arrival') == 'labels.new_arrival' ? 'New' : trans('labels.new_arrival') }}
-            </div>
-        @endif
+                <?php echo e(trans('labels.top_deals') == 'labels.top_deals' ? 'Hot' : trans('labels.top_deals')); ?>
 
-        <a href="{{ URL::to(@$storeinfo->slug.'/detail-'.$product->slug) }}" class="product-img-link2">
-            <img src="{{ helper::image_path($product->image) }}" alt="{{ $product->item_name }}" class="product-img2">
+            </div>
+        <?php elseif($product->is_new_arrival): ?>
+            <div class="discount-badge" style="background: #000;">
+                <?php echo e(trans('labels.new_arrival') == 'labels.new_arrival' ? 'New' : trans('labels.new_arrival')); ?>
+
+            </div>
+        <?php endif; ?>
+
+        <a href="<?php echo e(URL::to(@$storeinfo->slug.'/detail-'.$product->slug)); ?>" class="product-img-link2">
+            <img src="<?php echo e(helper::image_path($product->image)); ?>" alt="<?php echo e($product->item_name); ?>" class="product-img2">
         </a>
 
         <!-- Hover Floating Actions -->
         <div class="floating-actions2">
-            @if(helper::appdata(@$storeinfo->id)->online_order == 1)
-                @if($product->has_variants == 1)
-                    <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
+            <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
+                <?php if($product->has_variants == 1): ?>
+                    <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
                         <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
                     </a>
-                @else
-                    <a href="javascript:void(0)" onclick="addtocart('{{ $product->id }}', '{{ $product->item_name }}', '{{ $product->item_price }}', '{{ $product->image }}', '{{ $product->tax }}', '1', '{{ $product->item_price }}')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
+                <?php else: ?>
+                    <a href="javascript:void(0)" onclick="addtocart('<?php echo e($product->id); ?>', '<?php echo e($product->item_name); ?>', '<?php echo e($product->item_price); ?>', '<?php echo e($product->image); ?>', '<?php echo e($product->tax); ?>', '1', '<?php echo e($product->item_price); ?>')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
                         <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
                     </a>
-                @endif
-            @endif
-            <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.quick_view') ?? 'Quick View' }}">
+                <?php endif; ?>
+            <?php endif; ?>
+            <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.quick_view') ?? 'Quick View'); ?>">
                 <i class="fa-regular fa-eye" style="font-size: 14px;"></i>
             </a>
         </div>
     </div>
 
     <div class="product-details2 text-center">
-        <p class="product-category2">{{ @$product->category_info->name ?? trans('labels.category') }}</p>
+        <p class="product-category2"><?php echo e(@$product->category_info->name ?? trans('labels.category')); ?></p>
 
         <h3 class="product-title2">
-            <a href="{{ URL::to(@$storeinfo->slug.'/detail-'.$product->slug) }}">
-                {{ $product->item_name }}
+            <a href="<?php echo e(URL::to(@$storeinfo->slug.'/detail-'.$product->slug)); ?>">
+                <?php echo e($product->item_name); ?>
+
             </a>
         </h3>
 
         <div class="price-box2">
             <span class="current-price2">
-                {{ helper::currency_formate($product->item_price, @$storeinfo->id) }}
+                <?php echo e(helper::currency_formate($product->item_price, @$storeinfo->id)); ?>
+
             </span>
 
-            @if($product->item_original_price > $product->item_price)
+            <?php if($product->item_original_price > $product->item_price): ?>
                 <span class="original-price2">
-                    {{ helper::currency_formate($product->item_original_price, @$storeinfo->id) }}
+                    <?php echo e(helper::currency_formate($product->item_original_price, @$storeinfo->id)); ?>
+
                 </span>
-            @endif
+            <?php endif; ?>
         </div>
 
-        @if($product->has_variants == 1)
-            @php
+        <?php if($product->has_variants == 1): ?>
+            <?php
                 $variants = json_decode($product->variants_json, true);
                 $sizes = [];
                 $colors = [];
@@ -80,31 +85,31 @@
                         }
                     }
                 }
-            @endphp
+            ?>
 
             <div class="variants-preview2">
 
-                @if(!empty($sizes))
+                <?php if(!empty($sizes)): ?>
                     <div class="variant-sizes2">
-                        @foreach(array_slice($sizes, 0, 4) as $size)
-                            <span class="v-size2">{{ $size }}</span>
-                        @endforeach
+                        <?php $__currentLoopData = array_slice($sizes, 0, 4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $size): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <span class="v-size2"><?php echo e($size); ?></span>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                @if(!empty($colors))
+                <?php if(!empty($colors)): ?>
                     <div class="variant-colors2 mt-2">
-                        @foreach(array_slice($colors, 0, 4) as $color)
+                        <?php $__currentLoopData = array_slice($colors, 0, 4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $color): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <span class="v-color2"
-                                  style="background-color: {{ $color }};"
-                                  title="{{ $color }}">
+                                  style="background-color: <?php echo e($color); ?>;"
+                                  title="<?php echo e($color); ?>">
                             </span>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
 
             </div>
-        @endif
+        <?php endif; ?>
 
     </div>
 </div>
@@ -286,3 +291,4 @@
     display: inline-block;
 }
 </style>
+<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/template-17/partials/product_card.blade.php ENDPATH**/ ?>

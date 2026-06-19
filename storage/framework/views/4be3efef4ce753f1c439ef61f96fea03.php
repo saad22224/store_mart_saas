@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" dir="{{ session()->get('direction') == 2 ? 'rtl' : 'ltr' }}" class="light">
+<html lang="en" dir="<?php echo e(session()->get('direction') == 2 ? 'rtl' : 'ltr'); ?>" class="light">
 
 <head>
-    <title>{{ helper::appdata(@$storeinfo->id)->website_title }}</title>
+    <title><?php echo e(helper::appdata(@$storeinfo->id)->website_title); ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" id="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     <script>
         const theme = localStorage.getItem('theme');
@@ -17,56 +17,57 @@
         }
     </script>
 
-    <link rel="icon" href='{{ helper::image_path(helper::appdata(@$storeinfo->id)->favicon) }}' type="image/x-icon">
+    <link rel="icon" href='<?php echo e(helper::image_path(helper::appdata(@$storeinfo->id)->favicon)); ?>' type="image/x-icon">
     <meta name="bingbot" content="nocache">
-    @if (request()->is($storeinfo->slug . '/detail-*'))
-        <meta property="og:title" content="{{ @$getitem->item_name }}" />
-        <meta property="og:description" content="{{ strip_tags(trim($getitem->description)) }}" />
-        <meta property="og:image" content="{{ @helper::image_path($getitem['product_image']->image) }}" />
-    @elseif (request()->is($storeinfo->slug . '/blogs-*'))
-        <meta property="og:title" content="{{ @$blogdetail->title }}" />
-        <meta property="og:description" content="{{ strip_tags(trim($blogdetail->description)) }}" />
-        <meta property="og:image" content="{{ @helper::image_path(@$blogdetail->image) }}" />
-    @else
-        <meta property="og:title" content="{{ helper::appdata(@$storeinfo->id)->meta_title }}" />
-        <meta property="og:description" content="{{ helper::appdata(@$storeinfo->id)->meta_description }}" />
-        <meta property="og:image" content='{{ helper::image_path(helper::appdata(@$storeinfo->id)->og_image) }}' />
-    @endif
+    <?php if(request()->is($storeinfo->slug . '/detail-*')): ?>
+        <meta property="og:title" content="<?php echo e(@$getitem->item_name); ?>" />
+        <meta property="og:description" content="<?php echo e(strip_tags(trim($getitem->description))); ?>" />
+        <meta property="og:image" content="<?php echo e(@helper::image_path($getitem['product_image']->image)); ?>" />
+    <?php elseif(request()->is($storeinfo->slug . '/blogs-*')): ?>
+        <meta property="og:title" content="<?php echo e(@$blogdetail->title); ?>" />
+        <meta property="og:description" content="<?php echo e(strip_tags(trim($blogdetail->description))); ?>" />
+        <meta property="og:image" content="<?php echo e(@helper::image_path(@$blogdetail->image)); ?>" />
+    <?php else: ?>
+        <meta property="og:title" content="<?php echo e(helper::appdata(@$storeinfo->id)->meta_title); ?>" />
+        <meta property="og:description" content="<?php echo e(helper::appdata(@$storeinfo->id)->meta_description); ?>" />
+        <meta property="og:image" content='<?php echo e(helper::image_path(helper::appdata(@$storeinfo->id)->og_image)); ?>' />
+    <?php endif; ?>
     <!-- favicon-icon  -->
 
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/all.min.css')); ?>">
     <!-- font-awsome css  -->
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/bootstrap.min.css')); ?>">
     <!-- bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/owl.carousel.min.css')); ?>">
     <!-- owl.carousel css -->
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/swiper-bundle.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/swiper-bundle.min.css')); ?>">
 
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/style.css')); ?>">
     <!-- slick slider css -->
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/slick.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/slick-theme.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/slick.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/slick-theme.css')); ?>">
     <!-- style css  -->
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/fonts.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/fonts.css')); ?>">
     <!-- Fonts css  -->
-    <link rel="stylesheet" type="text/css" href="{{ url(env('ASSETPATHURL') . 'front/css/responsive.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/responsive.css')); ?>">
     <!-- responsive css  -->
     <link rel="stylesheet" type="text/css"
-        href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/sweetalert/sweetalert2.min.css') }}">
-    <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'admin-assets/css/toastr/toastr.min.css') }}">
-    <link rel="stylesheet" href="{{ url(env('ASSETPATHURL') . 'front/css/dataTables.bootstrap4.min.css') }}">
+        href="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/css/sweetalert/sweetalert2.min.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(url(env('ASSETPATHURL') . 'admin-assets/css/toastr/toastr.min.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(url(env('ASSETPATHURL') . 'front/css/dataTables.bootstrap4.min.css')); ?>">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
     <!-- IF VERSION 2  -->
-    @if (helper::adminappdata()->recaptcha_version == 'v2')
+    <?php if(helper::adminappdata()->recaptcha_version == 'v2'): ?>
         <script src='https://www.google.com/recaptcha/api.js'></script>
-    @endif
+    <?php endif; ?>
     <!-- IF VERSION 3  -->
-    @if (helper::adminappdata()->recaptcha_version == 'v3')
-        {!! RecaptchaV3::initJs() !!}
-    @endif
+    <?php if(helper::adminappdata()->recaptcha_version == 'v3'): ?>
+        <?php echo RecaptchaV3::initJs(); ?>
+
+    <?php endif; ?>
 
     <style>
         #splash {
@@ -74,9 +75,9 @@
         }
 
         :root {
-            @if (helper::appdata(@$storeinfo->id)->template == 8)
-                --bs-secondary: {{ helper::appdata($storeinfo->id)->secondary_color . '10' }};
-            @endif
+            <?php if(helper::appdata(@$storeinfo->id)->template == 8): ?>
+                --bs-secondary: <?php echo e(helper::appdata($storeinfo->id)->secondary_color . '10'); ?>;
+            <?php endif; ?>
         }
         body {
             font-family: 'Cairo', sans-serif !important;
@@ -92,9 +93,9 @@
         }
     </style>
     <!-- PWA  -->
-    @if (@helper::checkaddons('subscription'))
-        @if (@helper::checkaddons('pwa'))
-            @php
+    <?php if(@helper::checkaddons('subscription')): ?>
+        <?php if(@helper::checkaddons('pwa')): ?>
+            <?php
                 $checkplan = App\Models\Transaction::where('vendor_id', @$storeinfo->id)
                     ->orderByDesc('id')
                     ->first();
@@ -104,26 +105,26 @@
                 } else {
                     $pwa = @$checkplan->pwa;
                 }
-            @endphp
+            ?>
 
-            @if ($pwa == 1)
-                @if (helper::appdata(@$storeinfo->id)->pwa == 1)
-                    @include('front.pwa.pwa')
-                @endif
-            @endif
-        @else
-            @if (@helper::checkaddons('pwa'))
-                @if (helper::appdata(@$storeinfo->id)->pwa == 1)
-                    @include('front.pwa.pwa')
-                @endif
-            @endif
-        @endif
-    @endif
+            <?php if($pwa == 1): ?>
+                <?php if(helper::appdata(@$storeinfo->id)->pwa == 1): ?>
+                    <?php echo $__env->make('front.pwa.pwa', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php else: ?>
+            <?php if(@helper::checkaddons('pwa')): ?>
+                <?php if(helper::appdata(@$storeinfo->id)->pwa == 1): ?>
+                    <?php echo $__env->make('front.pwa.pwa', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
 
     <!-- PIXEL  -->
-    @if (@helper::checkaddons('subscription'))
-        @if (@helper::checkaddons('pixel'))
-            @php
+    <?php if(@helper::checkaddons('subscription')): ?>
+        <?php if(@helper::checkaddons('pixel')): ?>
+            <?php
                 $checkplan = App\Models\Transaction::where('vendor_id', @$storeinfo->id)
                     ->orderByDesc('id')
                     ->first();
@@ -134,16 +135,16 @@
                     $pixel = @$checkplan->pixel;
                 }
 
-            @endphp
-            @if ($pixel == 1)
-                @include('front.pixel.pixel')
-            @endif
-        @endif
-    @else
-        @if (@helper::checkaddons('pixel'))
-            @include('front.pixel.pixel')
-        @endif
-    @endif
+            ?>
+            <?php if($pixel == 1): ?>
+                <?php echo $__env->make('front.pixel.pixel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php else: ?>
+        <?php if(@helper::checkaddons('pixel')): ?>
+            <?php echo $__env->make('front.pixel.pixel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
+    <?php endif; ?>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKTXTSENXZ"></script>
   <script>
@@ -156,18 +157,18 @@
 </head>
 
 <body>
-    @if(Auth::user() && Auth::user()->type == 2 && Auth::user()->id == @$storeinfo->id)
+    <?php if(Auth::user() && Auth::user()->type == 2 && Auth::user()->id == @$storeinfo->id): ?>
     <div style="background-color: #111827; color: #ffffff; text-align: center; padding: 0.5rem 1rem; font-size: 0.875rem; z-index: 999999; position: relative;">
         أنت تتصفح متجرك الآن كمالك. 
-        <a href="{{ url('admin/dashboard') }}" style="color: #34d399; font-weight: 700; text-decoration: underline; margin-right: 0.5rem;">العودة للوحة التحكم</a>
+        <a href="<?php echo e(url('admin/dashboard')); ?>" style="color: #34d399; font-weight: 700; text-decoration: underline; margin-right: 0.5rem;">العودة للوحة التحكم</a>
     </div>
-    @endif
+    <?php endif; ?>
     <div id="splash"></div>
 
     <!-- Age Modal -->
-    @if (@helper::checkaddons('age_verification'))
-        @include('front.age_modal')
-    @endif
+    <?php if(@helper::checkaddons('age_verification')): ?>
+        <?php echo $__env->make('front.age_modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php endif; ?>
 
     <!-- mobile category Modal -->
 
@@ -175,7 +176,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content mt-6 cat-over">
                 <div class="modal-header justify-content-between py-2">
-                    <h1 class="modal-title fs-5 color-changer" id="exampleModalLabel">{{ trans('labels.category') }}
+                    <h1 class="modal-title fs-5 color-changer" id="exampleModalLabel"><?php echo e(trans('labels.category')); ?>
+
                     </h1>
                     <button type="button" class="bg-transparent border-0 m-0" data-bs-dismiss="modal"
                         aria-label="Close">
@@ -187,32 +189,34 @@
                         <div class="card card-header cat-dispaly bg-transparent px-0">
                             <div class=" d-inline-block">
                                 <h4
-                                    class="theme-4-title  {{ session()->get('direction') == 2 ? 'text-right' : '' }} m-0">
-                                    {{ trans('labels.category') }}
+                                    class="theme-4-title  <?php echo e(session()->get('direction') == 2 ? 'text-right' : ''); ?> m-0">
+                                    <?php echo e(trans('labels.category')); ?>
+
                                 </h4>
                             </div>
                         </div>
                         <div>
-                            @foreach (helper::getcategory(@$storeinfo->id) as $key => $category)
-                                @php
+                            <?php $__currentLoopData = helper::getcategory(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php
                                     $check_cat_count = 0;
-                                @endphp
-                                @foreach (helper::getitems(@$storeinfo->id) as $item)
-                                    @if ($category->id == $item->cat_id)
-                                        @php
+                                ?>
+                                <?php $__currentLoopData = helper::getitems(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($category->id == $item->cat_id): ?>
+                                        <?php
                                             $check_cat_count++;
-                                        @endphp
-                                    @endif
-                                @endforeach
-                                @if ($check_cat_count > 0)
+                                        ?>
+                                    <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($check_cat_count > 0): ?>
                                     <div data-bs-dismiss="modal">
-                                        <a class="nav-link mx-0 mt-0 border-0 py-2 fw-normal d-flex align-items-center justify-content-between {{ session()->get('direction') == 2 ? 'rtl-side-cat-check' : 'side-cat-check' }} btn-sm {{ $category->slug }}"
-                                            href="{{ URL::to($storeinfo->slug . '/search?category=' . $category->slug) }}">{{ $category->name }}
-                                            <div class="fw-semibold">{{ $check_cat_count }}</div>
+                                        <a class="nav-link mx-0 mt-0 border-0 py-2 fw-normal d-flex align-items-center justify-content-between <?php echo e(session()->get('direction') == 2 ? 'rtl-side-cat-check' : 'side-cat-check'); ?> btn-sm <?php echo e($category->slug); ?>"
+                                            href="<?php echo e(URL::to($storeinfo->slug . '/search?category=' . $category->slug)); ?>"><?php echo e($category->name); ?>
+
+                                            <div class="fw-semibold"><?php echo e($check_cat_count); ?></div>
                                         </a>
                                     </div>
-                                @endif
-                            @endforeach
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                     <div class="catbox-arow"></div>
@@ -222,7 +226,7 @@
     </div>
 
     <!---------------- mobile sider bar ---------------->
-    <div class="offcanvas mobile-sidebar {{ session()->get('direction') == 2 ? 'offcanvas-end' : 'offcanvas-start' }}"
+    <div class="offcanvas mobile-sidebar <?php echo e(session()->get('direction') == 2 ? 'offcanvas-end' : 'offcanvas-start'); ?>"
         tabindex="-1" id="mobile-sidebar" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header justify-content-between border-bottom">
             <script>
@@ -231,9 +235,9 @@
 
 
                     if (localStorage.getItem('theme') === 'dark') {
-                        logo = "{{ helper::image_path(helper::appdata(@$storeinfo->id)->darklogo) }}";
+                        logo = "<?php echo e(helper::image_path(helper::appdata(@$storeinfo->id)->darklogo)); ?>";
                     } else {
-                        logo = "{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}";
+                        logo = "<?php echo e(helper::image_path(helper::appdata(@$storeinfo->id)->logo)); ?>";
                     }
 
                     // Set logo image src
@@ -241,7 +245,7 @@
                 });
             </script>
 
-            <a href="{{ URL::to($storeinfo->slug) }}">
+            <a href="<?php echo e(URL::to($storeinfo->slug)); ?>">
                 <img id="logoimage" src="" alt="logo" class="object-fit-cover logo-h-55-px">
             </a>
 
@@ -252,81 +256,81 @@
         </div>
         <div class="offcanvas-body">
             <ul class="list-group list-group-flush">
-                @if (@helper::checkaddons('blog'))
-                    @if (helper::getblogs(@$storeinfo->id)->count() > 0)
+                <?php if(@helper::checkaddons('blog')): ?>
+                    <?php if(helper::getblogs(@$storeinfo->id)->count() > 0): ?>
                         <li class="list-group-item py-3 bg-transparent">
-                            <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/blogs') }}"
+                            <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/blogs')); ?>"
                                 class="d-flex align-items-center gap-2">
                                 <i class="fa-solid fa-list"></i>
-                                <span>{{ trans('labels.blogs') }}</span>
+                                <span><?php echo e(trans('labels.blogs')); ?></span>
                             </a>
                         </li>
-                    @endif
-                @endif
+                    <?php endif; ?>
+                <?php endif; ?>
                 <li class="list-group-item py-3 bg-transparent">
-                    <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/contact') }}"
+                    <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/contact')); ?>"
                         class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-phone-flip"></i>
-                        <span>{{ trans('labels.contact_us') }}</span>
+                        <span><?php echo e(trans('labels.contact_us')); ?></span>
                     </a>
                 </li>
-                @if (helper::getfaqs(@$storeinfo->id)->count() > 0)
+                <?php if(helper::getfaqs(@$storeinfo->id)->count() > 0): ?>
                     <li class="list-group-item py-3 bg-transparent">
-                        <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/faqs') }}"
+                        <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/faqs')); ?>"
                             class="d-flex align-items-center gap-2">
                             <i class="fa-solid fa-circle-question"></i>
-                            <span>{{ trans('labels.faqs') }}</span>
+                            <span><?php echo e(trans('labels.faqs')); ?></span>
                         </a>
                     </li>
-                @endif
+                <?php endif; ?>
                 <li class="list-group-item py-3 bg-transparent">
-                    <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
+                    <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/privacypolicy')); ?>"
                         class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-user-shield"></i>
-                        <span>{{ trans('labels.privacy_policy') }}</span>
+                        <span><?php echo e(trans('labels.privacy_policy')); ?></span>
                     </a>
                 </li>
                 <li class="list-group-item py-3 bg-transparent">
-                    <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
+                    <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/aboutus')); ?>"
                         class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-users"></i>
-                        <span>{{ trans('labels.about_us') }}</span>
+                        <span><?php echo e(trans('labels.about_us')); ?></span>
                     </a>
                 </li>
                 <li class="list-group-item py-3 bg-transparent">
-                    <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/terms_condition') }}"
+                    <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/terms_condition')); ?>"
                         class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-clipboard-list"></i>
-                        <span>{{ trans('labels.terms_condition') }}</span>
+                        <span><?php echo e(trans('labels.terms_condition')); ?></span>
                     </a>
                 </li>
                 <li class="list-group-item py-3 bg-transparent">
-                    <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
+                    <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/refund_policy')); ?>"
                         class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-hand-holding-dollar"></i>
-                        <span>{{ trans('labels.refund_policy') }}</span>
+                        <span><?php echo e(trans('labels.refund_policy')); ?></span>
                     </a>
                 </li>
                 <li class="list-group-item py-3 bg-transparent">
-                    <a class="text-dark color-changer" href="{{ URL::to($storeinfo->slug . '/find-order') }}"
+                    <a class="text-dark color-changer" href="<?php echo e(URL::to($storeinfo->slug . '/find-order')); ?>"
                         class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-truck-fast"></i>
-                        <span>{{ trans('labels.track_order') }}</span>
+                        <span><?php echo e(trans('labels.track_order')); ?></span>
                     </a>
                 </li>
                 <li class="list-group-item py-3 bg-transparent">
                     <a class="d-flex align-items-center gap-2 text-dark color-changer" data-bs-toggle="modal"
                         data-bs-target="#infomodal">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>{{ trans('labels.store_information') }}</span>
+                        <span><?php echo e(trans('labels.store_information')); ?></span>
                     </a>
                 </li>
             </ul>
             <!-- app install btn -->
             <div class="justify-content-center d-flex gap-2 my-3">
-                @if (@helper::checkaddons('subscription'))
-                    @if (@helper::checkaddons('user_app'))
-                        @php
+                <?php if(@helper::checkaddons('subscription')): ?>
+                    <?php if(@helper::checkaddons('user_app')): ?>
+                        <?php
                             $checkplan = App\Models\Transaction::where('vendor_id', @$storeinfo->id)
                                 ->orderByDesc('id')
                                 ->first();
@@ -336,60 +340,60 @@
                             } else {
                                 $user_app = @$checkplan->customer_app;
                             }
-                        @endphp
-                        @if ($user_app == 1)
+                        ?>
+                        <?php if($user_app == 1): ?>
                             <!-- Google play store button -->
-                            @if (
+                            <?php if(
                                 @helper::getappsetting(@$storeinfo->id)->android_link != null &&
-                                    @helper::getappsetting(@$storeinfo->id)->android_link != '')
-                                <a href="{{ @helper::getappsetting(@$storeinfo->id)->android_link }}"> <img
-                                        src="{{ url(env('ASSETPATHURL') . 'front/images/google-play.svg') }}"
+                                    @helper::getappsetting(@$storeinfo->id)->android_link != ''): ?>
+                                <a href="<?php echo e(@helper::getappsetting(@$storeinfo->id)->android_link); ?>"> <img
+                                        src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>"
                                         class="app-btn" alt=""> </a>
-                            @endif
-                            @if (
+                            <?php endif; ?>
+                            <?php if(
                                 @helper::getappsetting(@$storeinfo->id)->ios_link != null &&
-                                    @helper::getappsetting(@$storeinfo->id)->ios_link != '')
+                                    @helper::getappsetting(@$storeinfo->id)->ios_link != ''): ?>
                                 <!-- App store button -->
-                                <a href="{{ @helper::getappsetting(@$storeinfo->id)->ios_link }}"> <img
-                                        src="{{ url(env('ASSETPATHURL') . 'front/images/app-store.svg') }}"
+                                <a href="<?php echo e(@helper::getappsetting(@$storeinfo->id)->ios_link); ?>"> <img
+                                        src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>"
                                         class="app-btn" alt=""> </a>
-                            @endif
-                        @endif
-                    @endif
-                @else
-                    @if (@helper::checkaddons('user_app'))
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if(@helper::checkaddons('user_app')): ?>
                         <!-- Google play store button -->
-                        @if (
+                        <?php if(
                             @helper::getappsetting(@$storeinfo->id)->android_link != null &&
-                                @helper::getappsetting(@$storeinfo->id)->android_link != '')
-                            <a href="{{ @helper::getappsetting(@$storeinfo->id)->android_link }}"> <img
-                                    src="{{ url(env('ASSETPATHURL') . 'front/images/google-play.svg') }}"
+                                @helper::getappsetting(@$storeinfo->id)->android_link != ''): ?>
+                            <a href="<?php echo e(@helper::getappsetting(@$storeinfo->id)->android_link); ?>"> <img
+                                    src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google-play.svg')); ?>"
                                     class="app-btn" alt=""> </a>
-                        @endif
-                        @if (
+                        <?php endif; ?>
+                        <?php if(
                             @helper::getappsetting(@$storeinfo->id)->ios_link != null &&
-                                @helper::getappsetting(@$storeinfo->id)->ios_link != '')
+                                @helper::getappsetting(@$storeinfo->id)->ios_link != ''): ?>
                             <!-- App store button -->
-                            <a href="{{ @helper::getappsetting(@$storeinfo->id)->ios_link }}"> <img
-                                    src="{{ url(env('ASSETPATHURL') . 'front/images/app-store.svg') }}"
+                            <a href="<?php echo e(@helper::getappsetting(@$storeinfo->id)->ios_link); ?>"> <img
+                                    src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/app-store.svg')); ?>"
                                     class="app-btn" alt=""> </a>
-                        @endif
-                    @endif
-                @endif
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
         <div class="offcanvas-footer">
             <div class="text-center color-changer border-top p-2 fs-8">
-                {{ @helper::appdata(@$storeinfo->id)->copyright }}</div>
+                <?php echo e(@helper::appdata(@$storeinfo->id)->copyright); ?></div>
         </div>
     </div>
 
 
     <!--------------------- login sidebar --------------------->
-    <div class="offcanvas {{ session()->get('direction') == 2 ? 'offcanvas-start' : 'offcanvas-end' }}"
+    <div class="offcanvas <?php echo e(session()->get('direction') == 2 ? 'offcanvas-start' : 'offcanvas-end'); ?>"
         tabindex="-1" id="loginpage" aria-labelledby="loginpageLabel">
         <div class="offcanvas-header justify-content-between py-4 border-bottom">
-            <h5 class="offcanvas-title color-changer" id="auth_form_title">{{ trans('labels.login') }}</h5>
+            <h5 class="offcanvas-title color-changer" id="auth_form_title"><?php echo e(trans('labels.login')); ?></h5>
             <button type="button" class="bg-transparent border-0 m-0" data-bs-dismiss="offcanvas"
                 aria-label="Close">
                 <i class="fa-regular fa-xmark fs-4 color-changer"></i>
@@ -398,37 +402,37 @@
         <div class="offcanvas-body">
             <!-------------------------- login -------------------------->
             <div class="login input-14" id="login_form">
-                <form method="POST" action="{{ URL::to($storeinfo->slug . '/checklogin-normal') }}">
-                    @csrf
+                <form method="POST" action="<?php echo e(URL::to($storeinfo->slug . '/checklogin-normal')); ?>">
+                    <?php echo csrf_field(); ?>
                     <div class="mb-3">
-                        <label for="emailid" class="form-label fw-semibold">{{ trans('labels.email') }}</label>
+                        <label for="emailid" class="form-label fw-semibold"><?php echo e(trans('labels.email')); ?></label>
                         <input type="email" class="form-control rounded-2 p-3" name="email" id="emailid"
                             placeholder="Email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="Password" class="form-label fw-semibold">{{ trans('labels.password') }}</label>
+                        <label for="Password" class="form-label fw-semibold"><?php echo e(trans('labels.password')); ?></label>
                         <input type="password" class="form-control rounded-2 p-3" name="password" id="Password"
                             placeholder="Password" required>
                     </div>
-                    <a class="forgot_password_btn color-changer fw-bolder pb-3 d-flex fs-7 {{ session()->get('direction') == 2 ? ' justify-content-start' : ' justify-content-end ' }}"
-                        href="javascript:void(0)">{{ trans('labels.forgot_password') }}?</a>
+                    <a class="forgot_password_btn color-changer fw-bolder pb-3 d-flex fs-7 <?php echo e(session()->get('direction') == 2 ? ' justify-content-start' : ' justify-content-end '); ?>"
+                        href="javascript:void(0)"><?php echo e(trans('labels.forgot_password')); ?>?</a>
                     <button type="submit" id="btnsignin"
-                        class="btn btn-store d-block w-100 mb-3">{{ trans('labels.login') }}</button>
+                        class="btn btn-store d-block w-100 mb-3"><?php echo e(trans('labels.login')); ?></button>
                 </form>
-                <p class="text-center color-changer mb-3">{{ trans('labels.dont_have_account') }} <a
+                <p class="text-center color-changer mb-3"><?php echo e(trans('labels.dont_have_account')); ?> <a
                         class="signup-filter-btn fw-bolder create_account_btn text-secondary fw-semibold"
-                        href="javascript:void(0)">{{ trans('labels.create_account') }}</a></p>
+                        href="javascript:void(0)"><?php echo e(trans('labels.create_account')); ?></a></p>
                 <div class="or_section">
                     <div class="line"></div>
-                    <p class="mb-0 color-changer fw-medium">{{ trans('labels.or') }}</p>
+                    <p class="mb-0 color-changer fw-medium"><?php echo e(trans('labels.or')); ?></p>
                     <div class="line"></div>
                 </div>
-                @php
+                <?php
                     $setting = App\Models\Settings::where('vendor_id', @$storeinfo->id)->first();
-                @endphp
-                @if (@helper::checkaddons('subscription'))
-                    @if (@helper::checkaddons('google_login'))
-                        @php
+                ?>
+                <?php if(@helper::checkaddons('subscription')): ?>
+                    <?php if(@helper::checkaddons('google_login')): ?>
+                        <?php
                             $checkplan = App\Models\Transaction::where('vendor_id', @$storeinfo->id)
                                 ->orderByDesc('id')
                                 ->first();
@@ -438,39 +442,39 @@
                             } else {
                                 $google_login = @$checkplan->google_login;
                             }
-                        @endphp
-                        @if ($google_login == 1)
-                            @if (@$setting->google_mode == 1)
+                        ?>
+                        <?php if($google_login == 1): ?>
+                            <?php if(@$setting->google_mode == 1): ?>
                                 <div class="d-sm-flex justify-content-between my-3">
-                                    <a @if (env('Environment') == 'sendbox') onclick="myFunction()" @else href="{{ URL::to($storeinfo->slug . '/login/google-user') }}" @endif
-                                        class="btn btn-store-outline border-dark d-block m-0 w-100 mb-3 mb-sm-0 {{ session()->get('direction') == 2 ? 'ms-2' : 'me-2' }}">
-                                        <img src="{{ url(env('ASSETPATHURL') . 'front/images/google.svg') }}"
+                                    <a <?php if(env('Environment') == 'sendbox'): ?> onclick="myFunction()" <?php else: ?> href="<?php echo e(URL::to($storeinfo->slug . '/login/google-user')); ?>" <?php endif; ?>
+                                        class="btn btn-store-outline border-dark d-block m-0 w-100 mb-3 mb-sm-0 <?php echo e(session()->get('direction') == 2 ? 'ms-2' : 'me-2'); ?>">
+                                        <img src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google.svg')); ?>"
                                             alt="goole" class="social-login">
                                         <span
-                                            class="text-dark color-changer px-1">{{ trans('labels.sign_in') }}</span>
+                                            class="text-dark color-changer px-1"><?php echo e(trans('labels.sign_in')); ?></span>
                                     </a>
                                 </div>
-                            @endif
-                        @endif
-                    @endif
-                @else
-                    @if (@helper::checkaddons('google_login'))
-                        @if (@$setting->google_mode == 1)
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if(@helper::checkaddons('google_login')): ?>
+                        <?php if(@$setting->google_mode == 1): ?>
                             <div class="d-sm-flex justify-content-between my-3">
-                                <a @if (env('Environment') == 'sendbox') onclick="myFunction()" @else href="{{ URL::to($storeinfo->slug . '/login/google-user') }}" @endif
-                                    class="btn btn-store-outline border-dark d-block m-0 w-100 mb-3 mb-sm-0 {{ session()->get('direction') == 2 ? 'ms-2' : 'me-2' }}">
-                                    <img src="{{ url(env('ASSETPATHURL') . 'front/images/google.svg') }}"
+                                <a <?php if(env('Environment') == 'sendbox'): ?> onclick="myFunction()" <?php else: ?> href="<?php echo e(URL::to($storeinfo->slug . '/login/google-user')); ?>" <?php endif; ?>
+                                    class="btn btn-store-outline border-dark d-block m-0 w-100 mb-3 mb-sm-0 <?php echo e(session()->get('direction') == 2 ? 'ms-2' : 'me-2'); ?>">
+                                    <img src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/google.svg')); ?>"
                                         alt="goole" class="social-login">
-                                    <span class="text-dark color-changer px-1">{{ trans('labels.sign_in') }}</span>
+                                    <span class="text-dark color-changer px-1"><?php echo e(trans('labels.sign_in')); ?></span>
                                 </a>
                             </div>
-                        @endif
-                    @endif
-                @endif
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
 
-                @if (@helper::checkaddons('subscription'))
-                    @if (@helper::checkaddons('facebook_login'))
-                        @php
+                <?php if(@helper::checkaddons('subscription')): ?>
+                    <?php if(@helper::checkaddons('facebook_login')): ?>
+                        <?php
                             $checkplan = App\Models\Transaction::where('vendor_id', @$storeinfo->id)
                                 ->orderByDesc('id')
                                 ->first();
@@ -480,101 +484,101 @@
                             } else {
                                 $facebook_login = @$checkplan->facebook_login;
                             }
-                        @endphp
-                        @if ($facebook_login == 1)
-                            @if (@$setting->facebook_mode == 1)
+                        ?>
+                        <?php if($facebook_login == 1): ?>
+                            <?php if(@$setting->facebook_mode == 1): ?>
                                 <div class="d-sm-flex justify-content-between my-3">
-                                    <a @if (env('Environment') == 'sendbox') onclick="myFunction()" @else href="{{ URL::to($storeinfo->slug . '/login/facebook-user') }}" @endif
+                                    <a <?php if(env('Environment') == 'sendbox'): ?> onclick="myFunction()" <?php else: ?> href="<?php echo e(URL::to($storeinfo->slug . '/login/facebook-user')); ?>" <?php endif; ?>
                                         class="btn btn-store-outline border-dark d-block m-0 w-100">
-                                        <img src="{{ url(env('ASSETPATHURL') . 'front/images/facebook.svg') }}"
+                                        <img src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/facebook.svg')); ?>"
                                             alt="goole" class="social-login">
                                         <span
-                                            class="text-dark color-changer px-1">{{ trans('labels.sign_in') }}</span>
+                                            class="text-dark color-changer px-1"><?php echo e(trans('labels.sign_in')); ?></span>
                                     </a>
                                 </div>
-                            @endif
-                        @endif
-                    @endif
-                @else
-                    @if (@helper::checkaddons('facebook_login'))
-                        @if (@$setting->facebook_mode == 1)
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if(@helper::checkaddons('facebook_login')): ?>
+                        <?php if(@$setting->facebook_mode == 1): ?>
                             <div class="d-sm-flex justify-content-between my-3">
-                                <a @if (env('Environment') == 'sendbox') onclick="myFunction()" @else href="{{ URL::to($storeinfo->slug . '/login/facebook-user') }}" @endif
+                                <a <?php if(env('Environment') == 'sendbox'): ?> onclick="myFunction()" <?php else: ?> href="<?php echo e(URL::to($storeinfo->slug . '/login/facebook-user')); ?>" <?php endif; ?>
                                     class="btn btn-store-outline border-dark d-block m-0 w-100">
-                                    <img src="{{ url(env('ASSETPATHURL') . 'front/images/facebook.svg') }}"
+                                    <img src="<?php echo e(url(env('ASSETPATHURL') . 'front/images/facebook.svg')); ?>"
                                         alt="goole" class="social-login">
-                                    <span class="text-dark color-changer px-1">{{ trans('labels.sign_in') }}</span>
+                                    <span class="text-dark color-changer px-1"><?php echo e(trans('labels.sign_in')); ?></span>
                                 </a>
                             </div>
-                        @endif
-                    @endif
-                @endif
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
 
             </div>
 
             <!-------------------------- register -------------------------->
             <div class="register input-14 d-none" id="register_form">
-                <form action="{{ URL::to($storeinfo->slug . '/register_customer') }}" method="POST">
-                    @csrf
+                <form action="<?php echo e(URL::to($storeinfo->slug . '/register_customer')); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
                     <div class="mb-3">
-                        <label for="name" class="form-label fw-semibold">{{ trans('labels.name') }}</label>
+                        <label for="name" class="form-label fw-semibold"><?php echo e(trans('labels.name')); ?></label>
                         <input type="text" class="form-control rounded-2 p-3" id="name" name="name"
-                            placeholder="{{ trans('labels.name') }}" required>
+                            placeholder="<?php echo e(trans('labels.name')); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label for="emailid" class="form-label fw-semibold">{{ trans('labels.email') }}</label>
+                        <label for="emailid" class="form-label fw-semibold"><?php echo e(trans('labels.email')); ?></label>
                         <input type="email" class="form-control rounded-2 p-3" id="emailid" name="email"
-                            placeholder="{{ trans('labels.email') }}" required>
+                            placeholder="<?php echo e(trans('labels.email')); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label for="mobile" class="form-label fw-semibold">{{ trans('labels.mobile') }}</label>
+                        <label for="mobile" class="form-label fw-semibold"><?php echo e(trans('labels.mobile')); ?></label>
                         <input type="number" class="form-control rounded-2 p-3" id="mobile" name="mobile"
-                            placeholder="{{ trans('labels.mobile') }}" required>
+                            placeholder="<?php echo e(trans('labels.mobile')); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label fw-semibold">{{ trans('labels.password') }}</label>
+                        <label for="password" class="form-label fw-semibold"><?php echo e(trans('labels.password')); ?></label>
                         <input type="password" class="form-control rounded-2 p-3" id="password" name="password"
-                            placeholder="{{ trans('labels.password') }}" required>
+                            placeholder="<?php echo e(trans('labels.password')); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="confirmpassword"
-                            class="form-label fw-semibold">{{ trans('labels.confirm_password') }}</label>
+                            class="form-label fw-semibold"><?php echo e(trans('labels.confirm_password')); ?></label>
                         <input type="password" class="form-control rounded-2 p-3" id="confirmpassword"
-                            name="confirmpassword" placeholder="{{ trans('labels.confirm_password') }}" required>
+                            name="confirmpassword" placeholder="<?php echo e(trans('labels.confirm_password')); ?>" required>
                     </div>
 
-                    @include('landing.layout.recaptcha')
+                    <?php echo $__env->make('landing.layout.recaptcha', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                     <div class="mb-3 d-flex align-items-center">
                         <input type="checkbox" class="form-check-input p-0" id="exampleCheck2" required checked>
                         <label class="form-check-label fw-normal mx-2"
-                            for="exampleCheck2">{{ trans('labels.i_accept_the') }} <a
-                                href="{{ URL::to($storeinfo->slug . '/terms_condition') }}"
-                                class="fw-semibold text-secondary">{{ trans('labels.terms_condition') }}</a></label>
+                            for="exampleCheck2"><?php echo e(trans('labels.i_accept_the')); ?> <a
+                                href="<?php echo e(URL::to($storeinfo->slug . '/terms_condition')); ?>"
+                                class="fw-semibold text-secondary"><?php echo e(trans('labels.terms_condition')); ?></a></label>
                     </div>
                     <button type="submit" id="btnsignup"
-                        class="btn btn-store d-block w-100 p-3">{{ trans('labels.signup') }}</button>
-                    <p class="text-center color-changer mb25 mt10">{{ trans('labels.already_account') }} <a
+                        class="btn btn-store d-block w-100 p-3"><?php echo e(trans('labels.signup')); ?></button>
+                    <p class="text-center color-changer mb25 mt10"><?php echo e(trans('labels.already_account')); ?> <a
                             href="javascript:void(0)"
-                            class="fw-semibold login_btn text-secondary">{{ trans('labels.sign_in') }}</a></p>
+                            class="fw-semibold login_btn text-secondary"><?php echo e(trans('labels.sign_in')); ?></a></p>
                 </form>
             </div>
 
             <!-------------------------- forgot password -------------------------->
             <div class="forgotpassword input-14 d-none" id="forgot_password_form">
-                <form action="{{ URL::to($storeinfo->slug . '/send_password') }}" method="post">
-                    @csrf
+                <form action="<?php echo e(URL::to($storeinfo->slug . '/send_password')); ?>" method="post">
+                    <?php echo csrf_field(); ?>
                     <div class="mb-3">
                         <label for="forgetemailid"
-                            class="form-label fw-semibold">{{ trans('labels.email') }}</label>
+                            class="form-label fw-semibold"><?php echo e(trans('labels.email')); ?></label>
                         <input type="email" class="form-control rounded-2 p-3" id="forgetemailid" name="email"
-                            placeholder="{{ trans('labels.email') }}" required>
+                            placeholder="<?php echo e(trans('labels.email')); ?>" required>
                     </div>
                     <button type="submit" id="btnsubmit"
-                        class="btn btn-store d-block w-100 p-3">{{ trans('labels.submit') }}</button>
-                    <p class="text-center mb25 color-changer mt10">{{ trans('labels.dont_have_account') }} <a
+                        class="btn btn-store d-block w-100 p-3"><?php echo e(trans('labels.submit')); ?></button>
+                    <p class="text-center mb25 color-changer mt10"><?php echo e(trans('labels.dont_have_account')); ?> <a
                             href="javascript:void(0)"
-                            class="fw-semibold create_account_btn text-secondary">{{ trans('labels.signup') }}</a>
+                            class="fw-semibold create_account_btn text-secondary"><?php echo e(trans('labels.signup')); ?></a>
                     </p>
                 </form>
             </div>
@@ -584,51 +588,51 @@
 
 
     <!--------------- rating sidebar --------------->
-    @if (@helper::checkaddons('product_reviews'))
+    <?php if(@helper::checkaddons('product_reviews')): ?>
         <div class="" id="viewreviewsbody"></div>
-    @endif
+    <?php endif; ?>
 
 
     <main id="main-content">
 
         <!-- navbar -->
-        @if (!in_array(helper::appdata(@$storeinfo->id)->template, [11, 17]))
+        <?php if(!in_array(helper::appdata(@$storeinfo->id)->template, [11, 17])): ?>
             <div class="d-none d-lg-block">
                 <nav class="top-header border-bottom">
                     <div class="container">
-                      @php
+                      <?php
                             $store = App\Models\User::where('id' , $storeinfo->id)->first();
                             // dd($store);
                             $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
                             $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
-                        @endphp
+                        ?>
                         <div class="d-flex align-items-center mobile-header">
                             <div class="col-md-6 p-0 ">
                                 <div class="header-contact">
-                                    <a href="tel:{{ $storePhone }}" target="_blank"
+                                    <a href="tel:<?php echo e($storePhone); ?>" target="_blank"
                                         class="color-changer"><i class="fa-light fa-phone-flip"></i><span
-                                            class="mx-2">{{ $storePhone }}</span></a>
+                                            class="mx-2"><?php echo e($storePhone); ?></span></a>
       
-                                    <a href="mailto:{{ $storeEmail }}" target="_blank"
+                                    <a href="mailto:<?php echo e($storeEmail); ?>" target="_blank"
                                         class="color-changer"><i class="fa-light fa-envelope"></i><span
-                                            class="mx-2">{{  $storeEmail }}</span></a>
+                                            class="mx-2"><?php echo e($storeEmail); ?></span></a>
                                 </div>
                             </div>
                             <div class="col-md-6 p-0 ">
                                 <div class="header-social">
                                     <div class="social-media d-none d-lg-block">
                                         <ul class="d-flex gap-2 m-0 p-0">
-                                            @foreach (@helper::getsociallinks(@$storeinfo->id) as $links)
-                                            @if($links->icon == '<i class="fa-solid fa-phone"></i>')
-                                                <li><a href="tel:{{ $links->link }}" target="_blank"
-                                                        class="social-rounded fb p-0">{!! $links->icon !!}</a>
+                                            <?php $__currentLoopData = @helper::getsociallinks(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($links->icon == '<i class="fa-solid fa-phone"></i>'): ?>
+                                                <li><a href="tel:<?php echo e($links->link); ?>" target="_blank"
+                                                        class="social-rounded fb p-0"><?php echo $links->icon; ?></a>
                                                 </li>
-                                            @else
-                                                <li><a href="{{ $links->link }}" target="_blank"
-                                                        class="social-rounded fb p-0">{!! $links->icon !!}</a>
+                                            <?php else: ?>
+                                                <li><a href="<?php echo e($links->link); ?>" target="_blank"
+                                                        class="social-rounded fb p-0"><?php echo $links->icon; ?></a>
                                                 </li>
-                                            @endif
-                                            @endforeach
+                                            <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                         </ul>
                                     </div>
@@ -638,17 +642,17 @@
                     </div>
                 </nav>
             </div>
-        @endif
+        <?php endif; ?>
 
         <!-- navbar -->
 
-        @php
+        <?php
             $current_url = Request()->url();
             $home_url = url('/' . $storeinfo->slug);
-        @endphp
+        ?>
         <!-- mine header -->
 
-        @if (in_array(helper::appdata(@$storeinfo->id)->template, [7, 16]))
+        <?php if(in_array(helper::appdata(@$storeinfo->id)->template, [7, 16])): ?>
             <!-- Template 7 Modern Header -->
             <div class="t7-top-promo">
                 <div class="container">
@@ -657,91 +661,93 @@
                     </marquee>
                 </div>
             </div>
-            @if (helper::getsociallinks(@$storeinfo->id)->count() > 0)
+            <?php if(helper::getsociallinks(@$storeinfo->id)->count() > 0): ?>
                 <div class="t7-mobile-social d-lg-none">
                     <div class="container">
                         <ul class="t7-mobile-social-list">
-                            @foreach (helper::getsociallinks(@$storeinfo->id) as $links)
+                            <?php $__currentLoopData = helper::getsociallinks(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
-                                    @if ($links->icon == '<i class="fa-solid fa-phone"></i>')
-                                        <a href="tel:{{ $links->link }}" class="t7-mobile-social-link" aria-label="social-phone">
-                                            {!! $links->icon !!}
+                                    <?php if($links->icon == '<i class="fa-solid fa-phone"></i>'): ?>
+                                        <a href="tel:<?php echo e($links->link); ?>" class="t7-mobile-social-link" aria-label="social-phone">
+                                            <?php echo $links->icon; ?>
+
                                         </a>
-                                    @else
-                                        <a href="{{ $links->link }}" target="_blank" class="t7-mobile-social-link" aria-label="social-link">
-                                            {!! $links->icon !!}
+                                    <?php else: ?>
+                                        <a href="<?php echo e($links->link); ?>" target="_blank" class="t7-mobile-social-link" aria-label="social-link">
+                                            <?php echo $links->icon; ?>
+
                                         </a>
-                                    @endif
+                                    <?php endif; ?>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
             
             <header class="t7-header-main sticky-top">
                 <div class="t7-header-container">
                     <!-- Left Side: Profile & Search -->
                     <div class="t7-header-left">
-                        @if (@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
-                            @if (Auth::user() && Auth::user()->type == 3)
-                                <a href="{{ URL::to($storeinfo->slug . '/profile') }}" class="t7-header-icon-btn">
+                        <?php if(@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1): ?>
+                            <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                <a href="<?php echo e(URL::to($storeinfo->slug . '/profile')); ?>" class="t7-header-icon-btn">
                                     <i class="fa-light fa-user"></i>
                                 </a>
-                            @else
+                            <?php else: ?>
                                 <a href="javascript:void(0)" data-bs-toggle="offcanvas" data-bs-target="#loginpage" class="t7-header-icon-btn">
                                     <i class="fa-light fa-user"></i>
                                 </a>
-                            @endif
-                        @endif
+                            <?php endif; ?>
+                        <?php endif; ?>
                         
-                        @if (helper::appdata(@$storeinfo->id)->template != 16)
-                        <a href="{{ URL::to($storeinfo->slug . '/search') }}" class="t7-header-icon-btn">
+                        <?php if(helper::appdata(@$storeinfo->id)->template != 16): ?>
+                        <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>" class="t7-header-icon-btn">
                             <i class="fa-light fa-magnifying-glass"></i>
                         </a>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
                     <!-- Center: Circular Logo -->
                     <div class="t7-logo-center-wrap">
-                        <a style="border-radius: 30%;" href="{{ URL::to($storeinfo->slug) }}" class="t7-logo-circle">
-                            <img src="{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}" alt="Logo">
+                        <a style="border-radius: 30%;" href="<?php echo e(URL::to($storeinfo->slug)); ?>" class="t7-logo-circle">
+                            <img src="<?php echo e(helper::image_path(helper::appdata(@$storeinfo->id)->logo)); ?>" alt="Logo">
                         </a>
                     </div>
 
                     <!-- Right Side: Wishlist & Cart & Language -->
                     <div class="t7-header-right">
-                        @if (@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
-                            <a href="{{ URL::to($storeinfo->slug . '/wishlist') }}" class="t7-header-icon-btn">
+                        <?php if(@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1): ?>
+                            <a href="<?php echo e(URL::to($storeinfo->slug . '/wishlist')); ?>" class="t7-header-icon-btn">
                                 <i class="fa-light fa-heart"></i>
                                 <span class="t7-icon-badge" id="wishlistcnt">0</span>
                             </a>
-                        @endif
+                        <?php endif; ?>
                         
-                        @if (helper::appdata(@$storeinfo->id)->online_order == 1)
-                            <a href="{{ URL::to($storeinfo->slug . '/cart/') }}" class="t7-header-icon-btn">
+                        <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
+                            <a href="<?php echo e(URL::to($storeinfo->slug . '/cart/')); ?>" class="t7-header-icon-btn">
                                 <i class="fa-light fa-bag-shopping"></i>
-                                <span class="t7-icon-badge" id="cartcnt">{{ session()->get('cart') ?? 0 }}</span>
+                                <span class="t7-icon-badge" id="cartcnt"><?php echo e(session()->get('cart') ?? 0); ?></span>
                             </a>
-                        @endif
+                        <?php endif; ?>
 
                         <div class="dropdown">
                             <a class="t7-header-icon-btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fa-light fa-globe"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                @if(\App::getLocale() == 'en')
-                                    <li><a class="dropdown-item" href="{{ URL::to('/lang/change?lang=ar') }}">العربية</a></li>
-                                @else
-                                    <li><a class="dropdown-item" href="{{ URL::to('/lang/change?lang=en') }}">English</a></li>
-                                @endif
+                                <?php if(\App::getLocale() == 'en'): ?>
+                                    <li><a class="dropdown-item" href="<?php echo e(URL::to('/lang/change?lang=ar')); ?>">العربية</a></li>
+                                <?php else: ?>
+                                    <li><a class="dropdown-item" href="<?php echo e(URL::to('/lang/change?lang=en')); ?>">English</a></li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </div>
                 </div>
             </header>
             
-            @if (helper::appdata(@$storeinfo->id)->template == 16)
+            <?php if(helper::appdata(@$storeinfo->id)->template == 16): ?>
                 <style>
                     .t7-header-main {
                         background: rgba(255, 255, 255, 0.98) !important;
@@ -797,88 +803,88 @@
                         border: 2px solid #fff;
                     }
                 </style>
-            @endif
-        @elseif (helper::appdata(@$storeinfo->id)->template == 17)
-            @include('front.template-17.layout.header')
-        @else
+            <?php endif; ?>
+        <?php elseif(helper::appdata(@$storeinfo->id)->template == 17): ?>
+            <?php echo $__env->make('front.template-17.layout.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php else: ?>
             <!-- Existing Header Logic -->
-            @if (helper::appdata(@$storeinfo->id)->template != 11)
+            <?php if(helper::appdata(@$storeinfo->id)->template != 11): ?>
                 <!-- mine header structure ... -->
-                <div class="navbar main-header main-sticky-top p-0 {{ helper::appdata(@$storeinfo->id)->template == 10 ? 'header-10-bg top-0' : '' }}">
+                <div class="navbar main-header main-sticky-top p-0 <?php echo e(helper::appdata(@$storeinfo->id)->template == 10 ? 'header-10-bg top-0' : ''); ?>">
                     <!-- ... original header content ... -->
                 </div>
-            @endif
-        @endif
+            <?php endif; ?>
+        <?php endif; ?>
 
         <!-- mine header -->
 
         <!----------------------- mobile menu footer ----------------------->
-        @if(helper::appdata(@$storeinfo->id)->template != 17)
+        <?php if(helper::appdata(@$storeinfo->id)->template != 17): ?>
         <div class="mobile-menu-footer d-none">
             <ul class="p-0 m-0">
-                <li class="{{ request()->is($storeinfo->slug) ? 'mobile-active' : '' }}">
-                    <a href="{{ URL::to($storeinfo->slug) }}">
+                <li class="<?php echo e(request()->is($storeinfo->slug) ? 'mobile-active' : ''); ?>">
+                    <a href="<?php echo e(URL::to($storeinfo->slug)); ?>">
                         <i class="fa-light fa-house"></i>
-                        <span>{{ trans('labels.home') }}</span>
+                        <span><?php echo e(trans('labels.home')); ?></span>
                     </a>
                 </li>
-                <li class="{{ request()->is($storeinfo->slug . '/search') ? 'mobile-active' : '' }}">
-                    <a href="{{ URL::to($storeinfo->slug . '/search') }}">
+                <li class="<?php echo e(request()->is($storeinfo->slug . '/search') ? 'mobile-active' : ''); ?>">
+                    <a href="<?php echo e(URL::to($storeinfo->slug . '/search')); ?>">
                         <i class="fa-light fa-magnifying-glass"></i>
-                        <span>{{ trans('labels.search') }}</span>
+                        <span><?php echo e(trans('labels.search')); ?></span>
                     </a>
                 </li>
-                <li class="{{ request()->is($storeinfo->slug . '/category') ? 'mobile-active' : '' }}">
+                <li class="<?php echo e(request()->is($storeinfo->slug . '/category') ? 'mobile-active' : ''); ?>">
                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#catModal">
                         <i class="fa-light fa-box-archive"></i>
-                        <span>{{ trans('labels.category') }}</span>
+                        <span><?php echo e(trans('labels.category')); ?></span>
                     </a>
                 </li>
-                @if (helper::appdata(@$storeinfo->id)->online_order == 1)
-                    <li class="{{ request()->is($storeinfo->slug . '/cart') ? 'mobile-active' : '' }}">
-                        <a href="{{ URL::to($storeinfo->slug . '/cart/') }}">
+                <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
+                    <li class="<?php echo e(request()->is($storeinfo->slug . '/cart') ? 'mobile-active' : ''); ?>">
+                        <a href="<?php echo e(URL::to($storeinfo->slug . '/cart/')); ?>">
 
                             <i class="fa-light fa-bag-shopping position-relative">
-                                @if (session()->get('cart') > 0)
-                                    <div class="mobile-cart-count" id="cartcnt">{{ session()->get('cart') }}</div>
-                                @endif
+                                <?php if(session()->get('cart') > 0): ?>
+                                    <div class="mobile-cart-count" id="cartcnt"><?php echo e(session()->get('cart')); ?></div>
+                                <?php endif; ?>
                             </i>
-                            <span>{{ trans('labels.cart') }}</span>
+                            <span><?php echo e(trans('labels.cart')); ?></span>
                         </a>
                     </li>
-                @endif
+                <?php endif; ?>
 
 
-                @if (@helper::checkaddons('customer_login'))
-                    @if (helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
-                        @if (helper::appdata(@$storeinfo->id)->online_order == 1)
-                            <li class="{{ request()->is($storeinfo->slug . '/profile') ? 'mobile-active' : '' }}">
-                                @if (Auth::user() && Auth::user()->type == 3)
-                                    <a href="{{ URL::to($storeinfo->slug . '/profile') }}">
+                <?php if(@helper::checkaddons('customer_login')): ?>
+                    <?php if(helper::appdata(@$storeinfo->id)->checkout_login_required == 1): ?>
+                        <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
+                            <li class="<?php echo e(request()->is($storeinfo->slug . '/profile') ? 'mobile-active' : ''); ?>">
+                                <?php if(Auth::user() && Auth::user()->type == 3): ?>
+                                    <a href="<?php echo e(URL::to($storeinfo->slug . '/profile')); ?>">
                                         <i class="fa-light fa-user"></i>
-                                        <span>{{ trans('labels.account') }}</span></a>
-                                @else
+                                        <span><?php echo e(trans('labels.account')); ?></span></a>
+                                <?php else: ?>
                                     <a data-bs-toggle="offcanvas" data-bs-target="#loginpage">
                                         <i class="fa-light fa-user"></i>
-                                        <span>{{ trans('labels.account') }}</span>
+                                        <span><?php echo e(trans('labels.account')); ?></span>
                                     </a>
-                                @endif
+                                <?php endif; ?>
 
                             </li>
-                        @endif
-                    @endif
-                @else
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php else: ?>
                     <li class="">
                         <a data-bs-toggle="offcanvas" data-bs-target="#mobile-sidebar"
                             aria-controls="offcanvasExample">
                             <i class="fa-light fa-ellipsis-vertical"></i>
-                            <span>{{ trans('labels.more') }}</span>
+                            <span><?php echo e(trans('labels.more')); ?></span>
                         </a>
                     </li>
-                @endif
+                <?php endif; ?>
             </ul>
         </div>
-        @endif
+        <?php endif; ?>
 
 
         <div id="success-msg" class="alert alert-dismissible mt-3" style="display: none;">
@@ -896,18 +902,18 @@
                 --active-tab: #3ba2a484;
 
                 /* Hover Color */
-                --bs-primary: {{ helper::appdata(@$storeinfo->id)->primary_color }};
+                --bs-primary: <?php echo e(helper::appdata(@$storeinfo->id)->primary_color); ?>;
                 --primary-bg-color-hover: #000;
-                --bs-secondary: {{ helper::appdata(@$storeinfo->id)->secondary_color }};
+                --bs-secondary: <?php echo e(helper::appdata(@$storeinfo->id)->secondary_color); ?>;
 
-                --active-menu: {{ helper::appdata(@$storeinfo->id)->primary_color }}30;
+                --active-menu: <?php echo e(helper::appdata(@$storeinfo->id)->primary_color); ?>30;
                 --in-stock: #28a745;
                 --out-stock: #D41A1A;
                 --bs-primary-srg: color-mix(in srgb, var(--bs-primary), transparent 90%);
                 --bs-secondary-srg: color-mix(in srgb, var(--bs-secondary), transparent 90%);
 
             }
-            @if (in_array(helper::appdata(@$storeinfo->id)->template, [7, 16]))
+            <?php if(in_array(helper::appdata(@$storeinfo->id)->template, [7, 16])): ?>
             /* Template 7 Header Overrides */
             .t7-top-promo {
                 background: #4a148c; /* Dark Purple */
@@ -1042,11 +1048,12 @@
                     font-size: 18px;
                 }
             }
-            @endif
+            <?php endif; ?>
         </style>
-        @if (!request()->is($storeinfo->slug . '/detail-*'))
-            @include('front.theme.timer')
-        @endif
-        @include('cookie-consent::index')
-        {{-- <span class="d-block {{ helper::appdata(@$storeinfo->id)->template == 11 ? 'mb-40px' : '' }}"></span> --}}
+        <?php if(!request()->is($storeinfo->slug . '/detail-*')): ?>
+            <?php echo $__env->make('front.theme.timer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
+        <?php echo $__env->make('cookie-consent::index', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        
     </main>
+<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/theme/header.blade.php ENDPATH**/ ?>

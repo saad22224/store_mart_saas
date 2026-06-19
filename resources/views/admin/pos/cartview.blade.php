@@ -50,6 +50,11 @@
                                         ({{ helper::currency_formate($item->variants_price, $vendor_id) }})
                                     @endif
                                 </p>
+                                @if ($item->color_choice != null)
+                                    <p class="m-0 line-1 product-text-size text-muted">
+                                        {{ trans('labels.colors') ?? 'Colors' }}: {{ $item->color_choice }}
+                                    </p>
+                                @endif
                                 @php
                                     $extras_name = explode('|', $item->extras_name);
                                     $extras_price = explode('|', $item->extras_price);

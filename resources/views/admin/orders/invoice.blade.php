@@ -454,6 +454,9 @@
                                                     $extras_total_price = 0;
                                                 @endphp
                                             @endif
+                                            @if ($orders->color_choice != null)
+                                                <br><small><b class="text-muted">{{ trans('labels.colors') ?? 'Colors' }}</b>: {{ $orders->color_choice }}</small>
+                                            @endif
                                         </td>
                                         <td class="{{ session()->get('direction') == '2' ? 'text-start' : 'text-end' }}">
                                             {{ helper::currency_formate((float) $orders->variants_price + (float) $extras_total_price, $getorderdata->vendor_id) }}

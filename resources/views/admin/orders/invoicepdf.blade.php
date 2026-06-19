@@ -250,6 +250,9 @@
                                 $extras_total_price = 0;
                             @endphp
                         @endif
+                        @if ($orders->color_choice != null)
+                            <br><small><b class="text-muted">{{ trans('labels.colors') ?? 'Colors' }}</b>: {{ $orders->color_choice }}</small>
+                        @endif
                     </td>
                     @php
                         $price = (float) $extras_total_price + (float) $orders->variants_price;

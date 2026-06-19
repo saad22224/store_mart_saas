@@ -1054,7 +1054,7 @@
             var min_order = $('#modal_item_min_order').val();
             var max_order = $('#modal_item_max_order').val();
             var stock_management = $('#modal_stock_management').val();
-            var color_choice = $('input[name="color_choice"]:checked').val() || null;
+            var color_choice = $('input[name="modal_color_choice"]:checked').val() || null;
         } else {
             var vendor = $('#overview_vendor').val();
             var item_id = $('#overview_item_id').val();
@@ -1659,6 +1659,13 @@
             detail_set_variant_price(selected);
         }
     });
+    // handle color selection styling
+    $('body').on('click', '.color-selection', function() {
+        var wrapper = $(this).closest('.product-colors-wrapper');
+        wrapper.find('.check_color').removeClass('active');
+        $(this).closest('.check_color').addClass('active');
+    });
+
     $('#detail_variation input:checkbox').click(function() {
         var selected = [];
         var divselected = [];

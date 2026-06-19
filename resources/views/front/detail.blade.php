@@ -270,13 +270,13 @@
                                 </div>
                             </div>
                         @endif
-
+                        {{-- @dd($getitem) --}}
                         @if ($getitem->colors)
                             @php
-                                $colors = explode(',', $getitem->colors);
+                                $colors = array_filter(array_map('trim', preg_split('/[,|]+/', $getitem->colors)));
                             @endphp
                             <div class="product-colors-wrapper mb-3 border-bottom pb-3">
-                                <label class="fw-semibold form-label mt-3">{{ trans('labels.color') ?? 'Color' }}</label>
+                                <label class="fw-semibold form-label mt-3">{{ trans('labels.colors') ?? 'Colors' }}</label>
                                 <div class="d-flex flex-wrap gap-2">
                                     @foreach($colors as $index => $color)
                                         @php $color = trim($color); @endphp

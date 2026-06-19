@@ -274,6 +274,9 @@
                                                 $extras_total_price = 0;
                                             @endphp
                                         @endif
+                                        @if ($item->color_choice != null)
+                                            <br><small><b class="text-muted">{{ trans('labels.colors') ?? 'Colors' }}</b>: {{ $item->color_choice }}</small>
+                                        @endif
                                     </h6>
                                 </td>
                                 <td class="py-2 text-end">

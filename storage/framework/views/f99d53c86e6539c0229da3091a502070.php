@@ -303,14 +303,14 @@
                             $colors = array_filter(array_map('trim', preg_split('/[,|]+/', $getitem->colors)));
                         ?>
                         <div class="product-colors-wrapper mb-3 border-bottom pb-3">
-                            <label class="fw-semibold form-label mt-3"><?php echo e(trans('labels.color') ?? 'Color'); ?></label>
+                            <label class="fw-semibold form-label mt-3"><?php echo e(trans('labels.colors') ?? 'Colors'); ?></label>
                             <div class="d-flex flex-wrap gap-2">
                                 <?php $__currentLoopData = $colors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $color): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php $color = trim($color); ?>
                                     <label class="btn btn-outline-primary check_color <?php echo e($index == 0 ? 'active' : ''); ?>" 
                                            id="check_color_<?php echo e(str_replace(' ', '_', $color)); ?>" 
                                            for="color_<?php echo e(str_replace(' ', '_', $color)); ?>">
-                                        <input type="radio" class="d-none color-selection" name="color_choice" 
+                                        <input type="radio" class="d-none color-selection" name="modal_color_choice" 
                                                <?php echo e($index == 0 ? 'checked' : ''); ?> 
                                                value="<?php echo e($color); ?>" 
                                                id="color_<?php echo e(str_replace(' ', '_', $color)); ?>">

@@ -1142,4 +1142,11 @@
      'customer_reviews' => 'CUSTOMER REVIEWS 4.8/5',
      'reviews_desc' => 'Customer satisfaction is our primary goal. We believe you will find the products that best meet your needs.',
      'colors' => 'Colors',
+    'discover_our_latest_collection' => 'Discover our latest collection for this category. Premium quality and modern designs.',
+    'filters' => 'Filters',
+    'showing' => 'Showing',
+    'results' => 'results',
+    'sort_by_latest' => 'Sort by Latest',
+    'sort_by_price_low' => 'Sort by Price: Low to High',
+    'sort_by_price_high' => 'Sort by Price: High to Low',
 ];

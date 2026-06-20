@@ -1,6 +1,6 @@
 @include('front.theme.header')
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<main class="vela-home" style="background: #ffffff; padding-bottom: 50px;">
+<main class="tpl17-home" style="background: #ffffff; padding-bottom: 50px;">
 
     @php
         $homeSliders = isset($sliders) ? $sliders : collect();
@@ -21,39 +21,39 @@
     @endphp
 
     <style>
-        .vela-hero-slider {
+        .tpl17-hero-slider {
             width: 100%;
             background: #fff;
             overflow: hidden;
             margin-bottom: 46px;
         }
 
-        .vela-hero-slider .owl-stage-outer,
-        .vela-hero-slider .owl-stage,
-        .vela-hero-slider .owl-item {
+        .tpl17-hero-slider .owl-stage-outer,
+        .tpl17-hero-slider .owl-stage,
+        .tpl17-hero-slider .owl-item {
             /* removed height 100% to fix vertical overflow */
         }
 
-        .vela-hero-slide,
-        .vela-hero-slide-link {
+        .tpl17-hero-slide,
+        .tpl17-hero-slide-link {
             height: 100%;
         }
 
-        .vela-hero-slide {
+        .tpl17-hero-slide {
             height: clamp(260px, 49vw, 635px);
             display: block;
             background: #f7f7f7;
             overflow: hidden;
         }
 
-        .vela-hero-slide img {
+        .tpl17-hero-slide img {
             width: 100%;
             height: 100%;
             display: block;
             object-fit: cover;
         }
 
-        .vela-hero-slider .owl-dots {
+        .tpl17-hero-slider .owl-dots {
             position: absolute;
             left: 0;
             right: 0;
@@ -63,7 +63,7 @@
             gap: 7px;
         }
 
-        .vela-hero-slider .owl-dot span {
+        .tpl17-hero-slider .owl-dot span {
             width: 8px;
             height: 8px;
             margin: 0;
@@ -72,17 +72,17 @@
             transition: .2s ease;
         }
 
-        .vela-hero-slider .owl-dot.active span {
+        .tpl17-hero-slider .owl-dot.active span {
             width: 20px;
             background: #fff;
         }
 
-        .vela-categories-section {
+        .tpl17-categories-section {
             margin-bottom: 64px;
             position: relative;
         }
 
-        .vela-section-title {
+        .tpl17-section-title {
             font-size: clamp(30px, 3vw, 40px);
             font-weight: 800;
             color: #050505;
@@ -91,12 +91,12 @@
             text-align: center;
         }
 
-        .vela-category-carousel {
+        .tpl17-category-carousel {
             position: relative;
             padding: 0 24px;
         }
 
-        .vela-category-track {
+        .tpl17-category-track {
             display: flex;
             gap: 32px;
             overflow-x: hidden;
@@ -105,7 +105,7 @@
             padding: 20px 0;
         }
 
-        .vela-category-card {
+        .tpl17-category-card {
             display: block;
             flex: 0 0 calc((100% - 96px) / 4);
             min-width: 0;
@@ -114,7 +114,7 @@
             transition: transform 0.3s ease;
         }
 
-        .vela-category-image {
+        .tpl17-category-image {
             width: 100%;
             aspect-ratio: 1 / 1;
             border-radius: 12px;
@@ -123,7 +123,7 @@
             display: block;
         }
 
-        .vela-category-image img {
+        .tpl17-category-image img {
             width: 100%;
             height: 100%;
             display: block;
@@ -131,21 +131,21 @@
             transition: transform .35s ease;
         }
 
-        .vela-category-card:hover {
+        .tpl17-category-card:hover {
             color: #111;
             text-decoration: none;
             transform: scale(1.05);
         }
 
-        html[dir="rtl"] .vela-category-card:hover .vela-category-arrow {
+        html[dir="rtl"] .tpl17-category-card:hover .tpl17-category-arrow {
             transform: translateX(-5px) rotate(45deg);
         }
-        html[dir="ltr"] .vela-category-card:hover .vela-category-arrow,
-        .vela-category-card:hover .vela-category-arrow {
+        html[dir="ltr"] .tpl17-category-card:hover .tpl17-category-arrow,
+        .tpl17-category-card:hover .tpl17-category-arrow {
             transform: translateX(5px) rotate(45deg);
         }
 
-        .vela-category-name {
+        .tpl17-category-name {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -155,7 +155,7 @@
             line-height: 1.25;
         }
 
-        .vela-category-arrow {
+        .tpl17-category-arrow {
             width: 8px;
             height: 8px;
             border-top: 1.5px solid currentColor;
@@ -165,7 +165,7 @@
             transition: transform 0.3s ease;
         }
 
-        .vela-category-nav {
+        .tpl17-category-nav {
             width: 42px;
             height: 42px;
             border: 0;
@@ -181,7 +181,7 @@
             z-index: 2;
         }
 
-        .vela-category-nav::before {
+        .tpl17-category-nav::before {
             content: "";
             width: 11px;
             height: 11px;
@@ -189,46 +189,46 @@
             border-right: 2px solid currentColor;
         }
 
-        .vela-category-prev {
+        .tpl17-category-prev {
             left: -15px;
         }
 
-        .vela-category-prev::before {
+        .tpl17-category-prev::before {
             transform: rotate(-135deg);
         }
 
-        .vela-category-next {
+        .tpl17-category-next {
             right: -15px;
         }
 
-        .vela-category-next::before {
+        .tpl17-category-next::before {
             transform: rotate(45deg);
         }
 
         @media (min-width: 992px) {
-            .vela-category-nav {
+            .tpl17-category-nav {
                 display: inline-flex;
             }
         }
 
         @media (max-width: 991px) {
-            .vela-hero-slider {
+            .tpl17-hero-slider {
                 margin-bottom: 34px;
             }
 
-            .vela-hero-slide {
+            .tpl17-hero-slide {
                 height: clamp(220px, 72vw, 430px);
             }
 
-            .vela-categories-section {
+            .tpl17-categories-section {
                 margin-bottom: 48px;
             }
 
-            .vela-category-carousel {
+            .tpl17-category-carousel {
                 padding: 0;
             }
 
-            .vela-category-track {
+            .tpl17-category-track {
                 display: flex;
                 gap: 14px;
                 overflow-x: auto;
@@ -238,37 +238,37 @@
                 scrollbar-width: none;
             }
 
-            .vela-category-track::-webkit-scrollbar {
+            .tpl17-category-track::-webkit-scrollbar {
                 display: none;
             }
 
-            .vela-category-card {
+            .tpl17-category-card {
                 flex: 0 0 min(40vw, 140px);
                 scroll-snap-align: start;
             }
 
-            .vela-category-name {
+            .tpl17-category-name {
                 font-size: 16px;
                 margin-top: 12px;
             }
         }
 
         @media (max-width: 480px) {
-            .vela-hero-slide {
+            .tpl17-hero-slide {
                 height: 210px;
             }
 
-            .vela-section-title {
+            .tpl17-section-title {
                 margin-bottom: 24px;
             }
         }
     </style>
 
-    <section class="vela-hero-slider">
-        <div class="vela-hero-carousel owl-carousel owl-theme">
+    <section class="tpl17-hero-slider">
+        <div class="tpl17-hero-carousel owl-carousel owl-theme">
             @if($homeSliders->count() > 0)
                 @foreach ($homeSliders as $slider)
-                    <div class="vela-hero-slide">
+                    <div class="tpl17-hero-slide">
                         @php
                             $sliderHref = 'javascript:void(0)';
                             $sliderAttrs = '';
@@ -284,13 +284,13 @@
                                 }
                             }
                         @endphp
-                        <a href="{{ $sliderHref }}" class="vela-hero-slide-link" {!! $sliderAttrs !!}>
+                        <a href="{{ $sliderHref }}" class="tpl17-hero-slide-link" {!! $sliderAttrs !!}>
                             <img src="{{ helper::image_path($slider->banner_image) }}" alt="{{ $storeinfo->name }}">
                         </a>
                     </div>
                 @endforeach
             @else
-                <div class="vela-hero-slide">
+                <div class="tpl17-hero-slide">
                     <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png') }}" alt="{{ $storeinfo->name }}">
                 </div>
             @endif
@@ -302,25 +302,25 @@
         @if($section->section_key == 'categories')
             @php $categories = helper::getcategory($storeinfo->id); @endphp
             @if(count($categories) > 0)
-            <section class="vela-categories-section" data-aos="fade-up" data-aos-duration="1000">
+            <section class="tpl17-categories-section" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
-                    <h2 class="vela-section-title" data-aos="zoom-in" data-aos-duration="800">
+                    <h2 class="tpl17-section-title" data-aos="zoom-in" data-aos-duration="800">
                         {{ $section->title }}
                     </h2>
-                    <div class="vela-category-carousel">
+                    <div class="tpl17-category-carousel">
                         @if(count($categories) > 4)
-                            <button class="vela-category-nav vela-category-prev" type="button" aria-label="Previous categories"></button>
-                            <button class="vela-category-nav vela-category-next" type="button" aria-label="Next categories"></button>
+                            <button class="tpl17-category-nav tpl17-category-prev" type="button" aria-label="Previous categories"></button>
+                            <button class="tpl17-category-nav tpl17-category-next" type="button" aria-label="Next categories"></button>
                         @endif
-                        <div class="vela-category-track" id="velaCategoryTrack">
+                        <div class="tpl17-category-track" id="tpl17CategoryTrack">
                             @foreach($categories as $category)
-                                <a href="{{ URL::to(@$storeinfo->slug.'/category/'.$category->slug) }}" class="vela-category-card">
-                                    <span class="vela-category-image">
+                                <a href="{{ URL::to(@$storeinfo->slug.'/category/'.$category->slug) }}" class="tpl17-category-card">
+                                    <span class="tpl17-category-image">
                                         <img src="{{ @helper::image_path($category->image) }}" alt="{{ $category->name }}">
                                     </span>
-                                    <span class="vela-category-name">
+                                    <span class="tpl17-category-name">
                                         <span>{{ $category->name }}</span>
-                                        <span class="vela-category-arrow" aria-hidden="true"></span>
+                                        <span class="tpl17-category-arrow" aria-hidden="true"></span>
                                     </span>
                                 </a>
                             @endforeach
@@ -333,7 +333,7 @@
         @elseif($section->section_key == 'best_sellers')
             @php $best_sellers = helper::get_best_sellers($storeinfo->id, 4); @endphp
             @if(count($best_sellers) > 0)
-            <section class="vela-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
+            <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
                         <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
@@ -371,7 +371,7 @@
                 }
             @endphp
             @if(count($featured_products) > 0)
-            <section class="vela-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
+            <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
                         <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
@@ -404,7 +404,7 @@
         @elseif($section->section_key == 'new_arrivals')
             @php $new_arrivals = helper::get_new_arrivals($storeinfo->id, 4); @endphp
             @if(count($new_arrivals) > 0)
-            <section class="vela-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
+            <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
                         <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
@@ -423,7 +423,7 @@
         @elseif($section->section_key == 'exclusive')
             @php $exclusive_offers = helper::get_exclusive_offers($storeinfo->id, 4); @endphp
             @if(count($exclusive_offers) > 0)
-            <section class="vela-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
+            <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
                         <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
@@ -447,14 +447,14 @@
 </main>
 <style>
 /* Reset specific vela home elements that conflict */
-.vela-home a:hover { color: inherit; }
+.tpl17-home a:hover { color: inherit; }
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         if (window.jQuery && jQuery.fn.owlCarousel) {
-            jQuery('.vela-hero-carousel').owlCarousel({
+            jQuery('.tpl17-hero-carousel').owlCarousel({
                 items: 1,
-                loop: jQuery('.vela-hero-carousel .vela-hero-slide').length > 1,
+                loop: jQuery('.tpl17-hero-carousel .tpl17-hero-slide').length > 1,
                 autoplay: true,
                 autoplayTimeout: 4500,
                 autoplayHoverPause: true,
@@ -465,12 +465,12 @@
             });
         }
 
-        var categoryTrack = document.getElementById('velaCategoryTrack');
+        var categoryTrack = document.getElementById('tpl17CategoryTrack');
         if (!categoryTrack) return;
 
-        document.querySelectorAll('.vela-category-prev, .vela-category-next').forEach(function (button) {
+        document.querySelectorAll('.tpl17-category-prev, .tpl17-category-next').forEach(function (button) {
             button.addEventListener('click', function () {
-                var direction = button.classList.contains('vela-category-next') ? 1 : -1;
+                var direction = button.classList.contains('tpl17-category-next') ? 1 : -1;
                 var amount = categoryTrack.clientWidth * 0.75;
                 categoryTrack.scrollBy({ left: amount * direction, behavior: 'smooth' });
             });
@@ -489,3 +489,4 @@
     });
 </script>
 @include('front.theme.footer')
+

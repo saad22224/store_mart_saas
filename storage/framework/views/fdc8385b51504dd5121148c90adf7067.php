@@ -266,17 +266,33 @@
     flex-wrap: wrap;
 }
 .v-size2 {
-    width: 32px;
-    height: 32px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #555;
+    border: 1px solid #EBEBEB;
+    border-radius: 8px;
+    font-size: 17px;
+    color: black;
     background: #fff;
     font-weight: 500;
+}
+
+@media(max-width:767px){
+  .v-size2 {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #EBEBEB;
+    border-radius: 8px;
+    font-size: 15px;
+    color: black;
+    background: #fff;
+    font-weight: 500;
+}  
 }
 .variant-colors2 {
     display: flex;

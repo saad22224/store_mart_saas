@@ -263,6 +263,27 @@
         text-decoration: none;
         text-transform: capitalize;
         transition: color .2s ease;
+        position: relative;
+        display: inline-block;
+    }
+
+    .vela-nav-link::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        transform: scaleX(0);
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: #050505;
+        transform-origin: bottom right;
+        transition: transform 0.3s ease-out;
+    }
+
+    .vela-nav-link:hover::after,
+    .vela-nav-link.active::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
     }
 
     .vela-nav-link:hover,

@@ -25,20 +25,14 @@
 
         <!-- Hover Floating Actions -->
         <div class="floating-actions2">
-            <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
-                <?php if($product->has_variants == 1): ?>
-                    <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
-                        <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
-                    </a>
-                <?php else: ?>
-                    <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
-                        <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
-                    </a>
-                <?php endif; ?>
-            <?php endif; ?>
             <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.quick_view') ?? 'Quick View'); ?>">
-                <i class="fa-regular fa-eye" style="font-size: 14px;"></i>
+                <i class="fa-regular fa-eye"></i>
             </a>
+            <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
+                <a href="javascript:void(0)" onclick="GetProductOverview('<?php echo e($product->slug); ?>', '')" class="action-btn2" title="<?php echo e(trans('labels.add_to_cart') ?? 'Add to Cart'); ?>">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -205,9 +199,30 @@
     background: #f0f0f0;
     color: #000;
 }
+.action-btn2 i {
+    font-size: 16px;
+}
 .action-btn2 svg {
     width: 18px;
     height: 18px;
+}
+
+@media(max-width: 991px) {
+    .floating-actions2 {
+        opacity: 1;
+        transform: translateY(0);
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 4px;
+        gap: 4px;
+    }
+    .action-btn2 {
+        width: 32px;
+        height: 32px;
+    }
+    .action-btn2 i {
+        font-size: 14px;
+    }
 }
 
 .product-details2 {

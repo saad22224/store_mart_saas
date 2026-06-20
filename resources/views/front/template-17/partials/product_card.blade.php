@@ -23,20 +23,14 @@
 
         <!-- Hover Floating Actions -->
         <div class="floating-actions2">
-            @if(helper::appdata(@$storeinfo->id)->online_order == 1)
-                @if($product->has_variants == 1)
-                    <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
-                        <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
-                    </a>
-                @else
-                    <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
-                        <i class="fa-solid fa-cart-shopping" style="font-size: 14px;"></i>
-                    </a>
-                @endif
-            @endif
             <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.quick_view') ?? 'Quick View' }}">
-                <i class="fa-regular fa-eye" style="font-size: 14px;"></i>
+                <i class="fa-regular fa-eye"></i>
             </a>
+            @if(helper::appdata(@$storeinfo->id)->online_order == 1)
+                <a href="javascript:void(0)" onclick="GetProductOverview('{{ $product->slug }}', '')" class="action-btn2" title="{{ trans('labels.add_to_cart') ?? 'Add to Cart' }}">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -200,9 +194,30 @@
     background: #f0f0f0;
     color: #000;
 }
+.action-btn2 i {
+    font-size: 16px;
+}
 .action-btn2 svg {
     width: 18px;
     height: 18px;
+}
+
+@media(max-width: 991px) {
+    .floating-actions2 {
+        opacity: 1;
+        transform: translateY(0);
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 4px;
+        gap: 4px;
+    }
+    .action-btn2 {
+        width: 32px;
+        height: 32px;
+    }
+    .action-btn2 i {
+        font-size: 14px;
+    }
 }
 
 .product-details2 {

@@ -249,7 +249,7 @@
 <!-- Bottom White Section: Powered By -->
 <div class="vela-footer-bottom">
     <div class="container">
-        <p>Powered By <a href="https://easyorders.com" style="color: inherit; text-decoration: none;">Easyorders</a></p>
+        <p>Powered By <a href="{{ env('APP_URL', url('/')) }}" style="color: inherit; text-decoration: none; font-weight: 700;">matjarhub</a></p>
     </div>
 </div>
 

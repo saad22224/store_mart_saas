@@ -167,7 +167,10 @@
                     <h5 class="modal-title" id="instagramImportModalLabel">
                         <i class="fa-brands fa-instagram" style="color: #e1306c;"></i> جلب منتجات انستاجرام
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" style="position: absolute; left:15px"
+                    class="btn-close btn-close-white"
+                     data-bs-dismiss="modal"
+                      aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="padding: 2rem;">
                     <style>
@@ -206,7 +209,7 @@
                         <div class="col-md-12">
                             <label>اسم المستخدم في انستاجرام (بدون @)</label>
                             <div class="d-flex gap-2">
-                                <input type="text" id="igUsername" placeholder="مثال: storemart">
+                                <input type="text" id="igUsername" placeholder="مثال: matjarhub">
                                 <button class="ob-btn ob-btn-go" onclick="fetchInstagram()" id="igFetchBtn" style="white-space: nowrap;">جلب <i class="fa-solid fa-search"></i></button>
                             </div>
                         </div>

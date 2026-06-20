@@ -818,7 +818,7 @@
                         <div class="col-md-12 set-row">
                             <label>اسم المستخدم في انستاجرام (بدون @)</label>
                             <div class="d-flex gap-2">
-                                <input type="text" id="igUsername" placeholder="مثال: storemart">
+                                <input type="text" id="igUsername" placeholder="مثال: matjarhub">
                                 <button class="ob-btn ob-btn-go" onclick="fetchInstagram()" id="igFetchBtn" style="white-space: nowrap;">جلب <i class="fa-solid fa-search"></i></button>
                             </div>
                         </div>

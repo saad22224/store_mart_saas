@@ -4,12 +4,12 @@
 
     <?php
         $homeSliders = isset($sliders) ? $sliders : collect();
-        $theme_sections = App\Models\ThemeSection::where('vendor_id', $storeinfo->id)
-            ->where('is_active', 1)
-            ->orderBy('reorder_id')
-            ->get();
+        // $theme_sections = App\Models\ThemeSection::where('vendor_id', $storeinfo->id)
+        //     ->where('is_active', 1)
+        //     ->orderBy('reorder_id')
+        //     ->get();
         
-        if ($theme_sections->isEmpty()) {
+       // if ($theme_sections->isEmpty()) {
             $theme_sections = collect([
                 (object)['section_key' => 'categories', 'title' => trans('labels.categories') ?? 'Shop by Category', 'is_active' => 1],
                 (object)['section_key' => 'best_sellers', 'title' => trans('labels.best_sellers') ?? 'Best Sellers', 'is_active' => 1],
@@ -17,7 +17,7 @@
                 (object)['section_key' => 'new_arrivals', 'title' => trans('labels.new_arrivals') ?? 'New Arrivals', 'is_active' => 1],
                 (object)['section_key' => 'featured', 'title' => trans('labels.featured_products') ?? 'Featured Products', 'is_active' => 1],
             ]);
-        }
+        //}
     ?>
 
     <style>
@@ -347,7 +347,7 @@
                                 <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.15); z-index: 2;"></div>
                                 <div style="position: relative; width: 100%; height: 100%; border: 2px solid #fff; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3;">
                                     <h3 class="text-white fw-bold" style="font-size: 38px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"><?php echo e(@$best_sellers[0]->category_info->name ?? trans('labels.category')); ?></h3>
-                                    <a href="<?php echo e(URL::to(@$storeinfo->slug.'/products')); ?>" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><?php echo e(trans('labels.view_all') ?? 'View All'); ?></a>
+                                    <a href="<?php echo e(URL::to(@$storeinfo->slug.'/category/'.@$best_sellers[0]->category_info->slug)); ?>" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><?php echo e(trans('labels.view_all') ?? 'View All'); ?></a>
                                 </div>
                             </div>
                         </div>
@@ -385,7 +385,7 @@
                                 <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.15); z-index: 2;"></div>
                                 <div style="position: relative; width: 100%; height: 100%; border: 2px solid #fff; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3;">
                                     <h3 class="text-white fw-bold" style="font-size: 38px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"><?php echo e(@$featured_products[0]->category_info->name ?? trans('labels.category')); ?></h3>
-                                    <a href="<?php echo e(URL::to(@$storeinfo->slug.'/products')); ?>" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><?php echo e(trans('labels.view_all') ?? 'View All'); ?></a>
+                                    <a href="<?php echo e(URL::to(@$storeinfo->slug.'/category/'.@$featured_products[0]->category_info->slug)); ?>" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><?php echo e(trans('labels.view_all') ?? 'View All'); ?></a>
                                 </div>
                             </div>
                         </div>

@@ -222,6 +222,7 @@
 
             .tpl17-categories-section {
                 margin-bottom: 48px;
+                overflow-x: scroll !important ;
             }
 
             .tpl17-category-carousel {

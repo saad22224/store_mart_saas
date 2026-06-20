@@ -1721,7 +1721,7 @@ class helper
     }
     public static function imageext()
     {
-        $imageext = 'mimes:jpeg,jpg,png,webp';
+        $imageext = 'mimes:jpeg,jpg,png,webp,avif';
         return $imageext;
     }
     public static function imageresize($file, $directory_name)

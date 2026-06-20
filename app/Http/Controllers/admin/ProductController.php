@@ -56,7 +56,7 @@ class ProductController extends Controller
     {
         if ($request->has('product_image')) {
             $validator = Validator::make($request->all(), [
-                'product_image.*' => 'image|max:' . helper::imagesize() . '|' . helper::imageext(),
+                'product_image.*' => 'max:' . helper::imagesize() . '|' . helper::imageext(),
             ], [
                 'product_image.max' => trans('messages.image_size_message'),
             ]);
@@ -469,7 +469,7 @@ class ProductController extends Controller
     public function update_image(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_image' => 'image|max:' . helper::imagesize() . '|' . helper::imageext(),
+            'product_image' => 'max:' . helper::imagesize() . '|' . helper::imageext(),
         ], [
             'product_image.max' => trans('messages.image_size_message'),
         ]);
@@ -621,7 +621,7 @@ class ProductController extends Controller
         }
         if ($request->has('image')) {
             $validator = Validator::make($request->all(), [
-                'image.*' =>  'image|max:' . helper::imagesize() . '|' . helper::imageext(),
+                'image.*' =>  'max:' . helper::imagesize() . '|' . helper::imageext(),
             ], [
                 'image.max' => trans('messages.image_size_message'),
             ]);
@@ -789,3 +789,4 @@ class ProductController extends Controller
         }
     }
 }
+

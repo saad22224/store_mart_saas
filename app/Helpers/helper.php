@@ -1393,12 +1393,29 @@ class helper
     public static function language($vendor_id)
     {
         if (session()->get('locale') == null) {
-            $layout = Languages::select('name', 'layout', 'image', 'is_default', 'code')->where('code', helper::appdata($vendor_id)->default_language)->first();
-            App::setLocale($layout->code);
-            session()->put('locale', $layout->code);
-            session()->put('language', $layout->name);
-            session()->put('flag', $layout->image);
-            session()->put('direction', $layout->layout);
+            // Guard: appdata() may return null if vendor settings not found
+            $appdata = helper::appdata($vendor_id);
+            $defaultLang = $appdata ? $appdata->default_language : null;
+
+            // Try to find the language by code; fall back to first is_default, then any language
+            $layout = null;
+            if ($defaultLang) {
+                $layout = Languages::select('name', 'layout', 'image', 'is_default', 'code')->where('code', $defaultLang)->first();
+            }
+            if (!$layout) {
+                $layout = Languages::select('name', 'layout', 'image', 'is_default', 'code')->where('is_default', 1)->first();
+            }
+            if (!$layout) {
+                $layout = Languages::select('name', 'layout', 'image', 'is_default', 'code')->first();
+            }
+
+            if ($layout) {
+                App::setLocale($layout->code);
+                session()->put('locale', $layout->code);
+                session()->put('language', $layout->name);
+                session()->put('flag', $layout->image);
+                session()->put('direction', $layout->layout);
+            }
         } else {
             $layout = Languages::select('name', 'layout', 'image', 'is_default', 'code')->where('code', session()->get('locale'))->first();
             App::setLocale(session()->get('locale'));

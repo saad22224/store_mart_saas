@@ -16,7 +16,7 @@
         "intervention/image": "*",
         "jorenvanhocht/laravel-share": "^4.2",
         "josiasmontag/laravel-recaptchav3": "^1.0",
-        "laravel/framework": "^10.10",
+        "laravel/framework": "10.50.2",
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",

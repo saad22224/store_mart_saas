@@ -31,4 +31,4 @@
         </div>
     </nav>
 <?php endif; ?>
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/theme/timer.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/theme/timer.blade.php ENDPATH**/ ?>

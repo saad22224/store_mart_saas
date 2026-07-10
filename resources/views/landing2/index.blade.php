@@ -64,7 +64,8 @@
             max-width: 100%;
         }
 
-        html, body {
+        html,
+        body {
             overflow-x: hidden;
             width: 100%;
         }
@@ -1054,9 +1055,11 @@
             font-weight: 600;
             transition: background 0.2s;
         }
+
         .lang-option:hover {
             background: #F1F5F9;
         }
+
         .lang-option.active {
             background: rgba(21, 172, 130, 0.1);
             color: #15AC82;
@@ -1068,73 +1071,94 @@
         }
     </style>
     {{-- @if (@helper::checkaddons('pwa')) --}}
-        @php
-            $admin_id = 1;
-            $admin_user = App\Models\User::where('id', $admin_id)->first();
-            $pwa = 0;
-            if ($admin_user) {
-                $checkplan = App\Models\Transaction::where('vendor_id', $admin_id)->orderByDesc('id')->first();
-                if (@$admin_user->allow_without_subscription == 1) {
-                    $pwa = 1;
-                } else {
-                    $pwa = @$checkplan->pwa;
-                }
+    @php
+        $admin_id = 1;
+        $admin_user = App\Models\User::where('id', $admin_id)->first();
+        $pwa = 0;
+        if ($admin_user) {
+            $checkplan = App\Models\Transaction::where('vendor_id', $admin_id)->orderByDesc('id')->first();
+            if (@$admin_user->allow_without_subscription == 1) {
+                $pwa = 1;
+            } else {
+                $pwa = @$checkplan->pwa;
             }
-        @endphp
-        @if (helper::appdata($admin_id)->pwa == 1)
-            <meta name="theme-color" content="{{ helper::appdata($admin_id)->theme_color }}">
-            <meta name="background-color" content="{{ helper::appdata($admin_id)->background_color }}">
-            <link rel="apple-touch-icon" href="{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}">
-            <link rel="manifest" href='data:application/manifest+json,{"name": "{{ helper::appdata($admin_id)->app_name }}","short_name": "{{ helper::appdata($admin_id)->app_name }}","icons": [{"src": "{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}", "sizes": "512x512", "type": "image/png"}, {"src": "{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}", "sizes": "1024x1024", "type": "image/png"}], "start_url": "{{ request()->url() }}","display": "standalone","prefer_related_applications":"false" }'>
-        @endif
+        }
+    @endphp
+    @if (helper::appdata($admin_id)->pwa == 1)
+        <meta name="theme-color" content="{{ helper::appdata($admin_id)->theme_color }}">
+        <meta name="background-color" content="{{ helper::appdata($admin_id)->background_color }}">
+        <link rel="apple-touch-icon" href="{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}">
+        <link rel="manifest"
+            href='data:application/manifest+json,{"name": "{{ helper::appdata($admin_id)->app_name }}","short_name": "{{ helper::appdata($admin_id)->app_name }}","icons": [{"src": "{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}", "sizes": "512x512", "type": "image/png"}, {"src": "{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}", "sizes": "1024x1024", "type": "image/png"}], "start_url": "{{ request()->url() }}","display": "standalone","prefer_related_applications":"false" }'>
+    @endif
     {{-- @endif --}}
 
 
-      <!-- Meta Pixel Code -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
+    <!-- Meta Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
 
-    fbq('init', '3214801062033661');
-    fbq('track', 'PageView');
-  </script>
-  <!-- End Meta Pixel Code -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKTXTSENXZ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        fbq('init', '3214801062033661');
+        fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKTXTSENXZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-    gtag('config', 'G-YKTXTSENXZ');
-  </script>
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-YKTXTSENXZ');
+    </script>
 </head>
 
 <body>
-<!-- PWA Install Prompt Button -->
-    <div id="installBtn" style="display:none; opacity:0; transform: translateY(-150%); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);"
+    <!-- PWA Install Prompt Button -->
+    <div id="installBtn"
+        style="display:none; opacity:0; transform: translateY(-150%); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);"
         class="fixed top-4 left-0 right-0 mx-auto z-[100] flex items-center justify-between gap-2 md:gap-4 bg-white px-3 md:px-4 py-3 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 w-[92%] max-w-sm">
         <div class="flex items-center gap-2 md:gap-3 overflow-hidden">
             <div class="flex-shrink-0">
-                <img src="{{ helper::image_path(helper::appdata(1)->app_logo) }}" class="w-10 h-10 rounded-xl shadow-sm border border-gray-50 object-cover" alt="App Icon">
+                <img src="{{ helper::image_path(helper::appdata(1)->app_logo) }}"
+                    class="w-10 h-10 rounded-xl shadow-sm border border-gray-50 object-cover" alt="App Icon">
             </div>
             <div class="flex-1 min-w-0">
-                <h4 class="text-[13px] md:text-sm font-bold text-gray-900 leading-tight truncate" data-i18n="install.title">{{ helper::appdata(1)->app_name }}</h4>
-                <p class="text-[10px] md:text-xs text-gray-500 mt-0.5 truncate" data-i18n="install.desc">تثبيت التطبيق على جهازك</p>
+                <h4 class="text-[13px] md:text-sm font-bold text-gray-900 leading-tight truncate"
+                    data-i18n="install.title">{{ helper::appdata(1)->app_name }}</h4>
+                <p class="text-[10px] md:text-xs text-gray-500 mt-0.5 truncate" data-i18n="install.desc">تثبيت التطبيق
+                    على جهازك</p>
             </div>
         </div>
         <div class="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
-            <button onclick="installApp()" class="bg-green-600 text-white text-[11px] md:text-xs font-bold px-3 py-2 rounded-xl hover:bg-green-700 transition-colors shadow-md shadow-green-500/20 active:scale-95 whitespace-nowrap" data-i18n="install.btn">
+            <button onclick="installApp()"
+                class="bg-green-600 text-white text-[11px] md:text-xs font-bold px-3 py-2 rounded-xl hover:bg-green-700 transition-colors shadow-md shadow-green-500/20 active:scale-95 whitespace-nowrap"
+                data-i18n="install.btn">
                 تثبيت
             </button>
-            <button onclick="hideInstallBtn()" class="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors active:scale-95 flex-shrink-0">
+            <button onclick="hideInstallBtn()"
+                class="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors active:scale-95 flex-shrink-0">
                 <i class="fas fa-times text-xs md:text-sm"></i>
             </button>
         </div>
@@ -1185,7 +1209,8 @@
         async function installApp() {
             console.log('👍 Install button clicked');
             if (isIos()) {
-                alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                alert(
+                    "لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
                 hideInstallBtn();
                 return;
             }
@@ -1194,7 +1219,9 @@
                 return;
             }
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
+            const {
+                outcome
+            } = await deferredPrompt.userChoice;
             console.log(`👍 User choice outcome: ${outcome}`);
             deferredPrompt = null;
             hideInstallBtn();
@@ -1212,17 +1239,17 @@
             }
         }
     </script>
-{{-- meta pixel --}}
- <noscript>
-    <img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=3214801062033661&ev=PageView&noscript=1"/>
-  </noscript>
+    {{-- meta pixel --}}
+    <noscript>
+        <img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=3214801062033661&ev=PageView&noscript=1" />
+    </noscript>
     {{-- ===== Header ===== --}}
     <header class="site-header">
         <nav class="site-nav">
             <div class="nav-logo">
                 <a href="{{ url('/') }}">
-                <img style="width:100px;height:100px;" src="{{ asset('public/images/matjarhub.png') }}"></img>
+                    <img style="width:100px;height:100px;" src="{{ asset('public/images/matjarhub.png') }}"></img>
                 </a>
             </div>
 
@@ -1237,7 +1264,8 @@
             <div style="display:flex;align-items:center;gap:1rem;">
                 {{-- Language Switcher --}}
                 <div class="lang-switcher hidden md:block" style="position:relative;">
-                    <button type="button" class="lang-btn" onclick="toggleLangMenu()" style="
+                    <button type="button" class="lang-btn" onclick="toggleLangMenu()"
+                        style="
                         background: rgba(21, 172, 130, 0.1);
                         border: 1px solid rgba(21, 172, 130, 0.3);
                         border-radius: 9999px;
@@ -1254,7 +1282,8 @@
                         <span>{{ $lang == 'ar' ? 'العربية' : 'English' }}</span>
                         <span class="material-symbols-outlined" style="font-size: 1rem;">expand_more</span>
                     </button>
-                    <div id="langMenu" class="lang-menu" style="
+                    <div id="langMenu" class="lang-menu"
+                        style="
                         display: none;
                         position: absolute;
                         top: 100%;
@@ -1272,19 +1301,27 @@
                     </div>
                 </div>
                 <div class="hidden md:flex" style="gap: 0.5rem; align-items: center;">
-                    <button onclick="window.location.href = '{{ url('admin') }}'" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.55rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
-                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
+                    <button onclick="window.location.href = '{{ url('admin') }}'"
+                        style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.55rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; transition: all 0.2s ease;"
+                        onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
+                        onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+                    <button onclick="window.location.href = '{{ url('admin/register') }}'"
+                        class="btn-primary">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
                 </div>
-                
+
                 {{-- Mobile Login Button --}}
-                <button onclick="window.location.href = '{{ url('admin') }}'" class="md:hidden" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.4rem 1rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+                <button onclick="window.location.href = '{{ url('admin') }}'" class="md:hidden"
+                    style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.4rem 1rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem; transition: all 0.2s ease;"
+                    onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
+                    onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
 
                 <span class="material-symbols-outlined nav-hamburger" onclick="toggleMobileMenu()">menu</span>
             </div>
         </nav>
-        
+
         {{-- Mobile Menu --}}
-        <div id="mobileMenu" class="mobile-menu" style="
+        <div id="mobileMenu" class="mobile-menu"
+            style="
             display: none;
             position: fixed;
             top: 0;
@@ -1302,16 +1339,23 @@
             box-sizing: border-box;
         ">
             <div style="display:flex;flex-direction:column;gap:2rem;align-items:center;">
-                <a href="#" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
-                <a href="#who-we-are" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['who_we_are'] ?? 'من نحن' }}</a>
-                <a href="#why-us" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
-                <a href="#faq" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
-                <a href="#contact" onclick="closeMobileMenu()" style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
-                
-                <div style="display:flex; flex-direction:column; gap: 1rem; width: 100%; max-width: 300px; margin-top: 1rem; align-items: stretch;">
+                <a href="#" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
+                <a href="#who-we-are" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['who_we_are'] ?? 'من نحن' }}</a>
+                <a href="#why-us" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
+                <a href="#faq" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
+                <a href="#contact" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
+
+                <div
+                    style="display:flex; flex-direction:column; gap: 1rem; width: 100%; max-width: 300px; margin-top: 1rem; align-items: stretch;">
                     {{-- Mobile Language Switcher --}}
                     <div class="lang-switcher-mobile" style="position:relative; width: 100%;">
-                        <button type="button" class="lang-btn-mobile" onclick="toggleMobileLangMenu()" style="
+                        <button type="button" class="lang-btn-mobile" onclick="toggleMobileLangMenu()"
+                            style="
                             width: 100%;
                             background: rgba(21, 172, 130, 0.1);
                             border: 1px solid rgba(21, 172, 130, 0.3);
@@ -1332,7 +1376,8 @@
                             </div>
                             <span class="material-symbols-outlined" style="font-size: 1rem;">expand_more</span>
                         </button>
-                        <div id="mobileLangMenu" style="
+                        <div id="mobileLangMenu"
+                            style="
                             display: none;
                             margin-top: 0.5rem;
                             background: #F8FAFC;
@@ -1341,16 +1386,25 @@
                             overflow: hidden;
                             width: 100%;
                         ">
-                            <a href="?lang=ar" class="lang-option {{ $lang == 'ar' ? 'active' : '' }}" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center;">🇸🇦 العربية</a>
-                            <a href="?lang=en" class="lang-option {{ $lang == 'en' ? 'active' : '' }}" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.5);">🇬🇧 English</a>
+                            <a href="?lang=ar" class="lang-option {{ $lang == 'ar' ? 'active' : '' }}"
+                                style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center;">🇸🇦
+                                العربية</a>
+                            <a href="?lang=en" class="lang-option {{ $lang == 'en' ? 'active' : '' }}"
+                                style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.5);">🇬🇧
+                                English</a>
                         </div>
                     </div>
 
-                    <button onclick="window.location.href = '{{ url('admin') }}'" style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.8rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1.1rem; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'" onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
-                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
+                    <button onclick="window.location.href = '{{ url('admin') }}'"
+                        style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.8rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1.1rem; transition: all 0.2s ease;"
+                        onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
+                        onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary"
+                        style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
                 </div>
             </div>
-            <button onclick="closeMobileMenu()" style="
+            <button onclick="closeMobileMenu()"
+                style="
                 position: absolute;
                 top: 1.5rem;
                 {{ $lang == 'ar' ? 'left' : 'right' }}: 1.5rem;
@@ -1377,7 +1431,8 @@
 
             <h1 class="hero-title" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
                 {{ @$translations['hero']['title_line1'] ?? 'أنشئ متجر أحلامك' }} <br />
-                <span class="gradient-text">{{ @$translations['hero']['title_highlight'] ?? 'في ثوانٍ معدودة' }}</span>
+                <span
+                    class="gradient-text">{{ @$translations['hero']['title_highlight'] ?? 'في ثوانٍ معدودة' }}</span>
             </h1>
 
             <p class="hero-desc" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
@@ -1385,7 +1440,8 @@
             </p>
 
             <div class="hero-actions" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
-                <button class="btn-hero-primary" onclick="window.location.href = '{{ url('admin/register') }}'">{{ @$translations['hero']['btn_primary'] ?? 'ابدأ مجاناً الآن' }}</button>
+                <button class="btn-hero-primary"
+                    onclick="window.location.href = '{{ url('admin/register') }}'">{{ @$translations['hero']['btn_primary'] ?? 'ابدأ مجاناً الآن' }}</button>
                 {{-- <button class="btn-hero-secondary">{{ @$translations['hero']['btn_secondary'] ?? 'شاهد العرض التجريبي' }}</button> --}}
             </div>
         </div>
@@ -1425,7 +1481,9 @@
                     <span class="material-symbols-outlined" style="font-size:1rem;">groups</span>
                     {{ @$translations['who_we_are']['tag'] ?? 'تعرّف علينا' }}
                 </div>
-                <h2>{{ @$translations['who_we_are']['title_line1'] ?? 'نحن فريق شغوف بـ' }}<br /><span class="gradient-text">{{ @$translations['who_we_are']['title_highlight'] ?? 'تمكين التجارة الرقمية' }}</span></h2>
+                <h2>{{ @$translations['who_we_are']['title_line1'] ?? 'نحن فريق شغوف بـ' }}<br /><span
+                        class="gradient-text">{{ @$translations['who_we_are']['title_highlight'] ?? 'تمكين التجارة الرقمية' }}</span>
+                </h2>
                 <p>
                     {{ @$translations['who_we_are']['description1'] ?? 'Matjar Hub منصة سعودية نشأت من رحم التحديات التي يواجهها التجار العرب يومياً. هدفنا الأول هو إزالة العقبات التقنية وتسليم التاجر مفاتيح متجره الاحترافي في أقل من دقيقة.' }}
                 </p>
@@ -1451,7 +1509,8 @@
 
             {{-- Left: Image --}}
             <div class="who-image-wrap" data-aos="fade-right" data-aos-duration="700" data-aos-delay="150">
-                <img src="{{ asset('public/images/about.jpeg') }}" alt="{{ $lang == 'ar' ? 'فريق Matjar Hub' : 'Matjar Hub Team' }}" />
+                <img src="{{ asset('public/images/about.jpeg') }}"
+                    alt="{{ $lang == 'ar' ? 'فريق Matjar Hub' : 'Matjar Hub Team' }}" />
                 <div class="who-badge-float">
                     <div class="icon-wrap">
                         <span class="material-symbols-outlined"
@@ -1471,8 +1530,11 @@
     <section class="why-us-section" id="why-us">
         <div class="why-us-inner">
             <div class="section-header" data-aos="fade-up" data-aos-duration="700">
-                <h2>{{ @$translations['why_us']['title'] ?? 'لماذا تختار' }} <span class="gradient-text">{{ @$translations['why_us']['title_highlight'] ?? 'Matjar Hub؟' }}</span></h2>
-                <p>{{ @$translations['why_us']['subtitle'] ?? 'نحن نوفر لك كل الأدوات التي تحتاجها للنجاح في عالم التجارة الإلكترونية، مع التركيز على البساطة والقوة في وقت واحد.' }}</p>
+                <h2>{{ @$translations['why_us']['title'] ?? 'لماذا تختار' }} <span
+                        class="gradient-text">{{ @$translations['why_us']['title_highlight'] ?? 'Matjar Hub؟' }}</span>
+                </h2>
+                <p>{{ @$translations['why_us']['subtitle'] ?? 'نحن نوفر لك كل الأدوات التي تحتاجها للنجاح في عالم التجارة الإلكترونية، مع التركيز على البساطة والقوة في وقت واحد.' }}
+                </p>
             </div>
 
             <div class="why-us-grid">
@@ -1481,7 +1543,8 @@
                         <span class="material-symbols-outlined">speed</span>
                     </div>
                     <h3>{{ @$translations['why_us']['card1_title'] ?? 'سرعة خارقة' }}</h3>
-                    <p>{{ @$translations['why_us']['card1_desc'] ?? 'متاجرك تعمل على أحدث التقنيات السحابية لضمان سرعة تحميل لا تضاهى عالمياً.' }}</p>
+                    <p>{{ @$translations['why_us']['card1_desc'] ?? 'متاجرك تعمل على أحدث التقنيات السحابية لضمان سرعة تحميل لا تضاهى عالمياً.' }}
+                    </p>
                 </div>
 
                 <div class="why-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
@@ -1489,7 +1552,8 @@
                         <span class="material-symbols-outlined">support_agent</span>
                     </div>
                     <h3>{{ @$translations['why_us']['card2_title'] ?? 'دعم فني 24/7' }}</h3>
-                    <p>{{ @$translations['why_us']['card2_desc'] ?? 'فريقنا متواجد دائماً لمساعدتك في كل خطوة، عبر الواتساب، الهاتف، أو البريد.' }}</p>
+                    <p>{{ @$translations['why_us']['card2_desc'] ?? 'فريقنا متواجد دائماً لمساعدتك في كل خطوة، عبر الواتساب، الهاتف، أو البريد.' }}
+                    </p>
                 </div>
 
                 <div class="why-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
@@ -1497,7 +1561,8 @@
                         <span class="material-symbols-outlined">integration_instructions</span>
                     </div>
                     <h3>{{ @$translations['why_us']['card3_title'] ?? 'تكامل شامل' }}</h3>
-                    <p>{{ @$translations['why_us']['card3_desc'] ?? 'اربط متجرك مع كافة خدمات الشحن والدفع والتسويق بضغطة زر واحدة.' }}</p>
+                    <p>{{ @$translations['why_us']['card3_desc'] ?? 'اربط متجرك مع كافة خدمات الشحن والدفع والتسويق بضغطة زر واحدة.' }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -1508,7 +1573,9 @@
         <div class="about-inner">
             <div class="about-content" data-aos="fade-left" data-aos-duration="700">
                 <div class="about-badge">{{ @$translations['value']['badge'] ?? 'رسالتنا وقيمنا' }}</div>
-                <h2>{{ @$translations['value']['title_line1'] ?? 'نمكّن التجار في' }} <br /><span class="gradient-text">{{ @$translations['value']['title_highlight'] ?? 'العالم العربي' }}</span> {{ @$translations['value']['title_line2'] ?? 'للوصول للعالمية' }}</h2>
+                <h2>{{ @$translations['value']['title_line1'] ?? 'نمكّن التجار في' }} <br /><span
+                        class="gradient-text">{{ @$translations['value']['title_highlight'] ?? 'العالم العربي' }}</span>
+                    {{ @$translations['value']['title_line2'] ?? 'للوصول للعالمية' }}</h2>
                 <p>
                     {{ @$translations['value']['description'] ?? 'انطلقت منصة Matjar Hub لتكون الشريك الأول لكل طموح يريد البدء في تجارته الخاصة. نحن نؤمن أن التكنولوجيا لا يجب أن تكون عائقاً أمام الإبداع، لذلك عملنا على تبسيط كل العمليات المعقدة.' }}
                 </p>
@@ -1598,8 +1665,13 @@
         <div class="contact-inner">
             {{-- Info --}}
             <div data-aos="fade-left" data-aos-duration="700">
-                <h2 class="contact-info-title">{{ @$translations['contact']['title_line1'] ?? 'دعنا نساعدك في' }} <br /><span class="gradient-text">{{ @$translations['contact']['title_highlight'] ?? 'تحويل فكرتك إلى واقع' }}</span></h2>
-                <p class="contact-info-desc">{{ @$translations['contact']['description'] ?? 'فريق الخبراء لدينا جاهز للرد على استفساراتك ومساعدتك في اختيار الخطة الأنسب لمشروعك.' }}</p>
+                <h2 class="contact-info-title">{{ @$translations['contact']['title_line1'] ?? 'دعنا نساعدك في' }}
+                    <br /><span
+                        class="gradient-text">{{ @$translations['contact']['title_highlight'] ?? 'تحويل فكرتك إلى واقع' }}</span>
+                </h2>
+                <p class="contact-info-desc">
+                    {{ @$translations['contact']['description'] ?? 'فريق الخبراء لدينا جاهز للرد على استفساراتك ومساعدتك في اختيار الخطة الأنسب لمشروعك.' }}
+                </p>
 
                 <div class="contact-items">
                     <div class="contact-item">
@@ -1608,8 +1680,10 @@
                                 style="font-variation-settings:'FILL' 1;">call</span>
                         </div>
                         <div>
-                            <div class="contact-item-label">{{ @$translations['contact']['phone_label'] ?? 'الهاتف الموحد' }}</div>
-                            <div class="contact-item-value">{{ @$translations['contact']['phone_value'] ?? '+966 800 123 4567' }}</div>
+                            <div class="contact-item-label">
+                                {{ @$translations['contact']['phone_label'] ?? 'الهاتف الموحد' }}</div>
+                            <div class="contact-item-value">
+                                {{ @$translations['contact']['phone_value'] ?? '+966 800 123 4567' }}</div>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1618,8 +1692,10 @@
                                 style="font-variation-settings:'FILL' 1;">chat</span>
                         </div>
                         <div>
-                            <div class="contact-item-label">{{ @$translations['contact']['whatsapp_label'] ?? 'واتساب مباشر' }}</div>
-                            <div class="contact-item-value">{{ @$translations['contact']['whatsapp_value'] ?? '+966 50 123 4567' }}</div>
+                            <div class="contact-item-label">
+                                {{ @$translations['contact']['whatsapp_label'] ?? 'واتساب مباشر' }}</div>
+                            <div class="contact-item-value">
+                                {{ @$translations['contact']['whatsapp_value'] ?? '+966 50 123 4567' }}</div>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1628,8 +1704,10 @@
                                 style="font-variation-settings:'FILL' 1;">mail</span>
                         </div>
                         <div>
-                            <div class="contact-item-label">{{ @$translations['contact']['email_label'] ?? 'البريد الإلكتروني' }}</div>
-                            <div class="contact-item-value">{{ @$translations['contact']['email_value'] ?? 'hello@smartstore.sa' }}</div>
+                            <div class="contact-item-label">
+                                {{ @$translations['contact']['email_label'] ?? 'البريد الإلكتروني' }}</div>
+                            <div class="contact-item-value">
+                                {{ @$translations['contact']['email_value'] ?? 'hello@smartstore.sa' }}</div>
                         </div>
                     </div>
                 </div>
@@ -1642,30 +1720,38 @@
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom:0;">
                             <label>{{ @$translations['contact']['form_name'] ?? 'الاسم الكامل' }}</label>
-                            <input type="text" name="name" required placeholder="{{ @$translations['contact']['form_name_placeholder'] ?? 'أدخل اسمك' }}" />
+                            <input type="text" name="name" required
+                                placeholder="{{ @$translations['contact']['form_name_placeholder'] ?? 'أدخل اسمك' }}" />
                         </div>
                         <div class="form-group" style="margin-bottom:0;">
                             <label>{{ @$translations['contact']['form_email'] ?? 'البريد الإلكتروني' }}</label>
-                            <input type="email" name="email" required placeholder="example@mail.com" dir="ltr" />
+                            <input type="email" name="email" required placeholder="example@mail.com"
+                                dir="ltr" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>{{ @$translations['contact']['form_inquiry_type'] ?? 'نوع الاستفسار' }}</label>
                         <select name="inquiry_type" required>
-                            <option value="دعم فني">{{ @$translations['contact']['form_inquiry_support'] ?? 'دعم فني' }}</option>
-                            <option value="استفسار مبيعات">{{ @$translations['contact']['form_inquiry_sales'] ?? 'استفسار مبيعات' }}</option>
-                            <option value="شراكات">{{ @$translations['contact']['form_inquiry_partners'] ?? 'شراكات' }}</option>
-                            <option value="أخرى">{{ @$translations['contact']['form_inquiry_other'] ?? 'أخرى' }}</option>
+                            <option value="دعم فني">
+                                {{ @$translations['contact']['form_inquiry_support'] ?? 'دعم فني' }}</option>
+                            <option value="استفسار مبيعات">
+                                {{ @$translations['contact']['form_inquiry_sales'] ?? 'استفسار مبيعات' }}</option>
+                            <option value="شراكات">
+                                {{ @$translations['contact']['form_inquiry_partners'] ?? 'شراكات' }}</option>
+                            <option value="أخرى">{{ @$translations['contact']['form_inquiry_other'] ?? 'أخرى' }}
+                            </option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>{{ @$translations['contact']['form_message'] ?? 'الرسالة' }}</label>
-                        <textarea name="message" rows="4" required placeholder="{{ @$translations['contact']['form_message_placeholder'] ?? 'كيف يمكننا مساعدتك؟' }}"></textarea>
+                        <textarea name="message" rows="4" required
+                            placeholder="{{ @$translations['contact']['form_message_placeholder'] ?? 'كيف يمكننا مساعدتك؟' }}"></textarea>
                     </div>
 
-                    <button type="submit" class="btn-submit">{{ @$translations['contact']['form_submit'] ?? 'إرسال الرسالة' }}</button>
+                    <button type="submit"
+                        class="btn-submit">{{ @$translations['contact']['form_submit'] ?? 'إرسال الرسالة' }}</button>
                 </form>
             </div>
         </div>
@@ -1676,14 +1762,17 @@
         <div class="footer-inner">
             <div style="text-align:center;">
                 <div class="footer-brand-name">Matjar Hub</div>
-                <div class="footer-brand-desc">{{ @$translations['footer']['brand_desc'] ?? 'المنصة الرائدة في تمكين التجار في العالم العربي' }}</div>
+                <div class="footer-brand-desc">
+                    {{ @$translations['footer']['brand_desc'] ?? 'المنصة الرائدة في تمكين التجار في العالم العربي' }}
+                </div>
             </div>
 
             <!-- <div class="footer-links">
                 <a href="#">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
             </div> -->
 
-            <div class="footer-copy">{{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}</div>
+            <div class="footer-copy">
+                {{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}</div>
         </div>
     </footer>
 
@@ -1748,7 +1837,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     {{-- Toastify Notifications --}}
-    @if(session('contact_success'))
+    @if (session('contact_success'))
         <script>
             Toastify({
                 text: "{{ session('contact_success') }}",
@@ -1769,7 +1858,7 @@
         </script>
     @endif
 
-    @if(session('contact_error'))
+    @if (session('contact_error'))
         <script>
             Toastify({
                 text: "{{ session('contact_error') }}",
@@ -1794,16 +1883,21 @@
         @if ($pwa == 1 && helper::appdata($admin_id)->pwa == 1)
             <!--------------- PWA Section start ------------------>
             <div class="d-block d-sm-none" id="pwa-container">
-                <div class="pwa d-flex gap-2" style="position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:9999;padding:15px;box-shadow:0 -2px 10px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;">
+                <div class="pwa d-flex gap-2"
+                    style="position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:9999;padding:15px;box-shadow:0 -2px 10px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;">
                     <div class="d-flex align-items-center gap-2" style="display:flex;align-items:center;gap:10px;">
-                        <img src="{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}" class="pwa-image" alt="" height="40px" style="border-radius:10px;">
+                        <img src="{{ helper::image_path(helper::appdata($admin_id)->app_logo) }}" class="pwa-image"
+                            alt="" height="40px" style="border-radius:10px;">
                         <div class="pwa-content">
-                            <h5 class="mb-1 line-1 fs-7" style="margin:0;font-size:14px;font-weight:700;">{{ helper::appdata($admin_id)->app_title }}</h5>
-                            <p class="m-0 fs-8 line-1 text-dark" style="margin:0;font-size:12px;color:#475569;">{{ trans('labels.pwa_message') ?? 'Add to Home Screen' }}</p>
+                            <h5 class="mb-1 line-1 fs-7" style="margin:0;font-size:14px;font-weight:700;">
+                                {{ helper::appdata($admin_id)->app_title }}</h5>
+                            <p class="m-0 fs-8 line-1 text-dark" style="margin:0;font-size:12px;color:#475569;">
+                                {{ trans('labels.pwa_message') ?? 'Add to Home Screen' }}</p>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2" style="display:flex;align-items:center;gap:10px;">
-                        <a class="btn mobile-install-btn" id="mobile-install-app" style="background:#15AC82;color:#fff;padding:5px 10px;border-radius:5px;font-size:12px;cursor:pointer;">{{ trans('labels.install') ?? 'Install' }}</a>
+                        <a class="btn mobile-install-btn" id="mobile-install-app"
+                            style="background:#15AC82;color:#fff;padding:5px 10px;border-radius:5px;font-size:12px;cursor:pointer;">{{ trans('labels.install') ?? 'Install' }}</a>
                         <a class="close-btn" id="close-btn" style="cursor:pointer;">
                             <span class="material-symbols-outlined" style="font-size:16px;color:#dc3545;">close</span>
                         </a>
@@ -1817,7 +1911,7 @@
                         console.log("Service worker has been registered for scope: " + reg.scope);
                     });
                 }
-                
+
                 let deferredPrompt;
                 const isIosDevice = () => {
                     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -1833,22 +1927,25 @@
                     e.preventDefault();
                     deferredPrompt = e;
                 });
-                
+
                 document.getElementById('mobile-install-app')?.addEventListener('click', async () => {
                     if (isIosDevice()) {
-                        alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                        alert(
+                            "لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
                         document.getElementById('pwa-container').style.display = 'none';
                         return;
                     }
                     if (deferredPrompt) {
                         deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
+                        const {
+                            outcome
+                        } = await deferredPrompt.userChoice;
                         if (outcome === 'accepted') {
                             deferredPrompt = null;
                         }
                     }
                 });
-                
+
                 document.getElementById('close-btn')?.addEventListener('click', () => {
                     document.getElementById('pwa-container').style.display = 'none';
                 });
@@ -1857,7 +1954,9 @@
     @endif
 
     <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/+963986129664" target="_blank" style="position:fixed;bottom:20px;right:20px;background:#25D366;color:white;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:1000;text-decoration:none;transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <a href="https://wa.me/+963986129664" target="_blank"
+        style="position:fixed;bottom:20px;right:20px;background:#25D366;color:white;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:1000;text-decoration:none;transition:transform 0.3s ease;"
+        onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
         <i class="fab fa-whatsapp" style="font-size:30px;"></i>
     </a>
 </body>

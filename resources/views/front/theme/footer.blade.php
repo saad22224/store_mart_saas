@@ -1,471 +1,658 @@
 @if (helper::appdata(@$storeinfo->id)->template == 16)
-<style>
-    .t16-footer-features {
-        background:#fff;
-        border-top:1px solid rgba(0,0,0,.05);
-        padding:18px 0;
-    }
-    .t16-footer-feature-grid {
-        display:grid;
-        grid-template-columns:repeat(4,minmax(0,1fr));
-        gap:12px;
-    }
-    .t16-footer-feature {
-        display:flex;
-        align-items:center;
-        gap:12px;
-        background:#fcf9f8;
-        border:1px solid rgba(157,67,0,.12);
-        border-radius:14px;
-        padding:14px;
-        min-width:0;
-    }
-    .t16-footer-feature-icon {
-        width:42px;
-        height:42px;
-        flex:0 0 42px;
-        border-radius:12px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        color:#fff;
-        background:linear-gradient(135deg, {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }}, color-mix(in srgb, {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }} 82%, #000));
-    }
-    .t16-footer-feature h6,
-    .t16-footer-feature p { overflow:hidden; text-overflow:ellipsis; }
-    .t16-footer {
-        --t16-footer-primary: {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }};
-        position:relative;
-        overflow:hidden;
-        background:
-            linear-gradient(135deg, color-mix(in srgb, var(--t16-footer-primary) 82%, #1f120a) 0%, #24150e 100%);
-        color:#fff;
-        padding:36px 0 28px;
-    }
-    .t16-footer-card {
-        height:100%;
-        background:rgba(255,255,255,.1);
-        border:1px solid rgba(255,255,255,.18);
-        border-radius:18px;
-        padding:20px;
-        box-shadow:0 18px 45px rgba(0,0,0,.12);
-        backdrop-filter:blur(12px);
-        min-width:0;
-    }
-    .t16-footer-title {
-        font-size:1rem;
-        font-weight:800;
-        margin-bottom:14px;
-        color:#fff;
-    }
-    .t16-footer-links,
-    .t16-footer-contact {
-        list-style:none;
-        margin:0;
-        padding:0;
-        display:grid;
-        gap:10px;
-    }
-    .t16-footer a,
-    .t16-footer span,
-    .t16-footer p {
-        color:rgba(255,255,255,.82);
-        overflow-wrap:anywhere;
-    }
-    .t16-footer a {
-        text-decoration:none;
-        transition:.2s ease;
-    }
-    .t16-footer a:hover { color:#fff; }
-    .t16-footer-contact li {
-        display:flex;
-        align-items:center;
-        gap:10px;
-        min-width:0;
-    }
-    .t16-footer-icon,
-    .t16-footer-social a {
-        width:36px;
-        height:36px;
-        flex:0 0 36px;
-        border-radius:12px;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        background:rgba(255,255,255,.14);
-        border:1px solid rgba(255,255,255,.22);
-        color:#fff;
-    }
-    .t16-footer-newsletter .input-group {
-        border-radius:14px;
-        overflow:hidden;
-        background:rgba(255,255,255,.12);
-        border:1px solid rgba(255,255,255,.2);
-    }
-    .t16-footer-newsletter .form-control {
-        border:0;
-        box-shadow:none;
-        background:transparent;
-        color:#fff !important;
-    }
-    .t16-footer-newsletter .form-control::placeholder {
-        color:rgba(255,255,255,.68);
-    }
-    .t16-footer-newsletter .btn-store {
-        background:#fff !important;
-        color:var(--t16-footer-primary) !important;
-        border:0 !important;
-        font-weight:800;
-    }
-    .t16-footer-social {
-        display:flex;
-        flex-wrap:wrap;
-        gap:8px;
-        margin-top:14px;
-    }
-    .copy-right-sec.t16-copy {
-        background:#160d09 !important;
-        border-top:1px solid rgba(255,255,255,.1) !important;
-    }
-    .copy-right-sec.t16-copy .color-changer,
-    .copy-right-sec.t16-copy .text-dark { color:#fff !important; }
-    @media(max-width:991px){
-        .t16-footer-feature-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-        .t16-footer { padding-bottom:95px; }
-        .t16-footer-card { padding:16px; border-radius:16px; }
-        .t16-footer .row { --bs-gutter-x:.75rem; --bs-gutter-y:.75rem; }
-        .copy-right-sec.t16-copy { padding-bottom:85px !important; }
-    }
-    @media(max-width:420px){
-        .t16-footer-feature { padding:12px; align-items:flex-start; }
-        .t16-footer-feature-icon { width:36px; height:36px; flex-basis:36px; }
-    }
-</style>
+    <style>
+        .t16-footer-features {
+            background: #fff;
+            border-top: 1px solid rgba(0, 0, 0, .05);
+            padding: 18px 0;
+        }
 
-<section class="t16-footer-features">
-    <div class="container">
-        <div class="t16-footer-feature-grid">
-            @foreach (helper::footer_features(@$storeinfo->id) as $feature)
-                <div class="t16-footer-feature">
-                    <div class="t16-footer-feature-icon">{!! $feature->icon !!}</div>
-                    <div class="min-w-0">
-                        <h6 class="fw-700 color-changer m-0">{{ $feature->title }}</h6>
-                        <p class="fs-7 text-muted fw-normal line-2 mb-0">{{ $feature->description }}</p>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-@elseif (helper::appdata(@$storeinfo->id)->template == 17)
-    <!-- No features section for template 17 -->
-@else
-<section class="product-service mb-5 mb-lg-0">
-    <div class="py-4 bg-light bg-changer">
+        .t16-footer-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .t16-footer-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fcf9f8;
+            border: 1px solid rgba(157, 67, 0, .12);
+            border-radius: 14px;
+            padding: 14px;
+            min-width: 0;
+        }
+
+        .t16-footer-feature-icon {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: linear-gradient(135deg, {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }}, color-mix(in srgb, {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }} 82%, #000));
+        }
+
+        .t16-footer-feature h6,
+        .t16-footer-feature p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .t16-footer {
+            --t16-footer-primary: {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }};
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, color-mix(in srgb, var(--t16-footer-primary) 82%, #1f120a) 0%, #24150e 100%);
+            color: #fff;
+            padding: 36px 0 28px;
+        }
+
+        .t16-footer-card {
+            height: 100%;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, .12);
+            backdrop-filter: blur(12px);
+            min-width: 0;
+        }
+
+        .t16-footer-title {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+            color: #fff;
+        }
+
+        .t16-footer-links,
+        .t16-footer-contact {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .t16-footer a,
+        .t16-footer span,
+        .t16-footer p {
+            color: rgba(255, 255, 255, .82);
+            overflow-wrap: anywhere;
+        }
+
+        .t16-footer a {
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .t16-footer a:hover {
+            color: #fff;
+        }
+
+        .t16-footer-contact li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .t16-footer-icon,
+        .t16-footer-social a {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 36px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22);
+            color: #fff;
+        }
+
+        .t16-footer-newsletter .input-group {
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .2);
+        }
+
+        .t16-footer-newsletter .form-control {
+            border: 0;
+            box-shadow: none;
+            background: transparent;
+            color: #fff !important;
+        }
+
+        .t16-footer-newsletter .form-control::placeholder {
+            color: rgba(255, 255, 255, .68);
+        }
+
+        .t16-footer-newsletter .btn-store {
+            background: #fff !important;
+            color: var(--t16-footer-primary) !important;
+            border: 0 !important;
+            font-weight: 800;
+        }
+
+        .t16-footer-social {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .copy-right-sec.t16-copy {
+            background: #160d09 !important;
+            border-top: 1px solid rgba(255, 255, 255, .1) !important;
+        }
+
+        .copy-right-sec.t16-copy .color-changer,
+        .copy-right-sec.t16-copy .text-dark {
+            color: #fff !important;
+        }
+
+        @media(max-width:991px) {
+            .t16-footer-feature-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .t16-footer {
+                padding-bottom: 95px;
+            }
+
+            .t16-footer-card {
+                padding: 16px;
+                border-radius: 16px;
+            }
+
+            .t16-footer .row {
+                --bs-gutter-x: .75rem;
+                --bs-gutter-y: .75rem;
+            }
+
+            .copy-right-sec.t16-copy {
+                padding-bottom: 85px !important;
+            }
+        }
+
+        @media(max-width:420px) {
+            .t16-footer-feature {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            .t16-footer-feature-icon {
+                width: 36px;
+                height: 36px;
+                flex-basis: 36px;
+            }
+        }
+    </style>
+
+    <section class="t16-footer-features">
         <div class="container">
-            <div class="d-lg-block d-none">
-                <div class="row align-items-center justify-content-center">
-                    @foreach (helper::footer_features(@$storeinfo->id) as $feature)
-                        <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex p-3 justify-content-center">
-                            <div class="fs-4 free-icon icon-color">
-                                {!! $feature->icon !!}
-                            </div>
-                            <div class="free-content px-3 col-10">
-                                <h6 class="fw-500 color-changer m-0">{{ $feature->title }}</h6>
-                                <p class="fs-7 text-muted fw-normal line-2">{{ $feature->description }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <div class="footer-fiechar-slider owl-carousel owl-theme d-lg-none">
+            <div class="t16-footer-feature-grid">
                 @foreach (helper::footer_features(@$storeinfo->id) as $feature)
-                    <div class="item">
-                        <div class="col d-flex p-3 justify-content-center">
-                            <div class="fs-4 free-icon icon-color">
-                                {!! $feature->icon !!}
-                            </div>
-                            <div class="free-content px-3 col-10">
-                                <h6 class="fw-500 color-changer m-0">{{ $feature->title }}</h6>
-                                <p class="fs-7 text-muted fw-normal line-2">{{ $feature->description }}</p>
-                            </div>
+                    <div class="t16-footer-feature">
+                        <div class="t16-footer-feature-icon">{!! $feature->icon !!}</div>
+                        <div class="min-w-0">
+                            <h6 class="fw-700 color-changer m-0">{{ $feature->title }}</h6>
+                            <p class="fs-7 text-muted fw-normal line-2 mb-0">{{ $feature->description }}</p>
                         </div>
                     </div>
                 @endforeach
             </div>
         </div>
-    </div>
-</section>
+    </section>
+@elseif (helper::appdata(@$storeinfo->id)->template == 17)
+    <!-- No features section for template 17 -->
+@else
+    <section class="product-service mb-5 mb-lg-0">
+        <div class="py-4 bg-light bg-changer">
+            <div class="container">
+                <div class="d-lg-block d-none">
+                    <div class="row align-items-center justify-content-center">
+                        @foreach (helper::footer_features(@$storeinfo->id) as $feature)
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex p-3 justify-content-center">
+                                <div class="fs-4 free-icon icon-color">
+                                    {!! $feature->icon !!}
+                                </div>
+                                <div class="free-content px-3 col-10">
+                                    <h6 class="fw-500 color-changer m-0">{{ $feature->title }}</h6>
+                                    <p class="fs-7 text-muted fw-normal line-2">{{ $feature->description }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="footer-fiechar-slider owl-carousel owl-theme d-lg-none">
+                    @foreach (helper::footer_features(@$storeinfo->id) as $feature)
+                        <div class="item">
+                            <div class="col d-flex p-3 justify-content-center">
+                                <div class="fs-4 free-icon icon-color">
+                                    {!! $feature->icon !!}
+                                </div>
+                                <div class="free-content px-3 col-10">
+                                    <h6 class="fw-500 color-changer m-0">{{ $feature->title }}</h6>
+                                    <p class="fs-7 text-muted fw-normal line-2">{{ $feature->description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
 @endif
 
 <!-- footer -->
 @if (helper::appdata(@$storeinfo->id)->template == 16)
-@php
-    $store = App\Models\User::where('id' , $storeinfo->id)->first();
-    $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
-    $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
-    $city = \App\Models\City::find(@$storeinfo->city_id);
-    $country = \App\Models\Country::find(@$storeinfo->country_id);
-    $location = [];
-    if($city) $location[] = $city->city;
-    if($country) $location[] = $country->name;
-    $location_text = implode(', ', $location);
-@endphp
-<footer class="t16-footer">
-    <div class="container">
-        <div class="row g-3">
-            <div class="col-lg-4 col-6">
-                <div class="t16-footer-card">
-                    <h5 class="t16-footer-title">{{ trans('labels.pages') == 'labels.pages' ? 'Pages' : trans('labels.pages') }}</h5>
-                    <ul class="t16-footer-links">
-                        <li><a href="{{ URL::to($storeinfo->slug . '/contact') }}">{{ trans('labels.contact_us') }}</a></li>
-                        <li><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}">{{ trans('labels.privacy_policy') }}</a></li>
-                        <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}">{{ trans('labels.refund_policy') }} - {{ trans('labels.terms_condition') }}</a></li>
-                        <li><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}">{{ trans('labels.about_us') }}</a></li>
-                    </ul>
+    @php
+        $store = App\Models\User::where('id', $storeinfo->id)->first();
+        $storeEmail =
+            helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
+        $storePhone =
+            helper::appdata(@$storeinfo->id)->contact != '-'
+                ? helper::appdata(@$storeinfo->id)->contact
+                : $store->mobile;
+        $city = \App\Models\City::find(@$storeinfo->city_id);
+        $country = \App\Models\Country::find(@$storeinfo->country_id);
+        $location = [];
+        if ($city) {
+            $location[] = $city->city;
+        }
+        if ($country) {
+            $location[] = $country->name;
+        }
+        $location_text = implode(', ', $location);
+    @endphp
+    <footer class="t16-footer">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-lg-4 col-6">
+                    <div class="t16-footer-card">
+                        <h5 class="t16-footer-title">
+                            {{ trans('labels.pages') == 'labels.pages' ? 'Pages' : trans('labels.pages') }}</h5>
+                        <ul class="t16-footer-links">
+                            <li><a
+                                    href="{{ URL::to($storeinfo->slug . '/contact') }}">{{ trans('labels.contact_us') }}</a>
+                            </li>
+                            <li><a
+                                    href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}">{{ trans('labels.privacy_policy') }}</a>
+                            </li>
+                            <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}">{{ trans('labels.refund_policy') }}
+                                    - {{ trans('labels.terms_condition') }}</a></li>
+                            <li><a
+                                    href="{{ URL::to($storeinfo->slug . '/aboutus') }}">{{ trans('labels.about_us') }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-6">
+                    <div class="t16-footer-card">
+                        <h5 class="t16-footer-title">
+                            {{ trans('labels.contact_info') == 'labels.contact_info' ? (app()->getLocale() == 'ar' ? 'معلومات الاتصال' : 'Contact info') : trans('labels.contact_info') }}
+                        </h5>
+                        <ul class="t16-footer-contact">
+                            <li><span class="t16-footer-icon"><i class="fa-regular fa-envelope"></i></span><a
+                                    href="mailto:{{ $storeEmail }}" dir="ltr">{{ $storeEmail }}</a></li>
+                            <li><span class="t16-footer-icon"><i class="fa-solid fa-phone"></i></span><a
+                                    href="tel:{{ $storePhone }}" dir="ltr">{{ $storePhone }}</a></li>
+                            <li><span class="t16-footer-icon"><i class="fa-solid fa-location-dot"></i></span>
+                                @if (!empty($location_text))
+                                    <span>{{ $location_text }}</span>
+                                @else
+                                    <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}"
+                                        target="_blank">{{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}</a>
+                                @endif
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-12">
+                    <div class="t16-footer-card">
+                        <h5 class="t16-footer-title">
+                            {{ trans('labels.newslatter') == 'labels.newslatter' ? 'Newsletter' : trans('labels.newslatter') }}
+                        </h5>
+                        <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post"
+                            class="t16-footer-newsletter">
+                            @csrf
+                            <div class="input-group">
+                                <input type="email" class="form-control footer-input" name="subscribe_email"
+                                    placeholder="{{ trans('labels.email') }}" required>
+                                <button type="submit"
+                                    class="btn btn-store px-3">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'Subscribe' : trans('labels.subscribe') }}</button>
+                            </div>
+                        </form>
+                        @if (helper::getsociallinks($storeinfo->id)->count() > 0)
+                            <div class="t16-footer-social">
+                                @foreach (helper::getsociallinks($storeinfo->id) as $links)
+                                    <a href="{{ $links->link }}" target="_blank"
+                                        aria-label="social-link">{!! $links->icon !!}</a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-6">
-                <div class="t16-footer-card">
-                    <h5 class="t16-footer-title">{{ trans('labels.contact_info') == 'labels.contact_info' ? (app()->getLocale() == 'ar' ? 'معلومات الاتصال' : 'Contact info') : trans('labels.contact_info') }}</h5>
-                    <ul class="t16-footer-contact">
-                        <li><span class="t16-footer-icon"><i class="fa-regular fa-envelope"></i></span><a href="mailto:{{ $storeEmail }}" dir="ltr">{{ $storeEmail }}</a></li>
-                        <li><span class="t16-footer-icon"><i class="fa-solid fa-phone"></i></span><a href="tel:{{ $storePhone }}" dir="ltr">{{ $storePhone }}</a></li>
-                        <li><span class="t16-footer-icon"><i class="fa-solid fa-location-dot"></i></span>
-                            @if(!empty($location_text))
-                                <span>{{ $location_text }}</span>
-                            @else
-                                <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}" target="_blank">{{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}</a>
-                            @endif
+        </div>
+    </footer>
+@elseif (helper::appdata(@$storeinfo->id)->template == 17)
+    @include('front.template-17.layout.footer')
+@else
+    <footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
+        <div class="container">
+            <style>
+                :root {
+                    --t7-footer-accent: {{ helper::appdata($storeinfo->id)->primary_color ?? '#8e24aa' }};
+                }
+
+                .footer-sec2 {
+                    background: linear-gradient(145deg, color-mix(in srgb, var(--t7-footer-accent) 92%, #000 8%), var(--t7-footer-accent)) !important;
+                    border-top: 0 !important;
+                }
+
+                .footer-sec2 .color-changer,
+                .footer-sec2 .text-dark {
+                    color: #fff !important;
+                }
+
+                .footer-input::placeholder {
+                    color: inherit !important;
+                    opacity: 0.6;
+                }
+
+                .hover-opacity-100:hover {
+                    opacity: 1 !important;
+                }
+
+                .t7-footer-title {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    margin-bottom: 1.1rem;
+                }
+
+                .t7-footer-menu {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    display: grid;
+                    gap: .65rem;
+                }
+
+                .t7-footer-menu a {
+                    text-decoration: none;
+                    font-weight: 600;
+                    opacity: .82;
+                    transition: .2s ease;
+                }
+
+                .t7-footer-menu a:hover {
+                    opacity: 1;
+                    transform: translateX(-2px);
+                }
+
+                .t7-footer-contact {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    display: grid;
+                    gap: .8rem;
+                }
+
+                .t7-footer-contact li {
+                    display: flex;
+                    align-items: center;
+                    gap: .7rem;
+                }
+
+                .t7-footer-icon {
+                    width: 34px;
+                    height: 34px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.18);
+                    border: 1px solid rgba(255, 255, 255, 0.25);
+                }
+
+                .t7-footer-newsletter .input-group {
+                    max-width: 320px;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    border: 1px solid rgba(255, 255, 255, .35);
+                    background: rgba(255, 255, 255, .08);
+                }
+
+                .t7-footer-newsletter .form-control {
+                    box-shadow: none;
+                    border: 0;
+                    background: transparent;
+                }
+
+                .t7-footer-newsletter .btn-store {
+                    background: #fff !important;
+                    color: var(--t7-footer-accent) !important;
+                    border: 0 !important;
+                }
+
+                .t7-footer-newsletter .btn-store:hover {
+                    opacity: .92;
+                }
+
+                .t7-footer-note {
+                    margin-top: .9rem;
+                    font-size: .95rem;
+                    opacity: .85;
+                    font-weight: 600;
+                }
+
+                .t7-footer-social {
+                    display: flex;
+                    gap: .55rem;
+                    justify-content: center;
+                    margin-top: 1rem;
+                }
+
+                .t7-footer-social a {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 50%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid rgba(255, 255, 255, .35);
+                    text-decoration: none;
+                    opacity: .9;
+                }
+
+                .t7-footer-social a:hover {
+                    opacity: 1;
+                }
+
+                .copy-right-sec {
+                    background: color-mix(in srgb, var(--t7-footer-accent) 88%, #000 12%) !important;
+                    border-top: 1px solid rgba(255, 255, 255, .16) !important;
+                }
+
+                .copy-right-sec .color-changer,
+                .copy-right-sec .text-dark {
+                    color: #fff !important;
+                }
+
+                @media (min-width: 992px) {
+                    .t7-footer-col-right {
+                        padding-inline-end: 2rem;
+                    }
+
+                    .t7-footer-col-center {
+                        padding-inline: 1rem;
+                    }
+
+                    .t7-footer-col-left {
+                        padding-inline-start: 2rem;
+                    }
+                }
+
+                @media (max-width: 991px) {
+                    .copy-right-sec {
+                        padding-bottom: 85px !important;
+                    }
+                }
+            </style>
+            <div class="row g-4 align-items-start justify-content-between">
+
+                <div
+                    class="col-lg-4 col-md-12 t7-footer-col-right text-center {{ session()->get('direction') == 2 ? 'text-lg-end' : 'text-lg-start' }}">
+                    <h5 class="text-dark color-changer t7-footer-title">
+                        {{ trans('labels.pages') == 'labels.pages' ? 'الصفحات' : trans('labels.pages') }}</h5>
+                    <ul class="t7-footer-menu footer-menu">
+                        <li><a href="{{ URL::to($storeinfo->slug . '/contact') }}"
+                                class="text-dark color-changer hover-opacity-100">{{ trans('labels.contact_us') }}</a>
+                        </li>
+                        <li><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
+                                class="text-dark color-changer hover-opacity-100">{{ trans('labels.privacy_policy') }}</a>
+                        </li>
+                        <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
+                                class="text-dark color-changer hover-opacity-100">{{ trans('labels.refund_policy') }} -
+                                {{ trans('labels.terms_condition') }}</a>
+                        </li>
+                        <li><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
+                                class="text-dark color-changer hover-opacity-100">{{ trans('labels.about_us') }}</a>
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div class="col-lg-4 col-12">
-                <div class="t16-footer-card">
-                    <h5 class="t16-footer-title">{{ trans('labels.newslatter') == 'labels.newslatter' ? 'Newsletter' : trans('labels.newslatter') }}</h5>
-                    <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post" class="t16-footer-newsletter">
+
+                <div class="col-lg-4 col-md-12 t7-footer-col-center text-center">
+                    <h5 class="text-dark color-changer t7-footer-title">
+                        {{ trans('labels.contact_info') == 'labels.contact_info' ? 'معلومات الاتصال' : trans('labels.contact_info') }}
+                    </h5>
+                    <ul class="t7-footer-contact d-inline-grid text-start">
+                        <li>
+                            <div class="t7-footer-icon">
+                                <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
+                            </div>
+                            @php
+                                $store = App\Models\User::where('id', $storeinfo->id)->first();
+                                // dd($store);
+                                $storeEmail =
+                                    helper::appdata(@$storeinfo->id)->email != '-'
+                                        ? helper::appdata(@$storeinfo->id)->email
+                                        : $store->email;
+                                $storePhone =
+                                    helper::appdata(@$storeinfo->id)->contact != '-'
+                                        ? helper::appdata(@$storeinfo->id)->contact
+                                        : $store->mobile;
+                            @endphp
+                            <a href="mailto:{{ $storeEmail }}"
+                                class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100"
+                                dir="ltr">
+                                {{ $storeEmail }}
+                            </a>
+                        </li>
+                        <li>
+                            <div class="t7-footer-icon">
+                                <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
+                            </div>
+                            <a href="tel:{{ $storePhone }}"
+                                class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100"
+                                dir="ltr">
+                                {{ $storePhone }}
+                            </a>
+                        </li>
+                        @php
+                            $city = \App\Models\City::find(@$storeinfo->city_id);
+                            $country = \App\Models\Country::find(@$storeinfo->country_id);
+                            $location = [];
+                            if ($city) {
+                                $location[] = $city->city;
+                            }
+                            if ($country) {
+                                $location[] = $country->name;
+                            }
+                            $location_text = implode(', ', $location);
+                            //    dd( $city->city . " " . $country->name)
+                        @endphp
+                        @if (!empty($location_text))
+                            <li>
+                                <div class="t7-footer-icon">
+                                    <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
+                                </div>
+                                <span class="text-dark color-changer opacity-75 text-nowrap">
+                                    {{ $location_text }}
+                                </span>
+                            </li>
+                        @else
+                            <li>
+                                <div class="t7-footer-icon">
+                                    <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
+                                </div>
+                                <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}"
+                                    target="_blank"
+                                    class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 text-nowrap">
+                                    {{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+
+                <div
+                    class="col-lg-4 col-md-12 t7-footer-col-left text-center {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }} mt-2 mt-lg-0">
+                    <h5 class="text-dark color-changer t7-footer-title">
+                        {{ trans('labels.newslatter') == 'labels.newslatter' ? 'ليصلك جديدنا' : trans('labels.newslatter') }}
+                    </h5>
+                    <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post"
+                        class="t7-footer-newsletter d-flex justify-content-center {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
                         @csrf
                         <div class="input-group">
-                            <input type="email" class="form-control footer-input" name="subscribe_email" placeholder="{{ trans('labels.email') }}" required>
-                            <button type="submit" class="btn btn-store px-3">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'Subscribe' : trans('labels.subscribe') }}</button>
+                            <input type="email" class="form-control text-dark color-changer footer-input"
+                                name="subscribe_email" placeholder="{{ trans('labels.email') }}" required>
+                            <button type="submit" class="btn btn-store fw-bold px-4"
+                                style="border-radius: 0;">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'اشترك' : trans('labels.subscribe') }}</button>
                         </div>
                     </form>
+                    <p
+                        class="t7-footer-note {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }}">
+                        لأن ذوقك يستحق الأفضل دائمًا ✨
+                    </p>
                     @if (helper::getsociallinks($storeinfo->id)->count() > 0)
-                        <div class="t16-footer-social">
+                        <div
+                            class="t7-footer-social {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
                             @foreach (helper::getsociallinks($storeinfo->id) as $links)
-                                <a href="{{ $links->link }}" target="_blank" aria-label="social-link">{!! $links->icon !!}</a>
+                                <a href="{{ $links->link }}" target="_blank" class="text-dark color-changer"
+                                    aria-label="social-link">
+                                    {!! $links->icon !!}
+                                </a>
                             @endforeach
                         </div>
                     @endif
                 </div>
+
             </div>
         </div>
-    </div>
-</footer>
-@elseif (helper::appdata(@$storeinfo->id)->template == 17)
-    @include('front.template-17.layout.footer')
-@else
-<footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
-    <div class="container">
-        <style>
-            :root { --t7-footer-accent: {{ helper::appdata($storeinfo->id)->primary_color ?? '#8e24aa' }}; }
-            .footer-sec2 {
-                background: linear-gradient(145deg, color-mix(in srgb, var(--t7-footer-accent) 92%, #000 8%), var(--t7-footer-accent)) !important;
-                border-top: 0 !important;
-            }
-            .footer-sec2 .color-changer,
-            .footer-sec2 .text-dark { color: #fff !important; }
-            .footer-input::placeholder { color: inherit !important; opacity: 0.6; }
-            .hover-opacity-100:hover { opacity: 1 !important; }
-            .t7-footer-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.1rem; }
-            .t7-footer-menu { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; }
-            .t7-footer-menu a { text-decoration: none; font-weight: 600; opacity: .82; transition: .2s ease; }
-            .t7-footer-menu a:hover { opacity: 1; transform: translateX(-2px); }
-            .t7-footer-contact { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
-            .t7-footer-contact li { display: flex; align-items: center; gap: .7rem; }
-            .t7-footer-icon {
-                width: 34px;
-                height: 34px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.18);
-                border: 1px solid rgba(255, 255, 255, 0.25);
-            }
-            .t7-footer-newsletter .input-group {
-                max-width: 320px;
-                border-radius: 10px;
-                overflow: hidden;
-                border: 1px solid rgba(255, 255, 255, .35);
-                background: rgba(255, 255, 255, .08);
-            }
-            .t7-footer-newsletter .form-control {
-                box-shadow: none;
-                border: 0;
-                background: transparent;
-            }
-            .t7-footer-newsletter .btn-store {
-                background: #fff !important;
-                color: var(--t7-footer-accent) !important;
-                border: 0 !important;
-            }
-            .t7-footer-newsletter .btn-store:hover {
-                opacity: .92;
-            }
-            .t7-footer-note {
-                margin-top: .9rem;
-                font-size: .95rem;
-                opacity: .85;
-                font-weight: 600;
-            }
-            .t7-footer-social {
-                display: flex;
-                gap: .55rem;
-                justify-content: center;
-                margin-top: 1rem;
-            }
-            .t7-footer-social a {
-                width: 34px;
-                height: 34px;
-                border-radius: 50%;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border: 1px solid rgba(255, 255, 255, .35);
-                text-decoration: none;
-                opacity: .9;
-            }
-            .t7-footer-social a:hover { opacity: 1; }
-            .copy-right-sec {
-                background: color-mix(in srgb, var(--t7-footer-accent) 88%, #000 12%) !important;
-                border-top: 1px solid rgba(255, 255, 255, .16) !important;
-            }
-            .copy-right-sec .color-changer,
-            .copy-right-sec .text-dark { color: #fff !important; }
-            @media (min-width: 992px) {
-                .t7-footer-col-right { padding-inline-end: 2rem; }
-                .t7-footer-col-center { padding-inline: 1rem; }
-                .t7-footer-col-left { padding-inline-start: 2rem; }
-            }
-            @media (max-width: 991px) {
-                .copy-right-sec { padding-bottom: 85px !important; }
-            }
-        </style>
-        <div class="row g-4 align-items-start justify-content-between">
-            
-            <div class="col-lg-4 col-md-12 t7-footer-col-right text-center {{ session()->get('direction') == 2 ? 'text-lg-end' : 'text-lg-start' }}">
-                <h5 class="text-dark color-changer t7-footer-title">{{ trans('labels.pages') == 'labels.pages' ? 'الصفحات' : trans('labels.pages') }}</h5>
-                <ul class="t7-footer-menu footer-menu">
-                    <li><a href="{{ URL::to($storeinfo->slug . '/contact') }}"
-                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.contact_us') }}</a>
-                    </li>
-                    <li><a href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}"
-                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.privacy_policy') }}</a>
-                    </li>
-                    <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}"
-                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.refund_policy') }} - {{ trans('labels.terms_condition') }}</a>
-                    </li>
-                    <li><a href="{{ URL::to($storeinfo->slug . '/aboutus') }}"
-                            class="text-dark color-changer hover-opacity-100">{{ trans('labels.about_us') }}</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-4 col-md-12 t7-footer-col-center text-center">
-                <h5 class="text-dark color-changer t7-footer-title">{{ trans('labels.contact_info') == 'labels.contact_info' ? 'معلومات الاتصال' : trans('labels.contact_info') }}</h5>
-                <ul class="t7-footer-contact d-inline-grid text-start">
-                    <li>
-                        <div class="t7-footer-icon">
-                            <i class="fa-regular fa-envelope text-dark color-changer fs-5"></i>
-                        </div>
-                        @php
-                            $store = App\Models\User::where('id' , $storeinfo->id)->first();
-                            // dd($store);
-                            $storeEmail = helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
-                            $storePhone = helper::appdata(@$storeinfo->id)->contact != '-' ? helper::appdata(@$storeinfo->id)->contact : $store->mobile;
-                        @endphp
-                        <a href="mailto:{{ $storeEmail}}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            {{  $storeEmail }}
-                        </a>
-                    </li>
-                    <li>
-                        <div class="t7-footer-icon">
-                            <i class="fa-solid fa-phone text-dark color-changer fs-5"></i>
-                        </div>
-                        <a href="tel:{{ $storePhone }}" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100" dir="ltr">
-                            {{ $storePhone }}
-                        </a>
-                    </li>
-                    @php
-                        $city = \App\Models\City::find(@$storeinfo->city_id);
-                        $country = \App\Models\Country::find(@$storeinfo->country_id);
-                        $location = [];
-                        if($city) $location[] = $city->city;
-                        if($country) $location[] = $country->name;
-                        $location_text = implode(', ', $location);
-                    //    dd( $city->city . " " . $country->name) 
-                    @endphp
-                    @if(!empty($location_text))
-                    <li>
-                        <div class="t7-footer-icon">
-                            <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
-                        </div>
-                        <span class="text-dark color-changer opacity-75 text-nowrap">
-                            {{ $location_text }}
-                        </span>
-                    </li>
-                    @else
-                    <li>
-                        <div class="t7-footer-icon">
-                            <i class="fa-solid fa-location-dot text-dark color-changer fs-5"></i>
-                        </div>
-                        <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}" target="_blank" class="text-dark color-changer text-decoration-none opacity-75 hover-opacity-100 text-nowrap">
-                            {{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}
-                        </a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-
-            <div class="col-lg-4 col-md-12 t7-footer-col-left text-center {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }} mt-2 mt-lg-0">
-                <h5 class="text-dark color-changer t7-footer-title">{{ trans('labels.newslatter') == 'labels.newslatter' ? 'ليصلك جديدنا' : trans('labels.newslatter') }}</h5>
-                <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post" class="t7-footer-newsletter d-flex justify-content-center {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
-                    @csrf
-                    <div class="input-group">
-                        <input type="email" class="form-control text-dark color-changer footer-input" name="subscribe_email" placeholder="{{ trans('labels.email') }}" required>
-                        <button type="submit" class="btn btn-store fw-bold px-4" style="border-radius: 0;">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'اشترك' : trans('labels.subscribe') }}</button>
-                    </div>
-                </form>
-                <p class="t7-footer-note {{ session()->get('direction') == 2 ? 'text-lg-start' : 'text-lg-end' }}">
-                    لأن ذوقك يستحق الأفضل دائمًا ✨
-                </p>
-                @if (helper::getsociallinks($storeinfo->id)->count() > 0)
-                    <div class="t7-footer-social {{ session()->get('direction') == 2 ? 'justify-content-lg-start' : 'justify-content-lg-end' }}">
-                        @foreach (helper::getsociallinks($storeinfo->id) as $links)
-                            <a href="{{ $links->link }}" target="_blank" class="text-dark color-changer" aria-label="social-link">
-                                {!! $links->icon !!}
-                            </a>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-            
-        </div>
-    </div>
-</footer>
+    </footer>
 @endif
 
 <!-- copy-right-sec -->
-<div class="copy-right-sec bg-light bg-changer py-3 border-top {{ helper::appdata(@$storeinfo->id)->template == 16 ? 't16-copy' : '' }}">
+<div
+    class="copy-right-sec bg-light bg-changer py-3 border-top {{ helper::appdata(@$storeinfo->id)->template == 16 ? 't16-copy' : '' }}">
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-            <p class="mb-0 text-dark color-changer opacity-75 text-center text-md-start">Copyright &copy; MatjarHub. All Rights Reserved</p>
+            <p class="mb-0 text-dark color-changer opacity-75 text-center text-md-start">Copyright &copy; MatjarHub.
+                All Rights Reserved</p>
             <div class="d-flex align-items-center gap-2">
                 <span class="text-dark color-changer opacity-75 fs-7">Powered by</span>
                 <a href="{{ url('/') }}" target="_blank" class="d-flex align-items-center">
-                    <img src="{{ asset('public/images/matjarhub.png') }}" alt="matjarhub" style="height: 75px; object-fit: contain;">
+                    <img src="{{ asset('public/images/matjarhub.png') }}" alt="matjarhub"
+                        style="height: 75px; object-fit: contain;">
                 </a>
             </div>
         </div>
@@ -491,7 +678,8 @@
                 <h5 class="modal-title color-changer" id="exampleModalLabel">
                     {{ trans('labels.working_hours') }}
                 </h5>
-                <button type="button" class="bg-transparent border-0 m-0" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="bg-transparent border-0 m-0" data-bs-dismiss="modal"
+                    aria-label="Close">
                     <i class="fa-regular fa-xmark fs-4 color-changer"></i>
                 </button>
             </div>
@@ -504,7 +692,8 @@
                                     <li class="list-group-item bg-transparent d-flex border-0 default-color">
                                         <p class="fw-semibold col-6 color-changer">
                                             <i class="fa-solid fa-calendar-days"></i>
-                                            <span class="px-2">{{ trans('labels.' . strtolower($time->day)) }}</span>
+                                            <span
+                                                class="px-2">{{ trans('labels.' . strtolower($time->day)) }}</span>
                                         </p>
                                         <div class="col-6 d-flex justify-content-center">
                                             <p class="text-center color-changer">
@@ -852,7 +1041,8 @@
 @if (@helper::checkaddons('customer_login'))
     <input type="hidden" name="login_required" id="login_required"
         value="{{ @helper::appdata($storeinfo->id)->checkout_login_required }}">
-    <input type="hidden" name="checklogin" id="checklogin" value="{{ @Auth::user() && Auth::user()->type == 3 }}">
+    <input type="hidden" name="checklogin" id="checklogin"
+        value="{{ @Auth::user() && Auth::user()->type == 3 }}">
     <input type="hidden" name="customer_login" id="customer_login"
         value="{{ @helper::checkaddons('customer_login') }}">
 @endif
@@ -1446,12 +1636,12 @@
             if ($('#viewproduct-over').is(':visible')) {
                 var variants_name = $('#modal_variants_name').val();
                 var stock_management = $('#modal_stock_management').val();
-            var color_choice = $('input[name="color_choice"]:checked').val() || null;
+                var color_choice = $('input[name="color_choice"]:checked').val() || null;
                 $('.change-qty-2').prop('disabled', true);
             } else {
                 var variants_name = $('#variants_name').val();
                 var stock_management = $('#stock_management').val();
-            var color_choice = $('input[name="color_choice"]:checked').val() || null;
+                var color_choice = $('input[name="color_choice"]:checked').val() || null;
                 $('.change-qty-1').prop('disabled', true);
             }
             $.ajax({
@@ -1466,7 +1656,7 @@
                     vendor_id: "{{ $storeinfo->id }}",
                     variants_name: variants_name,
                     stock_management: stock_management,
-                color_choice: color_choice,
+                    color_choice: color_choice,
                 },
                 method: 'POST',
                 success: function(response) {
@@ -1603,7 +1793,7 @@
             $('.mobile_drop_down').show();
             deferredPrompt = e;
         });
-        
+
         if (isIos()) {
             $('.mobile_drop_down').show();
             $('.pwa').removeClass('d-none');
@@ -1613,7 +1803,8 @@
         if (mobile_install_app != null) {
             mobile_install_app.addEventListener('click', async () => {
                 if (isIos()) {
-                    alert("لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                    alert(
+                        "لتثبيت التطبيق على جهاز iOS، اضغط على زر المشاركة (Share) في المتصفح ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
                     $('.pwa').addClass('d-none');
                     $('.mobile_drop_down').hide();
                     return;

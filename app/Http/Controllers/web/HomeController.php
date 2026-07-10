@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Cart;
@@ -264,6 +265,24 @@ class HomeController extends Controller
         $topdeals = helper::top_deals($request->vendor_id);
         $quantity = @$variant->qty - (isset($cart[@$variant->id]['qty']) ? $cart[@$variant->id]['qty'] : 0);
 
+        // Guard: if no matching variant found, return item base price
+        if (!$variant) {
+            return response()->json([
+                'status'           => 1,
+                'price'            => @$item->price ?? 0,
+                'original_price'   => @$item->price ?? 0,
+                'quantity'         => @$item->qty ?? 0,
+                'variant_id'       => 0,
+                'item_id'          => $request->item_id,
+                'min_order'        => @$item->min_order ?? 1,
+                'max_order'        => @$item->max_order ?? 0,
+                'stock_management' => @$item->stock_management ?? 0,
+                'variants_name'    => @$request->name,
+                'is_available'     => @$item->is_available ?? 1,
+                'currency'         => @$item->currency,
+            ], 200);
+        }
+
         if ($item->top_deals == 1 && $topdeals != null) {
             if (@$topdeals->offer_type == 1) {
                 if ($variant->price > @$topdeals->offer_amount) {
@@ -491,7 +510,8 @@ class HomeController extends Controller
             session()->put('vendor_id', $request->vendor_id);
             return response()->json(['status' => 1, 'message' => trans('messages.add_to_cart_msg'), 'cartcnt' => $count], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => 0, 'message' => $e], 400);
+            Log::error('addtocart error: ' . $e->getMessage() . ' at line ' . $e->getLine() . ' in ' . $e->getFile());
+            return response()->json(['status' => 0, 'message' => $e->getMessage() . ' (line: ' . $e->getLine() . ')'], 400);
         }
     }
     public function cart(Request $request)

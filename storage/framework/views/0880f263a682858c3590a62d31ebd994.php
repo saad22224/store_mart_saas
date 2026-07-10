@@ -1492,4 +1492,4 @@
 
 
 <?php echo $__env->make('front.theme.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/template-7/home.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-7/home.blade.php ENDPATH**/ ?>

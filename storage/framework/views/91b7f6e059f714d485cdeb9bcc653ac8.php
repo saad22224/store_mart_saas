@@ -37,4 +37,4 @@
         </div>
     </div>
 </div>
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/whatsapp_chat.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/whatsapp_chat.blade.php ENDPATH**/ ?>

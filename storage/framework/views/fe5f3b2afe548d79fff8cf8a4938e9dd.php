@@ -18,4 +18,4 @@
         </div>
     <?php endif; ?>
 <?php endif; ?>
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/landing/layout/recaptcha.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/landing/layout/recaptcha.blade.php ENDPATH**/ ?>

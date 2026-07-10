@@ -661,4 +661,4 @@
         $('#modal_detail_item_price').text(currency_formate(total, currency));
     }
 </script>
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/productdetail.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/productdetail.blade.php ENDPATH**/ ?>

@@ -1056,4 +1056,4 @@
         <?php echo $__env->make('cookie-consent::index', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         
     </main>
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/theme/header.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/theme/header.blade.php ENDPATH**/ ?>

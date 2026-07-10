@@ -61,4 +61,4 @@
 
 </html>
 
-<?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/errors/404.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/errors/404.blade.php ENDPATH**/ ?>

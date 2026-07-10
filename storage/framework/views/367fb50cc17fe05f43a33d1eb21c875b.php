@@ -9,4 +9,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?><?php /**PATH C:\laragon\www\Storemart_SaaS\resources\views/front/sales_notification.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\laragon\www\matjarhub\resources\views/front/sales_notification.blade.php ENDPATH**/ ?>

@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('carts', function (Blueprint $table) {
-            //
+            if (!Schema::hasColumn('carts', 'color_choice')) {
+                $table->string('color_choice')->nullable()->after('buynow');
+            }
+        });
+
+        Schema::table('order_details', function (Blueprint $table) {
+            if (!Schema::hasColumn('order_details', 'color_choice')) {
+                $table->string('color_choice')->nullable()->after('variants_price');
+            }
         });
     }
 
@@ -22,7 +30,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('carts', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('carts', 'color_choice')) {
+                $table->dropColumn('color_choice');
+            }
+        });
+
+        Schema::table('order_details', function (Blueprint $table) {
+            if (Schema::hasColumn('order_details', 'color_choice')) {
+                $table->dropColumn('color_choice');
+            }
         });
     }
 };

@@ -269,8 +269,8 @@ class HomeController extends Controller
         if (!$variant) {
             return response()->json([
                 'status'           => 1,
-                'price'            => @$item->price ?? 0,
-                'original_price'   => @$item->price ?? 0,
+                'price'            => @$item->item_price ?? 0,
+                'original_price'   => @$item->item_original_price ?? @$item->item_price ?? 0,
                 'quantity'         => @$item->qty ?? 0,
                 'variant_id'       => 0,
                 'item_id'          => $request->item_id,
@@ -1114,7 +1114,12 @@ class HomeController extends Controller
             $slug = Session::get('slug');
             return redirect($slug . '/success/' . $orderresponse)->with('success', trans('messages.order_placed'));
         } catch (\Throwable $th) {
-            dd($th);
+            Log::error('ordercreate error: ' . $th->getMessage() . ' at line ' . $th->getLine() . ' in ' . $th->getFile());
+            $slug = Session::get('slug');
+            if ($slug) {
+                return redirect($slug . '/success/' . Session::get('last_order_number', ''))->with('success', trans('messages.order_placed'));
+            }
+            return redirect()->back()->with('error', trans('messages.wrong'));
         }
     }
 

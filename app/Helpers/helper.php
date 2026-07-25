@@ -545,7 +545,7 @@ class helper
         try {
             date_default_timezone_set(helper::appdata($vendor)->timezone);
             $vendorinfo = User::where('id', $vendor)->first();
-            if ($user_id != "" || $user_id != null) {
+            if ($user_id != "" && $user_id != null) {
                 if ($buynow == 1) {
                     $data = Cart::where('user_id', $user_id)->where('vendor_id', $vendorinfo->id)->where('buynow', 1)->get();
                 } else {
@@ -652,6 +652,9 @@ class helper
                 $order->save();
                 $order_id = DB::getPdo()->lastInsertId();
 
+                // Save order_number to session in case an exception occurs after this point
+                session(['last_order_number' => $order_number]);
+
                 $orderCount = \App\Models\Order::where('vendor_id', $vendor)->count();
                 if ($orderCount == 1) {
                     $firstSaleAutomation = \App\Models\Automation::where('trigger_type', \App\Enums\AutomationTriggerType::FIRST_SALE->value)->where('is_active', true)->first();
@@ -725,7 +728,7 @@ class helper
 
                 OrderCreated::dispatch($order->fresh(['details', 'vendor']));
 
-                if ($user_id != "" || $user_id != null) {
+                if ($user_id != "" && $user_id != null) {
                     if ($buynow == 1) {
                         $data = Cart::where('user_id', $user_id)->where('buynow', 1)->delete();
                     } else {
@@ -740,7 +743,7 @@ class helper
                 }
 
                 session()->forget(['offer_amount', 'offer_code', 'offer_type']);
-                if ($user_id != "" || $user_id != null) {
+                if ($user_id != "" && $user_id != null) {
                     $count = Cart::where('user_id', $user_id)->where('buynow', 0)->count();
                 } else {
                     $count = Cart::where('session_id', $session_id)->where('buynow', 0)->count();
@@ -768,8 +771,12 @@ class helper
                 return $order_number = "";
             }
         } catch (\Throwable $th) {
-            dd($th);
-            return $th;
+            \Illuminate\Support\Facades\Log::error('createorder helper error: ' . $th->getMessage() . ' at line ' . $th->getLine() . ' in ' . $th->getFile());
+            // If order was already saved, return its number so the user gets success redirect
+            if (!empty($order_number)) {
+                return $order_number;
+            }
+            return "error";
         }
     }
 

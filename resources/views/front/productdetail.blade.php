@@ -81,8 +81,6 @@
                         }
                         $off = $original_price > 0 ? number_format(100 - ($price * 100) / $original_price, 1) : 0;
                     } else {
-                        $price = $getitem->item_price;
-                        $original_price = $getitem->original_price;
                         if ($getitem['variation']->count() > 0) {
                             $price = $getitem['variation'][0]->price;
                             $original_price = $getitem['variation'][0]->original_price;

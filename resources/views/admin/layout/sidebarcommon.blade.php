@@ -17,6 +17,18 @@
         </a>
     </li>
 
+    <!-- Themes (Item 3 in Sidebar) -->
+    <li class="nav-item mb-2 fs-7">
+        <a class="nav-link rounded d-flex align-items-center justify-content-between {{ request()->is('admin/vendor_themes*') ? 'active' : '' }}"
+            aria-current="page" href="{{ URL::to('admin/vendor_themes') }}">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-palette"></i>
+                <span class="nav-text fw-bold">الثيمات</span>
+            </div>
+            <span class="badge bg-success rounded-pill px-2 py-1 fs-8">جديد</span>
+        </a>
+    </li>
+
     @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
         <li
             class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_addons_manager') == 1 ? 'd-block' : 'd-none' }}">
@@ -753,14 +765,7 @@
                 <span>{{ trans('labels.how_it_works') }}</span>
             </a>
         </li>
-        <li
-            class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_theme_images') == 1 ? 'd-block' : 'd-none' }}">
-            <a class="nav-link d-flex rounded {{ request()->is('admin/themes*') ? 'active' : '' }}"
-                aria-current="page" href="{{ URL::to('/admin/themes') }}">
-                <i class="fa-solid fa-palette"></i>
-                <span>{{ trans('labels.theme_images') }}</span>
-            </a>
-        </li>
+
         <li
             class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_features') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link d-flex rounded {{ request()->is('admin/features*') ? 'active' : '' }}"
@@ -1229,6 +1234,7 @@
             </ul>
         </li>
     @endif
+
     <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_settings') == 1 ? 'd-block' : 'd-none' }}">
         <a class="nav-link rounded d-flex {{ request()->is('admin/settings') ? 'active' : '' }}" aria-current="page"
             href="{{ URL::to('admin/settings') }}">

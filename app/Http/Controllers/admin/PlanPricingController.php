@@ -321,6 +321,7 @@ class PlanPricingController extends Controller
             $pixel = "2";
         }
         $tax_report = $request->tax_report == "on" ? 1 : 2;
+        $reports = $request->reports == "on" ? 1 : 2;
         $global_addons = $request->global_addons == "on" ? 1 : 2;
         $product_qa = $request->product_qa == "on" ? 1 : 2;
         $bulk_import = $request->bulk_import == "on" ? 1 : 2;

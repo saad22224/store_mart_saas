@@ -343,8 +343,15 @@
             </div>
         </div>
     </footer>
-@elseif (helper::appdata(@$storeinfo->id)->template == 17)
-    @include('front.template-17.layout.footer')
+@elseif (in_array(helper::appdata(@$storeinfo->id)->template, [17, 18, 19, 20, 21]))
+    @php
+        $tpl_num = helper::appdata(@$storeinfo->id)->template;
+    @endphp
+    @if(view()->exists('front.template-'.$tpl_num.'.layout.footer'))
+        @include('front.template-'.$tpl_num.'.layout.footer')
+    @else
+        @include('front.template-17.layout.footer')
+    @endif
 @else
     <footer class="footer-sec2 bg-light bg-changer py-5 border-top shadow-sm">
         <div class="container">

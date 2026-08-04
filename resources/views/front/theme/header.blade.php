@@ -798,8 +798,15 @@
                     }
                 </style>
             @endif
-        @elseif (helper::appdata(@$storeinfo->id)->template == 17)
-            @include('front.template-17.layout.header')
+        @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [17, 18, 19, 20, 21]))
+            @php
+                $tpl_num = helper::appdata(@$storeinfo->id)->template;
+            @endphp
+            @if(view()->exists('front.template-'.$tpl_num.'.layout.header'))
+                @include('front.template-'.$tpl_num.'.layout.header')
+            @else
+                @include('front.template-17.layout.header')
+            @endif
         @else
             <!-- Existing Header Logic -->
             @if (helper::appdata(@$storeinfo->id)->template != 11)

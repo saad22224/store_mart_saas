@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\TableController;
 use App\Http\Controllers\admin\GlobalExtrasController;
 use App\Http\Controllers\admin\HowItWorkController;
 use App\Http\Controllers\admin\ThemeController;
+use App\Http\Controllers\admin\VendorThemeController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\TransactionController;
@@ -85,6 +86,14 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
         Route::post('onboarding/save-settings', [AdminController::class, 'onboarding_save_settings']);
         Route::post('onboarding/complete', [AdminController::class, 'onboarding_complete']);
         Route::post('onboarding/clear-session', [AdminController::class, 'onboarding_clear_session']);
+
+        // VENDOR THEMES (accessible by admin & vendors)
+        Route::get('vendor_themes', [VendorThemeController::class, 'index']);
+        Route::get('vendor_themes/add', [VendorThemeController::class, 'add']);
+        Route::post('vendor_themes/save', [VendorThemeController::class, 'save']);
+        Route::get('vendor_themes/edit-{id}', [VendorThemeController::class, 'edit']);
+        Route::post('vendor_themes/update-{id}', [VendorThemeController::class, 'update']);
+        Route::get('vendor_themes/delete-{id}', [VendorThemeController::class, 'delete']);
         // Instagram Import
         Route::post('instagram/fetch', [\App\Http\Controllers\admin\InstagramController::class, 'fetch']);
         Route::post('instagram/import', [\App\Http\Controllers\admin\InstagramController::class, 'import']);
@@ -291,7 +300,7 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
             Route::get('/themes/edit-{id}', [ThemeController::class, 'edit']);
             Route::post('/themes/update-{id}', [ThemeController::class, 'update']);
             Route::get('/themes/delete-{id}', [ThemeController::class, 'delete']);
-            Route::post('/themes/reorder_theme', [ThemeController::class, 'reorder_theme']);
+            Route::get('/themes/reorder_theme', [ThemeController::class, 'reorder_theme']);
             Route::get('/themes/bulk_delete', [ThemeController::class, 'bulk_delete']);
 
             Route::get('/how_it_works', [HowItWorkController::class, 'index']);

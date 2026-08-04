@@ -9,4 +9,5 @@ class Theme extends Model
 {
     use HasFactory;
     protected $table = 'theme';
+    protected $fillable = ['reorder_id', 'vendor_id', 'name', 'image', 'link'];
 }

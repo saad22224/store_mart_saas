@@ -102,83 +102,51 @@
             background: linear-gradient(135deg, #15AC82 0%, #0D8D6B 100%);
         }
 
-        /* ===== Header ===== */
+        /* ===== Floating Header (EasyOrders Style) ===== */
         .site-header {
             position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.85);
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 2rem);
+            max-width: 1240px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 9999px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            padding: 0.4rem 1.25rem;
+            transition: all 0.3s ease;
         }
 
         .site-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0.75rem 1.25rem;
+            width: 100%;
         }
 
-        /* Hamburger: visible on mobile, hidden on md+ */
-        .nav-hamburger {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            color: #0F172A;
-            font-size: 1.75rem;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .nav-hamburger {
-                display: none;
-            }
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-logo-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            background: linear-gradient(135deg, #15AC82, #0D8D6B);
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-logo-icon .material-symbols-outlined {
-            color: #fff;
-        }
-
-        .nav-logo-text {
-            font-size: 1.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #15AC82, #0D8D6B);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .nav-logo img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
             align-items: center;
+            gap: 1.5rem;
         }
 
         .nav-links a {
+            font-size: 0.95rem;
             font-weight: 700;
-            color: #475569;
+            color: #334155;
             text-decoration: none;
-            transition: color 0.2s;
+            transition: color 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
         }
 
         .nav-links a:hover,
@@ -186,17 +154,13 @@
             color: #15AC82;
         }
 
-        .nav-links a.active {
-            border-bottom: 2px solid #15AC82;
-            padding-bottom: 2px;
-        }
-
         .btn-primary {
             background: linear-gradient(135deg, #15AC82, #0D8D6B);
             color: #fff;
-            padding: 0.55rem 1.5rem;
+            padding: 0.45rem 1.3rem;
             border-radius: 9999px;
             font-weight: 700;
+            font-size: 0.88rem;
             font-family: 'Cairo', sans-serif;
             border: none;
             cursor: pointer;
@@ -205,12 +169,59 @@
         }
 
         .btn-primary:hover {
-            opacity: 0.9;
+            opacity: 0.92;
             transform: translateY(-1px);
         }
 
-        .btn-primary:active {
-            transform: scale(0.97);
+        /* ===== Infinite Marquee Ticker Bar ===== */
+        .marquee-section {
+            width: 100%;
+            overflow: hidden;
+            background: #ffffff;
+            border-top: 1px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
+            padding: 1.2rem 0;
+            position: relative;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 2rem;
+            width: max-content;
+            animation: marqueeScroll 35s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        [dir="rtl"] .marquee-track {
+            animation: marqueeScrollRtl 35s linear infinite;
+        }
+
+        @keyframes marqueeScrollRtl {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1.25rem;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0F172A;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
         }
 
         /* ===== Hero Section ===== */
@@ -1248,75 +1259,46 @@
     <header class="site-header">
         <nav class="site-nav">
             <div class="nav-logo">
-                <a href="<?php echo e(url('/')); ?>">
-                    <img style="width:100px;height:100px;" src="<?php echo e(asset('public/images/matjarhub.png')); ?>"></img>
+                <a href="<?php echo e(url('/')); ?>" class="flex items-center gap-2">
+                    <img class="h-9 md:h-10 w-auto object-contain" src="<?php echo e(asset('public/images/matjarhub.png')); ?>" alt="MatjarHub">
                 </a>
             </div>
 
-            <div class="nav-links hidden md:flex">
+            <div class="nav-links hidden lg:flex">
                 <a href="#" class="active"><?php echo e(@$translations['nav']['home'] ?? 'الرئيسية'); ?></a>
                 <a href="#who-we-are"><?php echo e(@$translations['nav']['who_we_are'] ?? 'من نحن'); ?></a>
                 <a href="#why-us"><?php echo e(@$translations['nav']['why_us'] ?? 'لماذا نحن'); ?></a>
+                <a href="#pricing">الباقات والتسعير</a>
+                <a href="<?php echo e(url('/help')); ?>">مركز الدعم</a>
                 <a href="#faq"><?php echo e(@$translations['nav']['faq'] ?? 'الأسئلة'); ?></a>
-                <a href="#contact"><?php echo e(@$translations['nav']['contact'] ?? 'اتصل بنا'); ?></a>
             </div>
 
-            <div style="display:flex;align-items:center;gap:1rem;">
+            <div class="flex items-center gap-2.5">
                 
-                <div class="lang-switcher hidden md:block" style="position:relative;">
-                    <button type="button" class="lang-btn" onclick="toggleLangMenu()"
-                        style="
-                        background: rgba(21, 172, 130, 0.1);
-                        border: 1px solid rgba(21, 172, 130, 0.3);
-                        border-radius: 9999px;
-                        padding: 0.5rem 1rem;
-                        font-weight: 700;
-                        color: #15AC82;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        gap: 0.5rem;
-                        font-family: 'Cairo', sans-serif;
-                    ">
-                        <span class="material-symbols-outlined" style="font-size: 1.2rem;">language</span>
+                <div class="lang-switcher hidden lg:block relative">
+                    <button type="button" class="lang-btn px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-200 transition flex items-center gap-1.5" onclick="toggleLangMenu()">
+                        <span class="material-symbols-outlined text-base">language</span>
                         <span><?php echo e($lang == 'ar' ? 'العربية' : 'English'); ?></span>
-                        <span class="material-symbols-outlined" style="font-size: 1rem;">expand_more</span>
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
                     </button>
-                    <div id="langMenu" class="lang-menu"
-                        style="
-                        display: none;
-                        position: absolute;
-                        top: 100%;
-                        <?php echo e($lang == 'ar' ? 'left: 0;' : 'right: 0;'); ?>
-
-                        margin-top: 0.5rem;
-                        background: white;
-                        border-radius: 1rem;
-                        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-                        min-width: 140px;
-                        overflow: hidden;
-                        z-index: 100;
-                    ">
-                        <a href="?lang=ar" class="lang-option <?php echo e($lang == 'ar' ? 'active' : ''); ?>">🇸🇦 العربية</a>
-                        <a href="?lang=en" class="lang-option <?php echo e($lang == 'en' ? 'active' : ''); ?>">🇬🇧 English</a>
+                    <div id="langMenu" class="lang-menu hidden absolute top-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 min-w-[130px] overflow-hidden z-50">
+                        <a href="?lang=ar" class="lang-option block px-4 py-2 text-xs font-bold text-slate-800 hover:bg-emerald-50 hover:text-emerald-600 transition <?php echo e($lang == 'ar' ? 'bg-emerald-50 text-emerald-600' : ''); ?>">🇸🇦 العربية</a>
+                        <a href="?lang=en" class="lang-option block px-4 py-2 text-xs font-bold text-slate-800 hover:bg-emerald-50 hover:text-emerald-600 transition <?php echo e($lang == 'en' ? 'bg-emerald-50 text-emerald-600' : ''); ?>">🇬🇧 English</a>
                     </div>
                 </div>
-                <div class="hidden md:flex" style="gap: 0.5rem; align-items: center;">
-                    <button onclick="window.location.href = '<?php echo e(url('admin')); ?>'"
-                        style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.55rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; transition: all 0.2s ease;"
-                        onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
-                        onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'"><?php echo e(@$translations['nav']['login'] ?? 'تسجيل دخول'); ?></button>
-                    <button onclick="window.location.href = '<?php echo e(url('admin/register')); ?>'"
-                        class="btn-primary"><?php echo e(@$translations['nav']['create_account'] ?? 'إنشاء حساب'); ?></button>
+
+                <div class="hidden sm:flex items-center gap-2">
+                    <button onclick="window.location.href = '<?php echo e(url('admin')); ?>'" class="px-4 py-1.5 rounded-full text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition">
+                        <?php echo e(@$translations['nav']['login'] ?? 'تسجيل دخول'); ?>
+
+                    </button>
+                    <button onclick="window.location.href = '<?php echo e(url('admin/register')); ?>'" class="btn-primary">
+                        <?php echo e(@$translations['nav']['create_account'] ?? 'أنشئ متجرك مجاناً'); ?>
+
+                    </button>
                 </div>
 
-                
-                <button onclick="window.location.href = '<?php echo e(url('admin')); ?>'" class="md:hidden"
-                    style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.4rem 1rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem; transition: all 0.2s ease;"
-                    onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
-                    onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'"><?php echo e(@$translations['nav']['login'] ?? 'تسجيل دخول'); ?></button>
-
-                <span class="material-symbols-outlined nav-hamburger" onclick="toggleMobileMenu()">menu</span>
+                <span class="material-symbols-outlined nav-hamburger text-slate-800 text-2xl lg:hidden cursor-pointer" onclick="toggleMobileMenu()">menu</span>
             </div>
         </nav>
 
@@ -1346,6 +1328,10 @@
                     style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['who_we_are'] ?? 'من نحن'); ?></a>
                 <a href="#why-us" onclick="closeMobileMenu()"
                     style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['why_us'] ?? 'لماذا نحن'); ?></a>
+                <a href="#pricing" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">الباقات والتسعير</a>
+                <a href="<?php echo e(url('/help')); ?>" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">مركز الدعم</a>
                 <a href="#faq" onclick="closeMobileMenu()"
                     style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;"><?php echo e(@$translations['nav']['faq'] ?? 'الأسئلة'); ?></a>
                 <a href="#contact" onclick="closeMobileMenu()"
@@ -1446,6 +1432,78 @@
                 <button class="btn-hero-primary"
                     onclick="window.location.href = '<?php echo e(url('admin/register')); ?>'"><?php echo e(@$translations['hero']['btn_primary'] ?? 'ابدأ مجاناً الآن'); ?></button>
                 
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="marquee-section">
+        <div class="marquee-track">
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">bolt</span>
+                <span>صفحات هبوط فائقة السرعة</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">payments</span>
+                <span>تفعيل +15 بوابة دفع إلكترونية</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">local_shipping</span>
+                <span>الربط الفوري مع شركات الشحن</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">ads_click</span>
+                <span>ربط فيسبوك وتيك توك بكسل</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">trending_up</span>
+                <span>نظام الـ Downsell وزيادة المبيعات</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">domain</span>
+                <span>ربط الدومين الخاص بضغطة زر</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">support_agent</span>
+                <span>دعم فني مباشر 24/7</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">point_of_sale</span>
+                <span>نظام نقاط البيع والكاشير POS</span>
+            </div>
+
+            
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">bolt</span>
+                <span>صفحات هبوط فائقة السرعة</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">payments</span>
+                <span>تفعيل +15 بوابة دفع إلكترونية</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">local_shipping</span>
+                <span>الربط الفوري مع شركات الشحن</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">ads_click</span>
+                <span>ربط فيسبوك وتيك توك بكسل</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">trending_up</span>
+                <span>نظام الـ Downsell وزيادة المبيعات</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">domain</span>
+                <span>ربط الدومين الخاص بضغطة زر</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">support_agent</span>
+                <span>دعم فني مباشر 24/7</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">point_of_sale</span>
+                <span>نظام نقاط البيع والكاشير POS</span>
             </div>
         </div>
     </section>
@@ -1575,6 +1633,131 @@
                     </p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    
+    <section class="pricing-section py-20 bg-slate-50 relative overflow-hidden" id="pricing">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up" data-aos-duration="700">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold mb-4 shadow-sm">
+                    <span class="material-symbols-outlined text-base">payments</span>
+                    <span>خطط وأسعار مرنة</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-900 leading-tight mb-4">
+                    اختر الباقة المناسبة <span class="gradient-text">لتنمية تجارتك</span>
+                </h2>
+                <p class="text-slate-600 text-lg">
+                    بدون عمولات على مبيعاتك! خطط واضحة وشفافة تمكّنك من التوسع والانطلاق بكل قوة وسهولة.
+                </p>
+            </div>
+
+            <?php if(isset($planlist) && count($planlist) > 0): ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+                    <?php $__currentLoopData = $planlist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
+                            $isPopular = ($key == 1 || $loop->iteration == 2);
+                            $themesCount = 0;
+                            if (!empty($plan->themes_id)) {
+                                $themesCount = count(explode('|', $plan->themes_id));
+                            }
+                        ?>
+
+                        <div class="relative bg-white rounded-3xl p-8 border <?php echo e($isPopular ? 'border-emerald-500 shadow-2xl shadow-emerald-500/10 ring-2 ring-emerald-500/20' : 'border-slate-200/80 shadow-lg shadow-slate-100'); ?> flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                             data-aos="fade-up" data-aos-duration="600" data-aos-delay="<?php echo e($key * 100); ?>">
+                            
+                            <?php if($isPopular): ?>
+                                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full gradient-bg text-white text-xs font-extrabold shadow-md flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">star</span>
+                                    <span>الأكثر طلباً واختياراً</span>
+                                </div>
+                            <?php endif; ?>
+
+                            <div>
+                                <div class="mb-6">
+                                    <h3 class="text-2xl font-bold text-slate-900 mb-2"><?php echo e($plan->name); ?></h3>
+                                    <p class="text-slate-500 text-sm leading-relaxed min-h-[42px]"><?php echo e(Str::limit($plan->description, 90)); ?></p>
+                                </div>
+
+                                <div class="mb-8 pb-6 border-b border-slate-100 flex items-baseline gap-2">
+                                    <span class="text-4xl font-black text-slate-900"><?php echo e(helper::currency_formate($plan->price, '')); ?></span>
+                                    <span class="text-slate-500 text-sm font-semibold">
+                                        / 
+                                        <?php if($plan->plan_type == 1): ?>
+                                            <?php if($plan->duration == 1): ?> شهرياً
+                                            <?php elseif($plan->duration == 2): ?> كل 3 أشهر
+                                            <?php elseif($plan->duration == 3): ?> كل 6 أشهر
+                                            <?php elseif($plan->duration == 4): ?> سنوياً
+                                            <?php elseif($plan->duration == 5): ?> مدى الحياة
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <?php echo e($plan->days); ?> يوم
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+
+                                <ul class="space-y-3.5 mb-8 text-sm font-semibold text-slate-700">
+                                    <li class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                            <span class="material-symbols-outlined text-sm">check</span>
+                                        </span>
+                                        <span>منتجات <?php echo e($plan->order_limit == -1 ? 'غير محدودة' : $plan->order_limit); ?></span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                            <span class="material-symbols-outlined text-sm">check</span>
+                                        </span>
+                                        <span>طلبات <?php echo e($plan->appointment_limit == -1 ? 'غير محدودة' : $plan->appointment_limit); ?></span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                            <span class="material-symbols-outlined text-sm">check</span>
+                                        </span>
+                                        <span><?php echo e($themesCount > 0 ? $themesCount . ' ثيمات متجر متطورة' : 'جميع الثيمات متاحة'); ?></span>
+                                    </li>
+                                    <?php if($plan->custom_domain == 1): ?>
+                                        <li class="flex items-center gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-sm">check</span>
+                                            </span>
+                                            <span>ربط الدومين الخاص (Custom Domain)</span>
+                                        </li>
+                                    <?php endif; ?>
+                                    <?php if($plan->coupons == 1): ?>
+                                        <li class="flex items-center gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-sm">check</span>
+                                            </span>
+                                            <span>إنشاء قسائم خصومات وكوبونات</span>
+                                        </li>
+                                    <?php endif; ?>
+                                    <?php if($plan->google_analytics == 1): ?>
+                                        <li class="flex items-center gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-sm">check</span>
+                                            </span>
+                                            <span>ربط تحليلات جوجل (Google Analytics)</span>
+                                        </li>
+                                    <?php endif; ?>
+                                    <?php if($plan->pos == 1): ?>
+                                        <li class="flex items-center gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-sm">check</span>
+                                            </span>
+                                            <span>نظام نقاط البيع (POS)</span>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+
+                            <a href="<?php echo e(url('admin/register')); ?>"
+                               class="w-full py-3.5 px-6 rounded-2xl font-bold text-center transition-all duration-200 <?php echo e($isPopular ? 'gradient-bg text-white shadow-lg shadow-emerald-500/25 hover:opacity-95' : 'bg-slate-100 text-slate-800 hover:bg-slate-200'); ?>">
+                                اشترك الآن وابدأ مجاناً
+                            </a>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 

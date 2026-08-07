@@ -500,6 +500,8 @@ Route::group(['namespace' => '', 'middleware' => 'landingMiddleware'], function 
     Route::get('/stores', [LandingHomeController::class, 'allstores']);
     Route::post('/getcity', [AdminController::class, 'getcity']);
     Route::get('/themeimages', [LandingHomeController::class, 'themeimages']);
+    Route::get('/help', [LandingHomeController::class, 'help'])->name('landing2.help');
+    Route::post('/help/ai-ask', [LandingHomeController::class, 'aiAsk'])->name('landing2.ai.ask');
 });
 
 

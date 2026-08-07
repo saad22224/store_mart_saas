@@ -75,15 +75,15 @@
         /* Timeline Progress Bar (Video style) */
         .tpl18-progress-wrapper {
             position: absolute;
-            bottom: 45px;
+            bottom: 70px;
             left: 50%;
             transform: translateX(-50%);
-            width: 70%;
-            max-width: 650px;
+            width: 90%;
+            max-width: none;
             height: 2px;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.3);
             z-index: 10;
-            border-radius: 2px;
+            border-radius: 0;
             overflow: hidden;
         }
         .tpl18-progress-fill {
@@ -97,44 +97,45 @@
         /* Bottom Video Controls (Prev, Pause/Play, Next) */
         .tpl18-video-controls {
             position: absolute;
-            bottom: 14px;
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
             display: flex;
             align-items: center;
             gap: 16px;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(8px);
-            padding: 5px 18px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: transparent;
+            backdrop-filter: none;
+            padding: 0;
+            border-radius: 0;
+            border: none;
         }
         .tpl18-ctrl-btn {
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.8);
+            color: #000;
             cursor: pointer;
-            padding: 4px;
+            padding: 4px 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: color 0.2s, transform 0.2s;
+            /* filter: drop-shadow(0px 1px 2px rgba(255, 255, 255, 0.5)); */
         }
-        .tpl18-ctrl-btn:hover {
-            color: #ffffff;
+        /* .tpl18-ctrl-btn:hover {
+            color: #000000;
             transform: scale(1.15);
-        }
+        } */
         .tpl18-ctrl-divider {
             width: 1px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.25);
+            height: 14px;
+            background: rgba(0, 0, 0, 0.4);
         }
 
         @media (max-width: 767px) {
             .tpl18-hero-section { height: 60vw; min-height: 260px; max-height: 480px; }
-            .tpl18-progress-wrapper { width: 85%; bottom: 40px; }
-            .tpl18-video-controls { bottom: 8px; gap: 12px; padding: 4px 14px; }
+            .tpl18-progress-wrapper { width: 100%; left: 0; bottom: 38px; }
+            .tpl18-video-controls { gap: 12px; padding: 0; }
         }
 
         /* Categories Section Fix */
@@ -212,15 +213,13 @@
         
         <div class="tpl18-video-controls">
             <button type="button" class="tpl18-ctrl-btn" id="tpl18PrevBtn" aria-label="Previous slide">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <div class="tpl18-ctrl-divider"></div>
             <button type="button" class="tpl18-ctrl-btn" id="tpl18PauseBtn" aria-label="Pause / Play">
-                <svg id="tpl18PauseIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                <svg id="tpl18PauseIcon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="4" width="2.5" height="16" rx="1"/><rect x="14.5" y="4" width="2.5" height="16" rx="1"/></svg>
             </button>
-            <div class="tpl18-ctrl-divider"></div>
             <button type="button" class="tpl18-ctrl-btn" id="tpl18NextBtn" aria-label="Next slide">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
             </button>
         </div>
         <?php endif; ?>
@@ -443,10 +442,10 @@
                 if (!pauseIcon) return;
                 if (isPlaying) {
                     // Pause icon (two vertical bars)
-                    pauseIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+                    pauseIcon.innerHTML = '<rect x="7" y="4" width="2.5" height="16" rx="1"/><rect x="14.5" y="4" width="2.5" height="16" rx="1"/>';
                 } else {
                     // Play icon (triangle)
-                    pauseIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+                    pauseIcon.innerHTML = '<polygon points="7 4 19 12 7 20 7 4"/>';
                 }
             }
 

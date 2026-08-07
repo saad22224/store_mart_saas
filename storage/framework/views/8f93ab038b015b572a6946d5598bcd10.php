@@ -1,10 +1,10 @@
-@include('front.theme.header')
+<?php echo $__env->make('front.theme.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
 <main class="tpl18-home" style="background: #ffffff; padding-bottom: 50px;">
 
-    @php
+    <?php
         $homeSliders = isset($sliders) ? $sliders : collect();
         $theme_sections = collect([
             (object)['section_key' => 'categories', 'title' => trans('labels.categories') ?? 'Shop by Category', 'is_active' => 1],
@@ -13,7 +13,7 @@
             (object)['section_key' => 'new_arrivals', 'title' => trans('labels.new_arrivals') ?? 'New Arrivals', 'is_active' => 1],
             (object)['section_key' => 'featured', 'title' => trans('labels.featured_products') ?? 'Featured Products', 'is_active' => 1],
         ]);
-    @endphp
+    ?>
 
     <style>
         /* ===== Cinematic Full-Screen Slider ===== */
@@ -168,12 +168,12 @@
     <!-- Cinematic Full-Screen Hero Slider -->
     <section class="tpl18-hero-section" id="tpl18HeroSlider">
         <div class="tpl18-slides-wrap" id="tpl18SlidesWrap">
-            @php
+            <?php
                 $sliderItems = $homeSliders->count() > 0 ? $homeSliders : collect([null]);
-            @endphp
+            ?>
 
-            @foreach ($sliderItems as $slider)
-                @php
+            <?php $__currentLoopData = $sliderItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php
                     $sliderHref = 'javascript:void(0)';
                     $sliderOnClick = '';
                     if ($slider && ($slider->product_id != 0 || $slider->category_id != 0)) {
@@ -190,26 +190,26 @@
                     $imgSrc = ($slider && !empty($slider->banner_image))
                         ? helper::image_path($slider->banner_image)
                         : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png');
-                @endphp
+                ?>
 
-                <a href="{{ $sliderHref }}"
-                   class="tpl18-slide {{ $loop->first ? 'is-active' : '' }}"
-                   @if($sliderOnClick) onclick="{{ $sliderOnClick }}" @endif
-                   data-index="{{ $loop->index }}">
+                <a href="<?php echo e($sliderHref); ?>"
+                   class="tpl18-slide <?php echo e($loop->first ? 'is-active' : ''); ?>"
+                   <?php if($sliderOnClick): ?> onclick="<?php echo e($sliderOnClick); ?>" <?php endif; ?>
+                   data-index="<?php echo e($loop->index); ?>">
                     <img class="tpl18-slide-img"
-                         src="{{ $imgSrc }}"
-                         alt="{{ $storeinfo->name }}">
+                         src="<?php echo e($imgSrc); ?>"
+                         alt="<?php echo e($storeinfo->name); ?>">
                 </a>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
-        @if(count($sliderItems) > 1)
-        {{-- Timeline Progress Bar --}}
+        <?php if(count($sliderItems) > 1): ?>
+        
         <div class="tpl18-progress-wrapper">
             <div class="tpl18-progress-fill" id="tpl18ProgressFill"></div>
         </div>
 
-        {{-- Video Controls (Prev, Pause/Play, Next) --}}
+        
         <div class="tpl18-video-controls">
             <button type="button" class="tpl18-ctrl-btn" id="tpl18PrevBtn" aria-label="Previous slide">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
@@ -223,155 +223,156 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
             </button>
         </div>
-        @endif
+        <?php endif; ?>
     </section>
 
     <!-- Theme Sections -->
-    @foreach($theme_sections as $section)
-        @if($section->section_key == 'categories')
-            @php $categories = helper::getcategory($storeinfo->id); @endphp
-            @if(count($categories) > 0)
+    <?php $__currentLoopData = $theme_sections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $section): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php if($section->section_key == 'categories'): ?>
+            <?php $categories = helper::getcategory($storeinfo->id); ?>
+            <?php if(count($categories) > 0): ?>
             <section class="tpl17-categories-section" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <h2 class="tpl17-section-title" data-aos="zoom-in" data-aos-duration="800">
-                        {{ $section->title }}
+                        <?php echo e($section->title); ?>
+
                     </h2>
                     <div class="tpl17-category-carousel">
-                        @if(count($categories) > 4)
+                        <?php if(count($categories) > 4): ?>
                             <button class="tpl17-category-nav tpl17-category-prev" type="button" aria-label="Previous categories"></button>
                             <button class="tpl17-category-nav tpl17-category-next" type="button" aria-label="Next categories"></button>
-                        @endif
+                        <?php endif; ?>
                         <div class="tpl17-category-track" id="tpl17CategoryTrack">
-                            @foreach($categories as $category)
-                                <a href="{{ URL::to(@$storeinfo->slug.'/category/'.$category->slug) }}" class="tpl17-category-card">
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e(URL::to(@$storeinfo->slug.'/category/'.$category->slug)); ?>" class="tpl17-category-card">
                                     <span class="tpl17-category-image">
-                                        <img src="{{ @helper::image_path($category->image) }}" alt="{{ $category->name }}">
+                                        <img src="<?php echo e(@helper::image_path($category->image)); ?>" alt="<?php echo e($category->name); ?>">
                                     </span>
                                     <span class="tpl17-category-name">
-                                        <span>{{ $category->name }}</span>
+                                        <span><?php echo e($category->name); ?></span>
                                         <span class="tpl17-category-arrow" aria-hidden="true"></span>
                                     </span>
                                 </a>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
             </section>
-            @endif
+            <?php endif; ?>
 
-        @elseif($section->section_key == 'best_sellers')
-            @php $best_sellers = helper::get_best_sellers($storeinfo->id, 4); @endphp
-            @if(count($best_sellers) > 0)
+        <?php elseif($section->section_key == 'best_sellers'): ?>
+            <?php $best_sellers = helper::get_best_sellers($storeinfo->id, 4); ?>
+            <?php if(count($best_sellers) > 0): ?>
             <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
-                        <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
+                        <h2 style="font-size: 36px; font-weight: 800; color: #111;"><?php echo e($section->title); ?></h2>
                     </div>
                     <div class="row g-4">
                         <div class="col-lg-3 col-md-12">
                             <div style="border-radius: 20px; overflow: hidden; height: 100%; min-height: 400px; position: relative; padding: 20px; background: #f4f4f4;">
-                                <img src="{{ @helper::image_path($best_sellers[0]->image) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+                                <img src="<?php echo e(@helper::image_path($best_sellers[0]->image)); ?>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
                                 <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.15); z-index: 2;"></div>
                                 <div style="position: relative; width: 100%; height: 100%; border: 2px solid #fff; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3;">
-                                    <h3 class="text-white fw-bold" style="font-size: 38px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">{{ @$best_sellers[0]->category_info->name ?? trans('labels.category') }}</h3>
-                                    <a href="{{ URL::to(@$storeinfo->slug.'/category/'.@$best_sellers[0]->category_info->slug) }}" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">{{ trans('labels.view_all') ?? 'View All' }}</a>
+                                    <h3 class="text-white fw-bold" style="font-size: 38px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"><?php echo e(@$best_sellers[0]->category_info->name ?? trans('labels.category')); ?></h3>
+                                    <a href="<?php echo e(URL::to(@$storeinfo->slug.'/category/'.@$best_sellers[0]->category_info->slug)); ?>" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><?php echo e(trans('labels.view_all') ?? 'View All'); ?></a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-9 col-md-12">
                             <div class="row g-4">
-                                @foreach($best_sellers as $product)
-                                    <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
-                                        @include('front.template-18.partials.product_card', ['product' => $product])
+                                <?php $__currentLoopData = $best_sellers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
+                                        <?php echo $__env->make('front.template-18.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            @endif
+            <?php endif; ?>
 
-        @elseif($section->section_key == 'featured')
-            @php 
+        <?php elseif($section->section_key == 'featured'): ?>
+            <?php 
                 $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('top_deals', 1)->where('is_available', 1)->orderByDesc('id')->take(4)->get(); 
                 if ($featured_products->isEmpty()) {
                     $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('is_available', 1)->orderByDesc('id')->take(4)->get();
                 }
-            @endphp
-            @if(count($featured_products) > 0)
+            ?>
+            <?php if(count($featured_products) > 0): ?>
             <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
-                        <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
+                        <h2 style="font-size: 36px; font-weight: 800; color: #111;"><?php echo e($section->title); ?></h2>
                     </div>
                     <div class="row g-4">
                         <div class="col-lg-3 col-md-12">
                             <div style="border-radius: 20px; overflow: hidden; height: 100%; min-height: 400px; position: relative; padding: 20px; background: #f4f4f4;">
-                                <img src="{{ @helper::image_path($featured_products[0]->image) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+                                <img src="<?php echo e(@helper::image_path($featured_products[0]->image)); ?>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
                                 <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.15); z-index: 2;"></div>
                                 <div style="position: relative; width: 100%; height: 100%; border: 2px solid #fff; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3;">
-                                    <h3 class="text-white fw-bold" style="font-size: 38px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">{{ @$featured_products[0]->category_info->name ?? trans('labels.category') }}</h3>
-                                    <a href="{{ URL::to(@$storeinfo->slug.'/category/'.@$featured_products[0]->category_info->slug) }}" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">{{ trans('labels.view_all') ?? 'View All' }}</a>
+                                    <h3 class="text-white fw-bold" style="font-size: 38px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"><?php echo e(@$featured_products[0]->category_info->name ?? trans('labels.category')); ?></h3>
+                                    <a href="<?php echo e(URL::to(@$storeinfo->slug.'/category/'.@$featured_products[0]->category_info->slug)); ?>" class="btn" style="background: #000; color: #fff; border-radius: 30px; padding: 10px 35px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><?php echo e(trans('labels.view_all') ?? 'View All'); ?></a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-9 col-md-12">
                             <div class="row g-4">
-                                @foreach($featured_products as $product)
-                                    <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
-                                        @include('front.template-18.partials.product_card', ['product' => $product])
+                                <?php $__currentLoopData = $featured_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
+                                        <?php echo $__env->make('front.template-18.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            @endif
+            <?php endif; ?>
 
-        @elseif($section->section_key == 'new_arrivals')
-            @php $new_arrivals = helper::get_new_arrivals($storeinfo->id, 4); @endphp
-            @if(count($new_arrivals) > 0)
+        <?php elseif($section->section_key == 'new_arrivals'): ?>
+            <?php $new_arrivals = helper::get_new_arrivals($storeinfo->id, 4); ?>
+            <?php if(count($new_arrivals) > 0): ?>
             <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
-                        <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
+                        <h2 style="font-size: 36px; font-weight: 800; color: #111;"><?php echo e($section->title); ?></h2>
                     </div>
                     <div class="row g-4">
-                        @foreach($new_arrivals as $product)
-                            <div class="col-lg-3 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
-                                @include('front.template-18.partials.product_card', ['product' => $product])
+                        <?php $__currentLoopData = $new_arrivals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-lg-3 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
+                                <?php echo $__env->make('front.template-18.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </section>
-            @endif
+            <?php endif; ?>
 
-        @elseif($section->section_key == 'exclusive')
-            @php $exclusive_offers = helper::get_exclusive_offers($storeinfo->id, 4); @endphp
-            @if(count($exclusive_offers) > 0)
+        <?php elseif($section->section_key == 'exclusive'): ?>
+            <?php $exclusive_offers = helper::get_exclusive_offers($storeinfo->id, 4); ?>
+            <?php if(count($exclusive_offers) > 0): ?>
             <section class="tpl17-section" style="margin-bottom: 60px;" data-aos="fade-up" data-aos-duration="1000">
                 <div class="container">
                     <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="800">
-                        <h2 style="font-size: 36px; font-weight: 800; color: #111;">{{ $section->title }}</h2>
+                        <h2 style="font-size: 36px; font-weight: 800; color: #111;"><?php echo e($section->title); ?></h2>
                     </div>
                     <div class="row g-4">
-                        @foreach($exclusive_offers as $product)
-                        <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="{{ $loop->iteration * 100 }}">
-                            <a href="{{ URL::to(@$storeinfo->slug.'/detail-'.$product->slug) }}" style="display:block; border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 3/4; background: #f8f8f8;">
-                                <img src="{{ helper::image_path($product->image) }}" alt="{{ $product->item_name }}" style="width:100%; height: 100%; object-fit:cover; transition: transform 0.4s ease;">
+                        <?php $__currentLoopData = $exclusive_offers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
+                            <a href="<?php echo e(URL::to(@$storeinfo->slug.'/detail-'.$product->slug)); ?>" style="display:block; border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 3/4; background: #f8f8f8;">
+                                <img src="<?php echo e(helper::image_path($product->image)); ?>" alt="<?php echo e($product->item_name); ?>" style="width:100%; height: 100%; object-fit:cover; transition: transform 0.4s ease;">
                             </a>
                         </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </section>
-            @endif
+            <?php endif; ?>
 
-        @endif
-    @endforeach
+        <?php endif; ?>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 </main>
 
@@ -505,4 +506,5 @@
         AOS.init({ once: true, offset: 50, duration: 800, easing: 'ease-in-out' });
     });
 </script>
-@include('front.theme.footer')
+<?php echo $__env->make('front.theme.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-18/home.blade.php ENDPATH**/ ?>

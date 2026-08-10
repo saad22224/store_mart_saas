@@ -1,5 +1,7 @@
 @include('front.theme.header')
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
 <main class="tpl20-home" style="background: #ffffff; padding-bottom: 50px; overflow-x: hidden;">
@@ -16,160 +18,191 @@
     @endphp
 
     <style>
-        /* Template 20 - Pearl Bags Triptych Split Slider & Red Ticker (Screenshot 3 Match) */
-        .tpl20-announcement {
-            background: #111827;
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 10px 0;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        .tpl20-hero-wrap {
-            max-width: 1320px;
-            margin: 30px auto 20px;
-            padding: 0 20px;
-        }
-
-        .tpl20-triptych-card {
-            background: #e2d2be;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
-            display: grid;
-            grid-template-columns: 0.9fr 1.2fr 0.9fr;
-            min-height: 480px;
+        /* ===== Cinematic Full-Screen Slider (Template 20) ===== */
+        .tpl20-hero-section {
             position: relative;
+            width: 100%;
+            height: 75vh;
+            min-height: 380px;
+            max-height: 620px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            background: #050505;
         }
 
-        .tpl20-side-img-left, .tpl20-side-img-right {
+        /* Slides container */
+        .tpl20-slides-wrap {
             position: relative;
-            overflow: hidden;
+            width: 100%;
             height: 100%;
+            overflow: hidden;
         }
 
-        .tpl20-side-img-left img, .tpl20-side-img-right img {
+        /* Individual slide */
+        .tpl20-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.9s ease;
+            display: block;
+            text-decoration: none;
+            overflow: hidden;
+        }
+
+        .tpl20-slide.is-active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .tpl20-slide.is-leaving {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* The image — Ken Burns effect */
+        .tpl20-slide-img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transform-origin: center center;
+            transform: scale(1);
+            transition: none;
         }
 
-        .tpl20-center-paper {
-            background: #d4beaa url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 50px 40px;
+        .tpl20-slide.is-active .tpl20-slide-img {
+            animation: tpl20KenBurns 8s ease forwards;
+        }
+
+        @keyframes tpl20KenBurns {
+            0%   { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* ===== Vertical Progress Bar — Right Side (Subtle) ===== */
+        .tpl20-progress-rail {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 40%;
+            max-height: 300px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            z-index: 10;
+            overflow: visible;
+        }
+
+        .tpl20-progress-fill {
+            width: 100%;
+            height: 0%;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: height 0.05s linear;
+            position: relative;
+        }
+
+        .tpl20-progress-fill::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ffffff;
+        }
+
+        /* Bottom Controls (Prev, Pause/Play, Next) */
+        .tpl20-video-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tpl20-ctrl-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            border-left: 1px solid rgba(0,0,0,0.05);
-            border-right: 1px solid rgba(0,0,0,0.05);
+            transition: color 0.2s;
         }
 
-        .tpl20-brand-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 4px;
-            color: #111;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-        }
-
-        .tpl20-hero-heading {
-            font-family: 'Bodoni Moda', serif;
-            font-size: clamp(32px, 4.5vw, 54px);
-            font-style: italic;
-            font-weight: 700;
-            line-height: 1.1;
+        .tpl20-ctrl-btn:hover {
             color: #ffffff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            margin-bottom: 18px;
-            text-transform: uppercase;
         }
 
-        .tpl20-hero-desc {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 15px;
-            color: #4a3e35;
-            max-width: 360px;
-            margin-bottom: 30px;
-            line-height: 1.6;
+        .tpl20-ctrl-divider {
+            width: 1px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .tpl20-outline-btn {
-            border: 2px solid #ffffff;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            color: #111;
+        /* Slide counter */
+        .tpl20-slide-counter {
+            position: absolute;
+            right: 24px;
+            bottom: 55px;
+            z-index: 10;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 800;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .tpl20-slide-counter .tpl20-counter-current {
+            color: rgba(255, 255, 255, 0.8);
             font-size: 14px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 12px 40px;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            font-weight: 700;
         }
 
-        .tpl20-outline-btn:hover {
-            background: #111;
-            border-color: #111;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        /* Diagonal Red Ticker Banner (Screenshot 3 Match) */
-        .tpl20-red-ticker-container {
-            margin-top: 30px;
-            margin-bottom: 50px;
-            transform: rotate(-2deg) scale(1.03);
-            background: #e11d48;
-            box-shadow: 0 10px 30px rgba(225, 29, 72, 0.3);
-            padding: 14px 0;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .tpl20-red-ticker-track {
-            display: inline-flex;
-            animation: tpl20Ticker 25s linear infinite;
-        }
-
-        .tpl20-red-ticker-item {
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(22px, 3.5vw, 36px);
-            font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-right: 40px;
-            display: inline-flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        @keyframes tpl20Ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        @media (max-width: 991px) {
-            .tpl20-triptych-card {
-                grid-template-columns: 1fr;
+        @media (max-width: 767px) {
+            .tpl20-hero-section {
+                height: 60vw;
+                min-height: 260px;
+                max-height: 480px;
             }
-            .tpl20-side-img-left, .tpl20-side-img-right {
-                display: none;
+
+            .tpl20-progress-rail {
+                right: 14px;
+                width: 2px;
+                height: 35%;
             }
-            .tpl20-center-paper {
-                padding: 40px 20px;
+
+            .tpl20-progress-fill::after {
+                width: 5px;
+                height: 5px;
+            }
+
+            .tpl20-video-controls {
+                right: 8px;
+                bottom: 10px;
+            }
+
+            .tpl20-slide-counter {
+                right: 12px;
+                bottom: 40px;
+                font-size: 10px;
+            }
+
+            .tpl20-slide-counter .tpl20-counter-current {
+                font-size: 12px;
             }
         }
 
+        /* Categories Section */
         .tpl17-categories-section { margin-bottom: 64px; position: relative; }
         .tpl17-section-title { font-size: clamp(30px, 3vw, 40px); font-weight: 800; color: #050505; line-height: 1.15; margin: 0 0 34px; text-align: center; }
         .tpl17-category-carousel { position: relative; padding: 0 24px; }
@@ -197,74 +230,82 @@
         }
     </style>
 
-    <!-- Top Announcement Bar -->
-    <div class="tpl20-announcement">
-        ✦ Welcome to Our Store ✦ Free Shipping on all Items ✦ Exclusive Handbag Collection ✦
-    </div>
+    <!-- Cinematic Full-Screen Hero Slider -->
+    <section class="tpl20-hero-section" id="tpl20HeroSlider">
+        <div class="tpl20-slides-wrap" id="tpl20SlidesWrap">
+            @php
+                $sliderItems = $homeSliders->count() > 0 ? $homeSliders : collect([null]);
+            @endphp
 
-    <!-- Triptych Split Hero Slider Container -->
-    <div class="tpl20-hero-wrap">
-        <div class="tpl20-hero-owl owl-carousel owl-theme" data-aos="fade-up">
-            @if($homeSliders->count() > 0)
-                @foreach ($homeSliders as $slider)
-                    @php
-                        $sliderHref = 'javascript:void(0)';
-                        $sliderAttrs = '';
-                        if ($slider->product_id != 0 || $slider->category_id != 0) {
-                            if ($slider->type == 1 && !empty($slider['category_info'])) {
-                                $sliderHref = URL::to($storeinfo->slug . '/search?category=' . $slider['category_info']->slug);
-                            } elseif ($slider->type == 2) {
-                                $item = helper::itemdetails($slider->product_id, $storeinfo->id);
-                                if (!empty($item)) {
-                                    $sliderHref = 'javascript:void(0)';
-                                    $sliderAttrs = "onclick=\"GetProductOverview('{$item->slug}','')\"";
-                                }
+            @foreach ($sliderItems as $slider)
+                @php
+                    $sliderHref = 'javascript:void(0)';
+                    $sliderOnClick = '';
+                    if ($slider && ($slider->product_id != 0 || $slider->category_id != 0)) {
+                        if ($slider->type == 1 && !empty($slider['category_info'])) {
+                            /* ---- Link to category page ---- */
+                            $sliderHref = URL::to($storeinfo->slug . '/category/' . $slider['category_info']->slug);
+                        } elseif ($slider->type == 2) {
+                            $item = helper::itemdetails($slider->product_id, $storeinfo->id);
+                            if (!empty($item)) {
+                                $sliderOnClick = "GetProductOverview('{$item->slug}','')";
                             }
                         }
-                    @endphp
-                    <div class="tpl20-triptych-card">
-                        <div class="tpl20-side-img-left">
-                            <img src="{{ helper::image_path($slider->banner_image) }}" alt="{{ $storeinfo->name }}">
-                        </div>
-                        <div class="tpl20-center-paper">
-                            <div class="tpl20-brand-title">{{ $storeinfo->name ?? 'PEARL BAGS' }}</div>
-                            <h2 class="tpl20-hero-heading">HARVEST YOUR STYLE</h2>
-                            <p class="tpl20-hero-desc">Fall is all about layering—and that includes your accessories. Discover the season's most-wanted bags.</p>
-                            <a href="{{ $sliderHref }}" class="tpl20-outline-btn" {!! $sliderAttrs !!}>Shop Now</a>
-                        </div>
-                        <div class="tpl20-side-img-right">
-                            <img src="{{ helper::image_path($slider->banner_image) }}" alt="{{ $storeinfo->name }}">
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <div class="tpl20-triptych-card">
-                    <div class="tpl20-side-img-left">
-                        <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png') }}" alt="{{ $storeinfo->name }}">
-                    </div>
-                    <div class="tpl20-center-paper">
-                        <div class="tpl20-brand-title">PEARL BAGS</div>
-                        <h2 class="tpl20-hero-heading">HARVEST YOUR STYLE</h2>
-                        <p class="tpl20-hero-desc">Fall is all about layering—and that includes your accessories. Discover the season's most-wanted bags.</p>
-                        <a href="javascript:void(0)" class="tpl20-outline-btn">Shop Now</a>
-                    </div>
-                    <div class="tpl20-side-img-right">
-                        <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png') }}" alt="{{ $storeinfo->name }}">
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
+                    }
+                    $imgSrc =
+                        $slider && !empty($slider->banner_image)
+                            ? helper::image_path($slider->banner_image)
+                            : url(
+                                env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png',
+                            );
+                @endphp
 
-    <!-- Diagonal Red Ticker Banner -->
-    <div class="tpl20-red-ticker-container">
-        <div class="tpl20-red-ticker-track">
-            <span class="tpl20-red-ticker-item">✦ LIMITED EDITION COLLECTION ✦ NEW HANDBAG ARRIVALS</span>
-            <span class="tpl20-red-ticker-item">✦ LIMITED EDITION COLLECTION ✦ NEW HANDBAG ARRIVALS</span>
-            <span class="tpl20-red-ticker-item">✦ LIMITED EDITION COLLECTION ✦ NEW HANDBAG ARRIVALS</span>
-            <span class="tpl20-red-ticker-item">✦ LIMITED EDITION COLLECTION ✦ NEW HANDBAG ARRIVALS</span>
+                <a href="{{ $sliderHref }}" class="tpl20-slide {{ $loop->first ? 'is-active' : '' }}"
+                    @if ($sliderOnClick) onclick="{{ $sliderOnClick }}" @endif
+                    data-index="{{ $loop->index }}">
+                    <img class="tpl20-slide-img" src="{{ $imgSrc }}" alt="{{ $storeinfo->name }}">
+                </a>
+            @endforeach
         </div>
-    </div>
+
+        @if (count($sliderItems) > 1)
+            {{-- Vertical Progress Bar — Right Side --}}
+            <div class="tpl20-progress-rail">
+                <div class="tpl20-progress-fill" id="tpl20ProgressFill"></div>
+            </div>
+
+            {{-- Slide Counter --}}
+            <div class="tpl20-slide-counter">
+                <span class="tpl20-counter-current" id="tpl20CounterCurrent">01</span>
+                <span> / </span>
+                <span id="tpl20CounterTotal">{{ str_pad(count($sliderItems), 2, '0', STR_PAD_LEFT) }}</span>
+            </div>
+
+            {{-- Controls (Prev, Pause/Play, Next) --}}
+            <div class="tpl20-video-controls">
+                <button type="button" class="tpl20-ctrl-btn" id="tpl20PrevBtn" aria-label="Previous slide">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+                <div class="tpl20-ctrl-divider"></div>
+                <button type="button" class="tpl20-ctrl-btn" id="tpl20PauseBtn" aria-label="Pause / Play">
+                    <svg id="tpl20PauseIcon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="7" y="4" width="2.5" height="16" rx="1" />
+                        <rect x="14.5" y="4" width="2.5" height="16" rx="1" />
+                    </svg>
+                </button>
+                <div class="tpl20-ctrl-divider"></div>
+                <button type="button" class="tpl20-ctrl-btn" id="tpl20NextBtn" aria-label="Next slide">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+        @endif
+    </section>
 
     <!-- Theme Sections -->
     @foreach($theme_sections as $section)
@@ -333,8 +374,8 @@
             @endif
 
         @elseif($section->section_key == 'featured')
-            @php 
-                $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('top_deals', 1)->where('is_available', 1)->orderByDesc('id')->take(4)->get(); 
+            @php
+                $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('top_deals', 1)->where('is_available', 1)->orderByDesc('id')->take(4)->get();
                 if ($featured_products->isEmpty()) {
                     $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('is_available', 1)->orderByDesc('id')->take(4)->get();
                 }
@@ -416,27 +457,140 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (window.jQuery && jQuery.fn.owlCarousel) {
-            jQuery('.tpl20-hero-owl').owlCarousel({
-                items: 1,
-                loop: jQuery('.tpl20-hero-owl .tpl20-triptych-card').length > 1,
-                autoplay: true,
-                autoplayTimeout: 5000,
-                autoplayHoverPause: true,
-                smartSpeed: 800,
-                nav: false,
-                dots: false,
-                rtl: document.documentElement.dir === 'rtl'
-            });
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+
+        /* ===== Cinematic Slider with Vertical Progress ===== */
+        (function() {
+            var slides = Array.from(document.querySelectorAll('.tpl20-slide'));
+            var progressFill = document.getElementById('tpl20ProgressFill');
+            var prevBtn = document.getElementById('tpl20PrevBtn');
+            var nextBtn = document.getElementById('tpl20NextBtn');
+            var pauseBtn = document.getElementById('tpl20PauseBtn');
+            var pauseIcon = document.getElementById('tpl20PauseIcon');
+            var counterCurrent = document.getElementById('tpl20CounterCurrent');
+
+            if (slides.length <= 1) {
+                if (progressFill) progressFill.style.height = '100%';
+                return;
+            }
+
+            var current = 0;
+            var isPlaying = true;
+            var elapsed = 0;
+            var DURATION = 6000;
+            var TICK = 40;
+            var timer = null;
+
+            function updateCounter() {
+                if (counterCurrent) {
+                    counterCurrent.textContent = String(current + 1).padStart(2, '0');
+                }
+            }
+
+            function goTo(index) {
+                var prev = current;
+                current = (index + slides.length) % slides.length;
+                if (prev === current) return;
+
+                slides[prev].classList.remove('is-active');
+                slides[prev].classList.add('is-leaving');
+                setTimeout(function() {
+                    slides[prev].classList.remove('is-leaving');
+                }, 950);
+
+                slides[current].classList.add('is-active');
+                updateCounter();
+
+                var img = slides[current].querySelector('.tpl20-slide-img');
+                if (img) {
+                    img.style.animation = 'none';
+                    img.offsetHeight;
+                    img.style.animation = '';
+                }
+            }
+
+            function resetProgress() {
+                elapsed = 0;
+                if (progressFill) progressFill.style.height = '0%';
+            }
+
+            function startTimer() {
+                clearInterval(timer);
+                timer = setInterval(function() {
+                    if (!isPlaying) return;
+                    elapsed += TICK;
+                    var pct = Math.min((elapsed / DURATION) * 100, 100);
+                    if (progressFill) progressFill.style.height = pct + '%';
+
+                    if (elapsed >= DURATION) {
+                        resetProgress();
+                        goTo(current + 1);
+                    }
+                }, TICK);
+            }
+
+            function updatePauseUI() {
+                if (!pauseIcon) return;
+                if (isPlaying) {
+                    pauseIcon.innerHTML =
+                        '<rect x="7" y="4" width="2.5" height="16" rx="1"/><rect x="14.5" y="4" width="2.5" height="16" rx="1"/>';
+                } else {
+                    pauseIcon.innerHTML = '<polygon points="7 4 19 12 7 20 7 4"/>';
+                }
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    resetProgress();
+                    goTo(current - 1);
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    resetProgress();
+                    goTo(current + 1);
+                });
+            }
+
+            if (pauseBtn) {
+                pauseBtn.addEventListener('click', function() {
+                    isPlaying = !isPlaying;
+                    updatePauseUI();
+                });
+            }
+
+            /* Touch / swipe support */
+            var hero = document.getElementById('tpl20HeroSlider');
+            var touchStartX = 0;
+            if (hero) {
+                hero.addEventListener('touchstart', function(e) {
+                    touchStartX = e.touches[0].clientX;
+                }, { passive: true });
+                hero.addEventListener('touchend', function(e) {
+                    var diff = touchStartX - e.changedTouches[0].clientX;
+                    if (Math.abs(diff) > 40) {
+                        resetProgress();
+                        goTo(current + (diff > 0 ? 1 : -1));
+                    }
+                }, { passive: true });
+            }
+
+            updateCounter();
+            startTimer();
+        })();
+
+        /* ===== Category Row Carousel ===== */
         var categoryTrack = document.getElementById('tpl17CategoryTrack');
         if (!categoryTrack) return;
-        document.querySelectorAll('.tpl17-category-prev, .tpl17-category-next').forEach(function (button) {
-            button.addEventListener('click', function () {
+        document.querySelectorAll('.tpl17-category-prev, .tpl17-category-next').forEach(function(button) {
+            button.addEventListener('click', function() {
                 var direction = button.classList.contains('tpl17-category-next') ? 1 : -1;
                 var amount = categoryTrack.clientWidth * 0.75;
-                categoryTrack.scrollBy({ left: amount * direction, behavior: 'smooth' });
+                categoryTrack.scrollBy({
+                    left: amount * direction,
+                    behavior: 'smooth'
+                });
             });
         });
     });

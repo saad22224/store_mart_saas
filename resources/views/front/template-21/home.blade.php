@@ -1,5 +1,7 @@
 @include('front.theme.header')
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
 <main class="tpl21-home" style="background: #ffffff; padding-bottom: 50px;">
@@ -16,149 +18,152 @@
     @endphp
 
     <style>
-        /* Template 21 - Luxury Bookstore & Literary Hero Slider */
-        .tpl21-hero-container {
-            background: linear-gradient(135deg, #181310 0%, #2b211a 50%, #150f0c 100%);
-            min-height: 560px;
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        /* ===== Template 21 — Full-Width Slider with Numbered Progress ===== */
+        .tpl21-hero {
             position: relative;
+            width: 100%;
+            height: 75vh;
+            min-height: 380px;
+            max-height: 620px;
             overflow: hidden;
             margin-bottom: 50px;
+            background: #0a0a0a;
         }
 
-        .tpl21-hero-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-
-        .tpl21-hero-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .tpl21-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(217, 119, 6, 0.15);
-            border: 1px solid rgba(217, 119, 6, 0.4);
-            color: #fbbf24;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 6px 16px;
-            border-radius: 30px;
-            margin-bottom: 24px;
-        }
-
-        .tpl21-hero-title {
-            font-family: 'Lora', serif;
-            font-size: clamp(36px, 5vw, 58px);
-            font-weight: 600;
-            line-height: 1.15;
-            color: #fff8f0;
-            margin-bottom: 20px;
-        }
-
-        .tpl21-hero-desc {
-            font-size: 16px;
-            color: #d1c5b8;
-            line-height: 1.6;
-            margin-bottom: 35px;
-            max-width: 500px;
-        }
-
-        .tpl21-btn-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .tpl21-btn-primary {
-            background: #d97706;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-            padding: 14px 36px;
-            border-radius: 30px;
-            text-decoration: none;
-            box-shadow: 0 10px 25px rgba(217, 119, 6, 0.35);
-            transition: all 0.3s ease;
-        }
-
-        .tpl21-btn-primary:hover {
-            background: #b45309;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        .tpl21-btn-ghost {
-            border: 1px solid rgba(255,255,255,0.25);
-            color: #fff8f0;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 13px 32px;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .tpl21-btn-ghost:hover {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-
-        .tpl21-book-card-wrap {
+        .tpl21-slides-wrap {
             position: relative;
-            display: flex;
-            justify-content: center;
-        }
-
-        .tpl21-book-3d-card {
             width: 100%;
-            max-width: 380px;
-            height: 460px;
-            border-radius: 20px;
+            height: 100%;
             overflow: hidden;
-            position: relative;
-            box-shadow: -20px 20px 60px rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #110e0c;
         }
 
-        .tpl21-book-3d-card img {
+        .tpl21-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.9s ease;
+            display: block;
+            text-decoration: none;
+            overflow: hidden;
+        }
+
+        .tpl21-slide.is-active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .tpl21-slide.is-leaving {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .tpl21-slide-img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transform: scale(1);
+            transition: none;
         }
 
-        .tpl21-book-tag {
+        .tpl21-slide.is-active .tpl21-slide-img {
+            animation: tpl21Ken 7s ease forwards;
+        }
+
+        @keyframes tpl21Ken {
+            0%   { transform: scale(1); }
+            100% { transform: scale(1.06); }
+        }
+
+        /* ===== Numbered Progress Bar at Bottom ===== */
+        .tpl21-progress-bar {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #d97706;
-            color: #fff;
-            font-size: 12px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            display: flex;
+            align-items: flex-end;
+            height: 60px;
+            padding: 0 20px;
+            gap: 20px;
+            direction: ltr;
+        }
+
+        .tpl21-progress-item {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            cursor: pointer;
+            padding: 0 0 14px 0;
+        }
+
+        .tpl21-progress-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
             font-weight: 800;
-            padding: 6px 14px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            color: rgba(255, 255, 255, 0.3);
+            padding: 0 0 8px 20px;
+            transition: color 0.4s ease;
+            user-select: none;
         }
 
-        @media (max-width: 991px) {
-            .tpl21-hero-grid { grid-template-columns: 1fr; text-align: center; }
-            .tpl21-hero-desc { margin-left: auto; margin-right: auto; }
-            .tpl21-btn-group { justify-content: center; }
-            .tpl21-book-3d-card { height: 340px; margin: 0 auto; }
+        .tpl21-progress-item.is-active .tpl21-progress-number,
+        .tpl21-progress-item.is-done .tpl21-progress-number {
+            color: rgba(255, 255, 255, 0.9);
         }
 
+        .tpl21-progress-line {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tpl21-progress-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: #ffffff;
+            transition: none;
+        }
+
+        .tpl21-progress-item.is-done .tpl21-progress-line-fill {
+            width: 100% !important;
+        }
+
+        .tpl21-progress-item.is-upcoming .tpl21-progress-line-fill {
+            width: 0% !important;
+        }
+
+        @media (max-width: 767px) {
+            .tpl21-hero {
+                height: 55vw;
+                min-height: 240px;
+                max-height: 420px;
+            }
+
+            .tpl21-progress-bar {
+                height: 48px;
+            }
+
+            .tpl21-progress-number {
+                font-size: 16px;
+                padding: 0 0 6px 12px;
+            }
+
+            .tpl21-progress-line {
+                height: 2px;
+            }
+        }
+
+        /* ===== Categories Section ===== */
         .tpl17-categories-section { margin-bottom: 64px; position: relative; }
         .tpl17-section-title { font-size: clamp(30px, 3vw, 40px); font-weight: 800; color: #050505; line-height: 1.15; margin: 0 0 34px; text-align: center; }
         .tpl17-category-carousel { position: relative; padding: 0 24px; }
@@ -186,66 +191,52 @@
         }
     </style>
 
-    <!-- Luxury Bookstore Hero Slider -->
-    <section class="tpl21-hero-container">
-        <div class="tpl21-hero-inner">
-            <div class="tpl21-hero-owl owl-carousel owl-theme" data-aos="fade-up">
-                @if($homeSliders->count() > 0)
-                    @foreach ($homeSliders as $slider)
-                        @php
-                            $sliderHref = 'javascript:void(0)';
-                            $sliderAttrs = '';
-                            if ($slider->product_id != 0 || $slider->category_id != 0) {
-                                if ($slider->type == 1 && !empty($slider['category_info'])) {
-                                    $sliderHref = URL::to($storeinfo->slug . '/search?category=' . $slider['category_info']->slug);
-                                } elseif ($slider->type == 2) {
-                                    $item = helper::itemdetails($slider->product_id, $storeinfo->id);
-                                    if (!empty($item)) {
-                                        $sliderHref = 'javascript:void(0)';
-                                        $sliderAttrs = "onclick=\"GetProductOverview('{$item->slug}','')\"";
-                                    }
-                                }
+    <!-- Full-Width Hero Slider with Numbered Progress -->
+    <section class="tpl21-hero" id="tpl21Hero">
+        <div class="tpl21-slides-wrap">
+            @php
+                $sliderItems = $homeSliders->count() > 0 ? $homeSliders : collect([null]);
+            @endphp
+
+            @foreach ($sliderItems as $slider)
+                @php
+                    $sliderHref = 'javascript:void(0)';
+                    $sliderOnClick = '';
+                    if ($slider && ($slider->product_id != 0 || $slider->category_id != 0)) {
+                        if ($slider->type == 1 && !empty($slider['category_info'])) {
+                            $sliderHref = URL::to($storeinfo->slug . '/category/' . $slider['category_info']->slug);
+                        } elseif ($slider->type == 2) {
+                            $item = helper::itemdetails($slider->product_id, $storeinfo->id);
+                            if (!empty($item)) {
+                                $sliderOnClick = "GetProductOverview('{$item->slug}','')";
                             }
-                        @endphp
-                        <div class="tpl21-hero-grid">
-                            <div class="tpl21-hero-content">
-                                <div class="tpl21-badge">✦ Bestseller of the Month ✦</div>
-                                <h1 class="tpl21-hero-title">Discover Your Next Literary Journey</h1>
-                                <p class="tpl21-hero-desc">Immerse yourself in thousands of curated books, bestsellers, and timeless classics delivered straight to your door.</p>
-                                <div class="tpl21-btn-group">
-                                    <a href="{{ $sliderHref }}" class="tpl21-btn-primary" {!! $sliderAttrs !!}>Explore Books</a>
-                                    <a href="{{ $sliderHref }}" class="tpl21-btn-ghost" {!! $sliderAttrs !!}>Read Sample</a>
-                                </div>
-                            </div>
-                            <div class="tpl21-book-card-wrap">
-                                <div class="tpl21-book-3d-card">
-                                    <img src="{{ helper::image_path($slider->banner_image) }}" alt="{{ $storeinfo->name }}">
-                                    <span class="tpl21-book-tag">5.0 ★ Top Rated</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="tpl21-hero-grid">
-                        <div class="tpl21-hero-content">
-                            <div class="tpl21-badge">✦ Bestseller of the Month ✦</div>
-                            <h1 class="tpl21-hero-title">Discover Your Next Literary Journey</h1>
-                            <p class="tpl21-hero-desc">Immerse yourself in thousands of curated books, bestsellers, and timeless classics delivered straight to your door.</p>
-                            <div class="tpl21-btn-group">
-                                <a href="javascript:void(0)" class="tpl21-btn-primary">Explore Books</a>
-                                <a href="javascript:void(0)" class="tpl21-btn-ghost">Read Sample</a>
-                            </div>
-                        </div>
-                        <div class="tpl21-book-card-wrap">
-                            <div class="tpl21-book-3d-card">
-                                <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png') }}" alt="{{ $storeinfo->name }}">
-                                <span class="tpl21-book-tag">5.0 ★ Top Rated</span>
-                            </div>
+                        }
+                    }
+                    $imgSrc = $slider && !empty($slider->banner_image)
+                        ? helper::image_path($slider->banner_image)
+                        : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png');
+                @endphp
+
+                <a href="{{ $sliderHref }}" class="tpl21-slide {{ $loop->first ? 'is-active' : '' }}"
+                    @if ($sliderOnClick) onclick="{{ $sliderOnClick }}" @endif
+                    data-index="{{ $loop->index }}">
+                    <img class="tpl21-slide-img" src="{{ $imgSrc }}" alt="{{ $storeinfo->name }}">
+                </a>
+            @endforeach
+        </div>
+
+        @if (count($sliderItems) > 1)
+            <div class="tpl21-progress-bar" id="tpl21ProgressBar">
+                @foreach ($sliderItems as $idx => $s)
+                    <div class="tpl21-progress-item {{ $idx === 0 ? 'is-active' : 'is-upcoming' }}" data-slide="{{ $idx }}">
+                        <span class="tpl21-progress-number">{{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        <div class="tpl21-progress-line">
+                            <div class="tpl21-progress-line-fill"></div>
                         </div>
                     </div>
-                @endif
+                @endforeach
             </div>
-        </div>
+        @endif
     </section>
 
     <!-- Theme Sections -->
@@ -315,8 +306,8 @@
             @endif
 
         @elseif($section->section_key == 'featured')
-            @php 
-                $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('top_deals', 1)->where('is_available', 1)->orderByDesc('id')->take(4)->get(); 
+            @php
+                $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('top_deals', 1)->where('is_available', 1)->orderByDesc('id')->take(4)->get();
                 if ($featured_products->isEmpty()) {
                     $featured_products = App\Models\Item::with(['variation', 'extras', 'category_info'])->where('vendor_id', $storeinfo->id)->where('is_available', 1)->orderByDesc('id')->take(4)->get();
                 }
@@ -398,24 +389,120 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (window.jQuery && jQuery.fn.owlCarousel) {
-            jQuery('.tpl21-hero-owl').owlCarousel({
-                items: 1,
-                loop: jQuery('.tpl21-hero-owl .tpl21-hero-grid').length > 1,
-                autoplay: true,
-                autoplayTimeout: 5000,
-                autoplayHoverPause: true,
-                smartSpeed: 800,
-                nav: false,
-                dots: false,
-                rtl: document.documentElement.dir === 'rtl'
+    document.addEventListener('DOMContentLoaded', function() {
+
+        /* ===== Slider with Numbered Progress ===== */
+        (function() {
+            var slides = Array.from(document.querySelectorAll('.tpl21-slide'));
+            var progressItems = Array.from(document.querySelectorAll('.tpl21-progress-item'));
+
+            if (slides.length <= 1) return;
+
+            var current = 0;
+            var isPlaying = true;
+            var elapsed = 0;
+            var DURATION = 6000;
+            var TICK = 30;
+            var timer = null;
+
+            function updateProgressUI() {
+                progressItems.forEach(function(item, i) {
+                    var fill = item.querySelector('.tpl21-progress-line-fill');
+                    item.classList.remove('is-active', 'is-done', 'is-upcoming');
+
+                    if (i < current) {
+                        item.classList.add('is-done');
+                        if (fill) fill.style.width = '100%';
+                    } else if (i === current) {
+                        item.classList.add('is-active');
+                        // fill is animated in the timer
+                    } else {
+                        item.classList.add('is-upcoming');
+                        if (fill) fill.style.width = '0%';
+                    }
+                });
+            }
+
+            function goTo(index) {
+                var prev = current;
+                current = (index + slides.length) % slides.length;
+                if (prev === current) return;
+
+                slides[prev].classList.remove('is-active');
+                slides[prev].classList.add('is-leaving');
+                setTimeout(function() {
+                    slides[prev].classList.remove('is-leaving');
+                }, 950);
+
+                slides[current].classList.add('is-active');
+
+                var img = slides[current].querySelector('.tpl21-slide-img');
+                if (img) {
+                    img.style.animation = 'none';
+                    img.offsetHeight;
+                    img.style.animation = '';
+                }
+
+                updateProgressUI();
+            }
+
+            function resetProgress() {
+                elapsed = 0;
+                var activeFill = progressItems[current] ? progressItems[current].querySelector('.tpl21-progress-line-fill') : null;
+                if (activeFill) activeFill.style.width = '0%';
+            }
+
+            function startTimer() {
+                clearInterval(timer);
+                timer = setInterval(function() {
+                    if (!isPlaying) return;
+                    elapsed += TICK;
+                    var pct = Math.min((elapsed / DURATION) * 100, 100);
+
+                    var activeFill = progressItems[current] ? progressItems[current].querySelector('.tpl21-progress-line-fill') : null;
+                    if (activeFill) activeFill.style.width = pct + '%';
+
+                    if (elapsed >= DURATION) {
+                        elapsed = 0;
+                        goTo(current + 1);
+                    }
+                }, TICK);
+            }
+
+            // Click on progress number to jump to that slide
+            progressItems.forEach(function(item, i) {
+                item.addEventListener('click', function() {
+                    if (i === current) return;
+                    elapsed = 0;
+                    goTo(i);
+                });
             });
-        }
+
+            /* Touch / swipe support */
+            var hero = document.getElementById('tpl21Hero');
+            var touchStartX = 0;
+            if (hero) {
+                hero.addEventListener('touchstart', function(e) {
+                    touchStartX = e.touches[0].clientX;
+                }, { passive: true });
+                hero.addEventListener('touchend', function(e) {
+                    var diff = touchStartX - e.changedTouches[0].clientX;
+                    if (Math.abs(diff) > 40) {
+                        elapsed = 0;
+                        goTo(current + (diff > 0 ? 1 : -1));
+                    }
+                }, { passive: true });
+            }
+
+            updateProgressUI();
+            startTimer();
+        })();
+
+        /* ===== Category Row Carousel ===== */
         var categoryTrack = document.getElementById('tpl17CategoryTrack');
         if (!categoryTrack) return;
-        document.querySelectorAll('.tpl17-category-prev, .tpl17-category-next').forEach(function (button) {
-            button.addEventListener('click', function () {
+        document.querySelectorAll('.tpl17-category-prev, .tpl17-category-next').forEach(function(button) {
+            button.addEventListener('click', function() {
                 var direction = button.classList.contains('tpl17-category-next') ? 1 : -1;
                 var amount = categoryTrack.clientWidth * 0.75;
                 categoryTrack.scrollBy({ left: amount * direction, behavior: 'smooth' });
@@ -430,3 +517,5 @@
     });
 </script>
 @include('front.theme.footer')
+
+

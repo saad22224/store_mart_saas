@@ -1,25 +1,25 @@
 <?php echo $__env->make('front.theme.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-<main class="tpl20-home" style="background: #ffffff; padding-bottom: 50px; overflow-x: hidden;">
+<main class="tpl21-home" style="background: #ffffff; padding-bottom: 50px;">
 
     <?php
         $homeSliders = isset($sliders) ? $sliders : collect();
         $theme_sections = collect([
-            (object)['section_key' => 'categories', 'title' => trans('labels.categories') ?? 'Shop by Category', 'is_active' => 1],
-            (object)['section_key' => 'best_sellers', 'title' => trans('labels.best_sellers') ?? 'Best Sellers', 'is_active' => 1],
-            (object)['section_key' => 'exclusive', 'title' => trans('labels.exclusive_offers') ?? 'Exclusive Offers', 'is_active' => 1],
-            (object)['section_key' => 'new_arrivals', 'title' => trans('labels.new_arrivals') ?? 'New Arrivals', 'is_active' => 1],
-            (object)['section_key' => 'featured', 'title' => trans('labels.featured_products') ?? 'Featured Products', 'is_active' => 1],
+            (object)['section_key' => 'categories', 'title' => trans('labels.categories') ?? 'Browse by Category', 'is_active' => 1],
+            (object)['section_key' => 'best_sellers', 'title' => trans('labels.best_sellers') ?? 'Bestsellers & Classics', 'is_active' => 1],
+            (object)['section_key' => 'exclusive', 'title' => trans('labels.exclusive_offers') ?? 'Special Book Bundles', 'is_active' => 1],
+            (object)['section_key' => 'new_arrivals', 'title' => trans('labels.new_arrivals') ?? 'New Book Releases', 'is_active' => 1],
+            (object)['section_key' => 'featured', 'title' => trans('labels.featured_products') ?? 'Featured Publications', 'is_active' => 1],
         ]);
     ?>
 
     <style>
-        /* ===== Cinematic Full-Screen Slider (Template 20) ===== */
-        .tpl20-hero-section {
+        /* ===== Template 21 — Full-Width Slider with Numbered Progress ===== */
+        .tpl21-hero {
             position: relative;
             width: 100%;
             height: 75vh;
@@ -27,19 +27,17 @@
             max-height: 620px;
             overflow: hidden;
             margin-bottom: 50px;
-            background: #050505;
+            background: #0a0a0a;
         }
 
-        /* Slides container */
-        .tpl20-slides-wrap {
+        .tpl21-slides-wrap {
             position: relative;
             width: 100%;
             height: 100%;
             overflow: hidden;
         }
 
-        /* Individual slide */
-        .tpl20-slide {
+        .tpl21-slide {
             position: absolute;
             inset: 0;
             opacity: 0;
@@ -49,160 +47,123 @@
             overflow: hidden;
         }
 
-        .tpl20-slide.is-active {
+        .tpl21-slide.is-active {
             opacity: 1;
             z-index: 2;
         }
 
-        .tpl20-slide.is-leaving {
+        .tpl21-slide.is-leaving {
             opacity: 0;
             z-index: 1;
         }
 
-        /* The image — Ken Burns effect */
-        .tpl20-slide-img {
+        .tpl21-slide-img {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transform-origin: center center;
             transform: scale(1);
             transition: none;
         }
 
-        .tpl20-slide.is-active .tpl20-slide-img {
-            animation: tpl20KenBurns 8s ease forwards;
+        .tpl21-slide.is-active .tpl21-slide-img {
+            animation: tpl21Ken 7s ease forwards;
         }
 
-        @keyframes tpl20KenBurns {
+        @keyframes tpl21Ken {
             0%   { transform: scale(1); }
-            100% { transform: scale(1.08); }
+            100% { transform: scale(1.06); }
         }
 
-        /* ===== Vertical Progress Bar — Right Side (Subtle) ===== */
-        .tpl20-progress-rail {
+        /* ===== Numbered Progress Bar at Bottom ===== */
+        .tpl21-progress-bar {
             position: absolute;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 2px;
-            height: 40%;
-            max-height: 300px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 100px;
+            bottom: 0;
+            left: 0;
+            right: 0;
             z-index: 10;
-            overflow: visible;
+            display: flex;
+            align-items: flex-end;
+            height: 60px;
+            padding: 0 20px;
+            gap: 20px;
+            direction: ltr;
         }
 
-        .tpl20-progress-fill {
-            width: 100%;
-            height: 0%;
-            border-radius: 100px;
-            background: rgba(255, 255, 255, 0.7);
-            transition: height 0.05s linear;
+        .tpl21-progress-item {
+            flex: 1;
             position: relative;
-        }
-
-        .tpl20-progress-fill::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #ffffff;
-        }
-
-        /* Bottom Controls (Prev, Pause/Play, Next) */
-        .tpl20-video-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10;
             display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .tpl20-ctrl-btn {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
+            flex-direction: column;
+            align-items: flex-start;
             cursor: pointer;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s;
+            padding: 0 0 14px 0;
         }
 
-        .tpl20-ctrl-btn:hover {
-            color: #ffffff;
-        }
-
-        .tpl20-ctrl-divider {
-            width: 1px;
-            height: 14px;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Slide counter */
-        .tpl20-slide-counter {
-            position: absolute;
-            right: 24px;
-            bottom: 55px;
-            z-index: 10;
+        .tpl21-progress-number {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 1px;
+            font-size: 22px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 0 0 8px 20px;
+            transition: color 0.4s ease;
+            user-select: none;
         }
 
-        .tpl20-slide-counter .tpl20-counter-current {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            font-weight: 700;
+        .tpl21-progress-item.is-active .tpl21-progress-number,
+        .tpl21-progress-item.is-done .tpl21-progress-number {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tpl21-progress-line {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tpl21-progress-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: #ffffff;
+            transition: none;
+        }
+
+        .tpl21-progress-item.is-done .tpl21-progress-line-fill {
+            width: 100% !important;
+        }
+
+        .tpl21-progress-item.is-upcoming .tpl21-progress-line-fill {
+            width: 0% !important;
         }
 
         @media (max-width: 767px) {
-            .tpl20-hero-section {
-                height: 60vw;
-                min-height: 260px;
-                max-height: 480px;
+            .tpl21-hero {
+                height: 55vw;
+                min-height: 240px;
+                max-height: 420px;
             }
 
-            .tpl20-progress-rail {
-                right: 14px;
-                width: 2px;
-                height: 35%;
+            .tpl21-progress-bar {
+                height: 48px;
             }
 
-            .tpl20-progress-fill::after {
-                width: 5px;
-                height: 5px;
+            .tpl21-progress-number {
+                font-size: 16px;
+                padding: 0 0 6px 12px;
             }
 
-            .tpl20-video-controls {
-                right: 8px;
-                bottom: 10px;
-            }
-
-            .tpl20-slide-counter {
-                right: 12px;
-                bottom: 40px;
-                font-size: 10px;
-            }
-
-            .tpl20-slide-counter .tpl20-counter-current {
-                font-size: 12px;
+            .tpl21-progress-line {
+                height: 2px;
             }
         }
 
-        /* Categories Section */
+        /* ===== Categories Section ===== */
         .tpl17-categories-section { margin-bottom: 64px; position: relative; }
         .tpl17-section-title { font-size: clamp(30px, 3vw, 40px); font-weight: 800; color: #050505; line-height: 1.15; margin: 0 0 34px; text-align: center; }
         .tpl17-category-carousel { position: relative; padding: 0 24px; }
@@ -230,9 +191,9 @@
         }
     </style>
 
-    <!-- Cinematic Full-Screen Hero Slider -->
-    <section class="tpl20-hero-section" id="tpl20HeroSlider">
-        <div class="tpl20-slides-wrap" id="tpl20SlidesWrap">
+    <!-- Full-Width Hero Slider with Numbered Progress -->
+    <section class="tpl21-hero" id="tpl21Hero">
+        <div class="tpl21-slides-wrap">
             <?php
                 $sliderItems = $homeSliders->count() > 0 ? $homeSliders : collect([null]);
             ?>
@@ -243,7 +204,6 @@
                     $sliderOnClick = '';
                     if ($slider && ($slider->product_id != 0 || $slider->category_id != 0)) {
                         if ($slider->type == 1 && !empty($slider['category_info'])) {
-                            /* ---- Link to category page ---- */
                             $sliderHref = URL::to($storeinfo->slug . '/category/' . $slider['category_info']->slug);
                         } elseif ($slider->type == 2) {
                             $item = helper::itemdetails($slider->product_id, $storeinfo->id);
@@ -252,57 +212,29 @@
                             }
                         }
                     }
-                    $imgSrc =
-                        $slider && !empty($slider->banner_image)
-                            ? helper::image_path($slider->banner_image)
-                            : url(
-                                env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png',
-                            );
+                    $imgSrc = $slider && !empty($slider->banner_image)
+                        ? helper::image_path($slider->banner_image)
+                        : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/banner-placeholder.png');
                 ?>
 
-                <a href="<?php echo e($sliderHref); ?>" class="tpl20-slide <?php echo e($loop->first ? 'is-active' : ''); ?>"
+                <a href="<?php echo e($sliderHref); ?>" class="tpl21-slide <?php echo e($loop->first ? 'is-active' : ''); ?>"
                     <?php if($sliderOnClick): ?> onclick="<?php echo e($sliderOnClick); ?>" <?php endif; ?>
                     data-index="<?php echo e($loop->index); ?>">
-                    <img class="tpl20-slide-img" src="<?php echo e($imgSrc); ?>" alt="<?php echo e($storeinfo->name); ?>">
+                    <img class="tpl21-slide-img" src="<?php echo e($imgSrc); ?>" alt="<?php echo e($storeinfo->name); ?>">
                 </a>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
         <?php if(count($sliderItems) > 1): ?>
-            
-            <div class="tpl20-progress-rail">
-                <div class="tpl20-progress-fill" id="tpl20ProgressFill"></div>
-            </div>
-
-            
-            <div class="tpl20-slide-counter">
-                <span class="tpl20-counter-current" id="tpl20CounterCurrent">01</span>
-                <span> / </span>
-                <span id="tpl20CounterTotal"><?php echo e(str_pad(count($sliderItems), 2, '0', STR_PAD_LEFT)); ?></span>
-            </div>
-
-            
-            <div class="tpl20-video-controls">
-                <button type="button" class="tpl20-ctrl-btn" id="tpl20PrevBtn" aria-label="Previous slide">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                </button>
-                <div class="tpl20-ctrl-divider"></div>
-                <button type="button" class="tpl20-ctrl-btn" id="tpl20PauseBtn" aria-label="Pause / Play">
-                    <svg id="tpl20PauseIcon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="7" y="4" width="2.5" height="16" rx="1" />
-                        <rect x="14.5" y="4" width="2.5" height="16" rx="1" />
-                    </svg>
-                </button>
-                <div class="tpl20-ctrl-divider"></div>
-                <button type="button" class="tpl20-ctrl-btn" id="tpl20NextBtn" aria-label="Next slide">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </button>
+            <div class="tpl21-progress-bar" id="tpl21ProgressBar">
+                <?php $__currentLoopData = $sliderItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $idx => $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="tpl21-progress-item <?php echo e($idx === 0 ? 'is-active' : 'is-upcoming'); ?>" data-slide="<?php echo e($idx); ?>">
+                        <span class="tpl21-progress-number"><?php echo e(str_pad($idx + 1, 2, '0', STR_PAD_LEFT)); ?></span>
+                        <div class="tpl21-progress-line">
+                            <div class="tpl21-progress-line-fill"></div>
+                        </div>
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         <?php endif; ?>
     </section>
@@ -364,7 +296,7 @@
                             <div class="row g-4">
                                 <?php $__currentLoopData = $best_sellers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
-                                        <?php echo $__env->make('front.template-20.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                        <?php echo $__env->make('front.template-21.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
@@ -402,7 +334,7 @@
                             <div class="row g-4">
                                 <?php $__currentLoopData = $featured_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
-                                        <?php echo $__env->make('front.template-20.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                        <?php echo $__env->make('front.template-21.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
@@ -423,7 +355,7 @@
                     <div class="row g-4">
                         <?php $__currentLoopData = $new_arrivals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-lg-3 col-md-6 col-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
-                                <?php echo $__env->make('front.template-20.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                <?php echo $__env->make('front.template-21.partials.product_card', ['product' => $product], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
@@ -460,32 +392,36 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        /* ===== Cinematic Slider with Vertical Progress ===== */
+        /* ===== Slider with Numbered Progress ===== */
         (function() {
-            var slides = Array.from(document.querySelectorAll('.tpl20-slide'));
-            var progressFill = document.getElementById('tpl20ProgressFill');
-            var prevBtn = document.getElementById('tpl20PrevBtn');
-            var nextBtn = document.getElementById('tpl20NextBtn');
-            var pauseBtn = document.getElementById('tpl20PauseBtn');
-            var pauseIcon = document.getElementById('tpl20PauseIcon');
-            var counterCurrent = document.getElementById('tpl20CounterCurrent');
+            var slides = Array.from(document.querySelectorAll('.tpl21-slide'));
+            var progressItems = Array.from(document.querySelectorAll('.tpl21-progress-item'));
 
-            if (slides.length <= 1) {
-                if (progressFill) progressFill.style.height = '100%';
-                return;
-            }
+            if (slides.length <= 1) return;
 
             var current = 0;
             var isPlaying = true;
             var elapsed = 0;
             var DURATION = 6000;
-            var TICK = 40;
+            var TICK = 30;
             var timer = null;
 
-            function updateCounter() {
-                if (counterCurrent) {
-                    counterCurrent.textContent = String(current + 1).padStart(2, '0');
-                }
+            function updateProgressUI() {
+                progressItems.forEach(function(item, i) {
+                    var fill = item.querySelector('.tpl21-progress-line-fill');
+                    item.classList.remove('is-active', 'is-done', 'is-upcoming');
+
+                    if (i < current) {
+                        item.classList.add('is-done');
+                        if (fill) fill.style.width = '100%';
+                    } else if (i === current) {
+                        item.classList.add('is-active');
+                        // fill is animated in the timer
+                    } else {
+                        item.classList.add('is-upcoming');
+                        if (fill) fill.style.width = '0%';
+                    }
+                });
             }
 
             function goTo(index) {
@@ -500,19 +436,21 @@
                 }, 950);
 
                 slides[current].classList.add('is-active');
-                updateCounter();
 
-                var img = slides[current].querySelector('.tpl20-slide-img');
+                var img = slides[current].querySelector('.tpl21-slide-img');
                 if (img) {
                     img.style.animation = 'none';
                     img.offsetHeight;
                     img.style.animation = '';
                 }
+
+                updateProgressUI();
             }
 
             function resetProgress() {
                 elapsed = 0;
-                if (progressFill) progressFill.style.height = '0%';
+                var activeFill = progressItems[current] ? progressItems[current].querySelector('.tpl21-progress-line-fill') : null;
+                if (activeFill) activeFill.style.width = '0%';
             }
 
             function startTimer() {
@@ -521,48 +459,28 @@
                     if (!isPlaying) return;
                     elapsed += TICK;
                     var pct = Math.min((elapsed / DURATION) * 100, 100);
-                    if (progressFill) progressFill.style.height = pct + '%';
+
+                    var activeFill = progressItems[current] ? progressItems[current].querySelector('.tpl21-progress-line-fill') : null;
+                    if (activeFill) activeFill.style.width = pct + '%';
 
                     if (elapsed >= DURATION) {
-                        resetProgress();
+                        elapsed = 0;
                         goTo(current + 1);
                     }
                 }, TICK);
             }
 
-            function updatePauseUI() {
-                if (!pauseIcon) return;
-                if (isPlaying) {
-                    pauseIcon.innerHTML =
-                        '<rect x="7" y="4" width="2.5" height="16" rx="1"/><rect x="14.5" y="4" width="2.5" height="16" rx="1"/>';
-                } else {
-                    pauseIcon.innerHTML = '<polygon points="7 4 19 12 7 20 7 4"/>';
-                }
-            }
-
-            if (prevBtn) {
-                prevBtn.addEventListener('click', function() {
-                    resetProgress();
-                    goTo(current - 1);
+            // Click on progress number to jump to that slide
+            progressItems.forEach(function(item, i) {
+                item.addEventListener('click', function() {
+                    if (i === current) return;
+                    elapsed = 0;
+                    goTo(i);
                 });
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', function() {
-                    resetProgress();
-                    goTo(current + 1);
-                });
-            }
-
-            if (pauseBtn) {
-                pauseBtn.addEventListener('click', function() {
-                    isPlaying = !isPlaying;
-                    updatePauseUI();
-                });
-            }
+            });
 
             /* Touch / swipe support */
-            var hero = document.getElementById('tpl20HeroSlider');
+            var hero = document.getElementById('tpl21Hero');
             var touchStartX = 0;
             if (hero) {
                 hero.addEventListener('touchstart', function(e) {
@@ -571,13 +489,13 @@
                 hero.addEventListener('touchend', function(e) {
                     var diff = touchStartX - e.changedTouches[0].clientX;
                     if (Math.abs(diff) > 40) {
-                        resetProgress();
+                        elapsed = 0;
                         goTo(current + (diff > 0 ? 1 : -1));
                     }
                 }, { passive: true });
             }
 
-            updateCounter();
+            updateProgressUI();
             startTimer();
         })();
 
@@ -588,10 +506,7 @@
             button.addEventListener('click', function() {
                 var direction = button.classList.contains('tpl17-category-next') ? 1 : -1;
                 var amount = categoryTrack.clientWidth * 0.75;
-                categoryTrack.scrollBy({
-                    left: amount * direction,
-                    behavior: 'smooth'
-                });
+                categoryTrack.scrollBy({ left: amount * direction, behavior: 'smooth' });
             });
         });
     });
@@ -603,4 +518,6 @@
     });
 </script>
 <?php echo $__env->make('front.theme.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-20/home.blade.php ENDPATH**/ ?>
+
+
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-21/home.blade.php ENDPATH**/ ?>

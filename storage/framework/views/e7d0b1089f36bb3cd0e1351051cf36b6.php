@@ -826,7 +826,7 @@
         <!-- mine header -->
 
         <!----------------------- mobile menu footer ----------------------->
-        <?php if(helper::appdata(@$storeinfo->id)->template != 17): ?>
+        <?php if(!in_array(helper::appdata(@$storeinfo->id)->template , [17 , 18 , 19 , 20 , 21])): ?>
         <div class="mobile-menu-footer d-none">
             <ul class="p-0 m-0">
                 <li class="<?php echo e(request()->is($storeinfo->slug) ? 'mobile-active' : ''); ?>">

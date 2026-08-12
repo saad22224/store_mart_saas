@@ -202,6 +202,7 @@
     "restaurants" => "Vendors",
     "customers" => "Customers",
     "menus" => "Menus",
+    "menu" => "Menu",
     "orders" => "Orders",
     "order" => "Order",
     "today_orders" => "Today Orders",

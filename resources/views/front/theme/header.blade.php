@@ -592,7 +592,7 @@
     <main id="main-content">
 
         <!-- navbar -->
-        @if (!in_array(helper::appdata(@$storeinfo->id)->template, [11, 17]))
+        @if (!in_array(helper::appdata(@$storeinfo->id)->template, [7, 11, 16, 17, 18, 19, 20, 21]))
             <div class="d-none d-lg-block">
                 <nav class="top-header border-bottom">
                     <div class="container">
@@ -648,7 +648,7 @@
         @endphp
         <!-- mine header -->
 
-        @if (in_array(helper::appdata(@$storeinfo->id)->template, [7, 16]))
+        @if (helper::appdata(@$storeinfo->id)->template == 7)
             <!-- Template 7 Modern Header -->
             <div class="t7-top-promo">
                 <div class="container">
@@ -695,11 +695,9 @@
                             @endif
                         @endif
                         
-                        @if (helper::appdata(@$storeinfo->id)->template != 16)
                         <a href="{{ URL::to($storeinfo->slug . '/search') }}" class="t7-header-icon-btn">
                             <i class="fa-light fa-magnifying-glass"></i>
                         </a>
-                        @endif
                     </div>
 
                     <!-- Center: Circular Logo -->
@@ -740,65 +738,186 @@
                     </div>
                 </div>
             </header>
-            
-            @if (helper::appdata(@$storeinfo->id)->template == 16)
-                <style>
-                    .t7-header-main {
-                        background: rgba(255, 255, 255, 0.98) !important;
-                        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05) !important;
-                        border-bottom: none !important;
-                        padding: 6px 0 !important;
-                    }
-                    .t7-header-icon-btn {
-                        background: #f6f3f2 !important;
-                        color: #584237 !important;
-                        border-radius: 12px !important;
-                        width: 42px !important; height: 42px !important;
-                        display: flex !important; align-items: center !important; justify-content: center !important;
-                        transition: all 0.3s !important;
-                        border: 1px solid #e0c0b1 !important;
-                    }
-                    .t7-header-icon-btn:hover {
-                        background: var(--t16-primary, #9d4300) !important;
-                        color: #fff !important;
-                        border-color: var(--t16-primary, #9d4300) !important;
-                    }
-                    .t7-logo-circle {
-                        border-radius: 15px !important;
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-                        border: 2px solid #fff !important;
-                        overflow: hidden !important;
-                        display: flex !important;
-                        background: #fff !important;
-                        padding: 5px !important;
-                        width: 64px !important;
-                        height: 64px !important;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    .t7-logo-circle img {
-                        border-radius: 10px !important;
-                        max-width: 100%;
-                        max-height: 100%;
-                        object-fit: contain;
-                    }
-                    .t7-top-promo {
-                        background: var(--t16-primary, #9d4300) !important;
-                        color: #fff !important;
-                        font-weight: 700 !important;
-                        font-size: 14px !important;
-                        padding: 6px 0 !important;
-                    }
-                    .t7-icon-badge {
-                        background: var(--t16-primary, #9d4300) !important;
-                        color: #fff !important;
-                        top: -5px !important;
-                        right: -5px !important;
-                        border: 2px solid #fff;
-                    }
-                </style>
-            @endif
-        @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [17, 18, 19, 20, 21]))
+
+        @elseif (helper::appdata(@$storeinfo->id)->template == 16)
+            <!-- Template 16 – Clean Walashi-style Header -->
+            <header class="t16-header sticky-top">
+                <div class="t16-header-container">
+                    <!-- Left: Logo -->
+                    <a href="{{ URL::to($storeinfo->slug) }}" class="t16-header-logo">
+                        <img src="{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}" alt="Logo">
+                    </a>
+
+
+                    <!-- Right: Actions -->
+                    <div class="t16-header-actions">
+                        @if (@helper::checkaddons('customer_login') && helper::appdata(@$storeinfo->id)->checkout_login_required == 1)
+                            @if (Auth::user() && Auth::user()->type == 3)
+                                <a href="{{ URL::to($storeinfo->slug . '/profile') }}" class="t16-hdr-btn" title="{{ trans('labels.account') }}">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
+                            @else
+                                <a href="javascript:void(0)" data-bs-toggle="offcanvas" data-bs-target="#loginpage" class="t16-hdr-btn" title="{{ trans('labels.login') }}">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
+                            @endif
+                        @endif
+
+                        @if (helper::appdata(@$storeinfo->id)->online_order == 1)
+                            <a href="{{ URL::to($storeinfo->slug . '/cart/') }}" class="t16-hdr-btn t16-cart-btn" title="{{ trans('labels.cart') }}">
+                                <i class="fa-regular fa-cart-shopping"></i>
+                                <span class="t16-hdr-badge" id="cartcnt">{{ session()->get('cart') ?? 0 }}</span>
+                            </a>
+                        @endif
+
+                        {{-- Language switcher --}}
+                        <div class="dropdown">
+                            <a class="t16-hdr-btn t16-lang-btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" title="Language">
+                                <span class="t16-lang-code">{{ strtoupper(App::getLocale()) }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end t16-lang-dropdown">
+                                @if(\App::getLocale() == 'en')
+                                    <li><a class="dropdown-item" href="{{ URL::to('/lang/change?lang=ar') }}"><span>🇸🇦</span> العربية</a></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ URL::to('/lang/change?lang=en') }}"><span>🇺🇸</span> English</a></li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <style>
+                .t16-header {
+                    background: #fff;
+                    padding: 10px 0;
+                    box-shadow: 0 2px 20px rgba(0,0,0,.06);
+                    z-index: 1050;
+                }
+                .t16-header-container {
+                    max-width: 1280px;
+                    margin: 0 auto;
+                    padding: 0 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                }
+                .t16-header-logo {
+                    flex-shrink: 0;
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #fff;
+                    border: 2px solid rgba(0,0,0,.06);
+                    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+                    transition: transform .3s ease;
+                }
+                .t16-header-logo:hover { transform: scale(1.05); }
+                .t16-header-logo img {
+                    width: 100%; height: 100%;
+                    object-fit: contain;
+                }
+                .t16-header-name {
+                    font-size: 1.15rem;
+                    font-weight: 700;
+                    color: #1c1b1b;
+                    flex: 1;
+                    text-align: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .t16-header-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+                .t16-hdr-btn {
+                    position: relative;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #f8f6f5;
+                    color: #584237;
+                    font-size: 17px;
+                    text-decoration: none;
+                    border: 1px solid rgba(0,0,0,.05);
+                    transition: all .3s ease;
+                }
+                .t16-hdr-btn:hover {
+                    background: var(--t16-primary, #9d4300);
+                    color: #fff;
+                    border-color: var(--t16-primary, #9d4300);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,.12);
+                }
+                .t16-hdr-badge {
+                    position: absolute;
+                    top: -4px;
+                    {{ session()->get('direction') == 2 ? 'left: -4px;' : 'right: -4px;' }}
+                    min-width: 18px;
+                    height: 18px;
+                    border-radius: 9px;
+                    background: var(--t16-primary, #9d4300);
+                    color: #fff;
+                    font-size: 10px;
+                    font-weight: 700;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 2px solid #fff;
+                    padding: 0 3px;
+                }
+                .t16-lang-btn {
+                    width: auto !important;
+                    padding: 0 12px !important;
+                    gap: 6px;
+                    font-size: 13px !important;
+                    font-weight: 700;
+                }
+                .t16-lang-btn::after {
+                    display: none; /* hide default dropdown caret */
+                }
+                .t16-lang-code {
+                    font-size: 13px;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                }
+                .t16-lang-dropdown {
+                    border: 1px solid rgba(0,0,0,.06);
+                    border-radius: 12px;
+                    box-shadow: 0 8px 24px rgba(0,0,0,.1);
+                    overflow: hidden;
+                    min-width: 140px;
+                }
+                .t16-lang-dropdown .dropdown-item {
+                    padding: 10px 16px;
+                    font-size: .9rem;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition: background .2s;
+                }
+                .t16-lang-dropdown .dropdown-item:hover {
+                    background: #f8f6f5;
+                }
+                @media(max-width: 576px) {
+                    .t16-header-logo { width: 40px; height: 40px; border-radius: 10px; }
+                    .t16-hdr-btn { width: 36px; height: 36px; font-size: 15px; border-radius: 10px; }
+                    .t16-header-actions { gap: 8px; }
+                    .t16-lang-btn { padding: 0 8px !important; }
+                }
+            </style>
+        @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [ 16 , 17, 18, 19, 20, 21]))
             @php
                 $tpl_num = helper::appdata(@$storeinfo->id)->template;
             @endphp
@@ -820,7 +939,7 @@
         <!-- mine header -->
 
         <!----------------------- mobile menu footer ----------------------->
-        @if(!in_array(helper::appdata(@$storeinfo->id)->template , [17 , 18 , 19 , 20 , 21]))
+        @if(!in_array(helper::appdata(@$storeinfo->id)->template , [16 , 17 , 18 , 19 , 20 , 21]))
         <div class="mobile-menu-footer d-none">
             <ul class="p-0 m-0">
                 <li class="{{ request()->is($storeinfo->slug) ? 'mobile-active' : '' }}">
@@ -914,7 +1033,7 @@
                 --bs-secondary-srg: color-mix(in srgb, var(--bs-secondary), transparent 90%);
 
             }
-            @if (in_array(helper::appdata(@$storeinfo->id)->template, [7, 16]))
+            @if (helper::appdata(@$storeinfo->id)->template == 7)
             /* Template 7 Header Overrides */
             .t7-top-promo {
                 background: #4a148c; /* Dark Purple */

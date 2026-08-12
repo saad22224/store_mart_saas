@@ -1488,7 +1488,7 @@ class HomeController extends Controller
             ->paginate(15)->onEachSide(0);
         $settingdata = helper::appdata(@$storeinfo->id);
         $tpl_num = $settingdata->template ?? 17;
-        if (in_array($tpl_num, [17, 18, 19, 20, 21]) && view()->exists('front.template-' . $tpl_num . '.category')) {
+        if (in_array($tpl_num, [16, 17, 18, 19, 20, 21]) && view()->exists('front.template-' . $tpl_num . '.category')) {
             return view('front.template-' . $tpl_num . '.category', compact('storeinfo', 'category', 'getcategory', 'products'));
         }
         return view('front.template-17.category', compact('storeinfo', 'category', 'getcategory', 'products'));

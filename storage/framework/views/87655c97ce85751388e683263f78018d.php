@@ -1,19 +1,19 @@
-@include('front.theme.header')
+<?php echo $__env->make('front.theme.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-@php
+<?php
     $primaryColor  = helper::appdata($storeinfo->id)->primary_color ?? '#9d4300';
     $allCategories = helper::getcategory($storeinfo->id);
     $storeName     = helper::appdata($storeinfo->id)->app_name ?? $storeinfo->name;
     $cartCount     = session('cart', 0);
-@endphp
+?>
 
-{{-- ═══════════════ SCOPED STYLES ═══════════════ --}}
+
 <style>
     /* ── CSS variables ── */
     :root {
-        --t16-primary:        {{ $primaryColor }};
-        --t16-primary-light:  {{ $primaryColor }}15;
-        --t16-primary-gradient: linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $primaryColor }}dd 100%);
+        --t16-primary:        <?php echo e($primaryColor); ?>;
+        --t16-primary-light:  <?php echo e($primaryColor); ?>15;
+        --t16-primary-gradient: linear-gradient(135deg, <?php echo e($primaryColor); ?> 0%, <?php echo e($primaryColor); ?>dd 100%);
         --t16-surface:        #fcf9f8;
         --t16-bg:             linear-gradient(180deg, #faf8f6 0%, #f5f2ef 100%);
         --t16-on-surface:     #1c1b1b;
@@ -559,12 +559,12 @@
     }
 </style>
 
-{{-- ═══════════════ HERO SLIDER ═══════════════ --}}
+
 <div class="container-fluid px-3 px-md-4 mt-3 t16-hero-container" style="max-width:1280px;margin-left:auto;margin-right:auto;">
     <div class="t16-slider-wrap" id="t16HeroSlider">
-        @if($sliders->count() > 0)
-            @foreach($sliders as $si => $slider)
-                @php
+        <?php if($sliders->count() > 0): ?>
+            <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $si => $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php
                     $isActive = $si === 0;
                     $linkOpen  = '';
                     $linkClose = '';
@@ -578,27 +578,29 @@
                             $linkClose = '</a>';
                         }
                     }
-                @endphp
-                <div class="t16-slide{{ $isActive ? ' active' : '' }}" data-slide="{{ $si }}"
-                     style="position:{{ $isActive ? 'relative' : 'absolute' }};inset:0;opacity:{{ $isActive ? '1' : '0' }};transition:opacity .8s ease-in-out;{{ !$isActive ? 'z-index:0;' : 'z-index:10;' }}">
-                    {!! $linkOpen !!}
-                    <img class="t16-slide-img"
-                         src="{{ helper::image_path($slider->banner_image) }}"
-                         alt="{{ $storeName }}">
-                    {!! $linkClose !!}
-                </div>
-            @endforeach
+                ?>
+                <div class="t16-slide<?php echo e($isActive ? ' active' : ''); ?>" data-slide="<?php echo e($si); ?>"
+                     style="position:<?php echo e($isActive ? 'relative' : 'absolute'); ?>;inset:0;opacity:<?php echo e($isActive ? '1' : '0'); ?>;transition:opacity .8s ease-in-out;<?php echo e(!$isActive ? 'z-index:0;' : 'z-index:10;'); ?>">
+                    <?php echo $linkOpen; ?>
 
-            {{-- Dots --}}
-            @if($sliders->count() > 1)
-                <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 16px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:30px;">
-                    @foreach($sliders as $di => $dot)
-                        <button onclick="t16GoSlide({{ $di }})" data-t16dot="{{ $di }}"
-                                style="width:12px;height:12px;border-radius:50%;border:none;background:#fff;
-                                       opacity:{{ $di===0?'1':'.4' }};cursor:pointer;transition:.3s;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.1);"></button>
-                    @endforeach
+                    <img class="t16-slide-img"
+                         src="<?php echo e(helper::image_path($slider->banner_image)); ?>"
+                         alt="<?php echo e($storeName); ?>">
+                    <?php echo $linkClose; ?>
+
                 </div>
-                {{-- Arrows --}}
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            
+            <?php if($sliders->count() > 1): ?>
+                <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 16px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:30px;">
+                    <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $di => $dot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <button onclick="t16GoSlide(<?php echo e($di); ?>)" data-t16dot="<?php echo e($di); ?>"
+                                style="width:12px;height:12px;border-radius:50%;border:none;background:#fff;
+                                       opacity:<?php echo e($di===0?'1':'.4'); ?>;cursor:pointer;transition:.3s;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.1);"></button>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+                
                 <button onclick="t16MoveSlide(-1)" class="t16-slider-arrow"
                         style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:30;
                                width:48px;height:48px;border-radius:50%;border:none;
@@ -615,144 +617,150 @@
                                transition:.3s;box-shadow:0 8px 24px rgba(0,0,0,.15);">
                     <i class="fa-solid fa-chevron-right" style="font-size:18px;"></i>
                 </button>
-            @endif
-        @else
+            <?php endif; ?>
+        <?php else: ?>
             <img class="t16-slide-img"
-                 src="{{ url(env('ASSETPATHURL').'admin-assets/images/about/defaultimages/banner-placeholder.png') }}"
-                 alt="{{ $storeName }}">
-        @endif
+                 src="<?php echo e(url(env('ASSETPATHURL').'admin-assets/images/about/defaultimages/banner-placeholder.png')); ?>"
+                 alt="<?php echo e($storeName); ?>">
+        <?php endif; ?>
     </div>
 </div>
 
-{{-- ═══════════════ STORE INFO & CONTACT ═══════════════ --}}
+
 <section style="max-width:1280px;margin:0 auto;padding:0 16px;" class="mt-4 mb-4">
     <div class="row g-4">
-        {{-- Store Info Card --}}
+        
         <div class="col-lg-8">
             <div class="t16-info-card">
                 <div>
-                    <h1 class="t16-store-name">{{ helper::appdata(@$storeinfo->id)->app_name ?? $storeinfo->name }}</h1>
+                    <h1 class="t16-store-name"><?php echo e(helper::appdata(@$storeinfo->id)->app_name ?? $storeinfo->name); ?></h1>
                     <div class="d-flex align-items-center gap-3 mt-2">
-                        <span class="t16-open-badge"><i class="fa-solid fa-circle" style="font-size:7px;"></i> {{ App::getLocale() == 'ar' ? 'مفتوح الآن' : 'Open Now' }}</span>
-                        @if(!empty(helper::appdata(@$storeinfo->id)->working_time))
+                        <span class="t16-open-badge"><i class="fa-solid fa-circle" style="font-size:7px;"></i> <?php echo e(App::getLocale() == 'ar' ? 'مفتوح الآن' : 'Open Now'); ?></span>
+                        <?php if(!empty(helper::appdata(@$storeinfo->id)->working_time)): ?>
                             <span style="color:#64748b;font-weight:600;font-size:0.9rem;">
-                                {{ helper::appdata(@$storeinfo->id)->working_time }}
+                                <?php echo e(helper::appdata(@$storeinfo->id)->working_time); ?>
+
                             </span>
-                        @endif
+                        <?php endif; ?>
                     </div>
                     
-                    @if(!empty(helper::appdata(@$storeinfo->id)->address))
+                    <?php if(!empty(helper::appdata(@$storeinfo->id)->address)): ?>
                     <div class="t16-store-address">
-                        {{ helper::appdata(@$storeinfo->id)->address }}
+                        <?php echo e(helper::appdata(@$storeinfo->id)->address); ?>
+
                     </div>
-                    @endif
+                    <?php endif; ?>
                     
-                    @if(!empty(@$storeinfo->category_info->name))
+                    <?php if(!empty(@$storeinfo->category_info->name)): ?>
                     <div>
                         <span class="t16-cat-tag">
-                            {{ $storeinfo->category_info->name }}
+                            <?php echo e($storeinfo->category_info->name); ?>
+
                         </span>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
 
-                @if(helper::getsociallinks(@$storeinfo->id)->count() > 0)
+                <?php if(helper::getsociallinks(@$storeinfo->id)->count() > 0): ?>
                 <div class="mt-4 d-flex gap-2">
-                    @foreach (helper::getsociallinks(@$storeinfo->id) as $links)
-                        @if ($links->icon != '<i class="fa-solid fa-phone"></i>')
-                            <a href="{{ $links->link }}" target="_blank" class="t16-social-icon">
-                                {!! $links->icon !!}
+                    <?php $__currentLoopData = helper::getsociallinks(@$storeinfo->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $links): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($links->icon != '<i class="fa-solid fa-phone"></i>'): ?>
+                            <a href="<?php echo e($links->link); ?>" target="_blank" class="t16-social-icon">
+                                <?php echo $links->icon; ?>
+
                             </a>
-                        @endif
-                    @endforeach
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
-        {{-- Contact Us Card --}}
+        
         <div class="col-lg-4">
             <div class="t16-contact-card">
                 <h3 class="t16-contact-title">
-                    <i class="fa-regular fa-phone-volume"></i> {{ App::getLocale() == 'ar' ? 'اتصل بنا' : 'Contact Us' }}
+                    <i class="fa-regular fa-phone-volume"></i> <?php echo e(App::getLocale() == 'ar' ? 'اتصل بنا' : 'Contact Us'); ?>
+
                 </h3>
                 
-                @php
+                <?php
                     $contactNo = helper::appdata(@$storeinfo->id)->contact;
-                @endphp
-                @if(!empty($contactNo))
-                <a href="tel:{{ $contactNo }}" class="t16-contact-btn">
+                ?>
+                <?php if(!empty($contactNo)): ?>
+                <a href="tel:<?php echo e($contactNo); ?>" class="t16-contact-btn">
                     <div class="main-info">
                         <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
                         <div class="text-info">
-                            <span class="num">{{ $contactNo }}</span>
-                            <span class="sub">{{ App::getLocale() == 'ar' ? 'اتصل الآن' : 'Call now' }}</span>
+                            <span class="num"><?php echo e($contactNo); ?></span>
+                            <span class="sub"><?php echo e(App::getLocale() == 'ar' ? 'اتصل الآن' : 'Call now'); ?></span>
                         </div>
                     </div>
                     <div class="action-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
                 </a>
-                @endif
+                <?php endif; ?>
 
-                @php
+                <?php
                     $storeEmail = helper::appdata(@$storeinfo->id)->email;
                     if (empty($storeEmail) || $storeEmail == '-') {
                         $storeEmail = @$storeinfo->email;
                     }
-                @endphp
-                @if(!empty($storeEmail) && $storeEmail != '-')
-                <a href="mailto:{{ $storeEmail }}" target="_blank" class="t16-map-btn">
+                ?>
+                <?php if(!empty($storeEmail) && $storeEmail != '-'): ?>
+                <a href="mailto:<?php echo e($storeEmail); ?>" target="_blank" class="t16-map-btn">
                     <div class="main-info">
                         <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
                         <div class="text-info">
-                            <span class="num">{{ $storeEmail }}</span>
-                            <span class="sub">{{ App::getLocale() == 'ar' ? 'أرسل بريداً إلكترونياً' : 'Send Email' }}</span>
+                            <span class="num"><?php echo e($storeEmail); ?></span>
+                            <span class="sub"><?php echo e(App::getLocale() == 'ar' ? 'أرسل بريداً إلكترونياً' : 'Send Email'); ?></span>
                         </div>
                     </div>
                     <div class="action-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
                 </a>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
 
-{{-- ═══════════════ MENU SECTION: CATEGORY CARDS ═══════════════ --}}
+
 <section style="max-width:1280px;margin:0 auto;padding:0 16px;" class="mt-5 t16-menu-section">
 
-    @if($allCategories->count() > 0)
-        <h2 class="t16-menu-title">{{ trans('labels.menu') }}</h2>
+    <?php if($allCategories->count() > 0): ?>
+        <h2 class="t16-menu-title"><?php echo e(trans('labels.menu')); ?></h2>
 
         <div class="t16-cats-scroll t16-hide-scroll">
-            @foreach($allCategories as $ci => $cat)
-                <a href="{{ URL::to(@$storeinfo->slug . '/category/' . $cat->slug) }}"
+            <?php $__currentLoopData = $allCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ci => $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a href="<?php echo e(URL::to(@$storeinfo->slug . '/category/' . $cat->slug)); ?>"
                    class="t16-cat-card"
-                   style="animation-delay: {{ $ci * 0.06 }}s;">
+                   style="animation-delay: <?php echo e($ci * 0.06); ?>s;">
                     <div class="t16-cat-card-img">
-                        @if (!empty($cat->image) && $cat->image !== 'default.png')
-                            <img src="{{ helper::image_path($cat->image) }}"
-                                 alt="{{ $cat->name }}"
+                        <?php if(!empty($cat->image) && $cat->image !== 'default.png'): ?>
+                            <img src="<?php echo e(helper::image_path($cat->image)); ?>"
+                                 alt="<?php echo e($cat->name); ?>"
                                  loading="lazy">
-                        @else
+                        <?php else: ?>
                             <div class="t16-cat-placeholder">
                                 <i class="fa-solid fa-utensils"></i>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
-                    <div class="t16-cat-card-name">{{ $cat->name }}</div>
-                    <div class="t16-cat-card-count">{{ trans('labels.items') == 'labels.items' ? 'items' : trans('labels.items') }}</div>
+                    <div class="t16-cat-card-name"><?php echo e($cat->name); ?></div>
+                    <div class="t16-cat-card-count"><?php echo e(trans('labels.items') == 'labels.items' ? 'items' : trans('labels.items')); ?></div>
                 </a>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-    @else
+    <?php else: ?>
         <div class="t16-empty">
             <i class="fa-regular fa-face-sad-tear d-block"></i>
-            {{ trans('labels.no_product_found') == 'labels.no_product_found' ? 'لا توجد منتجات' : trans('labels.no_product_found') }}
+            <?php echo e(trans('labels.no_product_found') == 'labels.no_product_found' ? 'لا توجد منتجات' : trans('labels.no_product_found')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
 </section>
 
-{{-- ═══════════════ JAVASCRIPT ═══════════════ --}}
+
 <script>
 /* ─── Slider ─── */
 (function(){
@@ -848,7 +856,7 @@ function t16DoAdd(itemId, uid, d, qty) {
 
     $.ajax({
         headers:  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url:      '{{ URL::to("/add-to-cart") }}',
+        url:      '<?php echo e(URL::to("/add-to-cart")); ?>',
         method:   'POST',
         dataType: 'json',
         data: {
@@ -878,17 +886,17 @@ function t16DoAdd(itemId, uid, d, qty) {
                 $('#' + uid + '_addbtn').hide();
                 $('#' + uid + '_stepper').css('display', 'flex');
                 $('#' + uid + '_qtynum').text(qty);
-                toastr.success('{{ trans("messages.add_to_cart_msg") }}');
+                toastr.success('<?php echo e(trans("messages.add_to_cart_msg")); ?>');
             } else {
                 toastr.error(res.message);
             }
             $('#' + uid + '_addbtn').prop('disabled', false)
-                .html('<i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>&nbsp;{{ trans("labels.add") ?? "إضافة" }}');
+                .html('<i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>&nbsp;<?php echo e(trans("labels.add") ?? "إضافة"); ?>');
         },
         error: function() {
             toastr.error(wrong);
             $('#' + uid + '_addbtn').prop('disabled', false)
-                .html('<i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>&nbsp;{{ trans("labels.add") ?? "إضافة" }}');
+                .html('<i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>&nbsp;<?php echo e(trans("labels.add") ?? "إضافة"); ?>');
         }
     });
 }
@@ -897,7 +905,7 @@ function t16DoAdd(itemId, uid, d, qty) {
 function t16DoUpdate(itemId, uid, d, newQty) {
     $.ajax({
         headers:  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url:      '{{ URL::to("/cart/qtyupdate") }}',
+        url:      '<?php echo e(URL::to("/cart/qtyupdate")); ?>',
         method:   'POST',
         dataType: 'json',
         data: {
@@ -935,7 +943,7 @@ function t16DoRemove(itemId, uid, d) {
     }
     $.ajax({
         headers:  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url:      '{{ URL::to("/cart/deletecartitem") }}',
+        url:      '<?php echo e(URL::to("/cart/deletecartitem")); ?>',
         method:   'POST',
         dataType: 'json',
         data: {
@@ -961,4 +969,5 @@ function t16DoRemove(itemId, uid, d) {
 }
 </script>
 
-@include('front.theme.footer')
+<?php echo $__env->make('front.theme.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-16/home.blade.php ENDPATH**/ ?>

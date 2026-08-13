@@ -900,6 +900,70 @@
             text-align: center;
         }
 
+        .footer-center-badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* PrimeTech Developed By Badge */
+        .primetech-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.55rem 1.4rem;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            text-decoration: none !important;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .primetech-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.75s ease;
+        }
+
+        .primetech-badge:hover::before {
+            left: 100%;
+        }
+
+        .primetech-badge:hover {
+            transform: translateY(-2px) scale(1.04);
+            background: linear-gradient(135deg, #111827 0%, #064e3b 100%);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35), 0 0 0 1px rgba(37, 211, 102, 0.4) inset;
+            color: #ffffff;
+        }
+
+        .primetech-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            direction: ltr;
+        }
+
+        .primetech-name {
+            font-weight: 800;
+            background: linear-gradient(135deg, #25D366 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
         /* ===== Who We Are Section ===== */
         .who-section {
             padding: 6rem 2rem;
@@ -1440,8 +1504,12 @@
                 <span>صفحات هبوط فائقة السرعة</span>
             </div>
             <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">payments</span>
-                <span>تفعيل +15 بوابة دفع إلكترونية</span>
+                <span class="material-symbols-outlined text-emerald-600 text-base">inventory_2</span>
+                <span>إدارة وبيع المنتجات الرقمية والفيزيائية</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">chat</span>
+                <span>استقبال الطلبات والإشعارات عبر الواتساب</span>
             </div>
             <div class="marquee-item">
                 <span class="material-symbols-outlined text-emerald-600 text-base">local_shipping</span>
@@ -1474,8 +1542,12 @@
                 <span>صفحات هبوط فائقة السرعة</span>
             </div>
             <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">payments</span>
-                <span>تفعيل +15 بوابة دفع إلكترونية</span>
+                <span class="material-symbols-outlined text-emerald-600 text-base">inventory_2</span>
+                <span>إدارة وبيع المنتجات الرقمية والفيزيائية</span>
+            </div>
+            <div class="marquee-item">
+                <span class="material-symbols-outlined text-emerald-600 text-base">chat</span>
+                <span>استقبال الطلبات والإشعارات عبر الواتساب</span>
             </div>
             <div class="marquee-item">
                 <span class="material-symbols-outlined text-emerald-600 text-base">local_shipping</span>
@@ -1949,12 +2021,15 @@
                 </div>
             </div>
 
-            <!-- <div class="footer-links">
-                <a href="#">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
-            </div> -->
+            <div class="footer-center-badge">
+                <a href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer" class="primetech-badge">
+                    <span class="primetech-text">Developed by <strong class="primetech-name">PrimeTech</strong></span>
+                </a>
+            </div>
 
             <div class="footer-copy">
-                {{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}</div>
+                {{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}
+            </div>
         </div>
     </footer>
 

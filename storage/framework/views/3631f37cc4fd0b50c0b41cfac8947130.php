@@ -53,6 +53,64 @@
             background: linear-gradient(135deg, #15AC82 0%, #0D8D6B 100%);
         }
 
+        /* PrimeTech Developed By Badge */
+        .primetech-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.55rem 1.4rem;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            text-decoration: none !important;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .primetech-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.75s ease;
+        }
+
+        .primetech-badge:hover::before {
+            left: 100%;
+        }
+
+        .primetech-badge:hover {
+            transform: translateY(-2px) scale(1.04);
+            background: linear-gradient(135deg, #111827 0%, #064e3b 100%);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35), 0 0 0 1px rgba(37, 211, 102, 0.4) inset;
+            color: #ffffff;
+        }
+
+        .primetech-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            direction: ltr;
+        }
+
+        .primetech-name {
+            font-weight: 800;
+            background: linear-gradient(135deg, #25D366 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
         .site-header {
             position: fixed;
             top: 0;
@@ -149,52 +207,72 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group" data-aos="fade-up">
-                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('https://www.youtube.com/embed/dQw4w9WgXcQ', 'كيف تدمج وتضيف المنتجات الجديدة في متجرك؟')">
-                        <img src="https://images.unsplash.com/photo-1556742049-0a67dd6127c5?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" alt="Tutorial Thumbnail">
+                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('<?php echo e(asset('public/videos/category.mp4')); ?>', 'إضافة فئة')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" preload="metadata">
+                            <source src="<?php echo e(asset('public/videos/category.mp4')); ?>#t=0.1" type="video/mp4">
+                        </video>
                         <div class="absolute w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
                             <span class="material-symbols-outlined text-3xl">play_arrow</span>
                         </div>
-                        <span class="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2.5 py-1 rounded-md font-mono">03:45</span>
                     </div>
                     <div class="p-5">
-                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-bold mb-2">إدارة المنتجات</span>
-                        <h3 class="font-bold text-slate-900 text-lg mb-2">كيف تضيف منتج جديد وتحدد خيارات الخصم والأنواع؟</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed">شرح تفصيلي لكيفية رفع صور المنتجات، وتحديد الأسعار، والأقسام والأنواع المختلفة.</p>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-bold mb-2">الأقسام</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">كيف تضيف فئة / قسم جديد؟</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">شرح توضيحي لكيفية إضافة فئات وأقسام لترتيب منتجات متجرك.</p>
                     </div>
                 </div>
 
                 
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-delay="100">
-                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('https://www.youtube.com/embed/dQw4w9WgXcQ', 'كيف تخصص تصميم وثيم المتجر؟')">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" alt="Tutorial Thumbnail">
+                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('<?php echo e(asset('public/videos/instgram.mp4')); ?>', 'إستيراد المنتجات من إنستجرام')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" preload="metadata">
+                            <source src="<?php echo e(asset('public/videos/instgram.mp4')); ?>#t=0.1" type="video/mp4">
+                        </video>
                         <div class="absolute w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
                             <span class="material-symbols-outlined text-3xl">play_arrow</span>
                         </div>
-                        <span class="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2.5 py-1 rounded-md font-mono">04:20</span>
                     </div>
                     <div class="p-5">
-                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-600 text-xs font-bold mb-2">التصميم والمظهر</span>
-                        <h3 class="font-bold text-slate-900 text-lg mb-2">طريقة تغيير شعار المتجر، الألوان، والبانرات الرئيسية</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed">تعلم كيفية اختيار ثيم متجرك وضبط الهوية البصرية بسهولة ودون خبرة برمجية.</p>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-600 text-xs font-bold mb-2">الربط والاستيراد</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">طريقة إستيراد المنتجات من إنستجرام</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">تعلم كيفية جلب منتجاتك وصورك مباشرة من حسابك على إنستجرام.</p>
                     </div>
                 </div>
 
                 
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-delay="200">
-                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('https://www.youtube.com/embed/dQw4w9WgXcQ', 'إعدادات وسائط الدفع والشحن')">
-                        <img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" alt="Tutorial Thumbnail">
+                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('<?php echo e(asset('public/videos/logo.mp4')); ?>', 'تغيير اللوجو')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" preload="metadata">
+                            <source src="<?php echo e(asset('public/videos/logo.mp4')); ?>#t=0.1" type="video/mp4">
+                        </video>
                         <div class="absolute w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
                             <span class="material-symbols-outlined text-3xl">play_arrow</span>
                         </div>
-                        <span class="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2.5 py-1 rounded-md font-mono">05:10</span>
                     </div>
                     <div class="p-5">
-                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-600 text-xs font-bold mb-2">الدفع والشحن</span>
-                        <h3 class="font-bold text-slate-900 text-lg mb-2">ضبط خيارات الشحن وتفعيل الدفع عند الاستلام الإلكتروني</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed">خطوات تفعيل وسائل الدفع الشائعة وتحديد أسعار الشحن والتوصيل لمختلف المناطق.</p>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-600 text-xs font-bold mb-2">التصميم والمظهر</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">كيف تغير شعار (اللوجو) الخاص بمتجرك؟</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">خطوات بسيطة لرفع شعارك الجديد وتحديث هوية متجرك البصرية.</p>
+                    </div>
+                </div>
+
+                
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="relative bg-slate-900 aspect-video flex items-center justify-center cursor-pointer" onclick="playVideo('<?php echo e(asset('public/videos/product.mp4')); ?>', 'إضافة منتج')">
+                        <video class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" preload="metadata">
+                            <source src="<?php echo e(asset('public/videos/product.mp4')); ?>#t=0.1" type="video/mp4">
+                        </video>
+                        <div class="absolute w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
+                            <span class="material-symbols-outlined text-3xl">play_arrow</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-bold mb-2">المنتجات</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">طريقة إضافة منتج جديد</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">تعرف على كيفية رفع المنتجات وتحديد أسعارها وتفاصيلها.</p>
                     </div>
                 </div>
             </div>
@@ -281,7 +359,10 @@
 
     
     <footer class="bg-slate-900 text-slate-400 text-sm py-8 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-6 text-center">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center gap-3 text-center">
+            <a href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer" class="primetech-badge">
+                <span class="primetech-text">Developed by <strong class="primetech-name">PrimeTech</strong></span>
+            </a>
             <p>© <?php echo e(date('Y')); ?> MatjarHub. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
@@ -296,7 +377,9 @@
                 </button>
             </div>
             <div class="aspect-video bg-black">
-                <iframe id="videoIframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <video id="videoPlayer" class="w-full h-full" controls>
+                    <source src="" type="video/mp4">
+                </video>
             </div>
         </div>
     </div>
@@ -307,13 +390,17 @@
 
         function playVideo(url, title) {
             document.getElementById('videoTitle').innerText = title;
-            document.getElementById('videoIframe').src = url;
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = url;
+            videoPlayer.play();
             document.getElementById('videoModal').classList.remove('hidden');
             document.getElementById('videoModal').classList.add('flex');
         }
 
         function closeVideoModal() {
-            document.getElementById('videoIframe').src = '';
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.pause();
+            videoPlayer.src = '';
             document.getElementById('videoModal').classList.add('hidden');
             document.getElementById('videoModal').classList.remove('flex');
         }

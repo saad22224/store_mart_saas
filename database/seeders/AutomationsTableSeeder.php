@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Automation;
 use Illuminate\Database\Seeder;
 
-class AutomationsTableSeeder extends Seeder
+class  AutomationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

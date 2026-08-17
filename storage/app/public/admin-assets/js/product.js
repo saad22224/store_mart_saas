@@ -253,9 +253,19 @@ $(document).on("click", ".add-variants", function (e) {
         hiddenVariantOptions: $("#hiddenVariantOptions").val()
       },
       success: function (data) {
+        if (data.message != "" && data.message != null) {
+          if (typeof toastr !== 'undefined') {
+            toastr.error(data.message);
+          }
+        }
         $("#hiddenVariantOptions").val(data.hiddenVariantOptions);
         $(".variant-table").html(data.varitantHTML);
         $('#variant_card').removeClass('d-none');
+        // For non-restaurant stores: update hidden has_variants to 1 and trigger UI update
+        if ($('#has_variants_hidden').length) {
+          $('#has_variants_hidden').val('1');
+          check_variation_validation(1);
+        }
         if (page == "add") {
           $("#commonModal").modal("hide");
         }
@@ -266,6 +276,7 @@ $(document).on("click", ".add-variants", function (e) {
     });
   }
 });
+
 
 var extras_row = 1;
 function extras_fields(name, price) {

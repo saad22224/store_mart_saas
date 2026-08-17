@@ -4576,11 +4576,14 @@ a {
   border: 1.5px solid #e2e8f0 !important;
   padding: 0.55rem 0.9rem !important;
   font-size: 0.88rem !important;
+  color: #0f172a !important;
+  background-color: #ffffff !important;
   transition: all 0.2s !important;
 }
 .form-control:focus, .form-select:focus {
   border-color: var(--bs-primary) !important;
   box-shadow: 0 0 0 3px rgba(99,102,241,0.08) !important;
+  color: #0f172a !important;
 }
 
 /* Buttons */

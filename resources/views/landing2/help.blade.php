@@ -53,63 +53,7 @@
             background: linear-gradient(135deg, #15AC82 0%, #0D8D6B 100%);
         }
 
-        /* PrimeTech Developed By Badge */
-        .primetech-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.55rem 1.4rem;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc;
-            text-decoration: none !important;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
 
-        .primetech-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.75s ease;
-        }
-
-        .primetech-badge:hover::before {
-            left: 100%;
-        }
-
-        .primetech-badge:hover {
-            transform: translateY(-2px) scale(1.04);
-            background: linear-gradient(135deg, #111827 0%, #064e3b 100%);
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35), 0 0 0 1px rgba(37, 211, 102, 0.4) inset;
-            color: #ffffff;
-        }
-
-        .primetech-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            direction: ltr;
-        }
-
-        .primetech-name {
-            font-weight: 800;
-            background: linear-gradient(135deg, #25D366 0%, #34d399 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-        }
 
         .site-header {
             position: fixed;
@@ -360,9 +304,7 @@
     {{-- Footer --}}
     <footer class="bg-slate-900 text-slate-400 text-sm py-8 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center gap-3 text-center">
-            <a href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer" class="primetech-badge">
-                <span class="primetech-text">Developed by <strong class="primetech-name">PrimeTech</strong></span>
-            </a>
+
             <p>© {{ date('Y') }} MatjarHub. جميع الحقوق محفوظة.</p>
         </div>
     </footer>

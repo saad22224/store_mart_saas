@@ -480,32 +480,31 @@
                                                                         <tr class="fs-7 fw-500"
                                                                             data-id="{{ $productVariant['product_variants']['id'] }}">
                                                                             @foreach (explode('|', $productVariant['product_variants']['name']) as $key => $values)
-                                                                                <td>
-                                                                                    <input type="text"
+                                                                                <td class="text-center align-middle">
+                                                                                    <span class="badge bg-light text-dark border px-3 py-2 fw-bold" style="font-size: 14px !important; color: #0f172a !important; background-color: #f1f5f9 !important; border: 1.5px solid #cbd5e1 !important; display: inline-block; min-width: 45px;">
+                                                                                        {{ trim($values) }}
+                                                                                    </span>
+                                                                                    <input type="hidden"
                                                                                         name="variants[{{ $productVariant['product_variants']['id'] }}][variants][{{ $key }}][]"
-                                                                                        autocomplete="off"
-                                                                                        spellcheck="false"
-                                                                                        class="form-control"
-                                                                                        value="{{ $values }}"
-                                                                                        readonly>
+                                                                                        value="{{ trim($values) }}">
                                                                                 </td>
                                                                             @endforeach
                                                                             <td>
-                                                                                <input type="number"
+                                                                                <input type="text"
                                                                                     name="variants[{{ $productVariant['product_variants']['id'] }}][original_price]"
                                                                                     autocomplete="off" spellcheck="false"
                                                                                     placeholder="{{ trans('labels.original_price') }}"
-                                                                                    class="form-control voriginal_price_{{ $counter }}"
+                                                                                    class="variant-input voriginal_price_{{ $counter }}"
                                                                                     value="{{ $productVariant['product_variants']['original_price'] }}"
                                                                                     id="voriginal_price_{{ $counter }}"
                                                                                     required>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number"
+                                                                                <input type="text"
                                                                                     name="variants[{{ $productVariant['product_variants']['id'] }}][price]"
                                                                                     autocomplete="off" spellcheck="false"
                                                                                     placeholder="{{ trans('labels.selling_price') }}"
-                                                                                    class="form-control vprice_{{ $counter }}"
+                                                                                    class="variant-input vprice_{{ $counter }}"
                                                                                     value="{{ $productVariant['product_variants']['price'] }}"
                                                                                     id="vprice_{{ $counter }}"
                                                                                     required>
@@ -516,7 +515,7 @@
                                                                                     name="variants[{{ $productVariant['product_variants']['id'] }}][qty]"
                                                                                     autocomplete="off" spellcheck="false"
                                                                                     placeholder="{{ trans('labels.stock_qty') }}"
-                                                                                    class="form-control vqty_{{ $counter }}"
+                                                                                    class="variant-input vqty_{{ $counter }}"
                                                                                     value="{{ $productVariant['product_variants']['qty'] }}"
                                                                                     id="vqty_{{ $counter }}">
                                                                             </td>
@@ -525,7 +524,7 @@
                                                                                     name="variants[{{ $productVariant['product_variants']['id'] }}][min_order]"
                                                                                     autocomplete="off" spellcheck="false"
                                                                                     placeholder="{{ trans('labels.min_order_qty') }}"
-                                                                                    class="form-control vmin_order_{{ $counter }}"
+                                                                                    class="variant-input vmin_order_{{ $counter }}"
                                                                                     value="{{ $productVariant['product_variants']['min_order'] }}"
                                                                                     id="vmin_order_{{ $counter }}">
                                                                             </td>
@@ -534,7 +533,7 @@
                                                                                     name="variants[{{ $productVariant['product_variants']['id'] }}][max_order]"
                                                                                     autocomplete="off" spellcheck="false"
                                                                                     placeholder="{{ trans('labels.max_order_qty') }}"
-                                                                                    class="form-control vmax_order_{{ $counter }}"
+                                                                                    class="variant-input vmax_order_{{ $counter }}"
                                                                                     value="{{ $productVariant['product_variants']['max_order'] }}"
                                                                                     id="vmax_order_{{ $counter }}">
                                                                             </td>
@@ -543,7 +542,7 @@
                                                                                     name="variants[{{ $productVariant['product_variants']['id'] }}][low_qty]"
                                                                                     autocomplete="off" spellcheck="false"
                                                                                     placeholder="{{ trans('labels.product_low_qty_warning') }}"
-                                                                                    class="form-control vlow_qty_{{ $counter }}"
+                                                                                    class="variant-input vlow_qty_{{ $counter }}"
                                                                                     value="{{ $productVariant['product_variants']['low_qty'] }}"
                                                                                     id="vlow_qty_{{ $counter }}">
                                                                             </td>
@@ -856,49 +855,6 @@
             $('#variant_options').val("");
         });
 
-        $(document).on('click', '.add-variants', function(e) {
-            e.preventDefault();
-            var form = $(this).parents('form');
-            var variantNameEle = $('#variant_name');
-            var variantOptionsEle = $('#variant_options');
-            var isValid = true;
-            var hiddenVariantOptions = $('#hiddenVariantOptions').val();
-
-            if (variantNameEle.val() == '') {
-                variantNameEle.focus();
-                isValid = false;
-            } else if (variantOptionsEle.val() == '') {
-                variantOptionsEle.focus();
-                isValid = false;
-            }
-
-            if (isValid) {
-                $.ajax({
-                    url: form.attr('action'),
-                    datType: 'json',
-                    data: {
-                        variant_name: variantNameEle.val(),
-                        variant_options: variantOptionsEle.val(),
-                        hiddenVariantOptions: hiddenVariantOptions
-                    },
-                    success: function(data) {
-                        if (data.message != "" && data.message != null) {
-                            toastr.error(data.message);
-                        }
-                        $('#hiddenVariantOptions').val(data.hiddenVariantOptions);
-                        $('.variant-table').html(data.varitantHTML);
-                        $('#variant_card').removeClass('d-none');
-                        $("#commonModal").modal('hide');
-                        // For non-restaurant stores: update hidden has_variants to 1 and trigger UI update
-                        if ($('#has_variants_hidden').length) {
-                            $('#has_variants_hidden').val('1');
-                            check_variation_validation(1);
-                        }
-                    }
-                })
-            }
-        });
-
     </script>
     <script>
         function validation(value, id) {
@@ -952,5 +908,5 @@
 
         })
     </script>
-    <script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/product.js') }}"></script>
+    <script src="{{ url(env('ASSETPATHURL') . 'admin-assets/js/product.js?v=' . time()) }}"></script>
 @endsection

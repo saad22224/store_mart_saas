@@ -1,2 +1,0 @@
-<?php echo $__env->make('front.template-17.layout.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-21/layout/header.blade.php ENDPATH**/ ?>

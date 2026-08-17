@@ -1150,4 +1150,7 @@
     'sort_by_latest' => 'Sort by Latest',
     'sort_by_price_low' => 'Sort by Price: Low to High',
     'sort_by_price_high' => 'Sort by Price: High to Low',
+    'optional' => 'Optional',
+    'colors_placeholder' => 'e.g. Red, Blue, Green',
+    'colors_help' => 'Enter colors separated by commas',
 ];

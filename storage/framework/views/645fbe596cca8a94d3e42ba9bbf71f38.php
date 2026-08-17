@@ -1,2 +1,0 @@
-<?php echo $__env->make('front.template-17.layout.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-19/layout/footer.blade.php ENDPATH**/ ?>

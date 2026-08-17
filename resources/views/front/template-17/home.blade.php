@@ -275,7 +275,7 @@
                             $sliderAttrs = '';
                             if ($slider->product_id != 0 || $slider->category_id != 0) {
                                 if ($slider->type == 1 && !empty($slider['category_info'])) {
-                                    $sliderHref = URL::to($storeinfo->slug . '/search?category=' . $slider['category_info']->slug);
+                                    $sliderHref = URL::to($storeinfo->slug . '/category/' . $slider['category_info']->slug);
                                 } elseif ($slider->type == 2) {
                                     $item = helper::itemdetails($slider->product_id, $storeinfo->id);
                                     if (!empty($item)) {

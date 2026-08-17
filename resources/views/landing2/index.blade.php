@@ -906,63 +906,7 @@
             align-items: center;
         }
 
-        /* PrimeTech Developed By Badge */
-        .primetech-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.55rem 1.4rem;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc;
-            text-decoration: none !important;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
 
-        .primetech-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.75s ease;
-        }
-
-        .primetech-badge:hover::before {
-            left: 100%;
-        }
-
-        .primetech-badge:hover {
-            transform: translateY(-2px) scale(1.04);
-            background: linear-gradient(135deg, #111827 0%, #064e3b 100%);
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35), 0 0 0 1px rgba(37, 211, 102, 0.4) inset;
-            color: #ffffff;
-        }
-
-        .primetech-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            direction: ltr;
-        }
-
-        .primetech-name {
-            font-weight: 800;
-            background: linear-gradient(135deg, #25D366 0%, #34d399 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-        }
 
         /* ===== Who We Are Section ===== */
         .who-section {
@@ -1213,7 +1157,7 @@
     <!-- PWA Install Prompt Button -->
     <div id="installBtn"
         style="display:none; opacity:0; transform: translateY(-150%); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);"
-        class="fixed top-4 left-0 right-0 mx-auto z-[100] flex items-center justify-between gap-2 md:gap-4 bg-white px-3 md:px-4 py-3 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 w-[92%] max-w-sm">
+        class="fixed top-4 left-0 right-0 mx-auto z-[200] flex items-center justify-between gap-2 md:gap-4 bg-white px-3 md:px-4 py-3 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 w-[92%] max-w-sm">
         <div class="flex items-center gap-2 md:gap-3 overflow-hidden">
             <div class="flex-shrink-0">
                 <img src="{{ helper::image_path(helper::appdata(1)->app_logo) }}"
@@ -2021,11 +1965,7 @@
                 </div>
             </div>
 
-            <div class="footer-center-badge">
-                <a href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer" class="primetech-badge">
-                    <span class="primetech-text">Developed by <strong class="primetech-name">PrimeTech</strong></span>
-                </a>
-            </div>
+
 
             <div class="footer-copy">
                 {{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}

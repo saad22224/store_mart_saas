@@ -121,6 +121,10 @@ class VendorController extends Controller
                 $usersetting = Settings::where('vendor_id', $edituser->id)->first();
                 // dd($plan->themes_id[0]);
                 $firstTheme = explode('|', $plan->themes_id)[0];
+                // Fallback to template 1 if themes_id is "0", empty, or invalid
+                if (empty($firstTheme) || $firstTheme === '0') {
+                    $firstTheme = 1;
+                }
 
                 $usersetting->template = $firstTheme;
                 $usersetting->save();

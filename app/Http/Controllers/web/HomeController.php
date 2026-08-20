@@ -131,8 +131,13 @@ class HomeController extends Controller
         if ($request->is($request->vendor . '/pwa')) {
             return view('front.themepwa', compact('bestsellingitems', 'getitem', 'toprateditems', 'storeinfo', 'bannerimage1', 'bannerimage2', 'cartdata', 'whowearedata', 'sliders', 'testimonials'));
         } else {
-            return view('front.template-' . $settingdata->template . '.home', compact('bestsellingitems', 'getitem', 'toprateditems', 'storeinfo', 'bannerimage1', 'bannerimage2', 'cartdata', 'whowearedata', 'sliders', 'testimonials'));
+            $templateNum = $settingdata->template ?? 1;
+            if (empty($templateNum) || $templateNum == '0') {
+                $templateNum = 1;
+            }
+            return view('front.template-' . $templateNum . '.home', compact('bestsellingitems', 'getitem', 'toprateditems', 'storeinfo', 'bannerimage1', 'bannerimage2', 'cartdata', 'whowearedata', 'sliders', 'testimonials'));
         }
+
     }
     public function privacyshow(Request $request)
     {

@@ -246,6 +246,7 @@
             </ul>
         </li>
 
+        {{-- Temporarily hidden from merchant dashboard: Shopify
         @if (@helper::checkaddons('shopify'))
             <li
                 class="nav-item mb-2 fs-7 dropdown multimenu {{ helper::check_menu($role_id, 'role_shopify') == 1 ? 'd-block' : 'd-none' }}">
@@ -280,6 +281,7 @@
                 </ul>
             </li>
         @endif
+        --}}
 
         <li
             class="nav-item mt-3 {{ helper::check_menu($role_id, 'role_sliders') == 1 || helper::check_menu($role_id, 'role_banner') == 1 || helper::check_menu($role_id, 'role_coupons') == 1 || helper::check_menu($role_id, 'role_top_deals') == 1 || helper::check_menu($role_id, 'role_firebase_notification') == 1 ? 'd-block' : 'd-none' }}">
@@ -291,6 +293,7 @@
                 <i class="fa-solid fa-image"></i><span class="nav-text ">{{ trans('labels.sliders') }}</span>
             </a>
         </li>
+        {{-- Temporarily hidden from merchant dashboard: Banners
         <li
             class="nav-item mb-2 fs-7 dropdown multimenu {{ helper::check_menu($role_id, 'role_banner') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link collapsed rounded d-flex align-items-center justify-content-between dropdown-toggle mb-1"
@@ -320,6 +323,7 @@
                 </li>
             </ul>
         </li>
+        --}}
         @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('coupon'))
                 @php
@@ -429,6 +433,8 @@
                 </a>
             </li>
         @endif
+        {{-- Temporarily hidden from merchant dashboard: Transactions (admin only) --}}
+        @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
         <li
             class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_transaction') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link rounded d-flex {{ request()->is('admin/transaction*') ? 'active' : '' }}"
@@ -437,6 +443,9 @@
                 <span class="">{{ trans('labels.transaction') }}</span>
             </a>
         </li>
+        @endif
+        {{-- Temporarily hidden from merchant dashboard: Payment Gateways (admin only) --}}
+        @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
         <li
             class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_payment_methods') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link rounded d-flex {{ request()->is('admin/payment') ? 'active' : '' }}"
@@ -445,7 +454,9 @@
                 <span class="">{{ trans('labels.payment_methods') }}</span>
             </a>
         </li>
+        @endif
     @else
+        {{-- Temporarily hidden from merchant dashboard: Payment Gateways
         @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
             <li
                 class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_payment_methods') == 1 ? 'd-block' : 'd-none' }}">
@@ -456,9 +467,11 @@
                 </a>
             </li>
         @endif
+        --}}
     @endif
 
     @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
+        {{-- Temporarily hidden from merchant dashboard: Working Hours
         <li
             class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_working_hours') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link rounded d-flex {{ request()->is('admin/time*') ? 'active' : '' }}"
@@ -467,6 +480,7 @@
                 <span class="nav-text">{{ trans('labels.working_hours') }}</span>
             </a>
         </li>
+        --}}
 
         @php
             $delivery_type = explode('|', helper::appdata($vendor_id)->delivery_type);
@@ -481,6 +495,7 @@
             </li>
         @endif
         @if (helper::appdata($vendor_id)->product_type == 1)
+            {{-- Temporarily hidden from merchant dashboard: Custom Status
             @if (@helper::checkaddons('custom_status'))
                 <li
                     class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_custom_status') == 1 ? 'd-block' : 'd-none' }}">
@@ -497,6 +512,7 @@
                     </a>
                 </li>
             @endif
+            --}}
         @endif
     @endif
 
@@ -617,6 +633,7 @@
                 <span>{{ trans('labels.basic_settings') }}</span>
             </a>
         </li>
+        {{-- Temporarily hidden from merchant dashboard: Who We Are (من نحن)
         <li
             class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_who_we_are') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link d-flex rounded {{ request()->is('admin/whoweare*') ? 'active' : '' }}"
@@ -625,6 +642,8 @@
                 <span>{{ trans('labels.who_we_are') }}</span>
             </a>
         </li>
+        --}}
+        {{-- Temporarily hidden from merchant dashboard: Blog
         @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('blog'))
                 @php
@@ -671,6 +690,8 @@
                 </li>
             @endif
         @endif
+        --}}
+        {{-- Temporarily hidden from merchant dashboard: Reviews
         @if (@helper::checkaddons('store_reviews'))
             <li
                 class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_testimonials') == 1 ? 'd-block' : 'd-none' }}">
@@ -687,6 +708,8 @@
                 </a>
             </li>
         @endif
+        --}}
+        {{-- Temporarily hidden from merchant dashboard: FAQ
         <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_faqs') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link d-flex rounded {{ request()->is('admin/faqs*') ? 'active' : '' }}"
                 aria-current="page" href="{{ URL::to('/admin/faqs') }}">
@@ -694,6 +717,7 @@
                 <span>{{ trans('labels.faqs') }}</span>
             </a>
         </li>
+        --}}
         <li
             class="nav-item mb-2 fs-7 dropdown multimenu {{ helper::check_menu($role_id, 'role_cms_pages') == 1 ? 'd-block' : 'd-none' }}">
             <a class="nav-link collapsed rounded d-flex align-items-center justify-content-between dropdown-toggle mb-1"
@@ -718,6 +742,7 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.terms') }}</span>
                     </a>
                 </li>
+                {{-- Temporarily hidden from merchant dashboard: About Us
                 <li class="nav-item ps-4 mb-1">
                     <a class="nav-link rounded {{ request()->is('admin/aboutus*') ? 'active' : '' }}"
                         aria-current="page" href="{{ URL::to('/admin/aboutus') }}">
@@ -725,6 +750,7 @@
                             <i class="fa-solid fa-circle-small"></i>{{ trans('labels.about') }}</span>
                     </a>
                 </li>
+                --}}
                 <li class="nav-item ps-4 mb-1">
                     <a class="nav-link rounded {{ request()->is('admin/refund_policy') ? 'active' : '' }}"
                         aria-current="page" href="{{ URL::to('/admin/refund_policy') }}">
@@ -922,6 +948,8 @@
     @endif
 
 
+    {{-- Temporarily hidden from merchant dashboard: Employee Management --}}
+    @if (false)
     @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
         @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('employee'))
@@ -936,7 +964,6 @@
 
                 @endphp
                 @if ($role_management == 1)
-                    {{-- role management --}}
                     <li
                         class="nav-item mt-3 {{ helper::check_menu($role_id, 'role_employees') == 1 || helper::check_menu($role_id, 'role_roles') == 1 ? 'd-block' : 'd-none' }}">
                         <h6 class="text-muted mb-2 fs-7 text-uppercase">{{ trans('labels.employee_management') }}
@@ -973,7 +1000,6 @@
                 @endif
             @endif
         @else
-            {{-- role management --}}
             @if (@helper::checkaddons('employee'))
                 <li
                     class="nav-item mt-3 {{ helper::check_menu($role_id, 'role_employees') == 1 || helper::check_menu($role_id, 'role_roles') == 1 ? 'd-block' : 'd-none' }}">
@@ -1010,11 +1036,14 @@
             @endif
         @endif
     @endif
+    @endif
 
     <li
         class="nav-item mt-3 {{ helper::check_menu($role_id, 'role_subscribers') == 1 || helper::check_menu($role_id, 'role_inquiries') == 1 || helper::check_menu($role_id, 'role_product_inquiry') == 1 || helper::check_menu($role_id, 'role_share') == 1 || helper::check_menu($role_id, 'role_whatsapp_settings') == 1 || helper::check_menu($role_id, 'role_telegram_settings') == 1 || helper::check_menu($role_id, 'role_settings') == 1 ? 'd-block' : 'd-none' }}">
         <h6 class="text-muted mb-2 fs-7 text-uppercase">{{ trans('labels.other') }}</h6>
     </li>
+    {{-- Temporarily hidden from merchant dashboard: Subscribers (admin only) --}}
+    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
     <li
         class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_subscribers') == 1 ? 'd-block' : 'd-none' }}">
         <a class="nav-link rounded d-flex {{ request()->is('admin/subscribers*') ? 'active' : '' }}"
@@ -1023,6 +1052,9 @@
             <span class="">{{ trans('labels.subscribers') }}</span>
         </a>
     </li>
+    @endif
+    {{-- Temporarily hidden from merchant dashboard: Inquiries (admin only) --}}
+    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
     <li class="nav-item mb-2 fs-7 {{ helper::check_menu($role_id, 'role_inquiries') == 1 ? 'd-block' : 'd-none' }}">
         <a class="nav-link rounded d-flex {{ request()->is('admin/inquiries*') ? 'active' : '' }}"
             aria-current="page" href="{{ URL::to('admin/inquiries') }}">
@@ -1030,6 +1062,7 @@
             <span class="">{{ trans('labels.inquiries') }}</span>
         </a>
     </li>
+    @endif
     @if (Auth::user()->type == '2' || Auth::user()->type == 4)
         @if (@helper::checkaddons('product_inquiry'))
             <li
@@ -1054,6 +1087,8 @@
                 <span class="">{{ trans('labels.share') }}</span>
             </a>
         </li>
+        {{-- Temporarily hidden from merchant dashboard: WhatsApp Settings --}}
+        @if (false)
         @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('whatsapp_message'))
                 @php
@@ -1099,6 +1134,9 @@
                 </li>
             @endif
         @endif
+        @endif
+        {{-- Temporarily hidden from merchant dashboard: Telegram Settings --}}
+        @if (false)
         @if (@helper::checkaddons('subscription'))
             @if (@helper::checkaddons('telegram_message'))
                 @php
@@ -1143,6 +1181,7 @@
                     </a>
                 </li>
             @endif
+        @endif
         @endif
     @endif
     @if (@helper::checkaddons('language'))

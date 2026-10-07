@@ -47,6 +47,13 @@ class AddTemplatesSeeder extends Seeder
                 'image' => 'theme-21.png',
                 'preview_link' => '#',
             ],
+            [
+                'id' => 22,
+                'name' => 'Matjar Pulse / نبض المتجر',
+                'identifier' => 'theme_22',
+                'image' => 'theme-22.png',
+                'preview_link' => '#',
+            ],
         ];
 
         foreach ($themeList as $item) {

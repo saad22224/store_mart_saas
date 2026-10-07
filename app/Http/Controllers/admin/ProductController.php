@@ -15,6 +15,7 @@ use App\Models\ProductImage;
 use App\Models\GlobalExtras;
 use App\Models\Banner;
 use App\Models\Tax;
+use App\Models\ItemContentSection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -50,7 +51,17 @@ class ProductController extends Controller
         $getcategorylist = Category::where('is_available', 1)->where('is_deleted', 2)->where('vendor_id',  $vendor_id)->orderBy('reorder_id')->get();
         $gettaxlist = Tax::where('vendor_id', $vendor_id)->where('is_deleted', 2)->where('is_available', 1)->orderBy('reorder_id')->get();
         $getitems = Item::where('vendor_id', $vendor_id)->where('is_available', 1)->where('is_deleted', 2)->orderBy('reorder_id')->get();
-        return view('admin.product.add_product', compact("getcategorylist", "globalextras", "gettaxlist", "getitems"));
+        $canUseEnhancedProductPage = helper::can_use_enhanced_product_page($vendor_id);
+        $contentSections = collect();
+
+        return view('admin.product.add_product', compact(
+            'getcategorylist',
+            'globalextras',
+            'gettaxlist',
+            'getitems',
+            'canUseEnhancedProductPage',
+            'contentSections'
+        ));
     }
     public function save(Request $request)
     {
@@ -211,6 +222,9 @@ class ProductController extends Controller
                 }
             }
         }
+
+        $this->syncContentSections($request, $product, $vendor_id);
+
         return redirect('admin/products/')->with('success', trans('messages.success'));
     }
     public function edit($slug)
@@ -246,7 +260,28 @@ class ProductController extends Controller
                 }
             }
 
-            return view('admin.product.edit_product', compact('getproductdata', 'getcategorylist', 'productreview', 'gettaxlist', 'productVariantArrays', 'product_variant_names', 'variant_options', 'globalextras', 'getitems'));
+            $canUseEnhancedProductPage = helper::can_use_enhanced_product_page($vendor_id);
+            $contentSections = collect();
+            if ($canUseEnhancedProductPage) {
+                $contentSections = ItemContentSection::forVendorItem($vendor_id, $getproductdata->id)
+                    ->orderBy('reorder_id')
+                    ->orderBy('id')
+                    ->get();
+            }
+
+            return view('admin.product.edit_product', compact(
+                'getproductdata',
+                'getcategorylist',
+                'productreview',
+                'gettaxlist',
+                'productVariantArrays',
+                'product_variant_names',
+                'variant_options',
+                'globalextras',
+                'getitems',
+                'canUseEnhancedProductPage',
+                'contentSections'
+            ));
         }
         return redirect('admin/products')->with('error', trans('messages.wrong'));
     }
@@ -458,11 +493,257 @@ class ProductController extends Controller
             } else {
                 Extra::where('item_id', $product->id)->delete();
             }
+
+            if (Auth::user()->type == 4) {
+                $vendor_id = Auth::user()->vendor_id;
+            } else {
+                $vendor_id = Auth::user()->id;
+            }
+            if ((int) $product->vendor_id !== (int) $vendor_id) {
+                return redirect('admin/products')->with('error', trans('messages.wrong'));
+            }
+            $this->syncContentSections($request, $product, $vendor_id);
+
             return redirect('admin/products')->with('success', trans('messages.success'));
         } catch (\Throwable $th) {
 
             return redirect()->back()->with('error', trans('messages.wrong'));
         }
+    }
+
+    /**
+     * Sync enhanced product page sections for eligible vendors only.
+     * Tenant-safe: scoped by vendor_id + item_id.
+     */
+    protected function syncContentSections(Request $request, Item $product, $vendor_id): void
+    {
+        if (! helper::can_use_enhanced_product_page($vendor_id)) {
+            return;
+        }
+
+        // Only sync when the enhanced editor was rendered on the form.
+        if (! $request->has('content_sections_present')) {
+            return;
+        }
+
+        $incoming = $request->input('content_sections', []);
+        if (! is_array($incoming)) {
+            $incoming = [];
+        }
+
+        $files = $request->file('content_sections', []);
+        $allowedTypes = ItemContentSection::SECTION_TYPES;
+        $keptIds = [];
+        $order = 0;
+
+        foreach ($incoming as $idx => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            $type = isset($row['section_type']) ? preg_replace('/[^a-z0-9_]/', '', strtolower((string) $row['section_type'])) : '';
+            if ($type === '' || ! in_array($type, $allowedTypes, true)) {
+                continue;
+            }
+
+            $title = isset($row['title']) ? trim(strip_tags((string) $row['title'])) : null;
+            $body = isset($row['body']) ? trim((string) $row['body']) : null;
+            if ($body !== null) {
+                $body = strip_tags($body, '<p><br><strong><b><em><i><ul><ol><li><h3><h4><a>');
+            }
+
+            $meta = $this->buildSectionMeta($type, $row);
+            $media = $this->resolveSectionMedia($row, $files[$idx] ?? [], $vendor_id);
+
+            $hasContent = ($title !== null && $title !== '')
+                || ($body !== null && $body !== '')
+                || ! empty($media)
+                || ! empty($meta['items'] ?? null)
+                || ! empty($meta['button_label'] ?? null)
+                || ! empty($meta['url'] ?? null);
+
+            $sectionId = isset($row['id']) ? (int) $row['id'] : 0;
+            $existing = null;
+            if ($sectionId > 0) {
+                $existing = ItemContentSection::where('id', $sectionId)
+                    ->where('vendor_id', $vendor_id)
+                    ->where('item_id', $product->id)
+                    ->first();
+            }
+
+            if (! $hasContent && ! $existing) {
+                continue;
+            }
+
+            $payload = [
+                'vendor_id' => $vendor_id,
+                'item_id' => $product->id,
+                'section_type' => $type,
+                'title' => ($title !== null && $title !== '') ? $title : null,
+                'body' => ($body !== null && $body !== '') ? $body : null,
+                'media' => $media,
+                'meta' => $meta,
+                'reorder_id' => isset($row['reorder_id']) && $row['reorder_id'] !== ''
+                    ? (int) $row['reorder_id']
+                    : $order,
+                'is_active' => (int) ($row['is_active'] ?? 1) === 1 ? 1 : 0,
+            ];
+            $order++;
+
+            if ($existing) {
+                // Keep previous image if no new media uploaded/provided.
+                if ($payload['media'] === null && ! empty($existing->media)) {
+                    $payload['media'] = $existing->media;
+                }
+                $existing->fill($payload);
+                $existing->save();
+                $keptIds[] = $existing->id;
+                continue;
+            }
+
+            $created = ItemContentSection::create($payload);
+            $keptIds[] = $created->id;
+        }
+
+        $deleteQuery = ItemContentSection::where('vendor_id', $vendor_id)->where('item_id', $product->id);
+        if (count($keptIds) > 0) {
+            $deleteQuery->whereNotIn('id', $keptIds);
+        }
+        $deleteQuery->delete();
+    }
+
+    /**
+     * Build structured meta for FAQ / benefits / features / specs / etc.
+     */
+    protected function buildSectionMeta(string $type, array $row): ?array
+    {
+        $meta = [];
+
+        if (in_array($type, ['faq'], true)) {
+            $items = [];
+            foreach ((array) ($row['faq'] ?? []) as $faq) {
+                if (! is_array($faq)) {
+                    continue;
+                }
+                $q = trim(strip_tags((string) ($faq['q'] ?? '')));
+                $a = trim(strip_tags((string) ($faq['a'] ?? '')));
+                if ($q === '' && $a === '') {
+                    continue;
+                }
+                $items[] = ['q' => $q, 'a' => $a];
+            }
+            if (! empty($items)) {
+                $meta['items'] = $items;
+            }
+        }
+
+        if (in_array($type, ['benefits', 'trust'], true)) {
+            $items = [];
+            foreach ((array) ($row['list'] ?? []) as $line) {
+                $line = trim(strip_tags((string) $line));
+                if ($line !== '') {
+                    $items[] = $line;
+                }
+            }
+            if (! empty($items)) {
+                $meta['items'] = $items;
+            }
+        }
+
+        if ($type === 'features') {
+            $items = [];
+            foreach ((array) ($row['features'] ?? []) as $feature) {
+                if (! is_array($feature)) {
+                    continue;
+                }
+                $ft = trim(strip_tags((string) ($feature['title'] ?? '')));
+                $fx = trim(strip_tags((string) ($feature['text'] ?? '')));
+                if ($ft === '' && $fx === '') {
+                    continue;
+                }
+                $items[] = ['title' => $ft, 'text' => $fx];
+            }
+            if (! empty($items)) {
+                $meta['items'] = $items;
+            }
+        }
+
+        if ($type === 'specifications') {
+            $items = [];
+            foreach ((array) ($row['specs'] ?? []) as $spec) {
+                if (! is_array($spec)) {
+                    continue;
+                }
+                $label = trim(strip_tags((string) ($spec['label'] ?? '')));
+                $value = trim(strip_tags((string) ($spec['value'] ?? '')));
+                if ($label === '' && $value === '') {
+                    continue;
+                }
+                $items[] = ['label' => $label, 'value' => $value];
+            }
+            if (! empty($items)) {
+                $meta['items'] = $items;
+            }
+        }
+
+        if ($type === 'image_text') {
+            $pos = ($row['image_position'] ?? 'start') === 'end' ? 'end' : 'start';
+            $meta['image_position'] = $pos;
+        }
+
+        if ($type === 'cta') {
+            $label = trim(strip_tags((string) ($row['button_label'] ?? '')));
+            if ($label !== '') {
+                $meta['button_label'] = $label;
+            }
+        }
+
+        if ($type === 'video') {
+            $url = trim(strip_tags((string) ($row['media_url'] ?? '')));
+            if ($url !== '') {
+                $meta['url'] = $url;
+            }
+        }
+
+        return empty($meta) ? null : $meta;
+    }
+
+    /**
+     * Resolve section media from URL text and/or uploaded file.
+     */
+    protected function resolveSectionMedia(array $row, $fileBag, $vendor_id): ?array
+    {
+        $media = null;
+        $mediaUrl = isset($row['media_url']) ? trim(strip_tags((string) $row['media_url'])) : '';
+        if ($mediaUrl !== '') {
+            $media = ['url' => $mediaUrl];
+            if (preg_match('/\.(jpe?g|png|gif|webp)$/i', $mediaUrl) || ! str_starts_with($mediaUrl, 'http')) {
+                $media['image'] = $mediaUrl;
+            }
+        }
+
+        $upload = null;
+        if (is_array($fileBag) && isset($fileBag['media_file'])) {
+            $upload = $fileBag['media_file'];
+        } elseif ($fileBag instanceof \Illuminate\Http\UploadedFile) {
+            $upload = $fileBag;
+        }
+
+        if ($upload instanceof \Illuminate\Http\UploadedFile && $upload->isValid()) {
+            $validator = Validator::make(
+                ['media_file' => $upload],
+                ['media_file' => 'max:' . helper::imagesize() . '|' . helper::imageext()]
+            );
+            if (! $validator->fails()) {
+                $imageOptimizationService = app(\App\Services\ImageOptimizationService::class);
+                $stored = $imageOptimizationService->upload($upload, 'item');
+                if (! empty($stored)) {
+                    $media = ['image' => $stored, 'url' => $stored];
+                }
+            }
+        }
+
+        return $media;
     }
 
 

@@ -119,6 +119,8 @@
                                 @endif
                             @endif
 
+                            {{-- Theme 22: homepage sections are category-based — hide unused classifications --}}
+                            @if ((int) (helper::appdata($vendor_id)->template ?? 0) !== 22)
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">{{ trans('labels.product_classifications') }}</label>
@@ -130,6 +132,7 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">{{ trans('labels.colors') }} ({{ trans('labels.optional') }})</label>
@@ -165,6 +168,10 @@
                                 <textarea class="form-control" id="ckeditor" name="description">{{ old('description') }}</textarea>
 
                             </div>
+
+                            @if (!empty($canUseEnhancedProductPage))
+                                @include('admin.product.partials.enhanced_content_sections')
+                            @endif
 
                             @if($is_restaurant)
                             <div class="col-12">

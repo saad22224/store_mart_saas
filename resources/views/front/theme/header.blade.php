@@ -592,7 +592,7 @@
     <main id="main-content">
 
         <!-- navbar -->
-        @if (!in_array(helper::appdata(@$storeinfo->id)->template, [7, 11, 16, 17, 18, 19, 20, 21]))
+        @if (!in_array(helper::appdata(@$storeinfo->id)->template, [7, 11, 16, 17, 18, 19, 20, 21, 22]))
             <div class="d-none d-lg-block">
                 <nav class="top-header border-bottom">
                     <div class="container">
@@ -917,7 +917,7 @@
                     .t16-lang-btn { padding: 0 8px !important; }
                 }
             </style>
-        @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [ 16 , 17, 18, 19, 20, 21]))
+        @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [ 16 , 17, 18, 19, 20, 21, 22]))
             @php
                 $tpl_num = helper::appdata(@$storeinfo->id)->template;
             @endphp
@@ -939,7 +939,7 @@
         <!-- mine header -->
 
         <!----------------------- mobile menu footer ----------------------->
-        @if(!in_array(helper::appdata(@$storeinfo->id)->template , [16 , 17 , 18 , 19 , 20 , 21]))
+        @if(!in_array(helper::appdata(@$storeinfo->id)->template , [16 , 17 , 18 , 19 , 20 , 21, 22]))
         <div class="mobile-menu-footer d-none">
             <ul class="p-0 m-0">
                 <li class="{{ request()->is($storeinfo->slug) ? 'mobile-active' : '' }}">

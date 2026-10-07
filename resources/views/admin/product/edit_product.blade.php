@@ -112,6 +112,8 @@
                                     </div>
                                 @endif
 
+                                {{-- Theme 22: homepage sections are category-based — hide unused classifications --}}
+                                @if ((int) (helper::appdata($vendor_id)->template ?? 0) !== 22)
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="form-label">{{ trans('labels.product_classifications') }}</label>
@@ -123,6 +125,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="form-label">{{ trans('labels.colors') }} ({{ trans('labels.optional') }})</label>
@@ -158,6 +161,9 @@
                                     <label class="form-label">{{ trans('labels.description') }}</label>
                                     <textarea class="form-control" id="ckeditor" name="description">{!! $getproductdata->description !!}</textarea>
                                 </div>
+                                @if (!empty($canUseEnhancedProductPage) || helper::can_use_enhanced_product_page($vendor_id))
+                                    @include('admin.product.partials.enhanced_content_sections')
+                                @endif
                                 @if($is_restaurant)
                                 <div
                                     class="col-12 border-bottom py-2 my-2 d-flex flex-wrap justify-content-between align-items-center">
@@ -604,7 +610,12 @@
             data-url="{{ url('admin/products/reorder_image-' . $getproductdata->id) }}" id="carddetails">
             <div class="card-body">
                 <div class="col-12 d-flex justify-content-between align-items-center pb-3 border-bottom mb-3">
-                    <h5 class="text-capitalize fw-600 text-dark color-changer">{{ trans('labels.product_images') }}</h5>
+                    <div>
+                        <h5 class="text-capitalize fw-600 text-dark color-changer mb-0">{{ trans('labels.product_images') }}</h5>
+                        @if (!empty($canUseEnhancedProductPage) || helper::can_use_enhanced_product_page($vendor_id))
+                            <small class="text-muted">ثيم 22: هذه الصور تظهر في معرض صفحة المنتج المحسّنة</small>
+                        @endif
+                    </div>
                     <a href="javascript:void(0)" onclick="addimage('{{ $getproductdata->id }}')"
                         class="btn btn-secondary px-sm-4">
                         <i class="fa-regular fa-plus mx-1"></i>{{ trans('labels.add_new') }}

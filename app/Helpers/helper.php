@@ -2101,4 +2101,59 @@ class helper
                str_contains($name, 'مطعم') ||
                str_contains($name, 'كافيه');
     }
+
+    /**
+     * Whether the vendor's latest plan entitles them to theme template ID.
+     * Extensible for future feature flags without rewriting callers.
+     */
+    public static function vendor_has_theme($vendor_id, $themeId = 22): bool
+    {
+        $user = User::find($vendor_id);
+        if (! $user) {
+            return false;
+        }
+        if ((int) $user->allow_without_subscription === 1) {
+            return true;
+        }
+        if (! self::checkaddons('subscription')) {
+            return (bool) self::checkaddons('theme_'.$themeId);
+        }
+        $plan = Transaction::where('vendor_id', $vendor_id)->orderByDesc('id')->first();
+        if (! $plan || empty($plan->themes_id)) {
+            return false;
+        }
+        $allowed = array_filter(explode('|', (string) $plan->themes_id), function ($id) {
+            return $id !== '' && $id !== null;
+        });
+
+        return in_array((string) $themeId, $allowed, true) || in_array((int) $themeId, array_map('intval', $allowed), true);
+    }
+
+    /**
+     * Enhanced landing-style product page (template-22 content sections).
+     * Available when the vendor is entitled to theme 22 OR currently uses template 22.
+     */
+    public static function can_use_enhanced_product_page($vendor_id): bool
+    {
+        if (self::vendor_has_theme($vendor_id, 22)) {
+            return true;
+        }
+
+        return (int) (self::appdata($vendor_id)->template ?? 0) === 22;
+    }
+
+    /**
+     * Resolve a storefront Blade view for the vendor's active template.
+     * Prefer front.template-{N}.{name} when it exists; otherwise fall back to front.{name}.
+     */
+    public static function resolve_storefront_view($vendor_id, string $name): string
+    {
+        $tpl = (int) (self::appdata($vendor_id)->template ?? 1);
+        $themed = 'front.template-'.$tpl.'.'.$name;
+        if (view()->exists($themed)) {
+            return $themed;
+        }
+
+        return 'front.'.$name;
+    }
 }

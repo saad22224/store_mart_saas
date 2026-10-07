@@ -343,7 +343,7 @@
             </div>
         </div>
     </footer>
-@elseif (in_array(helper::appdata(@$storeinfo->id)->template, [17, 18, 19, 20, 21]))
+@elseif (in_array(helper::appdata(@$storeinfo->id)->template, [17, 18, 19, 20, 21, 22]))
     @php
         $tpl_num = helper::appdata(@$storeinfo->id)->template;
     @endphp
@@ -1299,7 +1299,10 @@
                 if (response.status == 1) {
                     if (buynow == 0) {
                         if ($('#viewproduct-over').is(':visible')) {
-                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 2) {
+                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 2 || "{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
+                                if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
+                                    try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
+                                }
                                 location.reload();
                             } else {
                                 $('#viewproduct-over').modal('hide');
@@ -1309,6 +1312,9 @@
                                 $('.addtocart').prop("disabled", false);
                             }
                         } else {
+                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
+                                try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
+                            }
                             location.reload();
                         }
                         toastr.success("{{ trans('messages.success') }}");

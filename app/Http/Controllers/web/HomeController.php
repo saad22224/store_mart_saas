@@ -143,19 +143,19 @@ class HomeController extends Controller
     {
         $storeinfo = helper::storeinfo($request->vendor);
         $privacy = Privacypolicy::where('vendor_id', @$storeinfo->id)->orderBy('id', 'ASC')->first();
-        return view('front.privacy', compact('storeinfo', 'privacy'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'privacy'), compact('storeinfo', 'privacy'));
     }
     public function terms_condition(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
         $terms = terms::where('vendor_id', @$storeinfo->id)->orderBy('id', 'ASC')->first();
-        return view('front.terms', compact('storeinfo', 'terms'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'terms'), compact('storeinfo', 'terms'));
     }
     public function aboutus(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
         $about = About::where('vendor_id', @$storeinfo->id)->orderBy('id', 'ASC')->first();
-        return view('front.about', compact('storeinfo', 'about'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'about'), compact('storeinfo', 'about'));
     }
     public function show(Request $request)
     {
@@ -256,9 +256,33 @@ class HomeController extends Controller
             App::setLocale(session()->get('locale'));
             $html = view('front.productdetail', compact('getitem', 'storeinfo', 'item_check'))->render();
             return response()->json(['status' => 1, 'output' => $html], 200);
-        } else {
-            return view('front.detail', compact('getitem', 'relateditem', 'recentProducts','storeinfo', 'item_check', 'question_answer', 'frequently_bought_items'));
         }
+
+        $templateNum = (int) (helper::appdata(@$storeinfo->id)->template ?? 1);
+        $contentSections = collect();
+        if ($templateNum === 22 && $getitem) {
+            $contentSections = \App\Models\ItemContentSection::query()
+                ->forVendorItem($storeinfo->id, $getitem->id)
+                ->active()
+                ->orderBy('reorder_id')
+                ->orderBy('id')
+                ->get();
+        }
+
+        $detailView = ($templateNum === 22 && view()->exists('front.template-22.detail'))
+            ? 'front.template-22.detail'
+            : 'front.detail';
+
+        return view($detailView, compact(
+            'getitem',
+            'relateditem',
+            'recentProducts',
+            'storeinfo',
+            'item_check',
+            'question_answer',
+            'frequently_bought_items',
+            'contentSections'
+        ));
     }
 
     public function getProductsVariantQuantity(Request $request)
@@ -529,7 +553,7 @@ class HomeController extends Controller
             $cartitems->where('session_id', Session::getId());
         }
         $cartdata = $cartitems->get();
-        return view('front.cart', compact('cartdata', 'storeinfo'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'cart'), compact('cartdata', 'storeinfo'));
     }
     public function checkout(Request $request)
     {
@@ -662,7 +686,7 @@ class HomeController extends Controller
         $tables = DineIn::where('vendor_id', $storeinfo->id)->where('is_available', 1)->orderBy('reorder_id')->get();
         $getshippingarealist = Shipping::where('vendor_id', $storeinfo->id)->where('is_available', 1)->orderBy('reorder_id')->get();
 
-        return view('front.checkout', compact('cartdata', 'storeinfo', 'paymentlist', 'tables', 'itemtaxes', 'taxArr', 'getshippingarealist'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'checkout'), compact('cartdata', 'storeinfo', 'paymentlist', 'tables', 'itemtaxes', 'taxArr', 'getshippingarealist'));
     }
     public function qtycheckurl(Request $request)
     {
@@ -1006,7 +1030,7 @@ class HomeController extends Controller
             ->where('vendor_id', @$storeinfo->id)
             ->first();
 
-        return view('front.terms', compact('storeinfo', 'terms'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'terms'), compact('storeinfo', 'terms'));
     }
     public function privacy(Request $request)
     {
@@ -1014,7 +1038,7 @@ class HomeController extends Controller
         $privacypolicy = Privacypolicy::select('privacypolicy_content')
             ->where('vendor_id', @$storeinfo->id)
             ->first();
-        return view('front.privacy', compact('storeinfo', 'privacypolicy'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'privacy'), compact('storeinfo', 'privacypolicy'));
     }
     public function book(Request $request)
     {
@@ -1037,7 +1061,7 @@ class HomeController extends Controller
                 }
             }
         }
-        return view('front.ordersuccess', compact('storeinfo', 'order_number', 'whmessage'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'ordersuccess'), compact('storeinfo', 'order_number', 'whmessage'));
     }
 
     public function ordercreate(Request $request)
@@ -1210,7 +1234,7 @@ class HomeController extends Controller
     public function contact(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        return view('front.contact', compact('storeinfo'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'contact'), compact('storeinfo'));
     }
 
     public function save_contact(Request $request)
@@ -1408,12 +1432,12 @@ class HomeController extends Controller
     {
         $storeinfo = helper::storeinfo($request->vendor);
         $policy = Settings::where('vendor_id', $storeinfo->id)->first();
-        return view('front.refund_policy', compact('policy', 'storeinfo'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'refund_policy'), compact('policy', 'storeinfo'));
     }
     public function faqs(Request $request)
     {
         $storeinfo = helper::storeinfo($request->vendor);
-        return view('front.faq', compact('storeinfo'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'faq'), compact('storeinfo'));
     }
     public function find_order(Request $request)
     {
@@ -1469,7 +1493,7 @@ class HomeController extends Controller
             }
         }
         $itemlist = $itemlist->groupBy('items.id')->orderBy('items.reorder_id')->paginate(15)->onEachSide(0);
-        return view('front.search', compact('storeinfo', 'category', 'itemlist'));
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'search'), compact('storeinfo', 'category', 'itemlist'));
     }
 
     public function categorypage(Request $request)
@@ -1493,7 +1517,7 @@ class HomeController extends Controller
             ->paginate(15)->onEachSide(0);
         $settingdata = helper::appdata(@$storeinfo->id);
         $tpl_num = $settingdata->template ?? 17;
-        if (in_array($tpl_num, [16, 17, 18, 19, 20, 21]) && view()->exists('front.template-' . $tpl_num . '.category')) {
+        if (in_array($tpl_num, [16, 17, 18, 19, 20, 21, 22]) && view()->exists('front.template-' . $tpl_num . '.category')) {
             return view('front.template-' . $tpl_num . '.category', compact('storeinfo', 'category', 'getcategory', 'products'));
         }
         return view('front.template-17.category', compact('storeinfo', 'category', 'getcategory', 'products'));

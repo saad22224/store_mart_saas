@@ -24,6 +24,10 @@ class Item extends Model
     public function multi_image(){
         return $this->hasMany('App\Models\ProductImage','item_id','id')->select('*',\DB::raw("CONCAT('".url('/storage/app/public/item/')."/', image) AS image_url"))->orderBy('reorder_id');
     }
+    public function contentSections()
+    {
+        return $this->hasMany(ItemContentSection::class, 'item_id', 'id')->orderBy('reorder_id');
+    }
     public static function possibleVariants($groups, $prefix = '')
     {
         $result = [];

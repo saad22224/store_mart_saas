@@ -75,66 +75,140 @@
     }
 
     /* ===== Section header + product rail ===== */
-    .mp-home-sections { padding: 28px 0 40px; }
-    .mp-product-sec { margin-bottom: 36px; }
+    .mp-home { overflow-x: clip; }
+    /*
+     * CRITICAL: .mp-wrap already sets horizontal padding.
+     * Do NOT reset padding to "28px 0" or cards stick to the viewport edge.
+     */
+    .mp-wrap.mp-home-sections,
+    .mp-home-sections {
+        padding: 28px 20px 48px;
+        width: 100%;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+    }
+    .mp-product-sec {
+        margin-bottom: 36px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
     .mp-sec-bar {
         display: flex; align-items: center; justify-content: space-between;
-        gap: 16px; margin-bottom: 18px; direction: rtl;
+        gap: 12px 16px; margin-bottom: 16px; direction: rtl;
+        width: 100%; flex-wrap: nowrap;
+        box-sizing: border-box;
     }
     .mp-sec-title {
-        margin: 0; font-size: clamp(1.15rem, 2.4vw, 1.55rem); font-weight: 800;
+        margin: 0; font-size: clamp(1.05rem, 2vw, 1.35rem); font-weight: 800;
         color: var(--mp-ink); text-transform: uppercase; letter-spacing: .02em;
-        border-bottom: 3px solid var(--mp-ink); padding-bottom: 6px;
-        display: inline-block;
+        border-bottom: 3px solid var(--mp-ink); padding-bottom: 5px;
+        display: inline-block; flex: 0 1 auto; min-width: 0;
+        line-height: 1.3;
     }
-    .mp-sec-controls { display: flex; align-items: center; gap: 10px; }
+    .mp-sec-controls {
+        display: flex; align-items: center; gap: 8px;
+        flex: 0 0 auto; margin-inline-start: auto;
+    }
     .mp-view-all {
         display: inline-flex; align-items: center; justify-content: center;
-        padding: 8px 18px; border: 1px solid #bbb; border-radius: 999px;
-        color: var(--mp-ink); text-decoration: none; font-weight: 700; font-size: 0.88rem;
-        background: transparent;
+        padding: 6px 14px; border: 1px solid #bbb; border-radius: 999px;
+        color: var(--mp-ink); text-decoration: none; font-weight: 700; font-size: 0.82rem;
+        background: transparent; white-space: nowrap;
     }
     .mp-view-all:hover { border-color: var(--mp-ink); color: var(--mp-ink); }
     .mp-scroll-btn {
-        width: 40px; height: 40px; border-radius: 50%; border: 1px solid #bbb;
+        width: 34px; height: 34px; border-radius: 50%; border: 1px solid #bbb;
         background: #fff; color: var(--mp-ink); cursor: pointer;
         display: inline-flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
     }
     .mp-scroll-btn:hover { border-color: var(--mp-ink); }
+
+    /* Fixed compact card width — never 33vw / giant cards */
     .mp-product-rail {
-        display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
-        padding-bottom: 8px; -webkit-overflow-scrolling: touch;
+        --mp-card-w: 220px;
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        padding: 0 0 8px;
+        margin: 0;
+        -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
+        direction: rtl;
+        justify-content: flex-start;
+        align-items: stretch;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .mp-product-rail::-webkit-scrollbar { display: none; }
-    .mp-product-rail .mp-card {
-        flex: 0 0 min(280px, 78vw); scroll-snap-align: start;
+    .mp-product-rail .mp-card,
+    .mp-product-rail.is-grid .mp-card {
+        flex: 0 0 var(--mp-card-w);
+        width: var(--mp-card-w);
+        max-width: var(--mp-card-w);
+        min-width: var(--mp-card-w);
+        scroll-snap-align: start;
+        box-sizing: border-box;
+    }
+    /* Keep same compact size even for 1–3 products (no stretching) */
+    .mp-product-rail.is-grid {
+        display: flex;
+        overflow-x: auto;
+        grid-template-columns: unset;
+        max-width: 100%;
+    }
+    .mp-product-rail.is-grid[data-count="1"],
+    .mp-product-rail.is-grid[data-count="2"] {
+        grid-template-columns: unset;
+        max-width: 100%;
+        justify-content: flex-start;
+    }
+    .mp-section-image-only { padding: 0; }
+    .mp-image-only-wrap {
+        max-width: 1120px; margin: 0 auto; padding: 0 0 8px;
+    }
+    .mp-image-only-wrap img {
+        width: 100%; height: auto; display: block; border-radius: 0;
+        vertical-align: middle;
     }
 
-    /* ===== Product card (reference) ===== */
+    /* ===== Product card (compact) ===== */
     .mp-card {
-        background: #fff; border-radius: 16px; overflow: hidden;
-        height: 100%; display: flex; flex-direction: column;
-        box-shadow: var(--mp-shadow);
+        background: #fff; border-radius: 12px; overflow: hidden;
+        display: flex; flex-direction: column;
+        box-shadow: 0 1px 8px rgba(0,0,0,.06);
     }
-    .mp-card-media { position: relative; aspect-ratio: 3 / 4; background: #f5f2ec; }
+    .mp-card-media {
+        position: relative; aspect-ratio: 3 / 4; background: #f5f2ec;
+        width: 100%; overflow: hidden; flex-shrink: 0;
+    }
     .mp-card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .mp-card-img-link { display: block; height: 100%; }
+    .mp-card-img-link { display: block; width: 100%; height: 100%; }
     .mp-badge {
-        position: absolute; top: 12px; left: 12px; right: auto; z-index: 2;
-        padding: 5px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 800; color: #fff;
+        position: absolute; top: 8px; left: 8px; right: auto; z-index: 2;
+        padding: 3px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 800; color: #fff;
     }
     .mp-badge-sale { background: var(--mp-coral); }
     .mp-card-quick {
-        position: absolute; bottom: 12px; right: 12px; left: auto;
-        width: 42px; height: 42px; border-radius: 50%;
-        background: #fff; color: #111;
+        position: absolute; bottom: 8px; right: 8px; left: auto;
+        width: 34px; height: 34px; border-radius: 50%; border: 0;
+        background: #111; color: #fff;
         display: inline-flex; align-items: center; justify-content: center;
-        box-shadow: 0 4px 14px rgba(0,0,0,.12); text-decoration: none; z-index: 2;
+        box-shadow: 0 2px 10px rgba(0,0,0,.12); text-decoration: none; z-index: 2;
+        cursor: pointer; padding: 0; font-size: 0.8rem;
     }
-    .mp-card-body { padding: 14px 14px 18px; text-align: center; }
+    .mp-card-quick:hover { background: #000; color: #fff; }
+    .mp-card-body { padding: 10px 10px 12px; text-align: center; }
     .mp-card-title {
-        margin: 0 0 8px; font-size: 0.95rem; font-weight: 700; line-height: 1.45;
+        margin: 0 0 6px; font-size: 0.86rem; font-weight: 700; line-height: 1.4;
+        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
     .mp-card-title a { color: var(--mp-ink); text-decoration: none; }
     .mp-card-price {
@@ -325,6 +399,11 @@
         padding: 16px; border-top: 1px solid #e5e0d8; display: grid; gap: 10px; background: #f7f3f0;
     }
 
+    /* SweetAlert must sit ABOVE the cart drawer (drawer = 1101) */
+    body:has(.mp-cart-drawer) .swal2-container {
+        z-index: 12050 !important;
+    }
+
     /* Cart page */
     .mp-breadcrumb {
         display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
@@ -466,15 +545,40 @@
         .mp-logo { justify-self: center; }
         .mp-actions { justify-self: start; }
     }
+    @media (min-width: 1200px) {
+        .mp-product-rail { --mp-card-w: 240px; gap: 14px; }
+    }
+    @media (max-width: 992px) and (min-width: 577px) {
+        .mp-product-rail { --mp-card-w: 200px; gap: 12px; }
+        .mp-sec-bar { gap: 10px; }
+    }
     @media (max-width: 576px) {
         .mp-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .mp-banner-row { grid-template-columns: 1fr; }
         .mp-features-grid { grid-template-columns: 1fr; }
         .mp-hero-slide img { height: 240px; }
         .mp-form-row { grid-template-columns: 1fr; }
-        .mp-product-rail .mp-card { flex-basis: min(220px, 72vw); }
-        .mp-scroll-btn { width: 34px; height: 34px; }
-        .mp-view-all { padding: 6px 12px; font-size: 0.8rem; }
+        .mp-wrap.mp-home-sections,
+        .mp-home-sections { padding: 18px 14px 32px; }
+        .mp-product-sec { margin-bottom: 24px; overflow: hidden; }
+        .mp-sec-bar {
+            flex-wrap: wrap; row-gap: 10px; margin-bottom: 12px;
+        }
+        .mp-sec-title { font-size: 1rem; }
+        .mp-sec-controls { width: auto; justify-content: flex-start; }
+        .mp-product-rail {
+            --mp-card-w: 156px;
+            gap: 10px;
+            margin: 0;
+            padding: 0 0 6px;
+        }
+        .mp-scroll-btn { width: 32px; height: 32px; }
+        .mp-view-all { padding: 5px 10px; font-size: 0.78rem; }
+        .mp-image-only-wrap { padding: 0; }
+        .mp-card-body { padding: 8px 8px 10px; }
+        .mp-card-title { font-size: 0.8rem; }
+        .mp-card-quick { width: 30px; height: 30px; bottom: 8px; right: 8px; font-size: 0.72rem; }
+        .mp-price-now { font-size: 0.92rem; }
     }
 </style>
 <?php /**PATH C:\laragon\www\matjarhub\resources\views/front/template-22/partials/theme_styles.blade.php ENDPATH**/ ?>

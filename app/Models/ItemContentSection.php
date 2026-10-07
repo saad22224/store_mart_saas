@@ -34,6 +34,7 @@ class ItemContentSection extends Model
     public const SECTION_TYPES = [
         'benefits',
         'rich_text',
+        'image',
         'image_text',
         'features',
         'specifications',

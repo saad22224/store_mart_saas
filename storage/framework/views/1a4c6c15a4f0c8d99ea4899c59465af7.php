@@ -1317,12 +1317,29 @@
             dataType: 'json',
             success: function(response) {
                 if (response.status == 1) {
-                    if (buynow == 0) {
-                        if ($('#viewproduct-over').is(':visible')) {
-                            if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 2 || "<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 22) {
-                                if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 22) {
-                                    try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
-                                }
+                        if (buynow == 0) {
+                        if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 22) {
+                            // Theme 22: update UI without full page reload (mp_cart_js may also handle)
+                            if ($('#viewproduct-over').is(':visible')) {
+                                $('#viewproduct-over').modal('hide');
+                            }
+                            $('#cartcnt').text(response.cartcnt).show().removeClass('d-none');
+                            $('.cart-count').text(response.cartcnt);
+                            $('.addtocart').html("<?php echo e(trans('labels.add_to_cart')); ?>");
+                            $('.addtocart').prop("disabled", false);
+                            $('.buynow').html("<?php echo e(trans('labels.buy_now')); ?>");
+                            $('.buynow').prop("disabled", false);
+                            toastr.success("<?php echo e(trans('messages.success')); ?>");
+                            if (typeof mpRefreshDrawerHtml === 'function') {
+                                mpRefreshDrawerHtml().then(function () {
+                                    if (window.mpOpenCartDrawer) window.mpOpenCartDrawer();
+                                });
+                            } else if (window.mpOpenCartDrawer) {
+                                try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
+                                location.reload();
+                            }
+                        } else if ($('#viewproduct-over').is(':visible')) {
+                            if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 2) {
                                 location.reload();
                             } else {
                                 $('#viewproduct-over').modal('hide');
@@ -1331,13 +1348,11 @@
                                 $('.addtocart').html("<?php echo e(trans('labels.add_to_cart')); ?>");
                                 $('.addtocart').prop("disabled", false);
                             }
+                            toastr.success("<?php echo e(trans('messages.success')); ?>");
                         } else {
-                            if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 22) {
-                                try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
-                            }
                             location.reload();
+                            toastr.success("<?php echo e(trans('messages.success')); ?>");
                         }
-                        toastr.success("<?php echo e(trans('messages.success')); ?>");
                     } else {
                         if (customer_login != "" && customer_login.activated == 1) {
                             if (checklogin) {
@@ -1592,7 +1607,16 @@
                         success: function(response) {
                             if (response.status == 1) {
                                 $('.shopping-cart #cartcnt').text(response.cartcnt);
-                                location.reload();
+                                $('#cartcnt').text(response.cartcnt);
+                                if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 22) {
+                                    if (typeof window.mpRefreshDrawerHtml === 'function') {
+                                        window.mpRefreshDrawerHtml();
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    location.reload();
+                                }
                             } else {
                                 swal("Cancelled", "<?php echo e(trans('messages.wrong')); ?> :(",
                                     "error");
@@ -1642,7 +1666,17 @@
                 method: 'POST',
                 success: function(response) {
                     if (response.status == 1) {
-                        location.reload();
+                        if ("<?php echo e(helper::appdata(@$storeinfo->id)->template); ?>" == 22) {
+                            $("#number_" + cart_id).val(qty);
+                            $('.change-qty').prop('disabled', false);
+                            if (typeof toastr !== 'undefined') toastr.success(response.message || "<?php echo e(trans('messages.success')); ?>");
+                            // Theme 22 drawer/page updates without reload when override is present
+                            if (typeof window.mpRecalcDrawerLocal === 'function') {
+                                window.mpRecalcDrawerLocal(cart_id, qty, price);
+                            }
+                        } else {
+                            location.reload();
+                        }
                     } else {
                         $("#number_" + cart_id).val(response.qty);
                         toastr.error(response.message);
@@ -2154,6 +2188,10 @@
             }
         </script>
     <?php endif; ?>
+<?php endif; ?>
+
+<?php if(helper::appdata(@$storeinfo->id)->template == 22): ?>
+    <?php echo $__env->make('front.template-22.partials.mp_cart_js', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php endif; ?>
 
 </body>

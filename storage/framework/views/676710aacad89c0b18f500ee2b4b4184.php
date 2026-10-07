@@ -1,30 +1,25 @@
 
 <?php
-    if (!isset($cartdata) || $cartdata === null) {
-        $mpCartQuery = \App\Models\Cart::select(
-            'carts.id', 'carts.item_id', 'carts.attribute', 'carts.item_name', 'carts.item_image',
-            'carts.item_price', 'carts.extras_name', 'carts.extras_id', 'carts.extras_price',
-            'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.buynow',
-            'carts.variants_name', 'carts.variants_price', 'items.slug', 'items.currency', 'carts.color_choice'
-        )->join('items', 'carts.item_id', 'items.id')
-            ->where('carts.vendor_id', @$storeinfo->id)
-            ->where('carts.buynow', '!=', 1);
-        if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->type == 3) {
-            $mpCartQuery->where('user_id', @\Illuminate\Support\Facades\Auth::user()->id);
-        } else {
-            $mpCartQuery->where('session_id', \Illuminate\Support\Facades\Session::getId());
-        }
-        $mpDrawerCart = $mpCartQuery->get();
+    // Always read live cart rows so the drawer stays in sync after AJAX add/qty/remove.
+    $mpCartQuery = \App\Models\Cart::select(
+        'carts.id', 'carts.item_id', 'carts.attribute', 'carts.item_name', 'carts.item_image',
+        'carts.item_price', 'carts.extras_name', 'carts.extras_id', 'carts.extras_price',
+        'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.buynow',
+        'carts.variants_name', 'carts.variants_price', 'items.slug', 'items.currency', 'carts.color_choice'
+    )->join('items', 'carts.item_id', 'items.id')
+        ->where('carts.vendor_id', @$storeinfo->id)
+        ->where('carts.buynow', '!=', 1);
+    if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->type == 3) {
+        $mpCartQuery->where('carts.user_id', @\Illuminate\Support\Facades\Auth::user()->id);
     } else {
-        $mpDrawerCart = collect($cartdata)->filter(function ($c) {
-            return ($c->buynow ?? 0) != 1;
-        });
+        $mpCartQuery->where('carts.session_id', \Illuminate\Support\Facades\Session::getId());
     }
+    $mpDrawerCart = $mpCartQuery->orderBy('carts.id', 'desc')->get();
     $mpDrawerSub = 0;
     foreach ($mpDrawerCart as $c) {
         $mpDrawerSub += ($c->item_price * $c->qty);
     }
-    $mpDrawerCount = is_countable($mpDrawerCart) ? count($mpDrawerCart) : 0;
+    $mpDrawerCount = $mpDrawerCart->count();
 ?>
 
 <div class="mp-drawer-backdrop" id="mpCartBackdrop" hidden></div>
@@ -51,7 +46,7 @@
         <div class="mp-drawer-foot">
             <div class="mp-summary-row mp-summary-total">
                 <span><?php echo e(trans('labels.sub_total')); ?></span>
-                <strong><?php echo e(helper::currency_formate($mpDrawerSub, $storeinfo->id)); ?></strong>
+                <strong data-mp-subtotal><?php echo e(helper::currency_formate($mpDrawerSub, $storeinfo->id)); ?></strong>
             </div>
             <a href="<?php echo e(URL::to(@$storeinfo->slug . '/cart')); ?>" class="mp-btn-outline w-100">عرض السلة</a>
             <a href="<?php echo e(URL::to(@$storeinfo->slug . '/checkout?buy_now=0')); ?>" class="mp-btn-primary w-100"><?php echo e(trans('labels.checkout')); ?></a>

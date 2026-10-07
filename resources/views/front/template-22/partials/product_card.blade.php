@@ -9,6 +9,8 @@
     $discountPct = $hasDiscount ? round((($original - $price) / $original) * 100) : 0;
     $img = helper::image_path($product->image);
     $url = URL::to(@$storeinfo->slug . '/detail-' . $product->slug);
+    $cartImage = @$product->product_image->image ?? $product->image;
+    $hasVariants = (int) ($product->has_variants ?? 2) === 1;
 @endphp
 <article class="mp-card">
     <div class="mp-card-media">
@@ -20,10 +22,27 @@
                 onerror="this.src='{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}'">
         </a>
         @if (helper::appdata(@$storeinfo->id)->online_order == 1)
-            <a href="javascript:void(0)" class="mp-card-quick" onclick="GetProductOverview('{{ $product->slug }}', '')"
-                title="{{ trans('labels.add_to_cart') }}">
-                <i class="fa-solid fa-bag-shopping"></i>
-            </a>
+            @if ($hasVariants)
+                <a href="{{ $url }}" class="mp-card-quick" title="{{ trans('labels.view') }}">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </a>
+            @else
+                <button type="button" class="mp-card-quick"
+                    title="{{ trans('labels.add_to_cart') }}"
+                    data-mp-quick-add
+                    data-item-id="{{ $product->id }}"
+                    data-item-name="{{ e($product->item_name) }}"
+                    data-item-image="{{ $cartImage }}"
+                    data-item-price="{{ $price }}"
+                    data-item-original="{{ $original }}"
+                    data-tax="{{ $product->tax }}"
+                    data-min="{{ $product->min_order ?? 0 }}"
+                    data-max="{{ $product->max_order ?? 0 }}"
+                    data-stock="{{ $product->stock_management }}"
+                    data-vendor="{{ @$storeinfo->id }}">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </button>
+            @endif
         @endif
     </div>
     <div class="mp-card-body">

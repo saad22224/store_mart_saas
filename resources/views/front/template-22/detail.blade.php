@@ -59,7 +59,16 @@
     .mp-hero-prices { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
     .mp-hero-prices .mp-price-now { font-size: 1.35rem; font-weight: 800; color: #e53935; }
     .mp-hero-prices .mp-price-was { font-size: 0.95rem; color: #999; text-decoration: line-through; }
-    .mp-short-desc { color: #666; line-height: 1.75; margin: 0 0 18px; font-size: 0.92rem; }
+    .mp-product-desc {
+        margin: 0 0 18px; padding: 14px 16px; background: #f7f5f1;
+        border-radius: 12px; border: 1px solid #ebe6de;
+    }
+    .mp-product-desc-label {
+        font-size: 0.95rem; font-weight: 800; color: #111; margin: 0 0 8px;
+    }
+    .mp-short-desc { color: #555; line-height: 1.8; margin: 0; font-size: 0.9rem; }
+    .mp-short-desc p { margin: 0 0 8px; }
+    .mp-short-desc p:last-child { margin-bottom: 0; }
     .mp-rating { font-size: 0.88rem; font-weight: 600; color: #444; margin-bottom: 10px; }
     .mp-variant-label { font-size: 0.88rem; font-weight: 700; margin: 14px 0 8px; color: #222; }
     .mp-variant-opts { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -173,7 +182,10 @@
                 </div>
 
                 @if (!empty($getitem->description))
-                    <div class="mp-short-desc">{!! \Illuminate\Support\Str::of(strip_tags($getitem->description))->limit(160) !!}</div>
+                    <div class="mp-product-desc" id="mpProductDesc">
+                        <div class="mp-product-desc-label">{{ trans('labels.description') }}</div>
+                        <div class="mp-short-desc mp-rich-body">{!! \Illuminate\Support\Str::of($getitem->description)->stripTags('<p><br><strong><b><em><i><ul><ol><li><h3><h4><a>') !!}</div>
+                    </div>
                 @endif
 
                 @if ($getitem->has_variants == 1 && is_array($getitem->variants_json))
@@ -213,7 +225,7 @@
                 @endif
 
                 @if (helper::appdata($storeinfo->id)->online_order == 1)
-                    <div class="mp-purchase-row">
+                    <div class="mp-purchase-row" id="detail_plus_minus">
                         <div class="mp-qty-compact qty-input2">
                             <button type="button" class="change-qty-1" data-item_id="{{ $getitem->id }}"
                                 onclick="changeqty($(this).attr('data-item_id'),'minus')"><i class="fa fa-minus"></i></button>
@@ -224,15 +236,31 @@
                         <button type="button"
                             class="mp-btn mp-btn-cart addtocart {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
                             onclick="AddtoCart('0')">{{ trans('labels.add_to_cart') }}</button>
-                        <button type="button"
-                            class="mp-btn mp-btn-buy buynow {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
-                            onclick="AddtoCart('1')">{{ trans('labels.buy_now') }}</button>
+                        @if (@helper::checkaddons('customer_login') && helper::appdata($storeinfo->id)->checkout_login_required == 1 && helper::appdata($storeinfo->id)->is_checkout_login_required == 1)
+                            <button type="button"
+                                class="mp-btn mp-btn-buy buynow {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                onclick="login()">{{ trans('labels.buy_now') }}</button>
+                        @else
+                            <button type="button"
+                                class="mp-btn mp-btn-buy buynow {{ $getitem->has_variants == 2 && $getitem->stock_management == 1 && $getitem->qty == 0 ? 'disabled' : '' }}"
+                                onclick="AddtoCart('1')">{{ trans('labels.buy_now') }}</button>
+                        @endif
                     </div>
                 @endif
 
+                {{-- Required by shared AddtoCart() in theme footer --}}
+                <input type="hidden" name="vendor" id="overview_vendor" value="{{ $getitem->vendor_id }}">
                 <input type="hidden" name="item_id" id="overview_item_id" value="{{ $getitem->id }}">
+                <input type="hidden" name="item_name" id="overview_item_name" value="{{ $getitem->item_name }}">
+                <input type="hidden" name="item_image" id="overview_item_image" value="{{ @$getitem['product_image']->image }}">
+                <input type="hidden" name="item_min_order" id="item_min_order" value="{{ $getitem->min_order }}">
+                <input type="hidden" name="item_max_order" id="item_max_order" value="{{ $getitem->max_order }}">
+                <input type="hidden" name="item_price" id="overview_item_price" value="{{ $price }}">
+                <input type="hidden" name="item_original_price" id="overview_item_original_price" value="{{ $original_price }}">
+                <input type="hidden" name="tax" id="tax_val" value="{{ $getitem->tax }}">
                 <input type="hidden" name="variants_name" id="variants_name">
                 <input type="hidden" name="variants_id" id="variants_id" value="0">
+                <input type="hidden" name="stock_management" id="stock_management" value="{{ $getitem->stock_management }}">
                 <input type="hidden" id="item_price" value="{{ $price }}">
                 <input type="hidden" id="item_orignal_price" value="{{ $original_price }}">
             </div>
@@ -259,15 +287,6 @@
                 'storeinfo' => $storeinfo,
                 'getitem' => $getitem,
             ])
-        @endif
-
-        @if ($contentSections->where('section_type', 'rich_text')->isEmpty() && !empty($getitem->description))
-            <section class="mp-section">
-                <div class="mp-section-inner mp-prose">
-                    <h2 class="mp-section-heading">{{ trans('labels.description') }}</h2>
-                    <div class="mp-rich-body">{!! \Illuminate\Support\Str::of($getitem->description)->stripTags('<p><br><strong><b><em><i><ul><ol><li><h3><h4><img><a>') !!}</div>
-                </div>
-            </section>
         @endif
 
         @if (isset($relateditem) && $relateditem->count() > 0)

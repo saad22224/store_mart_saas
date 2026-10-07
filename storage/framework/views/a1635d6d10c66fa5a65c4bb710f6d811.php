@@ -3,8 +3,9 @@
     $lineTotal = $cart->price ?? ($cart->item_price * $cart->qty);
     $detailSlug = $cart->slug ?? optional(helper::getmin_maxorder($cart->item_id, $storeinfo->id))->slug;
     $detailUrl = $detailSlug ? URL::to($storeinfo->slug . '/detail-' . $detailSlug) : '#';
+    $unitPrice = $cart->item_price;
 ?>
-<div class="mp-cart-item" data-cart-id="<?php echo e($cart->id); ?>">
+<div class="mp-cart-item" data-cart-id="<?php echo e($cart->id); ?>" data-unit-price="<?php echo e($unitPrice); ?>">
     <a href="<?php echo e($detailUrl); ?>" class="mp-cart-item-img">
         <img src="<?php echo e(helper::image_path($cart->item_image)); ?>" alt="<?php echo e($cart->item_name); ?>" loading="lazy">
     </a>
@@ -31,20 +32,20 @@
         <?php endif; ?>
         <div class="mp-cart-item-bottom">
             <div class="mp-qty">
-                <button type="button" class="mp-qty-btn"
+                <button type="button" class="mp-qty-btn change-qty"
                     onclick="qtyupdate('<?php echo e($cart->id); ?>','<?php echo e($cart->item_id); ?>','<?php echo e($cart->variants_id); ?>','<?php echo e($cart->item_price); ?>','decreaseValue')">
                     <i class="fa fa-minus"></i>
                 </button>
                 <input type="text" id="number_<?php echo e($cart->id); ?>" value="<?php echo e($cart->qty); ?>" readonly>
-                <button type="button" class="mp-qty-btn"
+                <button type="button" class="mp-qty-btn change-qty"
                     onclick="qtyupdate('<?php echo e($cart->id); ?>','<?php echo e($cart->item_id); ?>','<?php echo e($cart->variants_id); ?>','<?php echo e($cart->item_price); ?>','increase')">
                     <i class="fa fa-plus"></i>
                 </button>
             </div>
             <div class="mp-cart-item-price">
-                <span class="mp-price-now"><?php echo e(helper::currency_formate($lineTotal, $storeinfo->id, $cart->currency ?? null)); ?></span>
+                <span class="mp-price-now" data-mp-line-price><?php echo e(helper::currency_formate($lineTotal, $storeinfo->id, $cart->currency ?? null)); ?></span>
                 <?php if(($cart->qty ?? 1) > 1): ?>
-                    <small><?php echo e(helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency ?? null)); ?> × <?php echo e($cart->qty); ?></small>
+                    <small data-mp-line-meta><?php echo e(helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency ?? null)); ?> × <?php echo e($cart->qty); ?></small>
                 <?php endif; ?>
             </div>
         </div>

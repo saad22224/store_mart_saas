@@ -3,6 +3,7 @@
     $typeLabels = [
         'benefits' => 'مزايا المنتج',
         'rich_text' => 'قصة / نص',
+        'image' => 'صورة فقط',
         'image_text' => 'صورة مع نص',
         'features' => 'خصائص',
         'specifications' => 'مواصفات',

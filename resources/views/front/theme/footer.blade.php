@@ -1297,12 +1297,29 @@
             dataType: 'json',
             success: function(response) {
                 if (response.status == 1) {
-                    if (buynow == 0) {
-                        if ($('#viewproduct-over').is(':visible')) {
-                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 2 || "{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
-                                if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
-                                    try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
-                                }
+                        if (buynow == 0) {
+                        if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
+                            // Theme 22: update UI without full page reload (mp_cart_js may also handle)
+                            if ($('#viewproduct-over').is(':visible')) {
+                                $('#viewproduct-over').modal('hide');
+                            }
+                            $('#cartcnt').text(response.cartcnt).show().removeClass('d-none');
+                            $('.cart-count').text(response.cartcnt);
+                            $('.addtocart').html("{{ trans('labels.add_to_cart') }}");
+                            $('.addtocart').prop("disabled", false);
+                            $('.buynow').html("{{ trans('labels.buy_now') }}");
+                            $('.buynow').prop("disabled", false);
+                            toastr.success("{{ trans('messages.success') }}");
+                            if (typeof mpRefreshDrawerHtml === 'function') {
+                                mpRefreshDrawerHtml().then(function () {
+                                    if (window.mpOpenCartDrawer) window.mpOpenCartDrawer();
+                                });
+                            } else if (window.mpOpenCartDrawer) {
+                                try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
+                                location.reload();
+                            }
+                        } else if ($('#viewproduct-over').is(':visible')) {
+                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 2) {
                                 location.reload();
                             } else {
                                 $('#viewproduct-over').modal('hide');
@@ -1311,13 +1328,11 @@
                                 $('.addtocart').html("{{ trans('labels.add_to_cart') }}");
                                 $('.addtocart').prop("disabled", false);
                             }
+                            toastr.success("{{ trans('messages.success') }}");
                         } else {
-                            if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
-                                try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
-                            }
                             location.reload();
+                            toastr.success("{{ trans('messages.success') }}");
                         }
-                        toastr.success("{{ trans('messages.success') }}");
                     } else {
                         if (customer_login != "" && customer_login.activated == 1) {
                             if (checklogin) {
@@ -1572,7 +1587,16 @@
                         success: function(response) {
                             if (response.status == 1) {
                                 $('.shopping-cart #cartcnt').text(response.cartcnt);
-                                location.reload();
+                                $('#cartcnt').text(response.cartcnt);
+                                if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
+                                    if (typeof window.mpRefreshDrawerHtml === 'function') {
+                                        window.mpRefreshDrawerHtml();
+                                    } else {
+                                        location.reload();
+                                    }
+                                } else {
+                                    location.reload();
+                                }
                             } else {
                                 swal("Cancelled", "{{ trans('messages.wrong') }} :(",
                                     "error");
@@ -1622,7 +1646,17 @@
                 method: 'POST',
                 success: function(response) {
                     if (response.status == 1) {
-                        location.reload();
+                        if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 22) {
+                            $("#number_" + cart_id).val(qty);
+                            $('.change-qty').prop('disabled', false);
+                            if (typeof toastr !== 'undefined') toastr.success(response.message || "{{ trans('messages.success') }}");
+                            // Theme 22 drawer/page updates without reload when override is present
+                            if (typeof window.mpRecalcDrawerLocal === 'function') {
+                                window.mpRecalcDrawerLocal(cart_id, qty, price);
+                            }
+                        } else {
+                            location.reload();
+                        }
                     } else {
                         $("#number_" + cart_id).val(response.qty);
                         toastr.error(response.message);
@@ -2134,6 +2168,10 @@
             }
         </script>
     @endif
+@endif
+
+@if (helper::appdata(@$storeinfo->id)->template == 22)
+    @include('front.template-22.partials.mp_cart_js')
 @endif
 
 </body>

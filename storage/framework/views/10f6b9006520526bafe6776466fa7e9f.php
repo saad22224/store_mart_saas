@@ -225,6 +225,19 @@
     </div>
 
     
+    <div class="mp-type-panel <?php echo e($type === 'image' ? 'is-open' : ''); ?>" data-type="image">
+        <label class="form-label fw-semibold">صورة القسم (بدون عنوان أو نص)</label>
+        <input type="file" class="form-control" name="content_sections[<?php echo e($idx); ?>][media_file]" accept="image/*">
+        <small class="text-muted d-block mt-1">الصورة وحدها تُعرض بعرض كامل في صفحة المنتج.</small>
+        <?php if(!empty($mediaImage)): ?>
+            <div class="mt-2">
+                <img src="<?php echo e(helper::image_path($mediaImage)); ?>" alt="" style="max-width:100%;max-height:180px;border-radius:10px;">
+                <input type="hidden" name="content_sections[<?php echo e($idx); ?>][media_url]" value="<?php echo e($mediaImage); ?>">
+            </div>
+        <?php endif; ?>
+    </div>
+
+    
     <div class="mp-type-panel <?php echo e($type === 'image_text' ? 'is-open' : ''); ?>" data-type="image_text">
         <div class="row g-2">
             <div class="col-md-8">

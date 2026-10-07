@@ -1,5 +1,5 @@
 @include('front.theme.header')
-@include('front.template-22.partials.theme_styles')
+{{-- theme_styles already included via template-22 layout header --}}
 
 @php
     $homeSliders = isset($sliders) ? $sliders : collect();

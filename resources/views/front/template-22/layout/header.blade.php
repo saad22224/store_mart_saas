@@ -1,4 +1,4 @@
-{{-- Theme 22 header — matches reference: logo | policies | search+cart --}}
+{{-- Theme 22 header — desktop + mobile (reference match) --}}
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 @include('front.template-22.partials.theme_styles')
 @php
@@ -16,53 +16,143 @@
         }
         $mpCartCount = $mpCountQ->count();
     }
+    $mpCategories = helper::getcategory(@$storeinfo->id);
+    $mpContact = helper::appdata(@$storeinfo->id)->contact ?? null;
+    $mpLogo = helper::appdata(@$storeinfo->id)->logo ?? null;
+    $mpLogoUrl = null;
+    if (!empty($mpLogo)) {
+        $mpLogoCandidates = [
+            'admin-assets/images/about/logo/' . $mpLogo,
+            'admin-assets/images/about/defaultimages/' . $mpLogo,
+        ];
+        foreach ($mpLogoCandidates as $mpRel) {
+            if (file_exists(storage_path('app/public/' . $mpRel))) {
+                $mpLogoUrl = url(env('ASSETPATHURL') . $mpRel);
+                break;
+            }
+        }
+        if (!$mpLogoUrl) {
+            $resolved = helper::image_path($mpLogo);
+            if (!\Illuminate\Support\Str::contains($resolved, 'item-placeholder')) {
+                $mpLogoUrl = $resolved;
+            }
+        }
+    }
 @endphp
 <header class="mp-header">
     <div class="mp-header-inner">
-        {{-- RTL: right = logo --}}
+        {{-- Mobile: left bag+search | center logo | right menu — outline icons like reference --}}
+        <button type="button" class="mp-icon-plain mp-menu-btn" id="mpMenuToggle" aria-label="القائمة" aria-expanded="false">
+            <i class="fa-light fa-bars"></i>
+        </button>
+
         <a href="{{ URL::to(@$storeinfo->slug . '/') }}" class="mp-logo">
-            @if (!empty(helper::appdata(@$storeinfo->id)->logo))
-                <img src="{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}" alt="{{ @$storeinfo->name }}">
+            @if (!empty($mpLogoUrl))
+                <img src="{{ $mpLogoUrl }}" alt="{{ @$storeinfo->name }}">
             @else
                 <span class="mp-logo-text">{{ @$storeinfo->name }}</span>
             @endif
         </a>
 
-        {{-- center = policy links --}}
-        <nav class="mp-nav-policies">
+        <nav class="mp-nav-policies mp-nav-policies-desktop">
             <a href="{{ URL::to(@$storeinfo->slug . '/refund_policy') }}">سياسة الاستبدال و الاسترجاع</a>
             <a href="{{ URL::to(@$storeinfo->slug . '/terms') }}">سياسة الشحن</a>
         </nav>
 
-        {{-- left = icons (LTR order like reference: bag then search) --}}
         <div class="mp-actions">
-            <button type="button" class="mp-icon-plain mp-menu-btn" id="mpMenuToggle" aria-label="القائمة">
-                <i class="fa-solid fa-bars"></i>
-            </button>
             <button type="button" class="mp-icon-plain" data-mp-open-cart aria-label="{{ trans('labels.cart') }}">
-                <i class="fa-solid fa-bag-shopping"></i>
+                <i class="fa-light fa-bag-shopping"></i>
                 <span class="mp-cart-count cart-count" id="cartcnt" @if ($mpCartCount < 1) style="display:none" @endif>{{ $mpCartCount }}</span>
             </button>
             <button type="button" class="mp-icon-plain" data-mp-open-search aria-label="{{ trans('labels.search') }}">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-light fa-magnifying-glass"></i>
             </button>
         </div>
     </div>
-    <div class="mp-mobile-nav" id="mpMobileNav">
-        <a href="{{ URL::to(@$storeinfo->slug . '/') }}">{{ trans('labels.home') }}</a>
+
+    {{-- Mobile-only beige policy strip (reference) --}}
+    <div class="mp-policy-bar">
         <a href="{{ URL::to(@$storeinfo->slug . '/refund_policy') }}">سياسة الاستبدال و الاسترجاع</a>
+        <span class="mp-policy-sep" aria-hidden="true"></span>
         <a href="{{ URL::to(@$storeinfo->slug . '/terms') }}">سياسة الشحن</a>
-        <a href="{{ URL::to(@$storeinfo->slug . '/privacy') }}">{{ trans('labels.privacypolicy') }}</a>
-        <a href="{{ URL::to(@$storeinfo->slug . '/contact') }}">{{ trans('labels.contact_us') }}</a>
-        <a href="{{ URL::to(@$storeinfo->slug . '/cart') }}">{{ trans('labels.cart') }}</a>
     </div>
 </header>
+
+{{-- Mobile categories drawer (reference style, categories instead of policies) --}}
+<div class="mp-nav-backdrop" id="mpNavBackdrop" hidden></div>
+<aside class="mp-nav-drawer" id="mpNavDrawer" aria-hidden="true" dir="rtl">
+    <div class="mp-nav-drawer-top">
+        <button type="button" class="mp-nav-close" id="mpNavClose" aria-label="إغلاق">
+            <i class="fa-light fa-xmark"></i>
+        </button>
+        <a href="{{ URL::to(@$storeinfo->slug . '/') }}" class="mp-nav-logo">
+            @if (!empty($mpLogoUrl))
+                <img src="{{ $mpLogoUrl }}" alt="{{ @$storeinfo->name }}">
+            @else
+                <span>{{ @$storeinfo->name }}</span>
+            @endif
+        </a>
+    </div>
+    <nav class="mp-nav-drawer-links">
+        @forelse ($mpCategories as $mpCat)
+            <a href="{{ URL::to(@$storeinfo->slug . '/category/' . $mpCat->slug) }}">{{ $mpCat->name }}</a>
+        @empty
+            <a href="{{ URL::to(@$storeinfo->slug . '/') }}">{{ trans('labels.home') }}</a>
+        @endforelse
+    </nav>
+    @if (!empty($mpContact) && $mpContact !== '-')
+        <div class="mp-nav-drawer-foot">
+            <a href="tel:{{ preg_replace('/\s+/', '', $mpContact) }}" class="mp-nav-help">
+                <strong>{{ $mpContact }}</strong>
+                <span>Need help? call us</span>
+            </a>
+        </div>
+    @endif
+</aside>
+
 @include('front.template-22.partials.search_overlay')
 @include('front.template-22.partials.cart_drawer')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.getElementById('mpMenuToggle');
-    var nav = document.getElementById('mpMobileNav');
-    if (btn && nav) btn.addEventListener('click', function () { nav.classList.toggle('is-open'); });
+    var toggle = document.getElementById('mpMenuToggle');
+    var drawer = document.getElementById('mpNavDrawer');
+    var backdrop = document.getElementById('mpNavBackdrop');
+    var closeBtn = document.getElementById('mpNavClose');
+
+    function openNav() {
+        if (!drawer) return;
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+        if (backdrop) {
+            backdrop.hidden = false;
+            backdrop.classList.add('is-open');
+        }
+        document.documentElement.classList.add('mp-drawer-lock');
+    }
+    function closeNav() {
+        if (!drawer) return;
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        if (backdrop) {
+            backdrop.hidden = true;
+            backdrop.classList.remove('is-open');
+        }
+        document.documentElement.classList.remove('mp-drawer-lock');
+    }
+
+    window.mpOpenNavDrawer = openNav;
+    window.mpCloseNavDrawer = closeNav;
+
+    if (toggle) toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        openNav();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeNav);
+    if (backdrop) backdrop.addEventListener('click', closeNav);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeNav();
+    });
 });
 </script>

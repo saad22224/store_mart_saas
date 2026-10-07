@@ -24,7 +24,7 @@
         <?php if(helper::appdata(@$storeinfo->id)->online_order == 1): ?>
             <?php if($hasVariants): ?>
                 <a href="<?php echo e($url); ?>" class="mp-card-quick" title="<?php echo e(trans('labels.view')); ?>">
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i class="fa-light fa-bag-shopping"></i>
                 </a>
             <?php else: ?>
                 <button type="button" class="mp-card-quick"
@@ -40,7 +40,7 @@
                     data-max="<?php echo e($product->max_order ?? 0); ?>"
                     data-stock="<?php echo e($product->stock_management); ?>"
                     data-vendor="<?php echo e(@$storeinfo->id); ?>">
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i class="fa-light fa-bag-shopping"></i>
                 </button>
             <?php endif; ?>
         <?php endif; ?>

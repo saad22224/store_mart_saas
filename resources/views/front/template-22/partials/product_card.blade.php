@@ -24,7 +24,7 @@
         @if (helper::appdata(@$storeinfo->id)->online_order == 1)
             @if ($hasVariants)
                 <a href="{{ $url }}" class="mp-card-quick" title="{{ trans('labels.view') }}">
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i class="fa-light fa-bag-shopping"></i>
                 </a>
             @else
                 <button type="button" class="mp-card-quick"
@@ -40,7 +40,7 @@
                     data-max="{{ $product->max_order ?? 0 }}"
                     data-stock="{{ $product->stock_management }}"
                     data-vendor="{{ @$storeinfo->id }}">
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i class="fa-light fa-bag-shopping"></i>
                 </button>
             @endif
         @endif

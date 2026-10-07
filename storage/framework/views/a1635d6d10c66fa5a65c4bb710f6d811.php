@@ -14,7 +14,7 @@
             <a href="<?php echo e($detailUrl); ?>" class="mp-cart-item-name"><?php echo e($cart->item_name); ?></a>
             <button type="button" class="mp-cart-remove" aria-label="<?php echo e(trans('labels.remove')); ?>"
                 onclick="RemoveCart('<?php echo e($cart->id); ?>','<?php echo e($storeinfo->id); ?>')">
-                <i class="fa-solid fa-trash-can"></i>
+                <i class="fa-regular fa-trash-can"></i>
             </button>
         </div>
         <?php if(!empty($cart->variants_name) || !empty($cart->extras_name) || !empty($cart->color_choice)): ?>
@@ -30,6 +30,12 @@
                 <?php endif; ?>
             </div>
         <?php endif; ?>
+        <div class="mp-cart-item-price">
+            <span class="mp-price-now" data-mp-line-price><?php echo e(helper::currency_formate($lineTotal, $storeinfo->id, $cart->currency ?? null)); ?></span>
+            <?php if(($cart->qty ?? 1) > 1): ?>
+                <small data-mp-line-meta><?php echo e($cart->qty); ?> × <?php echo e(helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency ?? null)); ?></small>
+            <?php endif; ?>
+        </div>
         <div class="mp-cart-item-bottom">
             <div class="mp-qty">
                 <button type="button" class="mp-qty-btn change-qty"
@@ -41,12 +47,6 @@
                     onclick="qtyupdate('<?php echo e($cart->id); ?>','<?php echo e($cart->item_id); ?>','<?php echo e($cart->variants_id); ?>','<?php echo e($cart->item_price); ?>','increase')">
                     <i class="fa fa-plus"></i>
                 </button>
-            </div>
-            <div class="mp-cart-item-price">
-                <span class="mp-price-now" data-mp-line-price><?php echo e(helper::currency_formate($lineTotal, $storeinfo->id, $cart->currency ?? null)); ?></span>
-                <?php if(($cart->qty ?? 1) > 1): ?>
-                    <small data-mp-line-meta><?php echo e(helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency ?? null)); ?> × <?php echo e($cart->qty); ?></small>
-                <?php endif; ?>
             </div>
         </div>
     </div>

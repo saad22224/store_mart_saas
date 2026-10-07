@@ -44,12 +44,14 @@
     </div>
     <?php if($mpDrawerCount > 0): ?>
         <div class="mp-drawer-foot">
-            <div class="mp-summary-row mp-summary-total">
+            <div class="mp-drawer-subtotal">
                 <span><?php echo e(trans('labels.sub_total')); ?></span>
                 <strong data-mp-subtotal><?php echo e(helper::currency_formate($mpDrawerSub, $storeinfo->id)); ?></strong>
             </div>
-            <a href="<?php echo e(URL::to(@$storeinfo->slug . '/cart')); ?>" class="mp-btn-outline w-100">عرض السلة</a>
-            <a href="<?php echo e(URL::to(@$storeinfo->slug . '/checkout?buy_now=0')); ?>" class="mp-btn-primary w-100"><?php echo e(trans('labels.checkout')); ?></a>
+            <div class="mp-drawer-actions">
+                <a href="<?php echo e(URL::to(@$storeinfo->slug . '/cart')); ?>" class="mp-drawer-btn mp-drawer-btn-ghost">عرض السلة</a>
+                <a href="<?php echo e(URL::to(@$storeinfo->slug . '/checkout?buy_now=0')); ?>" class="mp-drawer-btn mp-drawer-btn-solid"><?php echo e(trans('labels.checkout')); ?></a>
+            </div>
         </div>
     <?php endif; ?>
 </aside>

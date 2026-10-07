@@ -14,7 +14,7 @@
             <a href="{{ $detailUrl }}" class="mp-cart-item-name">{{ $cart->item_name }}</a>
             <button type="button" class="mp-cart-remove" aria-label="{{ trans('labels.remove') }}"
                 onclick="RemoveCart('{{ $cart->id }}','{{ $storeinfo->id }}')">
-                <i class="fa-solid fa-trash-can"></i>
+                <i class="fa-regular fa-trash-can"></i>
             </button>
         </div>
         @if (!empty($cart->variants_name) || !empty($cart->extras_name) || !empty($cart->color_choice))
@@ -30,6 +30,12 @@
                 @endif
             </div>
         @endif
+        <div class="mp-cart-item-price">
+            <span class="mp-price-now" data-mp-line-price>{{ helper::currency_formate($lineTotal, $storeinfo->id, $cart->currency ?? null) }}</span>
+            @if (($cart->qty ?? 1) > 1)
+                <small data-mp-line-meta>{{ $cart->qty }} × {{ helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency ?? null) }}</small>
+            @endif
+        </div>
         <div class="mp-cart-item-bottom">
             <div class="mp-qty">
                 <button type="button" class="mp-qty-btn change-qty"
@@ -41,12 +47,6 @@
                     onclick="qtyupdate('{{ $cart->id }}','{{ $cart->item_id }}','{{ $cart->variants_id }}','{{ $cart->item_price }}','increase')">
                     <i class="fa fa-plus"></i>
                 </button>
-            </div>
-            <div class="mp-cart-item-price">
-                <span class="mp-price-now" data-mp-line-price>{{ helper::currency_formate($lineTotal, $storeinfo->id, $cart->currency ?? null) }}</span>
-                @if (($cart->qty ?? 1) > 1)
-                    <small data-mp-line-meta>{{ helper::currency_formate($cart->item_price, $storeinfo->id, $cart->currency ?? null) }} × {{ $cart->qty }}</small>
-                @endif
             </div>
         </div>
     </div>

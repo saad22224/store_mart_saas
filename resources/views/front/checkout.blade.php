@@ -466,7 +466,8 @@
                                             <input type="text" class="form-control rounded-2 offer-input"
                                                 value="{{ Session::has('offer_code') ? Session::get('offer_code') : '' }}"
                                                 name="promocode" id="couponcode"
-                                                placeholder="{{ trans('labels.coupon_code') }}" readonly>
+                                                placeholder="{{ trans('labels.coupon_code') }}"
+                                                autocomplete="off">
 
                                             <button class="btn btn-md mb-0 btn-store d-none" id="btnremove"
                                                 onclick="RemoveCoupon()">{{ trans('labels.remove') }}</button>
@@ -492,7 +493,8 @@
                                         <input type="text" class="form-control rounded-2 offer-input"
                                             value="{{ Session::has('offer_code') ? Session::get('offer_code') : '' }}"
                                             name="promocode" id="couponcode"
-                                            placeholder="{{ trans('labels.coupon_code') }}" readonly>
+                                            placeholder="{{ trans('labels.coupon_code') }}"
+                                            autocomplete="off">
 
                                         <button class="btn btn-md mb-0 btn-store d-none" id="btnremove"
                                             onclick="RemoveCoupon()">{{ trans('labels.remove') }}</button>
@@ -661,9 +663,8 @@
                                     </div>
                                 @endif
                                 <p class="cart-total border-top text-success">{{ trans('labels.total_amount') }}
-                                    <span id="" class="text-success">
+                                    <span id="total_amount" class="text-success">
                                         {{ helper::currency_formate($grandtotal, $storeinfo->id) }}
-                                        {{-- {{dd(helper::currency_formate($grandtotal, $storeinfo->id) ) }} --}}
                                     </span>
                                 </p>
                             </div>
@@ -788,7 +789,7 @@
     <input type="hidden" name="tax_name" id="tax_name" value="{{ implode('|', $taxArr['tax']) }}">
     <input type="hidden" name="grand_total" id="grand_total" value="{{ @$grandtotal }}">
     <input type="hidden" name="discount_amount" id="discount_amount" value="{{ @$discount }}">
-    <input type="hidden" name="couponcode" id="couponcode" value="{{ Session::get('offer_code') }}">
+    <input type="hidden" name="couponcode_session" id="couponcode_session" value="{{ Session::get('offer_code') }}">
     <input type="hidden" name="buynow_key" id="buynow_key" value="{{ request()->get('buy_now') }}">
 
 </div>
@@ -2161,6 +2162,11 @@
                     toastr.error(response.message);
 
                 }
+            },
+            error: function() {
+                $('#btnapply').html("{{ trans('labels.apply') }}");
+                $('#btnapply').prop("disabled", false);
+                toastr.error("{{ trans('messages.wrong') }}");
             }
         });
     }

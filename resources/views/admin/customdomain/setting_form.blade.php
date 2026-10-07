@@ -8,6 +8,18 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="alert alert-info fs-7 mb-3">
+                                    {{ trans('labels.custom_domain_admin_help') }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">{{ trans('labels.custom_domain_server_ip') }}
+                                        <span class="text-danger"> * </span>
+                                    </label>
+                                    <input type="text" class="form-control" name="server_ip" required
+                                        value="{{ old('server_ip', @$setting->server_ip ?: env('SERVER_IP')) }}"
+                                        placeholder="203.0.113.10" pattern="^(\d{1,3}\.){3}\d{1,3}$">
+                                    <small class="text-muted">{{ trans('labels.custom_domain_server_ip_hint') }}</small>
+                                </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ trans('labels.cname_section_title') }}
                                         <span class="text-danger"> * </span> </label>

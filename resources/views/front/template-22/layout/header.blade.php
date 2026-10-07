@@ -18,25 +18,28 @@
     }
     $mpCategories = helper::getcategory(@$storeinfo->id);
     $mpContact = helper::appdata(@$storeinfo->id)->contact ?? null;
-    $mpLogo = helper::appdata(@$storeinfo->id)->logo ?? null;
+    $mpLogo = trim((string) (helper::appdata(@$storeinfo->id)->logo ?? ''));
     $mpLogoUrl = null;
-    if (!empty($mpLogo)) {
+    if ($mpLogo !== '' && $mpLogo !== 'default.png' && $mpLogo !== '-') {
         $mpLogoCandidates = [
-            'admin-assets/images/about/logo/' . $mpLogo,
-            'admin-assets/images/about/defaultimages/' . $mpLogo,
+            storage_path('app/public/admin-assets/images/about/logo/' . $mpLogo),
+            storage_path('app/public/admin-assets/images/about/defaultimages/' . $mpLogo),
+            public_path('storage/admin-assets/images/about/logo/' . $mpLogo),
+            public_path('storage/admin-assets/images/about/defaultimages/' . $mpLogo),
         ];
-        foreach ($mpLogoCandidates as $mpRel) {
-            if (file_exists(storage_path('app/public/' . $mpRel))) {
-                $mpLogoUrl = url(env('ASSETPATHURL') . $mpRel);
+        $mpLogoRelMap = [
+            storage_path('app/public/admin-assets/images/about/logo/' . $mpLogo) => 'admin-assets/images/about/logo/' . $mpLogo,
+            storage_path('app/public/admin-assets/images/about/defaultimages/' . $mpLogo) => 'admin-assets/images/about/defaultimages/' . $mpLogo,
+            public_path('storage/admin-assets/images/about/logo/' . $mpLogo) => 'admin-assets/images/about/logo/' . $mpLogo,
+            public_path('storage/admin-assets/images/about/defaultimages/' . $mpLogo) => 'admin-assets/images/about/defaultimages/' . $mpLogo,
+        ];
+        foreach ($mpLogoCandidates as $mpAbs) {
+            if (is_file($mpAbs)) {
+                $mpLogoUrl = url(rtrim((string) env('ASSETPATHURL'), '/') . '/' . $mpLogoRelMap[$mpAbs]);
                 break;
             }
         }
-        if (!$mpLogoUrl) {
-            $resolved = helper::image_path($mpLogo);
-            if (!\Illuminate\Support\Str::contains($resolved, 'item-placeholder')) {
-                $mpLogoUrl = $resolved;
-            }
-        }
+        // Never fall back to a guessed URL — missing files render as a broken "image" icon.
     }
 @endphp
 <header class="mp-header">

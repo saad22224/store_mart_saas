@@ -132,7 +132,13 @@ class SettingsController extends Controller
         } else {
             $vendor_id = Auth::user()->id;
         }
+        $request->validate([
+            'server_ip' => ['required', 'ip'],
+            'cname_title' => ['required'],
+            'cname_text' => ['required'],
+        ]);
         $settingsdata = Settings::where('vendor_id', $vendor_id)->first();
+        $settingsdata->server_ip = $request->server_ip;
         $settingsdata->cname_title = $request->cname_title;
         $settingsdata->cname_text = $request->cname_text;
         $settingsdata->save();

@@ -19,14 +19,18 @@ class CustomdomainController extends Controller
         } else {
             $vendor_id = Auth::user()->id;
         }
-        $customdomaindata = CustomDomain::with(['users'])->get();
-        $domain = Customdomain::where('vendor_id', $vendor_id)->first();
+        $customdomaindata = CustomDomain::with(['users'])
+            ->whereHas('users')
+            ->orderByDesc('id')
+            ->get();
+        $domain = CustomDomain::where('vendor_id', $vendor_id)->first();
         $setting = Settings::where('vendor_id', 1)->first();
         return view('admin.customdomain.customdomain', compact('setting', 'domain', 'customdomaindata'));
     }
     public function add(Request $request)
     {
-        return view('admin.customdomain.add');
+        $setting = Settings::where('vendor_id', 1)->first();
+        return view('admin.customdomain.add', compact('setting'));
     }
     public function save(Request $request)
     {
@@ -63,6 +67,7 @@ class CustomdomainController extends Controller
         $request->validate([
             'cname_text' => 'required',
             'cname_title' => 'required',
+            'server_ip' => 'required|ip',
         ], [
             "cname_text.required" => trans('messages.cname_text_required'),
             "cname_title.required" => trans('messages.cname_title_required'),
@@ -70,6 +75,7 @@ class CustomdomainController extends Controller
         $settingsdata = Settings::where('vendor_id', $vendor_id)->first();
         $settingsdata->cname_text = $request->cname_text;
         $settingsdata->cname_title = $request->cname_title;
+        $settingsdata->server_ip = $request->server_ip;
         $settingsdata->save();
         return redirect()->back()->with('success', trans('messages.success'));
     }

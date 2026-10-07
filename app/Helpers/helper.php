@@ -14,6 +14,7 @@ use App\Models\Blog;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Coupons;
+use App\Models\Currencies;
 use App\Models\CurrencySettings;
 use App\Models\CustomDomain;
 use App\Models\CustomStatus;
@@ -302,7 +303,19 @@ class helper
 
     public static function currency_formate($price, $vendor_id, $currency = null)
     {
-        return number_format($price, 0, '.', ',').helper::currencyinfo($vendor_id)->currency;
+        $info = helper::currencyinfo($vendor_id);
+        $symbol = $info->currency ?? '';
+        $decimals = (int) ($info->currency_formate ?? 2);
+        $decSep = ((int) ($info->decimal_separator ?? 1) === 1) ? '.' : ',';
+        $thouSep = $decSep === '.' ? ',' : '.';
+        $formatted = number_format((float) $price, $decimals, $decSep, $thouSep);
+        $space = ((int) ($info->currency_space ?? 2) === 1) ? ' ' : '';
+
+        if ((string) ($info->currency_position ?? '1') === '1') {
+            return $symbol.$space.$formatted;
+        }
+
+        return $formatted.$space.$symbol;
     }
 
     public static function vendortime($vendor)
@@ -972,8 +985,8 @@ class helper
 
             $data = new Settings;
             $data->vendor_id = $vendor_id;
-            $data->currencies = 'usd';
-            $data->default_currency = @$rec->default_currency ?? 'USD';
+            $data->currencies = 'syp|usd';
+            $data->default_currency = 'syp';
 
             // logo===================================================
             $data->logo = 'default.png';
@@ -2064,19 +2077,79 @@ class helper
     // get language list in athu pages.
     public static function currencyinfo($vendor_id)
     {
-        // if (Cookie::get('code') == null) {
-        //   dd($currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first()) ;
-        $currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first();
-        //     session()->put('currency', $currency->currency);
-        // } else {
+        $code = strtolower((string) (helper::appdata($vendor_id)->default_currency ?? 'syp'));
+        $currency = CurrencySettings::whereRaw('LOWER(code) = ?', [$code])->first();
+        if (empty($currency)) {
+            $currency = CurrencySettings::whereRaw('LOWER(code) = ?', ['syp'])->first();
+        }
+        if (empty($currency)) {
+            $currency = CurrencySettings::whereRaw('LOWER(code) = ?', ['usd'])->first();
+        }
 
-        //     $currency = CurrencySettings::where('code', Cookie::get('code'))->first();
-        //     if (empty($currency)) {
-        //         $currency = CurrencySettings::where('code', helper::appdata($vendor_id)->default_currency)->first();
-        //     }
-        //     session()->put('currency', $currency->currency);
-        // }
         return $currency;
+    }
+
+    /**
+     * Ensure base storefront currencies exist (non-destructive).
+     */
+    public static function ensure_base_currencies(): void
+    {
+        if (! CurrencySettings::whereRaw('LOWER(code) = ?', ['usd'])->exists()) {
+            $usd = new CurrencySettings;
+            $usd->code = 'usd';
+            $usd->name = 'US Dollar';
+            $usd->currency = '$';
+            $usd->exchange_rate = 1;
+            $usd->currency_position = '1';
+            $usd->currency_space = 2;
+            $usd->currency_formate = 1;
+            $usd->decimal_separator = 1;
+            $usd->is_available = 1;
+            $usd->save();
+        } else {
+            CurrencySettings::whereRaw('LOWER(code) = ?', ['usd'])->update([
+                'name' => 'US Dollar',
+                'currency' => '$',
+                'is_available' => 1,
+            ]);
+        }
+
+        if (! CurrencySettings::whereRaw('LOWER(code) = ?', ['syp'])->exists()) {
+            $syp = new CurrencySettings;
+            $syp->code = 'syp';
+            $syp->name = 'Syrian Pound';
+            $syp->currency = 'ل.س';
+            $syp->exchange_rate = 1;
+            $syp->currency_position = '2';
+            $syp->currency_space = 1;
+            $syp->currency_formate = 1;
+            $syp->decimal_separator = 1;
+            $syp->is_available = 1;
+            $syp->save();
+        } else {
+            CurrencySettings::whereRaw('LOWER(code) = ?', ['syp'])->update([
+                'name' => 'Syrian Pound',
+                'currency' => 'ل.س',
+                'is_available' => 1,
+            ]);
+        }
+
+        if (! Currencies::whereRaw('LOWER(code) = ?', ['usd'])->exists()) {
+            $c = new Currencies;
+            $c->currency = 'US Dollar';
+            $c->code = 'usd';
+            $c->currency_symbol = '$';
+            $c->is_available = 1;
+            $c->save();
+        }
+        if (! Currencies::whereRaw('LOWER(code) = ?', ['syp'])->exists()) {
+            $c = new Currencies;
+            $c->currency = 'Syrian Pound';
+            $c->code = 'syp';
+            $c->currency_symbol = 'ل.س';
+            $c->is_available = 1;
+            $c->save();
+        }
     }
 
     /**

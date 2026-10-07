@@ -843,31 +843,38 @@ class HomeController extends Controller
     }
     public function applypromocode(Request $request)
     {
-
-        if ($request->promocode == "") {
+        $code = trim((string) $request->promocode);
+        if ($code === '') {
             return response()->json(["status" => 0, "message" => trans('messages.enter_promocode')], 200);
         }
-        $promocode = Coupons::select('offer_amount', 'offer_type', 'offer_code', 'min_amount')->where('offer_code', $request->promocode)->where('vendor_id', $request->vendor_id)->first();
-        if ($request->sub_total < @$promocode->min_amount) {
+
+        $promocode = Coupons::select('offer_amount', 'offer_type', 'offer_code', 'min_amount', 'start_date', 'exp_date', 'is_available')
+            ->whereRaw('LOWER(offer_code) = ?', [strtolower($code)])
+            ->where('vendor_id', $request->vendor_id)
+            ->where('is_available', 1)
+            ->first();
+
+        if (!$promocode) {
+            return response()->json(['status' => 0, 'message' => trans('messages.wrong_promocode')], 200);
+        }
+
+        $today = date('Y-m-d');
+        if (($promocode->start_date && $today < $promocode->start_date) || ($promocode->exp_date && $today > $promocode->exp_date)) {
+            return response()->json(['status' => 0, 'message' => trans('messages.wrong_promocode')], 200);
+        }
+
+        if ($request->sub_total < $promocode->min_amount) {
             return response()->json(["status" => 0, "message" => trans('messages.not_eligible')], 200);
         }
 
         $offer_amount = $promocode->offer_amount;
-        // if ($promocode->offer_type == 2) {
-        //     $offer_amount = $request->sub_total * $promocode->offer_amount / 100;
-        // }
         session([
-            'offer_amount' => @$offer_amount,
-            'offer_code' => @$promocode->offer_code,
-            'offer_type' => @$promocode->offer_type,
+            'offer_amount' => $offer_amount,
+            'offer_code' => $promocode->offer_code,
+            'offer_type' => $promocode->offer_type,
         ]);
-        if (@$promocode->offer_code == $request->promocode) {
 
-            return response()->json(['status' => 1, 'message' => trans('messages.promocode_applied'), 'data' => $promocode], 200);
-        } else {
-
-            return response()->json(['status' => 0, 'message' => trans('messages.wrong_promocode')], 200);
-        }
+        return response()->json(['status' => 1, 'message' => trans('messages.promocode_applied'), 'data' => $promocode], 200);
     }
     public function removepromocode(Request $request)
     {

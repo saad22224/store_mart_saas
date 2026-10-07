@@ -15,6 +15,11 @@
             @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
                 @include('admin.customdomain.setting_form')
             @endif
+
+            @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
+                @include('admin.customdomain.partials.guide')
+            @endif
+
             <div class="card border-0 mb-3 box-shadow">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -25,15 +30,17 @@
                             @include('admin.customdomain.listcustomdomain_table')
                         @endif
                     </div>
-                    @if (Auth::user()->type == 2)
-                        <div class="card mt-4">
-                            <div class="card-header border-bottom color-changer">
-                                {{ $setting->cname_title }}
+                    @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
+                        @if (!empty($setting->cname_title) || !empty($setting->cname_text))
+                            <div class="card mt-4 border">
+                                <div class="card-header border-bottom color-changer">
+                                    {{ $setting->cname_title ?: trans('labels.read_before_sending_custom_domain_request') }}
+                                </div>
+                                <div class="card-body color-changer fs-7">
+                                    <div class="card-text">{!! $setting->cname_text !!}</div>
+                                </div>
                             </div>
-                            <div class="card-body color-changer fs-7">
-                                <p class="card-text"> {!! $setting->cname_text !!}</p>
-                            </div>
-                        </div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -44,6 +51,8 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.12.1/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace('cname_text');
+        if (document.getElementById('cname_text')) {
+            CKEDITOR.replace('cname_text');
+        }
     </script>
 @endsection

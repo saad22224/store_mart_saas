@@ -14,15 +14,21 @@
             $i = 1;
         @endphp
         @foreach ($customdomaindata as $ddata)
+            @php
+                $vendor = $ddata->users;
+                $vendorId = $vendor->id ?? $ddata->vendor_id;
+                $vendorName = $vendor->name ?? ('#' . $ddata->vendor_id);
+            @endphp
             <tr class="fs-7">
-                <td>@php
-
-                    echo $i++;
-
-                @endphp</td>
-                <td>{{ $ddata['users']->name }}</td>
-                <td>{{ $ddata->requested_domain }}</td>
-                <td>{{ $ddata->current_domain }}</td>
+                <td>{{ $i++ }}</td>
+                <td>
+                    {{ $vendorName }}
+                    @if (!$vendor)
+                        <span class="badge bg-secondary">{{ trans('labels.unavailable') }}</span>
+                    @endif
+                </td>
+                <td>{{ $ddata->requested_domain ?: '-' }}</td>
+                <td>{{ $ddata->current_domain ?: '-' }}</td>
                 <td>
                     @if ($ddata->status == 1)
                         <span class="badge bg-warning">{{ trans('labels.pending') }} </span>
@@ -32,18 +38,22 @@
                 </td>
 
                 <td>
-                    @if ($ddata->status == 1)
-                        <a class="btn btn-sm btn-outline-success {{ Auth::user()->type == 4 ? (helper::check_access('role_custom_domains', Auth::user()->role_id, Auth::user()->vendor_id, 'edit') == 1 ? '' : 'd-none') : '' }}"
-                            tooltip="{{ trans('labels.active') }}"
-                            @if (env('Environment') == 'sendbox') onclick="myFunction()" @else onclick="statusupdate('{{ URL::to('/admin/custom_domain/status_change-' . $ddata['users']->id) . '/2' }}') @endif">
-                            <i class="fas fa-check"></i>
-                        </a>
+                    @if ($vendor)
+                        @if ($ddata->status == 1)
+                            <a class="btn btn-sm btn-outline-success {{ Auth::user()->type == 4 ? (helper::check_access('role_custom_domains', Auth::user()->role_id, Auth::user()->vendor_id, 'edit') == 1 ? '' : 'd-none') : '' }}"
+                                tooltip="{{ trans('labels.active') }}"
+                                @if (env('Environment') == 'sendbox') onclick="myFunction()" @else onclick="statusupdate('{{ URL::to('/admin/custom_domain/status_change-' . $vendorId) . '/2' }}')" @endif>
+                                <i class="fas fa-check"></i>
+                            </a>
+                        @else
+                            <a class="btn btn-sm btn-outline-danger {{ Auth::user()->type == 4 ? (helper::check_access('role_custom_domains', Auth::user()->role_id, Auth::user()->vendor_id, 'edit') == 1 ? '' : 'd-none') : '' }}"
+                                tooltip="{{ trans('labels.inactive') }}"
+                                @if (env('Environment') == 'sendbox') onclick="myFunction()" @else onclick="statusupdate('{{ URL::to('/admin/custom_domain/status_change-' . $vendorId) . '/1' }}')" @endif>
+                                <i class="fas fa-close"></i>
+                            </a>
+                        @endif
                     @else
-                        <a class="btn btn-sm btn-outline-danger {{ Auth::user()->type == 4 ? (helper::check_access('role_custom_domains', Auth::user()->role_id, Auth::user()->vendor_id, 'edit') == 1 ? '' : 'd-none') : '' }}"
-                            tooltip="{{ trans('labels.inactive') }}"
-                            @if (env('Environment') == 'sendbox') onclick="myFunction()" @else onclick="statusupdate('{{ URL::to('/admin/custom_domain/status_change-' . $ddata['users']->id) . '/1' }}') @endif">
-                            <i class="fas fa-close"></i>
-                        </a>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
             </tr>

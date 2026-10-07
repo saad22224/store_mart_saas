@@ -1130,12 +1130,10 @@
             return $.number(price, 0) + currency_text;
         }
 
-        var formate = {{ @helper::currencyinfo($storeinfo->id)->decimal_digit ?? 2 }};
-        var exchange_rate = {{ @helper::currencyinfo($storeinfo->id)->exchange_rate ?? 1 }};
-        var price = parseFloat(price) * parseFloat(exchange_rate);
+        var formate = {{ (int) (@helper::currencyinfo($storeinfo->id)->currency_formate ?? 2) }};
+        var price = parseFloat(price);
 
-        var locale = "{{ \App::getLocale() }}";
-        var currency = locale === 'ar' ? "ل.س" : "{{ @helper::currencyinfo($storeinfo->id)->currency }}";
+        var currency = "{{ @helper::currencyinfo($storeinfo->id)->currency }}";
         var position = "{{ @helper::currencyinfo($storeinfo->id)->currency_position }}";
         var space = "{{ @helper::currencyinfo($storeinfo->id)->currency_space }}";
         var decimal_sep = "{{ @helper::currencyinfo($storeinfo->id)->decimal_separator }}";

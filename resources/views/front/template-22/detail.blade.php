@@ -128,6 +128,25 @@
         background: #fff; margin-bottom: 10px;
     }
     .mp-detail .mp-faq-item summary { font-weight: 700; font-size: 0.95rem; }
+    .mp-share {
+        margin-top: 18px; padding-top: 16px; border-top: 1px solid #ececec;
+    }
+    .mp-share-label {
+        font-size: 0.86rem; font-weight: 700; color: #444; margin: 0 0 10px;
+    }
+    .mp-share-actions {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .mp-share-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        height: 36px; padding: 0 12px; border-radius: 9px; border: 1px solid #e0e0e0;
+        background: #fff; color: #222; font-size: 0.8rem; font-weight: 600;
+        text-decoration: none; cursor: pointer; font-family: inherit;
+        transition: background .15s, border-color .15s;
+    }
+    .mp-share-btn:hover { background: #f7f7f7; border-color: #ccc; color: #111; }
+    .mp-share-btn i { font-size: 0.95rem; }
+    .mp-share-btn.is-copied { border-color: #2e7d32; color: #2e7d32; background: #f1f8f2; }
     @media (max-width: 900px) {
         .mp-detail-hero { grid-template-columns: 1fr; gap: 20px; padding-top: 16px; }
         .mp-purchase-row { flex-direction: column; align-items: stretch; }
@@ -248,6 +267,42 @@
                     </div>
                 @endif
 
+                @php
+                    $mpShareUrl = url()->current();
+                    $mpShareTitle = $getitem->item_name;
+                    $mpShareText = $mpShareTitle . ' ' . $mpShareUrl;
+                @endphp
+                <div class="mp-share" id="mpProductShare"
+                    data-url="{{ $mpShareUrl }}"
+                    data-title="{{ e($mpShareTitle) }}"
+                    data-text="{{ e($mpShareText) }}">
+                    <p class="mp-share-label">مشاركة المنتج</p>
+                    <div class="mp-share-actions">
+                        <button type="button" class="mp-share-btn" id="mpNativeShare" hidden>
+                            <i class="fa-light fa-share-nodes"></i> مشاركة
+                        </button>
+                        <a class="mp-share-btn" target="_blank" rel="noopener"
+                            href="https://wa.me/?text={{ rawurlencode($mpShareText) }}">
+                            <i class="fa-brands fa-whatsapp"></i> واتساب
+                        </a>
+                        <a class="mp-share-btn" target="_blank" rel="noopener"
+                            href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($mpShareUrl) }}">
+                            <i class="fa-brands fa-facebook-f"></i> فيسبوك
+                        </a>
+                        <a class="mp-share-btn" target="_blank" rel="noopener"
+                            href="https://twitter.com/intent/tweet?text={{ rawurlencode($mpShareTitle) }}&url={{ rawurlencode($mpShareUrl) }}">
+                            <i class="fa-brands fa-x-twitter"></i> X
+                        </a>
+                        <a class="mp-share-btn" target="_blank" rel="noopener"
+                            href="https://t.me/share/url?url={{ rawurlencode($mpShareUrl) }}&text={{ rawurlencode($mpShareTitle) }}">
+                            <i class="fa-brands fa-telegram"></i> تيليجرام
+                        </a>
+                        <button type="button" class="mp-share-btn" id="mpCopyLink">
+                            <i class="fa-light fa-link"></i> <span>نسخ الرابط</span>
+                        </button>
+                    </div>
+                </div>
+
                 {{-- Required by shared AddtoCart() in theme footer --}}
                 <input type="hidden" name="vendor" id="overview_vendor" value="{{ $getitem->vendor_id }}">
                 <input type="hidden" name="item_id" id="overview_item_id" value="{{ $getitem->id }}">
@@ -315,6 +370,57 @@
         document.querySelectorAll('.mp-thumbs button').forEach(function (b) { b.classList.remove('is-active'); });
         btn.classList.add('is-active');
     }
+
+    (function () {
+        var box = document.getElementById('mpProductShare');
+        if (!box) return;
+        var url = box.getAttribute('data-url') || window.location.href;
+        var title = box.getAttribute('data-title') || document.title;
+        var text = box.getAttribute('data-text') || (title + ' ' + url);
+
+        var nativeBtn = document.getElementById('mpNativeShare');
+        if (nativeBtn && navigator.share) {
+            nativeBtn.hidden = false;
+            nativeBtn.addEventListener('click', function () {
+                navigator.share({ title: title, text: title, url: url }).catch(function () {});
+            });
+        }
+
+        var copyBtn = document.getElementById('mpCopyLink');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function () {
+                var label = copyBtn.querySelector('span');
+                var done = function () {
+                    copyBtn.classList.add('is-copied');
+                    if (label) label.textContent = 'تم النسخ';
+                    if (typeof toastr !== 'undefined') toastr.success('تم نسخ رابط المنتج');
+                    setTimeout(function () {
+                        copyBtn.classList.remove('is-copied');
+                        if (label) label.textContent = 'نسخ الرابط';
+                    }, 1800);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(done).catch(function () {
+                        var tmp = document.createElement('input');
+                        tmp.value = url;
+                        document.body.appendChild(tmp);
+                        tmp.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tmp);
+                        done();
+                    });
+                } else {
+                    var tmp = document.createElement('input');
+                    tmp.value = url;
+                    document.body.appendChild(tmp);
+                    tmp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tmp);
+                    done();
+                }
+            });
+        }
+    })();
 </script>
 
 @include('front.theme.footer')

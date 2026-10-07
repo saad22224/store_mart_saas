@@ -28,15 +28,54 @@ class CurrencyController extends Controller
             $vendor_id = Auth::user()->id;
         }
 
+        $isMerchant = Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1);
+
+        if ($isMerchant) {
+            $request->validate([
+                'name' => 'required|string|max:100',
+                'code' => 'required|string|max:20',
+                'currency_symbol' => 'required|string|max:20',
+            ]);
+            $code = strtolower(trim($request->code));
+            if (CurrencySettings::whereRaw('LOWER(code) = ?', [$code])->exists()) {
+                return redirect()->back()->with('error', trans('messages.unique_currency') ?? 'Currency already exists')->withInput();
+            }
+            $currency = new CurrencySettings();
+            $currency->code = $code;
+            $currency->name = trim($request->name);
+            $currency->currency = trim($request->currency_symbol);
+            $currency->exchange_rate = 1; // kept for schema compatibility; unused in storefront
+            $currency->currency_position = '2';
+            $currency->currency_space = 1;
+            $currency->currency_formate = 1;
+            $currency->decimal_separator = 1;
+            $currency->is_available = 1;
+            $currency->save();
+
+            // Make newly added currency selectable; do not auto-activate.
+            $settingdata = Settings::where('vendor_id', $vendor_id)->first();
+            if ($settingdata) {
+                $codes = array_filter(explode('|', (string) $settingdata->currencies));
+                $codesLower = array_map('strtolower', $codes);
+                if (! in_array($code, $codesLower, true)) {
+                    $codes[] = $code;
+                    $settingdata->currencies = implode('|', $codes);
+                    $settingdata->save();
+                }
+            }
+
+            return redirect('admin/currency-settings/')->with('success', trans('messages.success'));
+        }
+
         $currency = new CurrencySettings();
         $currency->code = $request->code;
         $currency->name = $request->name;
         $currency->currency = $request->currency_symbol;
-        $currency->exchange_rate = $request->exchange_rate;
-        $currency->currency_position = $request->currency_position;
-        $currency->currency_space = $request->currency_space;
-        $currency->currency_formate = $request->currency_formate;
-        $currency->decimal_separator = $request->decimal_separator;
+        $currency->exchange_rate = $request->exchange_rate ?? 1;
+        $currency->currency_position = $request->currency_position ?? 1;
+        $currency->currency_space = $request->currency_space ?? 2;
+        $currency->currency_formate = $request->currency_formate ?? 1;
+        $currency->decimal_separator = $request->decimal_separator ?? 1;
         $currency->is_available = 1;
         $currency->save();
         return redirect('admin/currency-settings/')->with('success', trans('messages.success'));
@@ -163,26 +202,27 @@ class CurrencyController extends Controller
             $vendor_id = Auth::user()->id;
         }
         $settingdata = Settings::where('vendor_id', $vendor_id)->first();
-        if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)) {
-            $currency = CurrencySettings::where('code', $request->code)->first();
-            if ($currency->is_available == 2) {
-                return redirect()->back()->with('error', trans('messages.not_available_currency'));
-            } else {
-                $settingdata->default_currency = $request->code;
-                $settingdata->update();
-                return redirect()->back()->with('success', trans('messages.success'));
-            }
-        } else {
-            if (in_array($request->code, explode('|', $settingdata->currencies))) {
-                $settingdata->default_currency = $request->code;
-                $settingdata->update();
-                return redirect()->back()->with('success', trans('messages.success'));
-            } else {
-
-                return redirect()->back()->with('error', trans('messages.not_available_currency'));
-            }
+        $code = strtolower(trim((string) $request->code));
+        $currency = CurrencySettings::whereRaw('LOWER(code) = ?', [$code])->first();
+        if (! $currency || (int) $currency->is_available === 2) {
+            return redirect()->back()->with('error', trans('messages.not_available_currency'));
         }
+
+        // Single active currency source of truth.
+        $settingdata->default_currency = $currency->code;
+
+        $codes = array_values(array_filter(explode('|', (string) $settingdata->currencies)));
+        $codesLower = array_map('strtolower', $codes);
+        if (! in_array(strtolower($currency->code), $codesLower, true)) {
+            $codes[] = $currency->code;
+        }
+        $settingdata->currencies = implode('|', $codes);
+        $settingdata->update();
+
         session()->put('currency', $currency->currency);
+
+        return redirect()->back()->with('success', trans('messages.success'))
+            ->withCookie(cookie('code', $currency->code, 60 * 24 * 365));
     }
 
 

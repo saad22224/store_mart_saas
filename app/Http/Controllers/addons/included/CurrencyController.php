@@ -13,7 +13,8 @@ class CurrencyController extends Controller
 {
     public function index(Request $request)
     {
-        // dd('123');
+        \App\Helpers\helper::ensure_base_currencies();
+
         if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1)) {
             $getcurrency = CurrencySettings::where('is_available', 1)->get();
         } else {

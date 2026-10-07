@@ -474,7 +474,8 @@
                                             <input type="text" class="form-control rounded-2 offer-input"
                                                 value="<?php echo e(Session::has('offer_code') ? Session::get('offer_code') : ''); ?>"
                                                 name="promocode" id="couponcode"
-                                                placeholder="<?php echo e(trans('labels.coupon_code')); ?>" readonly>
+                                                placeholder="<?php echo e(trans('labels.coupon_code')); ?>"
+                                                autocomplete="off">
 
                                             <button class="btn btn-md mb-0 btn-store d-none" id="btnremove"
                                                 onclick="RemoveCoupon()"><?php echo e(trans('labels.remove')); ?></button>
@@ -500,7 +501,8 @@
                                         <input type="text" class="form-control rounded-2 offer-input"
                                             value="<?php echo e(Session::has('offer_code') ? Session::get('offer_code') : ''); ?>"
                                             name="promocode" id="couponcode"
-                                            placeholder="<?php echo e(trans('labels.coupon_code')); ?>" readonly>
+                                            placeholder="<?php echo e(trans('labels.coupon_code')); ?>"
+                                            autocomplete="off">
 
                                         <button class="btn btn-md mb-0 btn-store d-none" id="btnremove"
                                             onclick="RemoveCoupon()"><?php echo e(trans('labels.remove')); ?></button>
@@ -672,10 +674,9 @@
                                 <?php endif; ?>
                                 <p class="cart-total border-top text-success"><?php echo e(trans('labels.total_amount')); ?>
 
-                                    <span id="" class="text-success">
+                                    <span id="total_amount" class="text-success">
                                         <?php echo e(helper::currency_formate($grandtotal, $storeinfo->id)); ?>
 
-                                        
                                     </span>
                                 </p>
                             </div>
@@ -804,7 +805,7 @@
     <input type="hidden" name="tax_name" id="tax_name" value="<?php echo e(implode('|', $taxArr['tax'])); ?>">
     <input type="hidden" name="grand_total" id="grand_total" value="<?php echo e(@$grandtotal); ?>">
     <input type="hidden" name="discount_amount" id="discount_amount" value="<?php echo e(@$discount); ?>">
-    <input type="hidden" name="couponcode" id="couponcode" value="<?php echo e(Session::get('offer_code')); ?>">
+    <input type="hidden" name="couponcode_session" id="couponcode_session" value="<?php echo e(Session::get('offer_code')); ?>">
     <input type="hidden" name="buynow_key" id="buynow_key" value="<?php echo e(request()->get('buy_now')); ?>">
 
 </div>
@@ -2185,6 +2186,11 @@ unset($__errorArgs, $__bag); ?>" required>
                     toastr.error(response.message);
 
                 }
+            },
+            error: function() {
+                $('#btnapply').html("<?php echo e(trans('labels.apply')); ?>");
+                $('#btnapply').prop("disabled", false);
+                toastr.error("<?php echo e(trans('messages.wrong')); ?>");
             }
         });
     }

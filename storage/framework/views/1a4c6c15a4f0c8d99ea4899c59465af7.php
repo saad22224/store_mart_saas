@@ -1150,12 +1150,10 @@
             return $.number(price, 0) + currency_text;
         }
 
-        var formate = <?php echo e(@helper::currencyinfo($storeinfo->id)->decimal_digit ?? 2); ?>;
-        var exchange_rate = <?php echo e(@helper::currencyinfo($storeinfo->id)->exchange_rate ?? 1); ?>;
-        var price = parseFloat(price) * parseFloat(exchange_rate);
+        var formate = <?php echo e((int) (@helper::currencyinfo($storeinfo->id)->currency_formate ?? 2)); ?>;
+        var price = parseFloat(price);
 
-        var locale = "<?php echo e(\App::getLocale()); ?>";
-        var currency = locale === 'ar' ? "ل.س" : "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency); ?>";
+        var currency = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency); ?>";
         var position = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency_position); ?>";
         var space = "<?php echo e(@helper::currencyinfo($storeinfo->id)->currency_space); ?>";
         var decimal_sep = "<?php echo e(@helper::currencyinfo($storeinfo->id)->decimal_separator); ?>";

@@ -5,7 +5,13 @@
                 <div class="col-xl-6 col-md-6">
                     <div class="d-flex gap-3 align-items-center">
                         <div class="product-img">
-                            <img src="{{ helper::image_path($getitem['product_image']->image) }}" class="rounded">
+                            @php
+                                $barImage = $getitem['product_image']?->image ?? ($getitem->image_name ?? null);
+                                $barImageSrc = $barImage
+                                    ? helper::image_path($barImage)
+                                    : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png');
+                            @endphp
+                            <img src="{{ $barImageSrc }}" class="rounded" alt="{{ $getitem->item_name }}">
                         </div>
                         <div>
                             <h5 class="text-dark color-changer line-2 fs-15 fw-600 my-1">

@@ -1,964 +1,185 @@
 @include('front.theme.header')
+@include('front.template-16._theme_styles')
 
 @php
-    $primaryColor  = helper::appdata($storeinfo->id)->primary_color ?? '#9d4300';
     $allCategories = helper::getcategory($storeinfo->id);
-    $storeName     = helper::appdata($storeinfo->id)->app_name ?? $storeinfo->name;
-    $cartCount     = session('cart', 0);
+    $storeName = helper::appdata($storeinfo->id)->app_name ?? $storeinfo->name;
+    $cartdata = $cartdata ?? collect();
+
+    $allMenuItems = \App\Models\Item::with(['variation', 'extras', 'product_image', 'multi_image'])
+        ->where('vendor_id', $storeinfo->id)
+        ->where('is_available', 1)
+        ->where('is_deleted', 2)
+        ->orderBy('reorder_id', 'ASC')
+        ->get();
+
+    $menuSections = [];
+    foreach ($allCategories as $cat) {
+        $catItems = $allMenuItems->filter(function ($item) use ($cat) {
+            $ids = preg_split('/[|,]/', (string) $item->cat_id);
+            return in_array((string) $cat->id, array_map('strval', $ids), true);
+        })->values();
+        if ($catItems->count() > 0) {
+            $menuSections[] = ['category' => $cat, 'items' => $catItems];
+        }
+    }
 @endphp
 
-{{-- ═══════════════ SCOPED STYLES ═══════════════ --}}
-<style>
-    /* ── CSS variables ── */
-    :root {
-        --t16-primary:        {{ $primaryColor }};
-        --t16-primary-light:  {{ $primaryColor }}15;
-        --t16-primary-gradient: linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $primaryColor }}dd 100%);
-        --t16-surface:        #fcf9f8;
-        --t16-bg:             linear-gradient(180deg, #faf8f6 0%, #f5f2ef 100%);
-        --t16-on-surface:     #1c1b1b;
-        --t16-muted:          #584237;
-        --t16-border:         #e0c0b1;
-        --t16-card:           #ffffff;
-        --t16-radius:         1.25rem;
-        --t16-shadow:         0 8px 24px rgba(49,48,48,.08);
-        --t16-shadow-hover:   0 20px 48px rgba(49,48,48,.16);
-        --t16-accent:         #ff6b35;
-    }
-
-    /* ── Scrollbar hide ── */
-    .t16-hide-scroll::-webkit-scrollbar { display:none; }
-    .t16-hide-scroll { -ms-overflow-style:none; scrollbar-width:none; }
-
-    /* ── Slider ── */
-    .t16-slider-wrap {
-        position:relative; overflow:hidden;
-        border-radius:var(--t16-radius);
-        background:#f0eded;
-        box-shadow:0 12px 40px rgba(0,0,0,.12);
-    }
-    .t16-slider-wrap::before {
-        content:'';
-        position:absolute;
-        inset:0;
-        background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.4) 100%);
-        z-index:5;
-        pointer-events:none;
-    }
-    .t16-slider-wrap img.t16-slide-img {
-        width:100%; height:350px; object-fit:cover;
-        display:block;
-        transition:transform .6s ease;
-    }
-    .t16-slider-wrap:hover img.t16-slide-img {
-        transform:scale(1.05);
-    }
-    @media(max-width:576px){
-        .t16-slider-wrap img.t16-slide-img { height:220px; }
-    }
-
-    /* ── Slider arrows hover effect ── */
-    .t16-slider-arrow:hover {
-        background:rgba(255,255,255,.5) !important;
-        transform:translateY(-50%) scale(1.1) !important;
-    }
-
-    /* ── Category Cards Grid (Walashi style) ── */
-    .t16-menu-title {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--t16-on-surface);
-        margin-bottom: 20px;
-        letter-spacing: -0.5px;
-    }
-    .t16-cats-scroll {
-        display: flex;
-        gap: 16px;
-        overflow-x: auto;
-        padding: 4px 0 16px;
-        scroll-behavior: smooth;
-    }
-    .t16-cat-card {
-        flex: 0 0 auto;
-        width: 160px;
-        text-decoration: none;
-        color: inherit;
-        transition: transform .3s cubic-bezier(.4,0,.2,1);
-    }
-    .t16-cat-card:hover {
-        transform: translateY(-6px);
-    }
-    .t16-cat-card-img {
-        width: 160px;
-        height: 140px;
-        border-radius: 14px;
-        overflow: hidden;
-        background: #f0eded;
-        box-shadow: 0 4px 16px rgba(0,0,0,.08);
-    }
-    .t16-cat-card-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform .5s cubic-bezier(.4,0,.2,1);
-    }
-    .t16-cat-card:hover .t16-cat-card-img img {
-        transform: scale(1.08);
-    }
-    .t16-cat-card-name {
-        font-size: .95rem;
-        font-weight: 700;
-        color: var(--t16-on-surface);
-        margin-top: 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .t16-cat-card-count {
-        font-size: .8rem;
-        color: var(--t16-muted);
-        opacity: .7;
-    }
-    .t16-cat-placeholder {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f5f0ed 0%, #e8e0db 100%);
-        color: var(--t16-muted);
-        font-size: 2.5rem;
-        opacity: .5;
-    }
-
-    /* ── Product grid ── */
-    .t16-product-grid {
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:16px;
-    }
-    @media(max-width:480px){
-        .t16-product-grid { grid-template-columns:1fr; }
-    }
-
-    /* ── Product card ── */
-    .t16-card {
-        background:var(--t16-card);
-        border-radius:var(--t16-radius);
-        overflow:hidden;
-        display:flex; gap:16px;
-        padding:16px;
-        box-shadow:var(--t16-shadow);
-        transition:all .4s cubic-bezier(.4,0,.2,1);
-        border:1px solid rgba(0,0,0,.04);
-    }
-    .t16-card:hover {
-        box-shadow:var(--t16-shadow-hover);
-        transform:translateY(-4px);
-        border-color:rgba(0,0,0,.08);
-    }
-
-    .t16-card-img {
-        width:120px; height:120px;
-        border-radius:1rem;
-        overflow:hidden; flex-shrink:0;
-        background:#f0eded;
-        box-shadow:0 4px 12px rgba(0,0,0,.08);
-    }
-    .t16-card-img img {
-        width:100%; height:100%; object-fit:cover;
-        transition:transform .5s cubic-bezier(.4,0,.2,1);
-    }
-    .t16-card:hover .t16-card-img img { transform:scale(1.1); }
-
-    .t16-card-body { display:flex; flex-direction:column; justify-content:space-between; flex-grow:1; }
-
-    .t16-card-name {
-        font-size:.95rem; font-weight:600; color:var(--t16-on-surface);
-        display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-        margin-bottom:4px;
-    }
-    .t16-card-desc {
-        font-size:.8rem; color:var(--t16-muted);
-        display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-    }
-    .t16-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
-
-    .t16-price { font-size:1.05rem; font-weight:700; color:var(--t16-primary); }
-    .t16-old-price { font-size:.8rem; color:#aaa; text-decoration:line-through; margin-right:4px; }
-
-    /* Qty stepper */
-    .t16-qty { display:flex; align-items:center; gap:8px; }
-    .t16-qty-btn {
-        width:34px; height:34px; border-radius:50%;
-        border:2px solid var(--t16-border);
-        background:#fff; color:var(--t16-muted);
-        display:flex; align-items:center; justify-content:center;
-        cursor:pointer; transition:.3s; font-size:18px; line-height:1;
-        box-shadow:0 2px 8px rgba(0,0,0,.06);
-    }
-    .t16-qty-btn:hover { border-color:var(--t16-primary); color:var(--t16-primary); }
-    .t16-qty-btn.plus { background:var(--t16-primary-gradient); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(0,0,0,.15); }
-    .t16-qty-btn:active { transform:scale(.9); }
-    .t16-qty-num { width:28px; text-align:center; font-weight:700; font-size:1rem; color:var(--t16-on-surface); }
-
-    /* Add to cart button (for items at qty=0) */
-    .t16-add-btn {
-        display:flex; align-items:center; gap:8px;
-        background:var(--t16-primary-gradient); color:#fff;
-        border:none; border-radius:999px;
-        padding:10px 18px; font-size:.85rem; font-weight:600;
-        cursor:pointer; transition:.3s;
-        box-shadow:0 4px 12px rgba(0,0,0,.12);
-    }
-    .t16-add-btn:hover {
-        transform:translateY(-2px);
-        box-shadow:0 8px 20px rgba(0,0,0,.18);
-    }
-    .t16-add-btn:active { transform:scale(.95); }
-
-    /* Off badge */
-    .t16-off-badge {
-        display:inline-block;
-        background:var(--t16-primary); color:#fff;
-        font-size:10px; font-weight:700;
-        padding:2px 8px; border-radius:999px;
-        margin-left:6px;
-    }
-
-    /* Stock badges */
-    .t16-out-stock { color:#ba1a1a; font-size:.75rem; font-weight:600; }
-    .t16-in-stock  { color:#006e2f; font-size:.75rem; font-weight:600; }
-
-    /* ── Loading skeleton ── */
-    .t16-skeleton {
-        background:linear-gradient(90deg,#f0eded 25%,#e5e2e1 50%,#f0eded 75%);
-        background-size:200% 100%;
-        animation:t16Shimmer 1.2s infinite;
-        border-radius:6px;
-    }
-    @keyframes t16Shimmer {
-        0%   { background-position:200% 0; }
-        100% { background-position:-200% 0; }
-    }
-
-    /* ── Empty state ── */
-    .t16-empty {
-        text-align:center; padding:40px 20px;
-        color:var(--t16-muted); font-size:.9rem;
-    }
-    .t16-empty i { font-size:3rem; margin-bottom:12px; opacity:.4; }
-
-    /* ── Category card entrance animation ── */
-    .t16-cat-card {
-        animation: t16FadeIn .4s ease both;
-    }
-    @keyframes t16FadeIn {
-        from { opacity:0; transform:translateY(10px); }
-        to   { opacity:1; transform:translateY(0); }
-    }
-
-    /* ── Footer override for template-16 ── */
-    .footer-sec2 {
-        background: linear-gradient(180deg, var(--t16-primary) 0%, color-mix(in srgb, var(--t16-primary) 85%, #000 15%) 100%) !important;
-        border-top: none !important;
-        box-shadow: 0 -10px 40px rgba(0,0,0,.12);
-    }
-    .copy-right-sec {
-        background: color-mix(in srgb, var(--t16-primary) 80%, #000 20%) !important;
-        border-top: 1px solid rgba(255,255,255,.12) !important;
-    }
-    .t7-footer-icon {
-        background: rgba(255,255,255,.15) !important;
-        border: 1px solid rgba(255,255,255,.2) !important;
-    }
-    .t7-footer-social a {
-        background: rgba(255,255,255,.12) !important;
-        border: 1px solid rgba(255,255,255,.25) !important;
-        transition: .3s !important;
-    }
-    .t7-footer-social a:hover {
-        background: rgba(255,255,255,.25) !important;
-        transform: translateY(-2px) !important;
-    }
-    .t7-footer-menu a:hover {
-        color: #fff !important;
-        opacity: 1 !important;
-        transform: translateX(-4px) !important;
-    }
-    .t7-footer-newsletter .input-group {
-        border: 2px solid rgba(255,255,255,.25) !important;
-        background: rgba(255,255,255,.1) !important;
-    }
-    .t7-footer-newsletter .btn-store {
-        background: #fff !important;
-        color: var(--t16-primary) !important;
-        font-weight: 700 !important;
-        transition: .3s !important;
-    }
-    .t7-footer-newsletter .btn-store:hover {
-        transform: scale(1.02) !important;
-        box-shadow: 0 6px 20px rgba(0,0,0,.2) !important;
-    }
-
-    /* ── Additional animations & effects ── */
-    @keyframes t16Pulse {
-        0%, 100% { box-shadow: 0 0 0 0 var(--t16-primary); opacity: .8; }
-        50% { box-shadow: 0 0 0 10px var(--t16-primary); opacity: 0; }
-    }
-    @keyframes t16Float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
-    }
-
-    /* ── Category badge animation ── */
-    .t16-off-badge {
-        animation: t16Pulse 2s infinite;
-    }
-
-    /* ── Enhance empty state ── */
-    .t16-empty {
-        background: linear-gradient(135deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.8) 100%);
-        border-radius: var(--t16-radius);
-        border: 2px dashed var(--t16-border);
-    }
-
-    /* ── Walashi Store Info & Contact Cards ── */
-    .t16-info-card {
-        background: #fff;
-        border-radius: 20px;
-        padding: 32px;
-        box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-        border: 1px solid rgba(0,0,0,0.04);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .t16-store-name {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #0c1a24;
-        margin-bottom: 8px;
-        letter-spacing: -0.5px;
-    }
-    .t16-open-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: #e6f7ef;
-        color: #008a45;
-        font-size: 0.85rem;
-        font-weight: 700;
-        padding: 4px 12px;
-        border-radius: 999px;
-    }
-    .t16-store-address {
-        font-size: 0.95rem;
-        color: #666;
-        margin-top: 16px;
-        line-height: 1.5;
-    }
-    .t16-cat-tag {
-        display: inline-block;
-        background: #eaf1f1;
-        color: #1b5452;
-        font-size: 0.82rem;
-        font-weight: 700;
-        padding: 4px 14px;
-        border-radius: 8px;
-        margin-top: 14px;
-    }
-    .t16-social-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        background: #f4f6f8;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #111;
-        font-size: 1.1rem;
-        transition: all 0.3s;
-        border: 1px solid rgba(0,0,0,0.04);
-        text-decoration: none !important;
-    }
-    .t16-social-icon:hover {
-        background: #1b5452;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-
-    .t16-contact-card {
-        background: #fff;
-        border-radius: 20px;
-        padding: 28px;
-        box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-        border: 1px solid rgba(0,0,0,0.04);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-    .t16-contact-title {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: #0c1a24;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 20px;
-    }
-    .t16-contact-title i {
-        color: #1b5452;
-        font-size: 1.3rem;
-    }
-    
-    .t16-contact-btn {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 16px;
-        border-radius: 16px;
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        text-decoration: none !important;
-        color: #0c1a24 !important;
-        transition: all 0.25s ease;
-        margin-bottom: 12px;
-        width: 100%;
-    }
-    .t16-contact-btn:hover {
-        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-        transform: translateY(-2px);
-        border-color: #cbd5e1;
-    }
-    .t16-contact-btn .main-info {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        min-width: 0;
-    }
-    .t16-contact-btn .icon-circle {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: #e8f0f0;
-        color: #1b5452;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-    }
-    .t16-contact-btn .text-info {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-    }
-    .t16-contact-btn .text-info .num {
-        font-size: 1rem;
-        font-weight: 800;
-        color: #0c1a24;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.2;
-    }
-    .t16-contact-btn .text-info .sub {
-        font-size: 0.78rem;
-        color: #64748b;
-        font-weight: 500;
-        margin-top: 2px;
-    }
-    .t16-contact-btn .action-arrow {
-        color: #94a3b8;
-        font-size: 0.85rem;
-        flex-shrink: 0;
-    }
-
-    .t16-map-btn {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 16px;
-        border-radius: 16px;
-        background: #1b5452; 
-        color: #fff !important;
-        text-decoration: none !important;
-        transition: all 0.25s ease;
-        box-shadow: 0 4px 14px rgba(27, 84, 82, 0.2);
-        width: 100%;
-    }
-    .t16-map-btn:hover {
-        background: #14403f;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(27, 84, 82, 0.3);
-        color: #fff !important;
-    }
-    .t16-map-btn .main-info {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        min-width: 0;
-    }
-    .t16-map-btn .icon-circle {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.15);
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-    }
-    .t16-map-btn .text-info {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-    }
-    .t16-map-btn .text-info .num {
-        font-size: 1rem;
-        font-weight: 800;
-        color: #fff;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.2;
-    }
-    .t16-map-btn .text-info .sub {
-        font-size: 0.78rem;
-        color: rgba(255,255,255,0.75);
-        font-weight: 500;
-        margin-top: 2px;
-    }
-    .t16-map-btn .action-arrow {
-        color: rgba(255,255,255,0.6);
-        font-size: 0.85rem;
-        flex-shrink: 0;
-    }
-
-    @media(max-width: 768px) {
-        .t16-info-card, .t16-contact-card { padding: 24px; }
-        .t16-store-name { font-size: 1.8rem; }
-    }
-
-    /* ── Header overlap fix ── */
-    body {
-        background: var(--t16-bg);
-    }
-    @media(max-width:991px){
-    }
-    @media(max-width:576px){
-        .t16-hero-container { margin-top:10px !important; padding-left:10px !important; padding-right:10px !important; }
-        .t16-menu-section { margin-top:12px !important; padding-left:10px !important; padding-right:10px !important; }
-        .t16-cat-card { width:130px; }
-        .t16-cat-card-img { width:130px; height:115px; }
-        .t16-cats-scroll { gap:12px; }
-    }
-</style>
-
-{{-- ═══════════════ HERO SLIDER ═══════════════ --}}
-<div class="container-fluid px-3 px-md-4 mt-3 t16-hero-container" style="max-width:1280px;margin-left:auto;margin-right:auto;">
+{{-- Optional banner --}}
+@if ($sliders->count() > 0)
+<div class="t16-hero">
     <div class="t16-slider-wrap" id="t16HeroSlider">
-        @if($sliders->count() > 0)
-            @foreach($sliders as $si => $slider)
-                @php
-                    $isActive = $si === 0;
-                    $linkOpen  = '';
-                    $linkClose = '';
-                    if ($slider->product_id != 0 || $slider->category_id != 0) {
-                        if ($slider->type == 1) {
-                            $linkOpen  = '<a href="'.URL::to($storeinfo->slug.'/search?category='.@$slider->category_info->slug).'">';
-                            $linkClose = '</a>';
-                        } elseif ($slider->type == 2) {
-                            $sItem     = helper::itemdetails($slider->product_id, $storeinfo->id);
-                            $linkOpen  = '<a href="javascript:void(0)" onclick="GetProductOverview(\''.$sItem->slug.'\')">';
+        @foreach ($sliders as $si => $slider)
+            @php
+                $isActive = $si === 0;
+                $linkOpen = '';
+                $linkClose = '';
+                if ($slider->product_id != 0 || $slider->category_id != 0) {
+                    if ($slider->type == 1) {
+                        $linkOpen = '<a href="'.URL::to($storeinfo->slug.'/search?category='.@$slider->category_info->slug).'">';
+                        $linkClose = '</a>';
+                    } elseif ($slider->type == 2) {
+                        $sItem = helper::itemdetails($slider->product_id, $storeinfo->id);
+                        if ($sItem && ! empty($sItem->slug)) {
+                            $linkOpen = '<a href="'.URL::to($storeinfo->slug.'/detail-'.$sItem->slug).'">';
                             $linkClose = '</a>';
                         }
                     }
-                @endphp
-                <div class="t16-slide{{ $isActive ? ' active' : '' }}" data-slide="{{ $si }}"
-                     style="position:{{ $isActive ? 'relative' : 'absolute' }};inset:0;opacity:{{ $isActive ? '1' : '0' }};transition:opacity .8s ease-in-out;{{ !$isActive ? 'z-index:0;' : 'z-index:10;' }}">
-                    {!! $linkOpen !!}
-                    <img class="t16-slide-img"
-                         src="{{ helper::image_path($slider->banner_image) }}"
-                         alt="{{ $storeName }}">
-                    {!! $linkClose !!}
-                </div>
-            @endforeach
-
-            {{-- Dots --}}
-            @if($sliders->count() > 1)
-                <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 16px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:30px;">
-                    @foreach($sliders as $di => $dot)
-                        <button onclick="t16GoSlide({{ $di }})" data-t16dot="{{ $di }}"
-                                style="width:12px;height:12px;border-radius:50%;border:none;background:#fff;
-                                       opacity:{{ $di===0?'1':'.4' }};cursor:pointer;transition:.3s;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.1);"></button>
-                    @endforeach
-                </div>
-                {{-- Arrows --}}
-                <button onclick="t16MoveSlide(-1)" class="t16-slider-arrow"
-                        style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:30;
-                               width:48px;height:48px;border-radius:50%;border:none;
-                               background:rgba(255,255,255,.35);backdrop-filter:blur(12px);
-                               color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
-                               transition:.3s;box-shadow:0 8px 24px rgba(0,0,0,.15);">
-                    <i class="fa-solid fa-chevron-left" style="font-size:18px;"></i>
-                </button>
-                <button onclick="t16MoveSlide(1)" class="t16-slider-arrow"
-                        style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:30;
-                               width:48px;height:48px;border-radius:50%;border:none;
-                               background:rgba(255,255,255,.35);backdrop-filter:blur(12px);
-                               color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
-                               transition:.3s;box-shadow:0 8px 24px rgba(0,0,0,.15);">
-                    <i class="fa-solid fa-chevron-right" style="font-size:18px;"></i>
-                </button>
-            @endif
-        @else
-            <img class="t16-slide-img"
-                 src="{{ url(env('ASSETPATHURL').'admin-assets/images/about/defaultimages/banner-placeholder.png') }}"
-                 alt="{{ $storeName }}">
+                }
+            @endphp
+            <div class="t16-slide{{ $isActive ? ' active' : '' }}" data-slide="{{ $si }}"
+                style="position:{{ $isActive ? 'relative' : 'absolute' }};inset:0;opacity:{{ $isActive ? '1' : '0' }};transition:opacity .7s ease;{{ ! $isActive ? 'z-index:0;' : 'z-index:10;' }}">
+                {!! $linkOpen !!}
+                <img class="t16-slide-img" src="{{ helper::image_path($slider->banner_image) }}" alt="{{ $storeName }}">
+                {!! $linkClose !!}
+            </div>
+        @endforeach
+        @if ($sliders->count() > 1)
+            <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:8px;">
+                @foreach ($sliders as $di => $dot)
+                    <button type="button" onclick="t16GoSlide({{ $di }})" data-t16dot="{{ $di }}"
+                        style="width:9px;height:9px;border-radius:50%;border:none;background:#fff;opacity:{{ $di === 0 ? '1' : '.4' }};cursor:pointer;padding:0;"></button>
+                @endforeach
+            </div>
         @endif
     </div>
 </div>
+@endif
 
-{{-- ═══════════════ STORE INFO & CONTACT ═══════════════ --}}
-<section style="max-width:1280px;margin:0 auto;padding:0 16px;" class="mt-4 mb-4">
-    <div class="row g-4">
-        {{-- Store Info Card --}}
-        <div class="col-lg-8">
-            <div class="t16-info-card">
-                <div>
-                    <h1 class="t16-store-name">{{ helper::appdata(@$storeinfo->id)->app_name ?? $storeinfo->name }}</h1>
-                    <div class="d-flex align-items-center gap-3 mt-2">
-                        <span class="t16-open-badge"><i class="fa-solid fa-circle" style="font-size:7px;"></i> {{ App::getLocale() == 'ar' ? 'مفتوح الآن' : 'Open Now' }}</span>
-                        @if(!empty(helper::appdata(@$storeinfo->id)->working_time))
-                            <span style="color:#64748b;font-weight:600;font-size:0.9rem;">
-                                {{ helper::appdata(@$storeinfo->id)->working_time }}
-                            </span>
-                        @endif
-                    </div>
-                    
-                    @if(!empty(helper::appdata(@$storeinfo->id)->address))
-                    <div class="t16-store-address">
-                        {{ helper::appdata(@$storeinfo->id)->address }}
-                    </div>
-                    @endif
-                    
-                    @if(!empty(@$storeinfo->category_info->name))
-                    <div>
-                        <span class="t16-cat-tag">
-                            {{ $storeinfo->category_info->name }}
+<div class="t16-shell t16-menu-home">
+    @if (count($menuSections) > 0)
+        <div class="t16-sticky-chips" id="t16StickyChips">
+            <div class="t16-cat-chips">
+                @foreach ($menuSections as $section)
+                    <a href="#t16-cat-{{ $section['category']->id }}" class="t16-cat-chip" data-t16-chip="{{ $section['category']->id }}">
+                        <span class="t16-cat-chip-img">
+                            @if (! empty($section['category']->image) && $section['category']->image !== 'default.png')
+                                <img src="{{ helper::image_path($section['category']->image) }}" alt="" loading="lazy">
+                            @else
+                                <i class="fa-solid fa-utensils"></i>
+                            @endif
                         </span>
-                    </div>
-                    @endif
-                </div>
+                        <span class="t16-cat-chip-name">{{ $section['category']->name }}</span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
 
-                @if(helper::getsociallinks(@$storeinfo->id)->count() > 0)
-                <div class="mt-4 d-flex gap-2">
-                    @foreach (helper::getsociallinks(@$storeinfo->id) as $links)
-                        @if ($links->icon != '<i class="fa-solid fa-phone"></i>')
-                            <a href="{{ $links->link }}" target="_blank" class="t16-social-icon">
-                                {!! $links->icon !!}
-                            </a>
-                        @endif
+        @foreach ($menuSections as $sIdx => $section)
+            <section class="t16-menu-section" id="t16-cat-{{ $section['category']->id }}" data-t16-section="{{ $section['category']->id }}">
+                <div class="t16-section-head">
+                    <div>
+                        <h2 class="t16-section-title">{{ $section['category']->name }}</h2>
+                        <p class="t16-section-sub">
+                            {{ $section['items']->count() }}
+                            {{ App::getLocale() == 'ar' ? 'صنف' : 'items' }}
+                        </p>
+                    </div>
+                    <a href="{{ URL::to($storeinfo->slug.'/category/'.$section['category']->slug) }}" class="t16-section-more">
+                        {{ App::getLocale() == 'ar' ? 'عرض الكل' : 'View all' }}
+                    </a>
+                </div>
+                <div class="t16-menu-grid">
+                    @foreach ($section['items'] as $key => $item)
+                        @include('front.template-16._product_card', [
+                            'item' => $item,
+                            'storeinfo' => $storeinfo,
+                            'cartdata' => $cartdata,
+                            'key' => ($sIdx * 20) + $key,
+                        ])
                     @endforeach
                 </div>
-                @endif
-            </div>
-        </div>
-
-        {{-- Contact Us Card --}}
-        <div class="col-lg-4">
-            <div class="t16-contact-card">
-                <h3 class="t16-contact-title">
-                    <i class="fa-regular fa-phone-volume"></i> {{ App::getLocale() == 'ar' ? 'اتصل بنا' : 'Contact Us' }}
-                </h3>
-                
-                @php
-                    $contactNo = helper::appdata(@$storeinfo->id)->contact;
-                @endphp
-                @if(!empty($contactNo))
-                <a href="tel:{{ $contactNo }}" class="t16-contact-btn">
-                    <div class="main-info">
-                        <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
-                        <div class="text-info">
-                            <span class="num">{{ $contactNo }}</span>
-                            <span class="sub">{{ App::getLocale() == 'ar' ? 'اتصل الآن' : 'Call now' }}</span>
-                        </div>
-                    </div>
-                    <div class="action-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-                </a>
-                @endif
-
-                @php
-                    $storeEmail = helper::appdata(@$storeinfo->id)->email;
-                    if (empty($storeEmail) || $storeEmail == '-') {
-                        $storeEmail = @$storeinfo->email;
-                    }
-                @endphp
-                @if(!empty($storeEmail) && $storeEmail != '-')
-                <a href="mailto:{{ $storeEmail }}" target="_blank" class="t16-map-btn">
-                    <div class="main-info">
-                        <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
-                        <div class="text-info">
-                            <span class="num">{{ $storeEmail }}</span>
-                            <span class="sub">{{ App::getLocale() == 'ar' ? 'أرسل بريداً إلكترونياً' : 'Send Email' }}</span>
-                        </div>
-                    </div>
-                    <div class="action-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-                </a>
-                @endif
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ═══════════════ MENU SECTION: CATEGORY CARDS ═══════════════ --}}
-<section style="max-width:1280px;margin:0 auto;padding:0 16px;" class="mt-5 t16-menu-section">
-
-    @if($allCategories->count() > 0)
-        <h2 class="t16-menu-title">{{ trans('labels.menu') }}</h2>
-
-        <div class="t16-cats-scroll t16-hide-scroll">
-            @foreach($allCategories as $ci => $cat)
-                <a href="{{ URL::to(@$storeinfo->slug . '/category/' . $cat->slug) }}"
-                   class="t16-cat-card"
-                   style="animation-delay: {{ $ci * 0.06 }}s;">
-                    <div class="t16-cat-card-img">
-                        @if (!empty($cat->image) && $cat->image !== 'default.png')
-                            <img src="{{ helper::image_path($cat->image) }}"
-                                 alt="{{ $cat->name }}"
-                                 loading="lazy">
-                        @else
-                            <div class="t16-cat-placeholder">
-                                <i class="fa-solid fa-utensils"></i>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="t16-cat-card-name">{{ $cat->name }}</div>
-                    <div class="t16-cat-card-count">{{ trans('labels.items') == 'labels.items' ? 'items' : trans('labels.items') }}</div>
-                </a>
-            @endforeach
-        </div>
+            </section>
+        @endforeach
     @else
-        <div class="t16-empty">
-            <i class="fa-regular fa-face-sad-tear d-block"></i>
-            {{ trans('labels.no_product_found') == 'labels.no_product_found' ? 'لا توجد منتجات' : trans('labels.no_product_found') }}
+        <div class="t16-empty mt-4">
+            <i class="fa-regular fa-utensils"></i>
+            {{ App::getLocale() == 'ar' ? 'لا توجد أصناف بعد' : 'No menu items yet' }}
         </div>
     @endif
+</div>
 
-</section>
-
-{{-- ═══════════════ JAVASCRIPT ═══════════════ --}}
 <script>
-/* ─── Slider ─── */
-(function(){
-    var slider  = document.getElementById('t16HeroSlider');
-    if (!slider) return;
-    var slides  = slider.querySelectorAll('.t16-slide');
-    var dots    = slider.querySelectorAll('[data-t16dot]');
-    var current = 0;
-    var timer;
-
-    function show(i) {
-        slides.forEach(function(s, idx) {
-            s.style.opacity   = idx === i ? '1'  : '0';
-            s.style.position  = idx === i ? 'relative' : 'absolute';
-            s.style.zIndex    = idx === i ? '10' : '0';
-        });
-        dots.forEach(function(d, idx) {
-            d.style.opacity = idx === i ? '1' : '.45';
-        });
-        current = i;
-    }
-
-    window.t16MoveSlide = function(dir) {
-        show((current + dir + slides.length) % slides.length);
-        reset();
-    };
-    window.t16GoSlide = function(i) { show(i); reset(); };
-
-    function auto() { timer = setInterval(function(){ show((current+1) % slides.length); }, 4000); }
-    function reset(){ clearInterval(timer); auto(); }
-    if (slides.length > 1) auto();
-})();
-
-/* ─── (Category tabs removed – navigation is now page-based) ─── */
-
-/* ══════════════════════════════════════════════════════
-   CART — jQuery + نفس API routes الموجودة في النظام
-   ══════════════════════════════════════════════════════ */
-
-/**
- * اقرأ بيانات المنتج من الـ hidden fields
- */
-function t16Data(itemId) {
-    var uid = 't16_' + itemId;
-    return {
-        cartId:   $('#' + uid + '_cartid').val()  || '',
-        price:    $('#' + uid + '_price').val()   || 0,
-        tax:      $('#' + uid + '_tax').val()     || '',
-        image:    $('#' + uid + '_image').val()   || '',
-        name:     $('#' + uid + '_name').val()    || '',
-        stock:    $('#' + uid + '_stock').val()   || 0,
-        min:      $('#' + uid + '_min').val()     || 0,
-        max:      $('#' + uid + '_max').val()     || 0,
-        vendor:   $('#' + uid + '_vendor').val()  || '',
-    };
-}
-
-/* "+" زيادة الكمية أو أول إضافة */
-window.t16Increment = function(itemId) {
-    var d    = t16Data(itemId);
-    var uid  = 't16_' + itemId;
-    var curQ = parseInt($('#' + uid + '_qtynum').text()) || 0;
-    if (curQ === 0) {
-        t16DoAdd(itemId, uid, d, 1);
-    } else {
-        t16DoUpdate(itemId, uid, d, curQ + 1);
-    }
-};
-
-/* "−" تقليل أو حذف */
-window.t16Decrement = function(itemId) {
-    var d    = t16Data(itemId);
-    var uid  = 't16_' + itemId;
-    var curQ = parseInt($('#' + uid + '_qtynum').text()) || 1;
-    if (curQ <= 1) {
-        t16DoRemove(itemId, uid, d);
-    } else {
-        t16DoUpdate(itemId, uid, d, curQ - 1);
-    }
-};
-
-/* زرار "إضافة" الأول */
-window.t16AddFirst = function(itemId) {
-    var d   = t16Data(itemId);
-    var uid = 't16_' + itemId;
-    t16DoAdd(itemId, uid, d, 1);
-};
-
-/* ── POST /add-to-cart ── */
-function t16DoAdd(itemId, uid, d, qty) {
-    $('#' + uid + '_addbtn').prop('disabled', true)
-        .html('<span class="loader"></span>');
-
-    $.ajax({
-        headers:  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url:      '{{ URL::to("/add-to-cart") }}',
-        method:   'POST',
-        dataType: 'json',
-        data: {
-            vendor_id:           d.vendor,
-            item_id:             itemId,
-            item_name:           d.name,
-            item_image:          d.image,
-            item_price:          d.price,
-            item_original_price: d.price,
-            tax:                 d.tax,
-            qty:                 qty,
-            min_order:           d.min,
-            max_order:           d.max,
-            stock_management:    d.stock,
-            buynow:              0,
-            variants_name:       '',
-            extras_id:           '',
-            extras_name:         '',
-            extras_price:        '',
-        },
-        success: function(res) {
-            if (res.status == 1) {
-                /* تحديث badge عدد السلة */
-                $('#cartcnt').text(res.cartcnt).removeClass('d-none');
-                $('.cart-count').text(res.cartcnt);
-                /* اظهر الـ stepper واخبي زر الإضافة */
-                $('#' + uid + '_addbtn').hide();
-                $('#' + uid + '_stepper').css('display', 'flex');
-                $('#' + uid + '_qtynum').text(qty);
-                toastr.success('{{ trans("messages.add_to_cart_msg") }}');
-            } else {
-                toastr.error(res.message);
-            }
-            $('#' + uid + '_addbtn').prop('disabled', false)
-                .html('<i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>&nbsp;{{ trans("labels.add") ?? "إضافة" }}');
-        },
-        error: function() {
-            toastr.error(wrong);
-            $('#' + uid + '_addbtn').prop('disabled', false)
-                .html('<i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>&nbsp;{{ trans("labels.add") ?? "إضافة" }}');
+(function () {
+    var slider = document.getElementById('t16HeroSlider');
+    if (slider) {
+        var slides = slider.querySelectorAll('.t16-slide');
+        var dots = slider.querySelectorAll('[data-t16dot]');
+        var current = 0, timer;
+        function show(i) {
+            slides.forEach(function (s, idx) {
+                s.style.opacity = idx === i ? '1' : '0';
+                s.style.position = idx === i ? 'relative' : 'absolute';
+                s.style.zIndex = idx === i ? '10' : '0';
+            });
+            dots.forEach(function (d, idx) { d.style.opacity = idx === i ? '1' : '.4'; });
+            current = i;
         }
-    });
-}
-
-/* ── POST /{slug}/qtyupdate ── */
-function t16DoUpdate(itemId, uid, d, newQty) {
-    $.ajax({
-        headers:  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url:      '{{ URL::to("/cart/qtyupdate") }}',
-        method:   'POST',
-        dataType: 'json',
-        data: {
-            vendor_id:        d.vendor,
-            item_id:          itemId,
-            cart_id:          d.cartId,
-            qty:              newQty,
-            price:            parseFloat(d.price) * newQty,
-            stock_management: d.stock,
-            variants_id:      null,
-        },
-        success: function(res) {
-            if (res.status == 1) {
-                $('#' + uid + '_qtynum').text(newQty);
-            } else {
-                toastr.error(res.message);
-                /* رجّع القيمة اللي رجّعها السيرفر لو رفض */
-                if (res.qty !== undefined) {
-                    $('#' + uid + '_qtynum').text(res.qty);
-                }
-            }
-        },
-        error: function() { toastr.error(wrong); }
-    });
-}
-
-/* ── POST /cart/deletecartitem ── */
-function t16DoRemove(itemId, uid, d) {
-    if (!d.cartId) {
-        /* لو cart_id مش موجود — بس reset الـ UI */
-        $('#' + uid + '_stepper').hide();
-        $('#' + uid + '_addbtn').show();
-        $('#' + uid + '_qtynum').text(1);
-        return;
+        window.t16GoSlide = function (i) { show(i); reset(); };
+        function auto() { timer = setInterval(function () { show((current + 1) % slides.length); }, 4200); }
+        function reset() { clearInterval(timer); auto(); }
+        if (slides.length > 1) auto();
     }
-    $.ajax({
-        headers:  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url:      '{{ URL::to("/cart/deletecartitem") }}',
-        method:   'POST',
-        dataType: 'json',
-        data: {
-            cart_id:   d.cartId,
-            vendor_id: d.vendor,
-        },
-        success: function(res) {
-            if (res.status == 1) {
-                /* تحديث badge */
-                $('#cartcnt').text(res.cartcnt);
-                $('.cart-count').text(res.cartcnt);
-                /* أظهر زر الإضافة وأخبي الـ stepper */
-                $('#' + uid + '_stepper').hide();
-                $('#' + uid + '_addbtn').show();
-                $('#' + uid + '_qtynum').text(1);
-                $('#' + uid + '_cartid').val('');
-            } else {
-                toastr.error(wrong);
-            }
-        },
-        error: function() { toastr.error(wrong); }
-    });
-}
-</script>
 
+    var chipsWrap = document.getElementById('t16StickyChips');
+    var sections = document.querySelectorAll('[data-t16-section]');
+    var chips = document.querySelectorAll('[data-t16-chip]');
+    if (!chipsWrap || !sections.length) return;
+
+    chips.forEach(function (chip) {
+        chip.addEventListener('click', function (e) {
+            var href = chip.getAttribute('href');
+            if (!href || href.charAt(0) !== '#') return;
+            var target = document.querySelector(href);
+            if (!target) return;
+            e.preventDefault();
+            var offset = chipsWrap.offsetHeight + 12;
+            var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+        });
+    });
+
+    function setActive(id) {
+        chips.forEach(function (c) {
+            c.classList.toggle('is-active', String(c.getAttribute('data-t16-chip')) === String(id));
+        });
+        var active = chipsWrap.querySelector('.t16-cat-chip.is-active');
+        if (active && active.scrollIntoView) {
+            active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    setActive(entry.target.getAttribute('data-t16-section'));
+                }
+            });
+        }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+        sections.forEach(function (s) { observer.observe(s); });
+    }
+})();
+</script>
+@include('front.template-16._cart_scripts')
 @include('front.theme.footer')

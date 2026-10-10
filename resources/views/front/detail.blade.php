@@ -414,6 +414,12 @@
                             </div>
                         @endif
 
+                        @include('front.partials.product_share', [
+                            'getitem' => $getitem,
+                            'shareUrl' => url()->current(),
+                            'shareTitle' => $getitem->item_name,
+                        ])
+
                         <div
                             class="d-flex border-top flex-wrap pt-3 gap-sm-2 gap-3 justify-content-between w-100 mb-3">
                             <div
@@ -487,9 +493,15 @@
                                     <div class="col-md-4">
                                         <div class="item h-100">
                                             <div class="card border h-100">
-                                                <img src="{{ helper::image_path($getitem['product_image']->image) }}"
+                                                @php
+                                                    $fbtMainImg = $getitem['product_image']?->image ?? ($getitem->image_name ?? null);
+                                                    $fbtMainSrc = $fbtMainImg
+                                                        ? helper::image_path($fbtMainImg)
+                                                        : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png');
+                                                @endphp
+                                                <img src="{{ $fbtMainSrc }}"
                                                     class="card-img-top object frequently_img" height="230"
-                                                    alt="...">
+                                                    alt="{{ $getitem->item_name }}">
                                                 <div class="woo_product_caption card-body">
                                                     <div class="woo_title">
                                                         <div
@@ -603,9 +615,16 @@
                                             <div class="item h-100">
                                                 <div class="card h-100 border">
                                                     <div class="position-relative">
-                                                        <img src="{{ helper::image_path($frequently_bought_item['product_image']->image) }}"
+                                                        @php
+                                                            $fbtItemImg = $frequently_bought_item['product_image']?->image
+                                                                ?? ($frequently_bought_item->image ?? null);
+                                                            $fbtItemSrc = $fbtItemImg
+                                                                ? helper::image_path($fbtItemImg)
+                                                                : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png');
+                                                        @endphp
+                                                        <img src="{{ $fbtItemSrc }}"
                                                             class="card-img-top object frequently_img image_opacity_{{ $frequently_bought_item->id }}"
-                                                            height="230" alt="..." style="opacity: 0.6;">
+                                                            height="230" alt="{{ $frequently_bought_item->item_name }}" style="opacity: 0.6;">
                                                         <div
                                                             class="position-absolute top-0 {{ session()->get('direction') == 2 ? 'start-0' : 'end-0' }} p-1 d-flex justify-content-center align-items-center">
                                                             <input type="checkbox"
@@ -699,7 +718,7 @@
                         <input type="hidden" name="item_name" id="overview_item_name"
                             value="{{ $getitem->item_name }}">
                         <input type="hidden" name="item_image" id="overview_item_image"
-                            value="{{ @$getitem['product_image']->image }}">
+                            value="{{ $getitem['product_image']?->image ?? ($getitem->image_name ?? '') }}">
                         <input type="hidden" name="item_min_order" id="item_min_order"
                             value="{{ $getitem->min_order }}">
                         <input type="hidden" name="item_max_order" id="item_max_order"
@@ -874,11 +893,14 @@
                             <div class="pro-box box-shadow-none">
                                 <div class="pro-img ">
                                     <a href="{{ URL::to($storeinfo->slug . '/detail-' . $item->slug) }}">
-                                        @if (@$item['product_image']->image == null)
+                                        @php
+                                            $relatedImg = $item['product_image']?->image ?? ($item->image_name ?? null);
+                                        @endphp
+                                        @if (empty($relatedImg))
                                             <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}"
                                                 alt="product image">
                                         @else
-                                            <img src="{{ @helper::image_path($item['product_image']->image) }}"
+                                            <img src="{{ helper::image_path($relatedImg) }}"
                                                 alt="product image">
                                         @endif
                                     </a>
@@ -1055,11 +1077,14 @@
                                     <div class="pro-box box-shadow-none">
                                         <div class="pro-img ">
                                             <a href="{{ URL::to($storeinfo->slug . '/detail-' . $item->slug) }}">
-                                                @if (@$item['product_image']->image == null)
+                                                @php
+                                                    $recentImg = $item['product_image']?->image ?? ($item->image_name ?? null);
+                                                @endphp
+                                                @if (empty($recentImg))
                                                     <img src="{{ url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png') }}"
                                                         alt="product image">
                                                 @else
-                                                    <img src="{{ @helper::image_path($item['product_image']->image) }}"
+                                                    <img src="{{ helper::image_path($recentImg) }}"
                                                         alt="product image">
                                                 @endif
                                             </a>
@@ -1261,7 +1286,13 @@
                 <div class="modal-body">
                     <div class="d-flex align-items-center gap-2">
                         <div>
-                            <img src="{{ helper::image_path($getitem['product_image']->image) }}" alt=""
+                            @php
+                                $qaImg = $getitem['product_image']?->image ?? ($getitem->image_name ?? null);
+                                $qaSrc = $qaImg
+                                    ? helper::image_path($qaImg)
+                                    : url(env('ASSETPATHURL') . 'admin-assets/images/about/defaultimages/item-placeholder.png');
+                            @endphp
+                            <img src="{{ $qaSrc }}" alt="{{ $getitem->item_name }}"
                                 class="rounded" height="110px" width="110px">
                         </div>
                         <div class="w-100">

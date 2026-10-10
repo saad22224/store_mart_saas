@@ -5,9 +5,8 @@
     } else {
         $vendor_id = Auth::user()->id;
     }
-    // Retrieve the vendor and check its store category through the relationship
-    $vendor = \App\Models\User::with('store_category')->find($vendor_id);
-    $is_restaurant = $vendor && $vendor->store_category && $vendor->store_category->name == 'مطعم/ كافيه';
+    // Restaurant/café OR Theme 16 — simplified menu product form
+    $is_restaurant = helper::is_menu_store($vendor_id);
 @endphp
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -67,6 +66,29 @@
                                             id="product_sku">
                                     </div>
                                 </div>
+                                @if ($is_restaurant)
+                                    {{-- Preserve non-menu fields on update without showing them --}}
+                                    <input type="hidden" name="video_url" value="{{ $getproductdata->video_url }}">
+                                    <input type="hidden" name="colors" value="{{ $getproductdata->colors }}">
+                                    <input type="hidden" name="attachment_name" value="{{ $getproductdata->attchment_name }}">
+                                    @foreach (explode('|', (string) $getproductdata->frequently_bought_items) as $fbi)
+                                        @if ($fbi !== '')
+                                            <input type="hidden" name="frequently_bought_items[]" value="{{ $fbi }}">
+                                        @endif
+                                    @endforeach
+                                    @if ($getproductdata->top_deals == 1)
+                                        <input type="hidden" name="product_classifications[]" value="top_deals">
+                                    @endif
+                                    @if ($getproductdata->is_new_arrival == 1)
+                                        <input type="hidden" name="product_classifications[]" value="is_new_arrival">
+                                    @endif
+                                    @if ($getproductdata->is_best_selling == 1)
+                                        <input type="hidden" name="product_classifications[]" value="is_best_selling">
+                                    @endif
+                                    @if ($getproductdata->is_exclusive == 1)
+                                        <input type="hidden" name="product_classifications[]" value="is_exclusive">
+                                    @endif
+                                @else
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-label">{{ trans('labels.video_url') }} </label>
@@ -76,6 +98,7 @@
 
                                     </div>
                                 </div>
+                                @endif
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-label">{{ trans('labels.tax') }}</label>
@@ -93,6 +116,7 @@
 
                                     </div>
                                 </div>
+                                @unless ($is_restaurant)
                                 @if (@helper::checkaddons('frequently_bought_together'))
                                     <div class="col-md-4">
                                         <div
@@ -157,6 +181,7 @@
                                 @if (@helper::checkaddons('digital_product'))
                                     @include('admin.product.digital_product')
                                 @endif
+                                @endunless
                                 <div class="col-md-12 form-group">
                                     <label class="form-label">{{ trans('labels.description') }}</label>
                                     <textarea class="form-control" id="ckeditor" name="description">{!! $getproductdata->description !!}</textarea>

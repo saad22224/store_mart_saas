@@ -2176,6 +2176,49 @@ class helper
     }
 
     /**
+     * Whether the vendor's active storefront template matches a theme ID
+     * (settings.template, e.g. Theme 16 => 16).
+     * Reads settings by vendor_id directly (not via appdata host resolution).
+     */
+    public static function uses_storefront_theme($vendor_id, int $themeId): bool
+    {
+        if (empty($vendor_id)) {
+            return false;
+        }
+        $settings = Settings::where('vendor_id', $vendor_id)->first();
+        if (! $settings) {
+            return false;
+        }
+
+        return (int) ($settings->template ?? 0) === $themeId;
+    }
+
+    /**
+     * Menu management / menu OCR import eligibility:
+     * restaurant/café store category OR active Theme 16 (OR).
+     */
+    public static function is_menu_store($vendor_id): bool
+    {
+        return self::is_restaurant_store($vendor_id) || self::uses_storefront_theme($vendor_id, 16);
+    }
+
+    /**
+     * Resolve vendor id for the authenticated merchant/staff user.
+     */
+    public static function current_vendor_id(): ?int
+    {
+        $user = Auth::user();
+        if (! $user) {
+            return null;
+        }
+        if ((int) $user->type === 4) {
+            return (int) $user->vendor_id;
+        }
+
+        return (int) $user->id;
+    }
+
+    /**
      * Whether the vendor's latest plan entitles them to theme template ID.
      * Extensible for future feature flags without rewriting callers.
      */

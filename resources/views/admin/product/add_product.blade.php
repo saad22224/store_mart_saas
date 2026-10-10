@@ -5,9 +5,8 @@
     } else {
         $vendor_id = Auth::user()->id;
     }
-    // Retrieve the vendor and check its store category through the relationship
-    $vendor = \App\Models\User::with('store_category')->find($vendor_id);
-    $is_restaurant = $vendor && $vendor->store_category && $vendor->store_category->name == 'مطعم/ كافيه';
+    // Restaurant/café OR Theme 16 — simplified menu product form
+    $is_restaurant = helper::is_menu_store($vendor_id);
 @endphp
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -78,6 +77,7 @@
                                     <div class="gallery"></div>
                                 </div>
                             </div>
+                            @unless ($is_restaurant)
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">{{ trans('labels.video_url') }} </label>
@@ -86,6 +86,7 @@
 
                                 </div>
                             </div>
+                            @endunless
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">{{ trans('labels.tax') }} </label>
@@ -101,6 +102,7 @@
                                 </div>
                             </div>
 
+                            @unless ($is_restaurant)
                             @if (@helper::checkaddons('frequently_bought_together'))
                                 @if (count($getitems) > 0)
                                     <div class="col-md-6">
@@ -162,6 +164,7 @@
                             @if (@helper::checkaddons('digital_product'))
                                 @include('admin.product.digital_product')
                             @endif
+                            @endunless
 
                             <div class="col-md-12 form-group">
                                 <label class="form-label">{{ trans('labels.description') }} </label>

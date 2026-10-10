@@ -19,3 +19,8 @@ yarn-error.log
 /.vscode
 storage/app/analytics/
 storage/app/public/*.sql
+storage/app/menu_ocr/
+storage/app/tessdata/*.traineddata
+storage/app/tessdata_best/*.traineddata
+tests/manual/fixtures/
+tests/manual/*.json

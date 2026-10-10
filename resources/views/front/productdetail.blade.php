@@ -429,6 +429,11 @@
                         </div>
                     @endif
                     @if (!request()->is('admin/pos/item-details'))
+                        @include('front.partials.product_share', [
+                            'getitem' => $getitem,
+                            'shareUrl' => URL::to($storeinfo->slug . '/detail-' . $getitem->slug),
+                            'shareTitle' => $getitem->item_name,
+                        ])
                         <div
                             class="d-flex flex-wrap gap-sm-2 gap-3 justify-content-between align-items-center w-100 mt-3">
                             @if (@helper::checkaddons('customer_login'))

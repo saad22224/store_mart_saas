@@ -1,215 +1,5 @@
 @if (helper::appdata(@$storeinfo->id)->template == 16)
-    <style>
-        .t16-footer-features {
-            background: #fff;
-            border-top: 1px solid rgba(0, 0, 0, .05);
-            padding: 18px 0;
-        }
-
-        .t16-footer-feature-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .t16-footer-feature {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #fcf9f8;
-            border: 1px solid rgba(157, 67, 0, .12);
-            border-radius: 14px;
-            padding: 14px;
-            min-width: 0;
-        }
-
-        .t16-footer-feature-icon {
-            width: 42px;
-            height: 42px;
-            flex: 0 0 42px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            background: linear-gradient(135deg, {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }}, color-mix(in srgb, {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }} 82%, #000));
-        }
-
-        .t16-footer-feature h6,
-        .t16-footer-feature p {
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .t16-footer {
-            --t16-footer-primary: {{ helper::appdata($storeinfo->id)->primary_color ?? '#9d4300' }};
-            position: relative;
-            overflow: hidden;
-            background:
-                linear-gradient(135deg, color-mix(in srgb, var(--t16-footer-primary) 82%, #1f120a) 0%, #24150e 100%);
-            color: #fff;
-            padding: 36px 0 28px;
-        }
-
-        .t16-footer-card {
-            height: 100%;
-            background: rgba(255, 255, 255, .1);
-            border: 1px solid rgba(255, 255, 255, .18);
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 18px 45px rgba(0, 0, 0, .12);
-            backdrop-filter: blur(12px);
-            min-width: 0;
-        }
-
-        .t16-footer-title {
-            font-size: 1rem;
-            font-weight: 800;
-            margin-bottom: 14px;
-            color: #fff;
-        }
-
-        .t16-footer-links,
-        .t16-footer-contact {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 10px;
-        }
-
-        .t16-footer a,
-        .t16-footer span,
-        .t16-footer p {
-            color: rgba(255, 255, 255, .82);
-            overflow-wrap: anywhere;
-        }
-
-        .t16-footer a {
-            text-decoration: none;
-            transition: .2s ease;
-        }
-
-        .t16-footer a:hover {
-            color: #fff;
-        }
-
-        .t16-footer-contact li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .t16-footer-icon,
-        .t16-footer-social a {
-            width: 36px;
-            height: 36px;
-            flex: 0 0 36px;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, .14);
-            border: 1px solid rgba(255, 255, 255, .22);
-            color: #fff;
-        }
-
-        .t16-footer-newsletter .input-group {
-            border-radius: 14px;
-            overflow: hidden;
-            background: rgba(255, 255, 255, .12);
-            border: 1px solid rgba(255, 255, 255, .2);
-        }
-
-        .t16-footer-newsletter .form-control {
-            border: 0;
-            box-shadow: none;
-            background: transparent;
-            color: #fff !important;
-        }
-
-        .t16-footer-newsletter .form-control::placeholder {
-            color: rgba(255, 255, 255, .68);
-        }
-
-        .t16-footer-newsletter .btn-store {
-            background: #fff !important;
-            color: var(--t16-footer-primary) !important;
-            border: 0 !important;
-            font-weight: 800;
-        }
-
-        .t16-footer-social {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .copy-right-sec.t16-copy {
-            background: #160d09 !important;
-            border-top: 1px solid rgba(255, 255, 255, .1) !important;
-        }
-
-        .copy-right-sec.t16-copy .color-changer,
-        .copy-right-sec.t16-copy .text-dark {
-            color: #fff !important;
-        }
-
-        @media(max-width:991px) {
-            .t16-footer-feature-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .t16-footer {
-                padding-bottom: 95px;
-            }
-
-            .t16-footer-card {
-                padding: 16px;
-                border-radius: 16px;
-            }
-
-            .t16-footer .row {
-                --bs-gutter-x: .75rem;
-                --bs-gutter-y: .75rem;
-            }
-
-            .copy-right-sec.t16-copy {
-                padding-bottom: 85px !important;
-            }
-        }
-
-        @media(max-width:420px) {
-            .t16-footer-feature {
-                padding: 12px;
-                align-items: flex-start;
-            }
-
-            .t16-footer-feature-icon {
-                width: 36px;
-                height: 36px;
-                flex-basis: 36px;
-            }
-        }
-    </style>
-
-    <section class="t16-footer-features">
-        <div class="container">
-            <div class="t16-footer-feature-grid">
-                @foreach (helper::footer_features(@$storeinfo->id) as $feature)
-                    <div class="t16-footer-feature">
-                        <div class="t16-footer-feature-icon">{!! $feature->icon !!}</div>
-                        <div class="min-w-0">
-                            <h6 class="fw-700 color-changer m-0">{{ $feature->title }}</h6>
-                            <p class="fs-7 text-muted fw-normal line-2 mb-0">{{ $feature->description }}</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+    {{-- Theme 16: no features strip --}}
 @elseif (helper::appdata(@$storeinfo->id)->template == 17)
     <!-- No features section for template 17 -->
 @else
@@ -253,96 +43,7 @@
 
 <!-- footer -->
 @if (helper::appdata(@$storeinfo->id)->template == 16)
-    @php
-        $store = App\Models\User::where('id', $storeinfo->id)->first();
-        $storeEmail =
-            helper::appdata(@$storeinfo->id)->email != '-' ? helper::appdata(@$storeinfo->id)->email : $store->email;
-        $storePhone =
-            helper::appdata(@$storeinfo->id)->contact != '-'
-                ? helper::appdata(@$storeinfo->id)->contact
-                : $store->mobile;
-        $city = \App\Models\City::find(@$storeinfo->city_id);
-        $country = \App\Models\Country::find(@$storeinfo->country_id);
-        $location = [];
-        if ($city) {
-            $location[] = $city->city;
-        }
-        if ($country) {
-            $location[] = $country->name;
-        }
-        $location_text = implode(', ', $location);
-    @endphp
-    <footer class="t16-footer">
-        <div class="container">
-            <div class="row g-3">
-                <div class="col-lg-4 col-6">
-                    <div class="t16-footer-card">
-                        <h5 class="t16-footer-title">
-                            {{ trans('labels.pages') == 'labels.pages' ? 'Pages' : trans('labels.pages') }}</h5>
-                        <ul class="t16-footer-links">
-                            <li><a
-                                    href="{{ URL::to($storeinfo->slug . '/contact') }}">{{ trans('labels.contact_us') }}</a>
-                            </li>
-                            <li><a
-                                    href="{{ URL::to($storeinfo->slug . '/privacypolicy') }}">{{ trans('labels.privacy_policy') }}</a>
-                            </li>
-                            <li><a href="{{ URL::to($storeinfo->slug . '/refund_policy') }}">{{ trans('labels.refund_policy') }}
-                                    - {{ trans('labels.terms_condition') }}</a></li>
-                            <li><a
-                                    href="{{ URL::to($storeinfo->slug . '/aboutus') }}">{{ trans('labels.about_us') }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-6">
-                    <div class="t16-footer-card">
-                        <h5 class="t16-footer-title">
-                            {{ trans('labels.contact_info') == 'labels.contact_info' ? (app()->getLocale() == 'ar' ? 'معلومات الاتصال' : 'Contact info') : trans('labels.contact_info') }}
-                        </h5>
-                        <ul class="t16-footer-contact">
-                            <li><span class="t16-footer-icon"><i class="fa-regular fa-envelope"></i></span><a
-                                    href="mailto:{{ $storeEmail }}" dir="ltr">{{ $storeEmail }}</a></li>
-                            <li><span class="t16-footer-icon"><i class="fa-solid fa-phone"></i></span><a
-                                    href="tel:{{ $storePhone }}" dir="ltr">{{ $storePhone }}</a></li>
-                            <li><span class="t16-footer-icon"><i class="fa-solid fa-location-dot"></i></span>
-                                @if (!empty($location_text))
-                                    <span>{{ $location_text }}</span>
-                                @else
-                                    <a href="https://www.google.com/maps/place/{{ helper::appdata($storeinfo->id)->address }}"
-                                        target="_blank">{{ empty(helper::appdata($storeinfo->id)->address) ? '-' : helper::appdata($storeinfo->id)->address }}</a>
-                                @endif
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-12">
-                    <div class="t16-footer-card">
-                        <h5 class="t16-footer-title">
-                            {{ trans('labels.newslatter') == 'labels.newslatter' ? 'Newsletter' : trans('labels.newslatter') }}
-                        </h5>
-                        <form action="{{ URL::to(@$storeinfo->slug . '/subscribe') }}" method="post"
-                            class="t16-footer-newsletter">
-                            @csrf
-                            <div class="input-group">
-                                <input type="email" class="form-control footer-input" name="subscribe_email"
-                                    placeholder="{{ trans('labels.email') }}" required>
-                                <button type="submit"
-                                    class="btn btn-store px-3">{{ trans('labels.subscribe') == 'labels.subscribe' ? 'Subscribe' : trans('labels.subscribe') }}</button>
-                            </div>
-                        </form>
-                        @if (helper::getsociallinks($storeinfo->id)->count() > 0)
-                            <div class="t16-footer-social">
-                                @foreach (helper::getsociallinks($storeinfo->id) as $links)
-                                    <a href="{{ $links->link }}" target="_blank"
-                                        aria-label="social-link">{!! $links->icon !!}</a>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    {{-- Theme 16: no storefront footer --}}
 @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [17, 18, 19, 20, 21, 22]))
     @php
         $tpl_num = helper::appdata(@$storeinfo->id)->template;
@@ -650,7 +351,7 @@
 
 <!-- copy-right-sec -->
 <div
-    class="copy-right-sec bg-light bg-changer py-3 border-top {{ helper::appdata(@$storeinfo->id)->template == 16 ? 't16-copy' : '' }}">
+    class="copy-right-sec bg-light bg-changer py-3 border-top {{ helper::appdata(@$storeinfo->id)->template == 16 ? 'd-none' : '' }}">
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
             <p class="mb-0 text-dark color-changer opacity-75 text-center text-md-start">Copyright &copy; MatjarHub.
@@ -1120,6 +821,71 @@
     }
     var whatsappnumber = "{{ helper::appdata($storeinfo->id)->whatsapp_number }}";
 
+    (function () {
+        function bindProductShare(box) {
+            if (!box || box.dataset.shareBound === '1') return;
+            box.dataset.shareBound = '1';
+
+            var url = box.getAttribute('data-url') || window.location.href;
+            var title = box.getAttribute('data-title') || document.title;
+            var copyLabel = box.getAttribute('data-copy-label') || 'Copy link';
+            var copiedLabel = box.getAttribute('data-copied-label') || 'Copied';
+            var copiedToast = box.getAttribute('data-copied-toast') || copiedLabel;
+
+            var nativeBtn = box.querySelector('.js-native-share');
+            if (nativeBtn && navigator.share) {
+                nativeBtn.hidden = false;
+                nativeBtn.addEventListener('click', function () {
+                    navigator.share({ title: title, text: title, url: url }).catch(function () {});
+                });
+            }
+
+            var copyBtn = box.querySelector('.js-copy-link');
+            if (!copyBtn) return;
+            copyBtn.addEventListener('click', function () {
+                var label = copyBtn.querySelector('.js-copy-label');
+                var done = function () {
+                    copyBtn.classList.add('is-copied');
+                    if (label) label.textContent = copiedLabel;
+                    if (typeof toastr !== 'undefined') toastr.success(copiedToast);
+                    setTimeout(function () {
+                        copyBtn.classList.remove('is-copied');
+                        if (label) label.textContent = copyLabel;
+                    }, 1800);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(done).catch(function () {
+                        var tmp = document.createElement('input');
+                        tmp.value = url;
+                        document.body.appendChild(tmp);
+                        tmp.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tmp);
+                        done();
+                    });
+                } else {
+                    var tmp = document.createElement('input');
+                    tmp.value = url;
+                    document.body.appendChild(tmp);
+                    tmp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tmp);
+                    done();
+                }
+            });
+        }
+
+        window.initProductShares = function () {
+            document.querySelectorAll('.js-product-share').forEach(bindProductShare);
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.initProductShares);
+        } else {
+            window.initProductShares();
+        }
+    })();
+
     function currency_formate(price, currency_type = null) {
         if (currency_type == 'USD') {
             return '$' + $.number(price, 2);
@@ -1187,6 +953,9 @@
                 }
                 $('#viewproduct_body').html(response.output);
                 $('#viewproduct-over').modal('show');
+                if (typeof window.initProductShares === 'function') {
+                    window.initProductShares();
+                }
 
             },
             error: function(error) {
@@ -1314,6 +1083,25 @@
                                 });
                             } else if (window.mpOpenCartDrawer) {
                                 try { sessionStorage.setItem('mp_open_cart', '1'); } catch (e) {}
+                                location.reload();
+                            }
+                        } else if ("{{ helper::appdata(@$storeinfo->id)->template }}" == 16) {
+                            if ($('#viewproduct-over').is(':visible')) {
+                                $('#viewproduct-over').modal('hide');
+                            }
+                            $('#cartcnt').text(response.cartcnt).show().removeClass('d-none');
+                            $('.cart-count').text(response.cartcnt);
+                            $('.addtocart').html("{{ trans('labels.add_to_cart') }}");
+                            $('.addtocart').prop("disabled", false);
+                            $('.buynow').html("{{ trans('labels.buy_now') }}");
+                            $('.buynow').prop("disabled", false);
+                            toastr.success("{{ trans('messages.success') }}");
+                            if (typeof t16RefreshDrawerHtml === 'function') {
+                                t16RefreshDrawerHtml().then(function () {
+                                    if (window.t16OpenCartDrawer) window.t16OpenCartDrawer();
+                                });
+                            } else if (window.t16OpenCartDrawer) {
+                                try { sessionStorage.setItem('t16_open_cart', '1'); } catch (e) {}
                                 location.reload();
                             }
                         } else if ($('#viewproduct-over').is(':visible')) {
@@ -2170,6 +1958,11 @@
 
 @if (helper::appdata(@$storeinfo->id)->template == 22)
     @include('front.template-22.partials.mp_cart_js')
+@endif
+
+@if (helper::appdata(@$storeinfo->id)->template == 16)
+    @include('front.template-16.partials.cart_drawer')
+    @include('front.template-16.partials.cart_drawer_js')
 @endif
 
 </body>

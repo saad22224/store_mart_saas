@@ -269,9 +269,13 @@ class HomeController extends Controller
                 ->get();
         }
 
-        $detailView = ($templateNum === 22 && view()->exists('front.template-22.detail'))
-            ? 'front.template-22.detail'
-            : 'front.detail';
+        if ($templateNum === 16 && view()->exists('front.template-16.detail')) {
+            $detailView = 'front.template-16.detail';
+        } elseif ($templateNum === 22 && view()->exists('front.template-22.detail')) {
+            $detailView = 'front.template-22.detail';
+        } else {
+            $detailView = 'front.detail';
+        }
 
         return view($detailView, compact(
             'getitem',
@@ -478,7 +482,7 @@ class HomeController extends Controller
                     }
                     $cart->item_id = $value;
                     $cart->item_name = $fbtitem->item_name;
-                    $cart->item_image = $fbtitem->product_image->image;
+                    $cart->item_image = $fbtitem->product_image?->image ?? ($fbtitem->image ?? '');
                     $cart->item_price = $fbtprice;
                     $cart->tax = $fbtitem->tax;
                     $cart->qty = 1;
@@ -537,7 +541,12 @@ class HomeController extends Controller
             }
             session()->put('cart', $count);
             session()->put('vendor_id', $request->vendor_id);
-            return response()->json(['status' => 1, 'message' => trans('messages.add_to_cart_msg'), 'cartcnt' => $count], 200);
+            return response()->json([
+                'status' => 1,
+                'message' => trans('messages.add_to_cart_msg'),
+                'cartcnt' => $count,
+                'cart_id' => $cart->id,
+            ], 200);
         } catch (\Exception $e) {
             Log::error('addtocart error: ' . $e->getMessage() . ' at line ' . $e->getLine() . ' in ' . $e->getFile());
             return response()->json(['status' => 0, 'message' => $e->getMessage() . ' (line: ' . $e->getLine() . ')'], 400);
@@ -1500,7 +1509,19 @@ class HomeController extends Controller
             }
         }
         $itemlist = $itemlist->groupBy('items.id')->orderBy('items.reorder_id')->paginate(15)->onEachSide(0);
-        return view(helper::resolve_storefront_view(@$storeinfo->id, 'search'), compact('storeinfo', 'category', 'itemlist'));
+
+        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_id', 'carts.extras_name', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.variants_name', 'carts.attribute', 'carts.buynow', 'items.currency')
+            ->join('items', 'carts.item_id', 'items.id')
+            ->where('carts.vendor_id', @$storeinfo->id)
+            ->where('carts.buynow', 0);
+        if (Auth::user() && Auth::user()->type == 3) {
+            $cartitems->where('carts.user_id', @Auth::user()->id);
+        } else {
+            $cartitems->where('carts.session_id', Session::getId());
+        }
+        $cartdata = $cartitems->get();
+
+        return view(helper::resolve_storefront_view(@$storeinfo->id, 'search'), compact('storeinfo', 'category', 'itemlist', 'cartdata'));
     }
 
     public function categorypage(Request $request)
@@ -1524,10 +1545,22 @@ class HomeController extends Controller
             ->paginate(15)->onEachSide(0);
         $settingdata = helper::appdata(@$storeinfo->id);
         $tpl_num = $settingdata->template ?? 17;
-        if (in_array($tpl_num, [16, 17, 18, 19, 20, 21, 22]) && view()->exists('front.template-' . $tpl_num . '.category')) {
-            return view('front.template-' . $tpl_num . '.category', compact('storeinfo', 'category', 'getcategory', 'products'));
+
+        $cartitems = Cart::select('carts.id', 'carts.item_id', 'carts.item_name', 'carts.item_image', 'carts.item_price', 'carts.extras_id', 'carts.extras_name', 'carts.extras_price', 'carts.qty', 'carts.price', 'carts.tax', 'carts.variants_id', 'carts.variants_name', 'carts.attribute', 'carts.buynow', 'items.currency')
+            ->join('items', 'carts.item_id', 'items.id')
+            ->where('carts.vendor_id', @$storeinfo->id)
+            ->where('carts.buynow', 0);
+        if (Auth::user() && Auth::user()->type == 3) {
+            $cartitems->where('carts.user_id', @Auth::user()->id);
+        } else {
+            $cartitems->where('carts.session_id', Session::getId());
         }
-        return view('front.template-17.category', compact('storeinfo', 'category', 'getcategory', 'products'));
+        $cartdata = $cartitems->get();
+
+        if (in_array($tpl_num, [16, 17, 18, 19, 20, 21, 22]) && view()->exists('front.template-' . $tpl_num . '.category')) {
+            return view('front.template-' . $tpl_num . '.category', compact('storeinfo', 'category', 'getcategory', 'products', 'cartdata'));
+        }
+        return view('front.template-17.category', compact('storeinfo', 'category', 'getcategory', 'products', 'cartdata'));
     }
 
     public function deletepassword(Request $request)

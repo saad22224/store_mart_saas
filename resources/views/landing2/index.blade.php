@@ -154,22 +154,53 @@
             color: #15AC82;
         }
 
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-nav-login,
+        .btn-nav-cta,
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.35rem;
+            padding: 0.45rem 1.15rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+            line-height: 1;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-nav-login {
+            background: #fff;
+            color: #0D8D6B;
+            border: 1.5px solid #15AC82;
+            box-shadow: none;
+        }
+
+        .btn-nav-login:hover {
+            background: #ECFDF5;
+            transform: translateY(-1px);
+        }
+
+        .btn-nav-cta,
         .btn-primary {
             background: linear-gradient(135deg, #15AC82, #0D8D6B);
             color: #fff;
-            padding: 0.45rem 1.3rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            font-family: 'Cairo', sans-serif;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-            box-shadow: 0 4px 15px rgba(21, 172, 130, 0.3);
+            border: 1.5px solid transparent;
+            box-shadow: 0 4px 14px rgba(21, 172, 130, 0.28);
         }
 
+        .btn-nav-cta:hover,
         .btn-primary:hover {
-            opacity: 0.92;
+            opacity: 0.95;
             transform: translateY(-1px);
         }
 
@@ -464,6 +495,142 @@
             border-radius: 1.5rem;
             box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
             transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        /* ===== Themes showcase ===== */
+        .themes-section {
+            padding: 5.5rem 1.5rem;
+            background: #ffffff;
+        }
+        .themes-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .themes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .themes-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .themes-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        .theme-card {
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.1);
+        }
+        .theme-card-media {
+            aspect-ratio: 16 / 11;
+            background: #F1F5F9;
+            overflow: hidden;
+        }
+        .theme-card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .theme-card-body {
+            padding: 1.15rem 1.25rem 1.35rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+        .theme-card-body h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+        }
+        .theme-card-body .theme-preview-btn {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            padding: 0.65rem 1rem;
+            border-radius: 9999px;
+            background: rgba(21, 172, 130, 0.1);
+            color: #0D8D6B;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border: 1px solid rgba(21, 172, 130, 0.25);
+        }
+        .theme-card-body .theme-preview-btn:hover {
+            background: #15AC82;
+            color: #fff;
+        }
+        .themes-empty {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #64748B;
+            background: #F8FAFC;
+            border-radius: 1rem;
+            border: 1px dashed #CBD5E1;
+        }
+
+        /* ===== How it works ===== */
+        .how-section {
+            padding: 5.5rem 1.5rem;
+            background: linear-gradient(180deg, #F8FAFC 0%, #ffffff 100%);
+        }
+        .how-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .how-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        @media (min-width: 768px) {
+            .how-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        .how-step {
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+        }
+        .how-step-num {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #15AC82, #0D8D6B);
+            color: #fff;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .how-step h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem;
+            color: #0F172A;
+        }
+        .how-step p {
+            margin: 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
 
         .why-card:hover {
@@ -838,72 +1005,101 @@
 
         /* ===== Footer ===== */
         .site-footer {
-            background: #e2e7ff;
-            border-radius: 1.5rem 1.5rem 0 0;
+            background: linear-gradient(180deg, #0F172A 0%, #0B1220 100%);
+            color: #CBD5E1;
         }
 
         .footer-inner {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 4rem 2rem 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 3.5rem 1.5rem 1.5rem;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
         }
 
         @media (min-width: 768px) {
-            .footer-inner {
-                flex-direction: row-reverse;
-                justify-content: space-between;
+            .footer-top {
+                grid-template-columns: 1.5fr 1fr 1fr;
+                align-items: start;
             }
         }
 
         .footer-brand-name {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #272e42;
-            margin-bottom: 0.35rem;
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 0.5rem;
         }
 
         .footer-brand-desc {
-            font-size: 0.85rem;
-            color: rgba(39, 46, 66, 0.6);
+            font-size: 0.95rem;
+            color: #94A3B8;
+            max-width: 28rem;
+            line-height: 1.75;
+            margin: 0;
+        }
+
+        .footer-col-title {
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin: 0 0 0.85rem;
         }
 
         .footer-links {
             display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
         }
 
         .footer-links a {
-            font-weight: 700;
-            color: #4a40e0;
+            font-weight: 600;
+            color: #CBD5E1;
             text-decoration: none;
             font-size: 0.9rem;
-            transition: text-decoration 0.2s;
-        }
-
-        .footer-links a:not(.footer-links a:first-child) {
-            color: rgba(39, 46, 66, 0.6);
+            transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            text-decoration: underline;
+            color: #34D399;
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.25rem;
         }
 
         .footer-copy {
-            font-size: 0.78rem;
-            color: rgba(39, 46, 66, 0.5);
-            text-align: center;
+            font-size: 0.82rem;
+            color: #64748B;
+            margin: 0;
         }
 
-        .footer-center-badge {
-            display: flex;
-            justify-content: center;
+        .footer-cta {
+            display: inline-flex;
             align-items: center;
+            gap: 0.35rem;
+            color: #34D399;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+        }
+
+        .footer-cta:hover {
+            color: #6EE7B7;
         }
 
 
@@ -1274,11 +1470,13 @@
 
             <div class="nav-links hidden lg:flex">
                 <a href="#" class="active">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
-                <a href="#who-we-are">{{ @$translations['nav']['who_we_are'] ?? 'من نحن' }}</a>
                 <a href="#why-us">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
-                <a href="#pricing">الباقات والتسعير</a>
-                <a href="{{ url('/help') }}">مركز الدعم</a>
+                <a href="#themes">{{ @$translations['nav']['themes'] ?? 'القوالب' }}</a>
+                <a href="#how-it-works">{{ @$translations['nav']['how_it_works'] ?? ($lang == 'en' ? 'How it works' : 'كيف تبدأ') }}</a>
+                <a href="#pricing">{{ @$translations['nav']['pricing'] ?? 'الباقات والتسعير' }}</a>
+                <a href="{{ url('/help') }}">{{ @$translations['nav']['support'] ?? ($lang == 'en' ? 'Support Center' : 'مركز الدعم') }}</a>
                 <a href="#faq">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
+                <a href="#contact">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
             </div>
 
             <div class="flex items-center gap-2.5">
@@ -1295,12 +1493,12 @@
                     </div>
                 </div>
 
-                <div class="hidden sm:flex items-center gap-2">
-                    <button onclick="window.location.href = '{{ url('admin') }}'" class="px-4 py-1.5 rounded-full text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition">
-                        {{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}
+                <div class="nav-actions hidden sm:flex">
+                    <button type="button" onclick="window.location.href = '{{ url('admin') }}'" class="btn-nav-login">
+                        {{ @$translations['nav']['login'] ?? ($lang == 'en' ? 'Login' : 'تسجيل دخول') }}
                     </button>
-                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary">
-                        {{ @$translations['nav']['create_account'] ?? 'أنشئ متجرك مجاناً' }}
+                    <button type="button" onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-nav-cta">
+                        {{ @$translations['nav']['create_account'] ?? ($lang == 'en' ? 'Create your store free' : 'أنشئ متجرك مجاناً') }}
                     </button>
                 </div>
 
@@ -1330,14 +1528,16 @@
             <div style="display:flex;flex-direction:column;gap:2rem;align-items:center;">
                 <a href="#" onclick="closeMobileMenu()"
                     style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
-                <a href="#who-we-are" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['who_we_are'] ?? 'من نحن' }}</a>
                 <a href="#why-us" onclick="closeMobileMenu()"
                     style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
+                <a href="#themes" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['themes'] ?? 'القوالب' }}</a>
+                <a href="#how-it-works" onclick="closeMobileMenu()"
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['how_it_works'] ?? ($lang == 'en' ? 'How it works' : 'كيف تبدأ') }}</a>
                 <a href="#pricing" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">الباقات والتسعير</a>
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['pricing'] ?? 'الباقات والتسعير' }}</a>
                 <a href="{{ url('/help') }}" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">مركز الدعم</a>
+                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['support'] ?? ($lang == 'en' ? 'Support Center' : 'مركز الدعم') }}</a>
                 <a href="#faq" onclick="closeMobileMenu()"
                     style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
                 <a href="#contact" onclick="closeMobileMenu()"
@@ -1391,9 +1591,9 @@
                     <button onclick="window.location.href = '{{ url('admin') }}'"
                         style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.8rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1.1rem; transition: all 0.2s ease;"
                         onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
-                        onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? 'تسجيل دخول' }}</button>
+                        onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? ($lang == 'en' ? 'Login' : 'تسجيل دخول') }}</button>
                     <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary"
-                        style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? 'إنشاء حساب' }}</button>
+                        style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? ($lang == 'en' ? 'Create your store free' : 'أنشئ متجرك مجاناً') }}</button>
                 </div>
             </div>
             <button onclick="closeMobileMenu()"
@@ -1441,82 +1641,36 @@
     </section>
 
     {{-- ===== Infinite Marquee Ticker Bar ===== --}}
+    @php
+        $marqueeDefaults = [
+            'item1' => ['icon' => 'bolt', 'ar' => 'صفحات هبوط فائقة السرعة', 'en' => 'Ultra-fast landing pages'],
+            'item2' => ['icon' => 'inventory_2', 'ar' => 'إدارة وبيع المنتجات الرقمية والفيزيائية', 'en' => 'Sell digital and physical products'],
+            'item3' => ['icon' => 'chat', 'ar' => 'استقبال الطلبات والإشعارات عبر الواتساب', 'en' => 'Orders and alerts via WhatsApp'],
+            'item4' => ['icon' => 'local_shipping', 'ar' => 'الربط الفوري مع شركات الشحن', 'en' => 'Instant shipping integrations'],
+            'item5' => ['icon' => 'ads_click', 'ar' => 'ربط فيسبوك وتيك توك بكسل', 'en' => 'Facebook & TikTok pixel tracking'],
+            'item6' => ['icon' => 'trending_up', 'ar' => 'نظام الـ Downsell وزيادة المبيعات', 'en' => 'Downsell tools to boost sales'],
+            'item7' => ['icon' => 'domain', 'ar' => 'ربط الدومين الخاص بضغطة زر', 'en' => 'Connect your custom domain easily'],
+            'item8' => ['icon' => 'support_agent', 'ar' => 'دعم فني مباشر 24/7', 'en' => 'Live support 24/7'],
+            'item9' => ['icon' => 'point_of_sale', 'ar' => 'نظام نقاط البيع والكاشير POS', 'en' => 'POS and cashier system'],
+        ];
+        $marqueeItems = [];
+        foreach ($marqueeDefaults as $key => $meta) {
+            $marqueeItems[] = [
+                'icon' => $meta['icon'],
+                'text' => @$translations['marquee'][$key] ?? ($lang == 'en' ? $meta['en'] : $meta['ar']),
+            ];
+        }
+    @endphp
     <section class="marquee-section">
         <div class="marquee-track">
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">bolt</span>
-                <span>صفحات هبوط فائقة السرعة</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">inventory_2</span>
-                <span>إدارة وبيع المنتجات الرقمية والفيزيائية</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">chat</span>
-                <span>استقبال الطلبات والإشعارات عبر الواتساب</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">local_shipping</span>
-                <span>الربط الفوري مع شركات الشحن</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">ads_click</span>
-                <span>ربط فيسبوك وتيك توك بكسل</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">trending_up</span>
-                <span>نظام الـ Downsell وزيادة المبيعات</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">domain</span>
-                <span>ربط الدومين الخاص بضغطة زر</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">support_agent</span>
-                <span>دعم فني مباشر 24/7</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">point_of_sale</span>
-                <span>نظام نقاط البيع والكاشير POS</span>
-            </div>
-
-            {{-- Duplicate for continuous infinite scroll --}}
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">bolt</span>
-                <span>صفحات هبوط فائقة السرعة</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">inventory_2</span>
-                <span>إدارة وبيع المنتجات الرقمية والفيزيائية</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">chat</span>
-                <span>استقبال الطلبات والإشعارات عبر الواتساب</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">local_shipping</span>
-                <span>الربط الفوري مع شركات الشحن</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">ads_click</span>
-                <span>ربط فيسبوك وتيك توك بكسل</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">trending_up</span>
-                <span>نظام الـ Downsell وزيادة المبيعات</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">domain</span>
-                <span>ربط الدومين الخاص بضغطة زر</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">support_agent</span>
-                <span>دعم فني مباشر 24/7</span>
-            </div>
-            <div class="marquee-item">
-                <span class="material-symbols-outlined text-emerald-600 text-base">point_of_sale</span>
-                <span>نظام نقاط البيع والكاشير POS</span>
-            </div>
+            @foreach ([1, 2] as $loopPass)
+                @foreach ($marqueeItems as $item)
+                    <div class="marquee-item">
+                        <span class="material-symbols-outlined text-emerald-600 text-base">{{ $item['icon'] }}</span>
+                        <span>{{ $item['text'] }}</span>
+                    </div>
+                @endforeach
+            @endforeach
         </div>
     </section>
 
@@ -1641,19 +1795,92 @@
         </div>
     </section>
 
+    {{-- ===== Themes Showcase (from admin/themes → vendor_themes) ===== --}}
+    <section class="themes-section" id="themes">
+        <div class="themes-inner">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="700">
+                <h2>{{ @$translations['themes']['title'] ?? ($lang == 'en' ? 'Ready-made store themes' : 'قوالب متاجر جاهزة') }}</h2>
+                <p>{{ @$translations['themes']['subtitle'] ?? ($lang == 'en' ? 'Choose a professional theme for your store.' : 'اختر قالباً احترافياً لمتجرك وابدأ البيع فوراً.') }}</p>
+            </div>
+
+            @php $themes = $themes ?? collect(); @endphp
+            @if ($themes->count() > 0)
+                <div class="themes-grid">
+                    @foreach ($themes as $index => $theme)
+                        @php
+                            $preview = trim((string) ($theme->preview_link ?? ''));
+                            $img = helper::image_path($theme->image);
+                        @endphp
+                        <article class="theme-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="{{ min($index * 80, 240) }}">
+                            <div class="theme-card-media">
+                                <img src="{{ $img }}" alt="{{ $theme->name }}" loading="lazy">
+                            </div>
+                            <div class="theme-card-body">
+                                <h3>{{ $theme->name }}</h3>
+                                @if ($preview !== '' && $preview !== '#')
+                                    <a class="theme-preview-btn" href="{{ $preview }}" target="_blank" rel="noopener noreferrer">
+                                        <span class="material-symbols-outlined text-base">open_in_new</span>
+                                        {{ @$translations['themes']['preview_btn'] ?? ($lang == 'en' ? 'Preview theme' : 'معاينة القالب') }}
+                                    </a>
+                                @endif
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @else
+                <div class="themes-empty" data-aos="fade-up">
+                    {{ @$translations['themes']['empty'] ?? ($lang == 'en' ? 'No themes available right now.' : 'لا توجد قوالب متاحة حالياً.') }}
+                </div>
+            @endif
+        </div>
+    </section>
+
+    {{-- ===== How it works ===== --}}
+    <section class="how-section" id="how-it-works">
+        <div class="how-inner">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="700">
+                <h2>{{ @$translations['how_it_works']['title'] ?? ($lang == 'en' ? 'How to start in 3 steps' : 'كيف تبدأ في 3 خطوات') }}</h2>
+                <p>{{ @$translations['how_it_works']['subtitle'] ?? ($lang == 'en' ? 'From signup to your first order.' : 'من التسجيل إلى أول طلب — بسرعة وبدون تعقيد') }}</p>
+            </div>
+            <div class="how-grid">
+                <div class="how-step" data-aos="fade-up" data-aos-delay="0">
+                    <div class="how-step-num">1</div>
+                    <h3>{{ @$translations['how_it_works']['step1_title'] ?? ($lang == 'en' ? 'Create your account' : 'أنشئ حسابك') }}</h3>
+                    <p>{{ @$translations['how_it_works']['step1_desc'] ?? '' }}</p>
+                </div>
+                <div class="how-step" data-aos="fade-up" data-aos-delay="80">
+                    <div class="how-step-num">2</div>
+                    <h3>{{ @$translations['how_it_works']['step2_title'] ?? ($lang == 'en' ? 'Pick a theme and add products' : 'اختر قالباً وأضف منتجاتك') }}</h3>
+                    <p>{{ @$translations['how_it_works']['step2_desc'] ?? '' }}</p>
+                </div>
+                <div class="how-step" data-aos="fade-up" data-aos-delay="160">
+                    <div class="how-step-num">3</div>
+                    <h3>{{ @$translations['how_it_works']['step3_title'] ?? ($lang == 'en' ? 'Publish and start selling' : 'انشر وابدأ البيع') }}</h3>
+                    <p>{{ @$translations['how_it_works']['step3_desc'] ?? '' }}</p>
+                </div>
+            </div>
+            <div class="text-center mt-10" data-aos="fade-up">
+                <a href="{{ url('admin/register') }}" class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold gradient-bg">
+                    {{ @$translations['nav']['start_now'] ?? ($lang == 'en' ? 'Start Now' : 'ابدأ الآن') }}
+                </a>
+            </div>
+        </div>
+    </section>
+
     {{-- ===== Pricing Plans Section ===== --}}
     <section class="pricing-section py-20 bg-slate-50 relative overflow-hidden" id="pricing">
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up" data-aos-duration="700">
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold mb-4 shadow-sm">
                     <span class="material-symbols-outlined text-base">payments</span>
-                    <span>خطط وأسعار مرنة</span>
+                    <span>{{ @$translations['nav']['pricing'] ?? ($lang == 'en' ? 'Flexible pricing' : 'خطط وأسعار مرنة') }}</span>
                 </div>
                 <h2 class="text-3xl md:text-5xl font-black text-slate-900 leading-tight mb-4">
-                    اختر الباقة المناسبة <span class="gradient-text">لتنمية تجارتك</span>
+                    {{ $lang == 'en' ? 'Choose the right plan' : 'اختر الباقة المناسبة' }}
+                    <span class="gradient-text">{{ $lang == 'en' ? 'to grow your business' : 'لتنمية تجارتك' }}</span>
                 </h2>
                 <p class="text-slate-600 text-lg">
-                    بدون عمولات على مبيعاتك! خطط واضحة وشفافة تمكّنك من التوسع والانطلاق بكل قوة وسهولة.
+                    {{ $lang == 'en' ? 'No commissions on your sales. Clear plans that let you scale with confidence.' : 'بدون عمولات على مبيعاتك! خطط واضحة وشفافة تمكّنك من التوسع والانطلاق بكل قوة وسهولة.' }}
                 </p>
             </div>
 
@@ -1958,17 +2185,40 @@
     {{-- ===== Footer ===== --}}
     <footer class="site-footer">
         <div class="footer-inner">
-            <div style="text-align:center;">
-                <div class="footer-brand-name">Matjar Hub</div>
-                <div class="footer-brand-desc">
-                    {{ @$translations['footer']['brand_desc'] ?? 'المنصة الرائدة في تمكين التجار في العالم العربي' }}
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand-name">Matjar Hub</div>
+                    <p class="footer-brand-desc">
+                        {{ @$translations['footer']['brand_desc'] ?? ($lang == 'en' ? 'The leading platform for empowering merchants in the Arab world' : 'المنصة الرائدة في تمكين التجار في العالم العربي') }}
+                    </p>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">{{ @$translations['footer']['explore_title'] ?? ($lang == 'en' ? 'Explore' : 'استكشف') }}</h4>
+                    <ul class="footer-links">
+                        <li><a href="#why-us">{{ @$translations['nav']['why_us'] ?? ($lang == 'en' ? 'Why Us' : 'لماذا نحن') }}</a></li>
+                        <li><a href="#themes">{{ @$translations['nav']['themes'] ?? ($lang == 'en' ? 'Themes' : 'القوالب') }}</a></li>
+                        <li><a href="#pricing">{{ @$translations['nav']['pricing'] ?? ($lang == 'en' ? 'Pricing' : 'الباقات') }}</a></li>
+                        <li><a href="#faq">{{ @$translations['nav']['faq'] ?? ($lang == 'en' ? 'FAQ' : 'الأسئلة') }}</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">{{ @$translations['footer']['support_title'] ?? ($lang == 'en' ? 'Support' : 'الدعم') }}</h4>
+                    <ul class="footer-links">
+                        <li><a href="#contact">{{ @$translations['nav']['contact'] ?? ($lang == 'en' ? 'Contact' : 'اتصل بنا') }}</a></li>
+                        <li><a href="{{ url('/help') }}">{{ @$translations['footer']['help_center'] ?? ($lang == 'en' ? 'Help Center' : 'مركز الدعم') }}</a></li>
+                        <li><a href="{{ url('admin') }}">{{ @$translations['nav']['login'] ?? ($lang == 'en' ? 'Login' : 'تسجيل دخول') }}</a></li>
+                        <li><a href="{{ url('admin/register') }}">{{ @$translations['nav']['create_account'] ?? ($lang == 'en' ? 'Create store' : 'أنشئ متجرك') }}</a></li>
+                    </ul>
                 </div>
             </div>
-
-
-
-            <div class="footer-copy">
-                {{ @$translations['footer']['copyright'] ?? '© 2026 Matjar Hub. جميع الحقوق محفوظة.' }}
+            <div class="footer-bottom">
+                <p class="footer-copy">
+                    {{ @$translations['footer']['copyright'] ?? ($lang == 'en' ? '© 2026 Matjar Hub. All rights reserved.' : '© 2026 Matjar Hub. جميع الحقوق محفوظة.') }}
+                </p>
+                <a class="footer-cta" href="{{ url('admin/register') }}">
+                    {{ @$translations['nav']['start_now'] ?? ($lang == 'en' ? 'Start Now' : 'ابدأ الآن') }}
+                    <span class="material-symbols-outlined text-base">arrow_forward</span>
+                </a>
             </div>
         </div>
     </footer>

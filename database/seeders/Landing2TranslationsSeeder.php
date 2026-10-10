@@ -12,8 +12,6 @@ class Landing2TranslationsSeeder extends Seeder
      */
     public function run(): void
     {
-        Landing2Translation::truncate();
-
         $translations = [
             // ===== HERO SECTION =====
             ['section' => 'hero', 'field' => 'badge', 'lang' => 'ar', 'value' => 'أكثر من 50,000 تاجر يثقون بنا'],
@@ -45,6 +43,66 @@ class Landing2TranslationsSeeder extends Seeder
             ['section' => 'nav', 'field' => 'contact', 'lang' => 'en', 'value' => 'Contact'],
             ['section' => 'nav', 'field' => 'start_now', 'lang' => 'ar', 'value' => 'ابدأ الآن'],
             ['section' => 'nav', 'field' => 'start_now', 'lang' => 'en', 'value' => 'Start Now'],
+            ['section' => 'nav', 'field' => 'themes', 'lang' => 'ar', 'value' => 'القوالب'],
+            ['section' => 'nav', 'field' => 'themes', 'lang' => 'en', 'value' => 'Themes'],
+            ['section' => 'nav', 'field' => 'pricing', 'lang' => 'ar', 'value' => 'الباقات والتسعير'],
+            ['section' => 'nav', 'field' => 'pricing', 'lang' => 'en', 'value' => 'Pricing'],
+            ['section' => 'nav', 'field' => 'how_it_works', 'lang' => 'ar', 'value' => 'كيف تبدأ'],
+            ['section' => 'nav', 'field' => 'how_it_works', 'lang' => 'en', 'value' => 'How it works'],
+            ['section' => 'nav', 'field' => 'login', 'lang' => 'ar', 'value' => 'تسجيل دخول'],
+            ['section' => 'nav', 'field' => 'login', 'lang' => 'en', 'value' => 'Login'],
+            ['section' => 'nav', 'field' => 'create_account', 'lang' => 'ar', 'value' => 'أنشئ متجرك مجاناً'],
+            ['section' => 'nav', 'field' => 'create_account', 'lang' => 'en', 'value' => 'Create your store free'],
+            ['section' => 'nav', 'field' => 'support', 'lang' => 'ar', 'value' => 'مركز الدعم'],
+            ['section' => 'nav', 'field' => 'support', 'lang' => 'en', 'value' => 'Support Center'],
+
+            // ===== MARQUEE =====
+            ['section' => 'marquee', 'field' => 'item1', 'lang' => 'ar', 'value' => 'صفحات هبوط فائقة السرعة'],
+            ['section' => 'marquee', 'field' => 'item1', 'lang' => 'en', 'value' => 'Ultra-fast landing pages'],
+            ['section' => 'marquee', 'field' => 'item2', 'lang' => 'ar', 'value' => 'إدارة وبيع المنتجات الرقمية والفيزيائية'],
+            ['section' => 'marquee', 'field' => 'item2', 'lang' => 'en', 'value' => 'Sell digital and physical products'],
+            ['section' => 'marquee', 'field' => 'item3', 'lang' => 'ar', 'value' => 'استقبال الطلبات والإشعارات عبر الواتساب'],
+            ['section' => 'marquee', 'field' => 'item3', 'lang' => 'en', 'value' => 'Orders and alerts via WhatsApp'],
+            ['section' => 'marquee', 'field' => 'item4', 'lang' => 'ar', 'value' => 'الربط الفوري مع شركات الشحن'],
+            ['section' => 'marquee', 'field' => 'item4', 'lang' => 'en', 'value' => 'Instant shipping integrations'],
+            ['section' => 'marquee', 'field' => 'item5', 'lang' => 'ar', 'value' => 'ربط فيسبوك وتيك توك بكسل'],
+            ['section' => 'marquee', 'field' => 'item5', 'lang' => 'en', 'value' => 'Facebook & TikTok pixel tracking'],
+            ['section' => 'marquee', 'field' => 'item6', 'lang' => 'ar', 'value' => 'نظام الـ Downsell وزيادة المبيعات'],
+            ['section' => 'marquee', 'field' => 'item6', 'lang' => 'en', 'value' => 'Downsell tools to boost sales'],
+            ['section' => 'marquee', 'field' => 'item7', 'lang' => 'ar', 'value' => 'ربط الدومين الخاص بضغطة زر'],
+            ['section' => 'marquee', 'field' => 'item7', 'lang' => 'en', 'value' => 'Connect your custom domain easily'],
+            ['section' => 'marquee', 'field' => 'item8', 'lang' => 'ar', 'value' => 'دعم فني مباشر 24/7'],
+            ['section' => 'marquee', 'field' => 'item8', 'lang' => 'en', 'value' => 'Live support 24/7'],
+            ['section' => 'marquee', 'field' => 'item9', 'lang' => 'ar', 'value' => 'نظام نقاط البيع والكاشير POS'],
+            ['section' => 'marquee', 'field' => 'item9', 'lang' => 'en', 'value' => 'POS and cashier system'],
+
+            // ===== THEMES SECTION =====
+            ['section' => 'themes', 'field' => 'title', 'lang' => 'ar', 'value' => 'قوالب متاجر جاهزة'],
+            ['section' => 'themes', 'field' => 'title', 'lang' => 'en', 'value' => 'Ready-made store themes'],
+            ['section' => 'themes', 'field' => 'subtitle', 'lang' => 'ar', 'value' => 'اختر قالباً احترافياً لمتجرك وابدأ البيع فوراً. القوالب تُحدَّث تلقائياً من لوحة التحكم.'],
+            ['section' => 'themes', 'field' => 'subtitle', 'lang' => 'en', 'value' => 'Choose a professional theme for your store and start selling instantly. Themes update automatically from the admin panel.'],
+            ['section' => 'themes', 'field' => 'empty', 'lang' => 'ar', 'value' => 'لا توجد قوالب متاحة حالياً. تحقق لاحقاً.'],
+            ['section' => 'themes', 'field' => 'empty', 'lang' => 'en', 'value' => 'No themes available right now. Please check back later.'],
+            ['section' => 'themes', 'field' => 'preview_btn', 'lang' => 'ar', 'value' => 'معاينة القالب'],
+            ['section' => 'themes', 'field' => 'preview_btn', 'lang' => 'en', 'value' => 'Preview theme'],
+
+            // ===== HOW IT WORKS =====
+            ['section' => 'how_it_works', 'field' => 'title', 'lang' => 'ar', 'value' => 'كيف تبدأ في 3 خطوات'],
+            ['section' => 'how_it_works', 'field' => 'title', 'lang' => 'en', 'value' => 'How to start in 3 steps'],
+            ['section' => 'how_it_works', 'field' => 'subtitle', 'lang' => 'ar', 'value' => 'من التسجيل إلى أول طلب — بسرعة وبدون تعقيد'],
+            ['section' => 'how_it_works', 'field' => 'subtitle', 'lang' => 'en', 'value' => 'From signup to your first order — fast and simple'],
+            ['section' => 'how_it_works', 'field' => 'step1_title', 'lang' => 'ar', 'value' => 'أنشئ حسابك'],
+            ['section' => 'how_it_works', 'field' => 'step1_title', 'lang' => 'en', 'value' => 'Create your account'],
+            ['section' => 'how_it_works', 'field' => 'step1_desc', 'lang' => 'ar', 'value' => 'سجّل مجاناً وحدد اسم متجرك في أقل من دقيقة.'],
+            ['section' => 'how_it_works', 'field' => 'step1_desc', 'lang' => 'en', 'value' => 'Sign up for free and set your store name in under a minute.'],
+            ['section' => 'how_it_works', 'field' => 'step2_title', 'lang' => 'ar', 'value' => 'اختر قالباً وأضف منتجاتك'],
+            ['section' => 'how_it_works', 'field' => 'step2_title', 'lang' => 'en', 'value' => 'Pick a theme and add products'],
+            ['section' => 'how_it_works', 'field' => 'step2_desc', 'lang' => 'ar', 'value' => 'خصّص المظهر، ارفع الصور، وفعّل وسائل الدفع والشحن.'],
+            ['section' => 'how_it_works', 'field' => 'step2_desc', 'lang' => 'en', 'value' => 'Customize the look, upload images, and enable payments and shipping.'],
+            ['section' => 'how_it_works', 'field' => 'step3_title', 'lang' => 'ar', 'value' => 'انشر وابدأ البيع'],
+            ['section' => 'how_it_works', 'field' => 'step3_title', 'lang' => 'en', 'value' => 'Publish and start selling'],
+            ['section' => 'how_it_works', 'field' => 'step3_desc', 'lang' => 'ar', 'value' => 'شارك رابط متجرك أو اربط دومينك الخاص واستقبل الطلبات.'],
+            ['section' => 'how_it_works', 'field' => 'step3_desc', 'lang' => 'en', 'value' => 'Share your store link or connect your domain and receive orders.'],
 
             // ===== STATS SECTION =====
             ['section' => 'stats', 'field' => 'stat1_number', 'lang' => 'ar', 'value' => '99.9%'],
@@ -230,6 +288,12 @@ class Landing2TranslationsSeeder extends Seeder
             ['section' => 'footer', 'field' => 'brand_desc', 'lang' => 'en', 'value' => 'The leading platform for empowering merchants in the Arab world'],
             ['section' => 'footer', 'field' => 'copyright', 'lang' => 'ar', 'value' => '© 2026 Matjar Hub. جميع الحقوق محفوظة.'],
             ['section' => 'footer', 'field' => 'copyright', 'lang' => 'en', 'value' => '© 2026 Matjar Hub. All rights reserved.'],
+            ['section' => 'footer', 'field' => 'explore_title', 'lang' => 'ar', 'value' => 'استكشف'],
+            ['section' => 'footer', 'field' => 'explore_title', 'lang' => 'en', 'value' => 'Explore'],
+            ['section' => 'footer', 'field' => 'support_title', 'lang' => 'ar', 'value' => 'الدعم'],
+            ['section' => 'footer', 'field' => 'support_title', 'lang' => 'en', 'value' => 'Support'],
+            ['section' => 'footer', 'field' => 'help_center', 'lang' => 'ar', 'value' => 'مركز الدعم'],
+            ['section' => 'footer', 'field' => 'help_center', 'lang' => 'en', 'value' => 'Help Center'],
 
             // ===== META =====
             ['section' => 'meta', 'field' => 'page_title', 'lang' => 'ar', 'value' => 'Matjar Hub - منصة التجارة الإلكترونية المتكاملة'],
@@ -237,7 +301,14 @@ class Landing2TranslationsSeeder extends Seeder
         ];
 
         foreach ($translations as $translation) {
-            Landing2Translation::create($translation);
+            Landing2Translation::updateOrCreate(
+                [
+                    'section' => $translation['section'],
+                    'field' => $translation['field'],
+                    'lang' => $translation['lang'],
+                ],
+                ['value' => $translation['value']]
+            );
         }
     }
 }

@@ -7,36 +7,51 @@
     }
 @endphp
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="text-capitalize fw-600 text-dark color-changer fs-4">{{ trans('labels.products') }}</h5>
-        <div class="d-flex">
-            <div class="d-flex align-items-center" style="gap: 10px;">
-                <!-- Bulk Delete Button -->
-                @if (@helper::checkaddons('bulk_delete'))
-                    <button id="bulkDeleteBtn"
-                        @if (env('Environment')=='sendbox' ) onclick="myFunction()" @else onclick="deleteSelected('{{ URL::to('admin/products/bulk_delete') }}')" @endif class="btn btn-danger hov btn-sm d-none d-flex" tooltip="{{ trans('labels.delete') }}">
-                        <i class="fa-regular fa-trash"></i>
-                    </button>
-                @endif
-                <a href="{{ URL::to('admin/products/add') }}"
-                    class="btn btn-secondary px-sm-4 d-flex {{ Auth::user()->type == 4 ? (helper::check_access('role_products', Auth::user()->role_id, $vendor_id, 'add') == 1 ? '' : 'd-none') : '' }}">
-                    <i class="fa-regular fa-plus mx-1"></i>{{ trans('labels.add') }}
-                </a>
-            </div>
-            @if (@helper::checkaddons('product_import'))
-                @if ($getproductslist->count() > 0)
-                    <a href="{{ URL::to('/admin/exportproduct') }}"
-                        class="btn btn-secondary px-sm-4 d-flex {{ Auth::user()->type == 4 ? (helper::check_access('role_products', Auth::user()->role_id, $vendor_id, 'add') == 1 ? '' : 'd-none') : '' }} mx-2">{{ trans('labels.export') }}</a>
-                @endif
+    @php
+        $can_add = Auth::user()->type == 4 ? helper::check_access('role_products', Auth::user()->role_id, $vendor_id, 'add') == 1 : true;
+    @endphp
+    <style>
+        .prod-toolbar { gap: 12px; }
+        .prod-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+        .prod-actions .pa-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 10px; font-size: 14px; font-weight: 600; white-space: nowrap; line-height: 1; transition: all .2s ease; }
+        .prod-actions .pa-btn i { font-size: 15px; }
+        .prod-actions .pa-btn:hover { transform: translateY(-1px); }
+        .prod-actions .pa-light { background: #fff; color: #334155; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(15, 23, 42, .05); }
+        .prod-actions .pa-light:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; box-shadow: 0 4px 12px rgba(15, 23, 42, .08); }
+        .prod-actions .pa-ig i { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .prod-actions .pa-menu i { color: #0f766e; }
+        .prod-actions .pa-export i { color: #64748b; }
+        .prod-actions .pa-icon { width: 40px; padding: 0; }
+        .dark .prod-actions .pa-light, [data-bs-theme="dark"] .prod-actions .pa-light { background: rgba(255, 255, 255, .06); color: #e2e8f0; border-color: rgba(255, 255, 255, .12); }
+    </style>
+    <div class="prod-toolbar d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h5 class="text-capitalize fw-600 text-dark color-changer fs-4 mb-0">{{ trans('labels.products') }}</h5>
+        <div class="prod-actions">
+            @if (@helper::checkaddons('bulk_delete'))
+                <button id="bulkDeleteBtn"
+                    @if (env('Environment')=='sendbox' ) onclick="myFunction()" @else onclick="deleteSelected('{{ URL::to('admin/products/bulk_delete') }}')" @endif class="btn btn-danger pa-btn pa-icon d-none" tooltip="{{ trans('labels.delete') }}">
+                    <i class="fa-regular fa-trash"></i>
+                </button>
             @endif
-            
-            <button type="button" class="btn btn-secondary px-sm-4 d-flex mx-2 {{ Auth::user()->type == 4 ? (helper::check_access('role_products', Auth::user()->role_id, $vendor_id, 'add') == 1 ? '' : 'd-none') : '' }}" style="background: linear-gradient(135deg, #e1306c, #c13584); border: none; color: white;" data-bs-toggle="modal" data-bs-target="#instagramImportModal">
-                <i class="fa-brands fa-instagram mx-1" style="margin-top: 2px;"></i> {{ trans('labels.import_from_instagram') }}
-            </button>
-
-
+            @if ($can_add)
+                <button type="button" class="btn pa-btn pa-light pa-ig" data-bs-toggle="modal" data-bs-target="#instagramImportModal">
+                    <i class="fa-brands fa-instagram"></i>{{ trans('labels.import_from_instagram') }}
+                </button>
+                @if (helper::is_menu_store($vendor_id))
+                    <a href="{{ URL::to('admin/products/menu-import') }}" class="btn pa-btn pa-light pa-menu">
+                        <i class="fa-regular fa-image"></i>{{ trans('labels.import_menu') }}
+                    </a>
+                @endif
+                @if (@helper::checkaddons('product_import') && $getproductslist->count() > 0)
+                    <a href="{{ URL::to('/admin/exportproduct') }}" class="btn pa-btn pa-light pa-export">
+                        <i class="fa-regular fa-file-export"></i>{{ trans('labels.export') }}
+                    </a>
+                @endif
+                <a href="{{ URL::to('admin/products/add') }}" class="btn btn-secondary pa-btn">
+                    <i class="fa-regular fa-plus"></i>{{ trans('labels.add') }}
+                </a>
+            @endif
         </div>
-
     </div>
     <div class="row">
 
@@ -177,7 +192,7 @@
                         .ig-post-card { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.02); cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; }
                         .ig-post-card:hover { border-color: rgba(99, 102, 241, 0.5); transform: translateY(-3px); background: rgba(255, 255, 255, 0.04); }
                         .ig-post-card.picked { border-color: #6366f1; background: rgba(99, 102, 241, 0.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
-                        .ig-post-card.picked::after { content: '\f00c'; font-family: "Font Awesome 6 Free", sans-serif; font-weight: 900; position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; background: #6366f1; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+                        .ig-post-card.picked::after { content: ''; position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; background: #6366f1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 14px no-repeat; border: 2px solid #fff; border-radius: 50%; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.35); }
                         .ig-post-img { width: 100%; height: 140px; object-fit: cover; }
                         .ig-post-body { padding: 10px; flex: 1; }
                         .ig-post-caption { font-size: 0.75rem; color: #cbd5e1; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }

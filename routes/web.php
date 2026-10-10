@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\PlanPricingController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\MenuImportController;
 use App\Http\Controllers\admin\MediaController;
 use App\Http\Controllers\admin\StoreCategoryController;
 use App\Http\Controllers\admin\WebSettingsController;
@@ -378,6 +379,11 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin'], function () {
                 Route::get('/variants/edit/{product_id}', [ProductController::class, 'productVariantsEdit']);
                 Route::post('/reorder_image-{item_id}', [ProductController::class, 'reorder_image']);
                 Route::get('bulk_delete', [ProductController::class, 'bulk_delete_product']);
+                // Menu image OCR import (restaurant/café OR Theme 16)
+                Route::get('menu-import', [MenuImportController::class, 'showUpload']);
+                Route::post('menu-import/process', [MenuImportController::class, 'process']);
+                Route::get('menu-import/review/{token}', [MenuImportController::class, 'review']);
+                Route::post('menu-import/confirm/{token}', [MenuImportController::class, 'confirm']);
             });
 
             // Media

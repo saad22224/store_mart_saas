@@ -1,4 +1,6 @@
-CKEDITOR.replace("cname_text");
+if (document.getElementById("cname_text") && typeof CKEDITOR !== "undefined") {
+  CKEDITOR.replace("cname_text");
+}
 $(".basicinfo").on("click", function () {
   "use strict";
   $("#settingmenuContent").find(".card").attr("style", "");

@@ -27,10 +27,10 @@ use App\Models\Faq;
 use App\Models\AppSettings;
 use App\Models\Contact;
 use App\Models\Theme;
+use App\Models\VendorTheme;
 use App\Helpers\helper;
 use App\Models\HowWorks;
 use App\Models\FunFact;
-use App\Models\Landing2Settings;
 use App\Models\Landing2Translation;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -51,7 +51,12 @@ class HomeController extends Controller
         // Get all translations for the current language
         $translations = Landing2Translation::getAll($lang);
 
-        return view('landing2.index', compact('translations', 'lang', 'planlist'));
+        $themes = VendorTheme::where('is_active', 1)
+            ->orderBy('reorder_id')
+            ->orderByDesc('id')
+            ->get(['id', 'name', 'image', 'preview_link', 'reorder_id']);
+
+        return view('landing2.index', compact('translations', 'lang', 'planlist', 'themes'));
     }
 
     public function help(Request $request)

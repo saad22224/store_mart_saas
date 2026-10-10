@@ -287,21 +287,15 @@
         }
 
         .ig-post-card.picked::after {
-            content: '\f00c';
-            font-family: "Font Awesome 6 Free", sans-serif;
-            font-weight: 900;
+            content: '';
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 24px;
-            height: 24px;
-            background: #6366f1;
-            color: #fff;
+            width: 26px;
+            height: 26px;
+            background: #6366f1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 14px no-repeat;
+            border: 2px solid #fff;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
             z-index: 2;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }

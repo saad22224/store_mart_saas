@@ -1,5 +1,7 @@
 @php
-    /* ─── Price calculation (identical to template-7) ─── */
+    $cartdata = $cartdata ?? collect();
+    $key = $key ?? 0;
+
     if ($item->top_deals == 1 && helper::top_deals($storeinfo->id) != null) {
         $deal = helper::top_deals($storeinfo->id);
         if ($item['variation']->count() > 0) {
@@ -17,10 +19,10 @@
         }
     } else {
         if ($item['variation']->count() > 0) {
-            $price          = $item['variation'][0]->price;
+            $price = $item['variation'][0]->price;
             $original_price = $item['variation'][0]->original_price;
         } else {
-            $price          = $item->item_price;
+            $price = $item->item_price;
             $original_price = $item->item_original_price;
         }
     }
@@ -28,159 +30,88 @@
         ? number_format(100 - ($price * 100) / $original_price, 0)
         : 0;
 
-    /* ─── Cart state from current session ─── */
     $cartQty = 0;
-    $cartId  = null;
+    $cartId = null;
     foreach ($cartdata as $ci) {
-        if ($ci->item_id == $item->id) {
+        if ((int) $ci->item_id === (int) $item->id) {
             $cartQty += $ci->qty;
-            $cartId   = $cartId ?? $ci->id;
+            $cartId = $cartId ?? $ci->id;
         }
     }
 
-    $imgSrc    = (@$item['product_image']->image)
-        ? helper::image_path($item['product_image']->image)
+    $imgFile = $item['product_image']?->image ?? ($item->image ?? null);
+    $imgSrc = $imgFile
+        ? helper::image_path($imgFile)
         : url(env('ASSETPATHURL').'admin-assets/images/about/defaultimages/item-placeholder.png');
 
-    $stockMgmt  = $item->stock_management ?? 0;
-    $isOut      = ($stockMgmt == 1 && helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1);
+    $stockMgmt = $item->stock_management ?? 0;
+    $isOut = ($stockMgmt == 1 && helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1);
     $onlineOrder = helper::appdata($storeinfo->id)->online_order;
-
-    /* unique id for this card's DOM elements */
-    $uid = 't16_' . $item->id;
+    $uid = 't16_'.$item->id;
+    $desc = ! empty($item->description) ? \Illuminate\Support\Str::limit(strip_tags($item->description), 90) : '';
 @endphp
 
-<style>
-    /* ── Product card specific animations ── */
-    #t16card_{{ $item->id }} {
-        animation: t16CardEntrance .5s ease both;
-        animation-delay: {{ (is_numeric($key) ? ($key % 10) : (crc32($key) % 10)) * 0.05 }}s;
-    }
-    @keyframes t16CardEntrance {
-        from { opacity: 0; transform: translateY(20px) scale(0.95); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-</style>
+<article class="t16-card" id="t16card_{{ $item->id }}" data-name="{{ mb_strtolower($item->item_name) }}"
+    style="animation-delay: {{ (is_numeric($key) ? ($key % 10) : 0) * 0.05 }}s;">
+    <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-card-media">
+        <img src="{{ $imgSrc }}" alt="{{ $item->item_name }}" loading="lazy">
+        @if ($off > 0)
+            <span class="t16-card-off">-{{ $off }}%</span>
+        @endif
+    </a>
 
-<div class="t16-card" id="t16card_{{ $item->id }}">
-
-    {{-- ── Image ── --}}
-    <div class="t16-card-img">
-        <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}">
-            <img src="{{ $imgSrc }}" alt="{{ $item->item_name }}" loading="lazy">
-        </a>
-    </div>
-
-    {{-- ── Body ── --}}
     <div class="t16-card-body">
-        <div>
-            {{-- Name --}}
-            <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" style="text-decoration:none;">
-                <div class="t16-card-name">{{ $item->item_name }}</div>
-            </a>
+        <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-card-name">{{ $item->item_name }}</a>
+        @if ($desc !== '')
+            <p class="t16-card-desc">{{ $desc }}</p>
+        @endif
 
-            {{-- Description --}}
-            @if(!empty($item->description))
-                <div class="t16-card-desc">{!! Str::limit(strip_tags($item->description), 80) !!}</div>
-            @endif
-
-            {{-- Rating --}}
-            @if(@helper::checkaddons('product_reviews') && helper::appdata($storeinfo->id)->product_ratting_switch == 1 && $item->ratings_average > 0)
-                <div style="margin-top:4px;font-size:.75rem;display:flex;align-items:center;gap:3px;">
-                    <i class="fa-solid fa-star" style="color:#f59e0b;"></i>
-                    <span style="color:#666;">{{ number_format($item->ratings_average, 1) }}</span>
-                </div>
-            @endif
-        </div>
-
-        {{-- ── Footer: price + action ── --}}
         <div class="t16-card-footer">
-            <div>
-                {{-- Price --}}
-                <span class="t16-price">
-                    {{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}
-                </span>
-                @if($off > 0)
-                    <span class="t16-old-price">
-                        {{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}
-                    </span>
-                    <span class="t16-off-badge">-{{ $off }}%</span>
-                @endif
-
-                {{-- Stock status --}}
-                @if($isOut)
-                    <div class="t16-out-stock mt-1">
-                        <i class="fa-solid fa-circle" style="font-size:7px;"></i>
-                        {{ trans('labels.out_of_stock') }}
-                    </div>
-                @elseif($stockMgmt == 1)
-                    <div class="t16-in-stock mt-1">
-                        <i class="fa-solid fa-circle" style="font-size:7px;"></i>
-                        {{ trans('labels.in_stock') }}
-                    </div>
+            <div class="t16-card-price-wrap">
+                <span class="t16-price">{{ helper::currency_formate($price, $storeinfo->id, $item->currency) }}</span>
+                @if ($off > 0)
+                    <span class="t16-old-price">{{ helper::currency_formate($original_price, $storeinfo->id, $item->currency) }}</span>
                 @endif
             </div>
 
-            {{-- ── Cart action ── --}}
-            @if($onlineOrder == 1 && !$isOut)
+            @if ($onlineOrder == 1 && ! $isOut)
+                <input type="hidden" id="{{ $uid }}_cartid" value="{{ $cartId }}">
+                <input type="hidden" id="{{ $uid }}_price" value="{{ $price }}">
+                <input type="hidden" id="{{ $uid }}_tax" value="{{ $item->tax }}">
+                <input type="hidden" id="{{ $uid }}_image" value="{{ $imgFile }}">
+                <input type="hidden" id="{{ $uid }}_name" value="{{ addslashes($item->item_name) }}">
+                <input type="hidden" id="{{ $uid }}_stock" value="{{ $stockMgmt }}">
+                <input type="hidden" id="{{ $uid }}_min" value="{{ $item->min_order ?? 0 }}">
+                <input type="hidden" id="{{ $uid }}_max" value="{{ $item->max_order ?? 0 }}">
+                <input type="hidden" id="{{ $uid }}_vendor" value="{{ $storeinfo->id }}">
 
-                {{-- Hidden data fields --}}
-                <input type="hidden" id="{{ $uid }}_cartid"  value="{{ $cartId }}">
-                <input type="hidden" id="{{ $uid }}_price"   value="{{ $price }}">
-                <input type="hidden" id="{{ $uid }}_tax"     value="{{ $item->tax }}">
-                <input type="hidden" id="{{ $uid }}_image"   value="{{ @$item['product_image']->image }}">
-                <input type="hidden" id="{{ $uid }}_name"    value="{{ addslashes($item->item_name) }}">
-                <input type="hidden" id="{{ $uid }}_stock"   value="{{ $stockMgmt }}">
-                <input type="hidden" id="{{ $uid }}_min"     value="{{ $item->min_order ?? 0 }}">
-                <input type="hidden" id="{{ $uid }}_max"     value="{{ $item->max_order ?? 0 }}">
-                <input type="hidden" id="{{ $uid }}_vendor"  value="{{ $storeinfo->id }}">
-                <input type="hidden" id="{{ $uid }}_slug"    value="{{ $item->slug }}">
-                <input type="hidden" id="{{ $uid }}_qty"     value="{{ $cartQty }}">
-
-                @if($item->has_variants == 1)
-                    {{-- Variant product: go to detail page to choose variant --}}
-                    <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}"
-                       class="t16-add-btn" style="display:flex;text-decoration:none;">
-                        <i class="fa-regular fa-sliders" style="font-size:12px;"></i>
-                        {{ trans('labels.view') ?? 'الخيارات' }}
+                @if ($item->has_variants == 1)
+                    <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-add-btn">
+                        <i class="fa-regular fa-sliders"></i>
+                        <span>{{ App::getLocale() == 'ar' ? 'الخيارات' : 'Options' }}</span>
                     </a>
                 @else
-                {{-- "Add" button: visible when qty=0 --}}
-                <button class="t16-add-btn"
-                        id="{{ $uid }}_addbtn"
-                        style="{{ $cartQty > 0 ? 'display:none;' : 'display:flex;' }}"
+                    <button type="button" class="t16-add-btn" id="{{ $uid }}_addbtn"
+                        style="{{ $cartQty > 0 ? 'display:none;' : '' }}"
                         onclick="t16AddFirst('{{ $item->id }}')">
-                    <i class="fa-regular fa-cart-shopping" style="font-size:12px;"></i>
-                    {{ trans('labels.add') ?? 'إضافة' }}
-                </button>
-
-                {{-- Stepper: visible when qty>0 --}}
-                <div class="t16-qty"
-                     id="{{ $uid }}_stepper"
-                     style="{{ $cartQty > 0 ? 'display:flex;' : 'display:none;' }}">
-                    <button class="t16-qty-btn minus"
-                            onclick="t16Decrement('{{ $item->id }}')">−</button>
-                    <span class="t16-qty-num"
-                          id="{{ $uid }}_qtynum">{{ max(1, $cartQty) }}</span>
-                    <button class="t16-qty-btn plus"
-                            onclick="t16Increment('{{ $item->id }}')">⁺</button>
-                </div>
+                        <i class="fa-regular fa-plus"></i>
+                        <span>{{ trans('labels.add') }}</span>
+                    </button>
+                    <div class="t16-qty" id="{{ $uid }}_stepper"
+                        style="{{ $cartQty > 0 ? 'display:flex;' : 'display:none;' }}">
+                        <button type="button" class="t16-qty-btn" onclick="t16Decrement('{{ $item->id }}')">−</button>
+                        <span class="t16-qty-num" id="{{ $uid }}_qtynum">{{ max(1, $cartQty) }}</span>
+                        <button type="button" class="t16-qty-btn" onclick="t16Increment('{{ $item->id }}')">+</button>
+                    </div>
                 @endif
-
-            @elseif($onlineOrder == 1 && $isOut)
-                <button class="t16-add-btn" style="opacity:.45;cursor:not-allowed;" disabled>
-                    <i class="fa-regular fa-ban" style="font-size:12px;"></i>
-                    {{ trans('labels.out_of_stock') }}
-                </button>
+            @elseif ($onlineOrder == 1 && $isOut)
+                <span class="t16-out-badge">{{ trans('labels.out_of_stock') }}</span>
             @else
-                {{-- View product modal (no online ordering) --}}
-                <button class="t16-add-btn"
-                        id="iconverifybtn_t16_{{ $item->id }}"
-                        onclick="GetProductOverview('{{ $item->slug }}', 'iconverifybtn_t16_{{ $item->id }}')">
-                    <i class="fa-regular fa-eye" style="font-size:12px;"></i>
-                    {{ trans('labels.view') ?? 'عرض' }}
-                </button>
+                <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-add-btn">
+                    <i class="fa-regular fa-eye"></i>
+                    <span>{{ trans('labels.view') }}</span>
+                </a>
             @endif
         </div>
     </div>
-</div>
+</article>

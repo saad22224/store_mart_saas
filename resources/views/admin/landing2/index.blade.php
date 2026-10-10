@@ -47,7 +47,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            @foreach(['home', 'who_we_are', 'why_us', 'faq', 'contact', 'start_now'] as $field)
+                            @foreach(['home', 'who_we_are', 'why_us', 'themes', 'how_it_works', 'pricing', 'faq', 'contact', 'login', 'create_account', 'start_now'] as $field)
                             <div class="col-md-4 form-group mb-3">
                                 <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (AR)</label>
                                 <input type="text" name="translations[nav][{{ $field }}][ar]" class="form-control" 
@@ -371,6 +371,88 @@
                             </div>
                         </div>
                         @endfor
+                    </div>
+                </div>
+            </div>
+
+            {{-- ===== MARQUEE ===== --}}
+            <div class="col-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h6 class="fw-600 text-primary mb-0">
+                            <i class="fa-solid fa-scroll me-2"></i>Marquee / Ticker
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (['item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9'] as $field)
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (AR)</label>
+                                    <input type="text" name="translations[marquee][{{ $field }}][ar]" class="form-control"
+                                        value="{{ @$translations['marquee'][$field]['ar']['value'] ?? '' }}">
+                                </div>
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (EN)</label>
+                                    <input type="text" name="translations[marquee][{{ $field }}][en]" class="form-control"
+                                        value="{{ @$translations['marquee'][$field]['en']['value'] ?? '' }}">
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ===== THEMES SECTION ===== --}}
+            <div class="col-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h6 class="fw-600 text-primary mb-0">
+                            <i class="fa-solid fa-palette me-2"></i>Themes Showcase
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted fs-7 mb-3">Theme cards are loaded automatically from Admin → Themes. Edit section titles here only.</p>
+                        <div class="row">
+                            @foreach (['title', 'subtitle', 'empty', 'preview_btn'] as $field)
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (AR)</label>
+                                    <input type="text" name="translations[themes][{{ $field }}][ar]" class="form-control"
+                                        value="{{ @$translations['themes'][$field]['ar']['value'] ?? '' }}">
+                                </div>
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (EN)</label>
+                                    <input type="text" name="translations[themes][{{ $field }}][en]" class="form-control"
+                                        value="{{ @$translations['themes'][$field]['en']['value'] ?? '' }}">
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ===== HOW IT WORKS ===== --}}
+            <div class="col-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h6 class="fw-600 text-primary mb-0">
+                            <i class="fa-solid fa-list-ol me-2"></i>How It Works
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (['title', 'subtitle', 'step1_title', 'step1_desc', 'step2_title', 'step2_desc', 'step3_title', 'step3_desc'] as $field)
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (AR)</label>
+                                    <input type="text" name="translations[how_it_works][{{ $field }}][ar]" class="form-control"
+                                        value="{{ @$translations['how_it_works'][$field]['ar']['value'] ?? '' }}">
+                                </div>
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (EN)</label>
+                                    <input type="text" name="translations[how_it_works][{{ $field }}][en]" class="form-control"
+                                        value="{{ @$translations['how_it_works'][$field]['en']['value'] ?? '' }}">
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -783,6 +865,18 @@
                                 <input type="text" name="translations[footer][copyright][en]" class="form-control" 
                                     value="{{ @$translations['footer']['copyright']['en']['value'] ?? '' }}">
                             </div>
+                            @foreach (['explore_title', 'support_title', 'help_center'] as $field)
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (AR)</label>
+                                    <input type="text" name="translations[footer][{{ $field }}][ar]" class="form-control"
+                                        value="{{ @$translations['footer'][$field]['ar']['value'] ?? '' }}">
+                                </div>
+                                <div class="col-md-6 form-group mb-3">
+                                    <label class="fw-500 text-capitalize">{{ str_replace('_', ' ', $field) }} (EN)</label>
+                                    <input type="text" name="translations[footer][{{ $field }}][en]" class="form-control"
+                                        value="{{ @$translations['footer'][$field]['en']['value'] ?? '' }}">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

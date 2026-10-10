@@ -6,6 +6,9 @@
         $vendor_id = Auth::user()->id;
     }
     $user = App\Models\User::where('id', $vendor_id)->first();
+    // Settings cleanup: keep only basicinfo, editprofile, changepasssword, delete_profile, maintenance_mode.
+    // Set true to restore hidden sections without deleting their implementation.
+    $settings_show_extras = false;
 @endphp
 
 @section('content')
@@ -20,7 +23,7 @@
                         aria-current="true">{{ trans('labels.basic_info') }}
                         <i class="fa-regular fa-angle-{{ session()->get('direction') == '2' ? 'left' : 'right' }}"></i>
                     </a>
-                    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                    @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                         @if (count(@helper::checkthemeaddons('theme_')) > 0)
                             <a href="#theme_images" data-tab="theme_images"
                                 class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
@@ -41,7 +44,7 @@
                         <i class="fa-regular fa-angle-{{ session()->get('direction') == '2' ? 'left' : 'right' }}"></i>
                     </a>
 
-                    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                    @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                         @if (@helper::checkaddons('whatsapp_message'))
                             <a href="#whatsappmessagesettings" data-tab="whatsappmessagesettings"
                                 class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
@@ -69,7 +72,7 @@
                             </a>
                         @endif
                     @endif
-                    @if (@helper::checkaddons('email_settings'))
+                    @if ($settings_show_extras && @helper::checkaddons('email_settings'))
                         <a href="#email_settings" data-tab="email_settings"
                             class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
                             aria-current="true">{{ trans('labels.email_settings') }}
@@ -94,7 +97,7 @@
                         </a>
                     @endif
 
-                    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                    @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                         @if (@helper::checkaddons('tawk_addons'))
                             <a href="#tawk_settings" data-tab="tawk_settings"
                                 class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
@@ -122,7 +125,7 @@
                             </a>
                         @endif
                     @endif
-                    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                    @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                         @if (@helper::checkaddons('wizz_chat'))
                             <a href="#wizz_chat_settings" data-tab="wizz_chat_settings"
                                 class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
@@ -138,6 +141,7 @@
                         @endif
                     @endif
                     @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
+                        @if ($settings_show_extras)
                         @if (@helper::checkaddons('subscription'))
                             @if (@helper::checkaddons('pixel'))
                                 @php
@@ -355,6 +359,7 @@
                             <i
                                 class="fa-regular fa-angle-{{ session()->get('direction') == '2' ? 'left' : 'right' }}"></i>
                         </a>
+                        @endif {{-- end $settings_show_extras vendor nav --}}
                         <a href="#delete_profile" data-tab="delete_profile"
                             class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
                             aria-current="true">{{ trans('labels.delete_profile') }}
@@ -368,7 +373,7 @@
                         <i class="fa-regular fa-angle-{{ session()->get('direction') == '2' ? 'left' : 'right' }}"></i>
                     </a>
 
-                    @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                    @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                         <a href="#notice_mode" data-tab="notice_mode"
                             class="list-group-item basicinfo p-3 list-item-secondary d-flex justify-content-between align-items-center"
                             aria-current="true">{{ trans('labels.notice') }}
@@ -1065,7 +1070,7 @@
                         </div>
                     </div>
                 </div>
-                @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                     @if (count(@helper::checkthemeaddons('theme_')) > 0)
                         <div id="theme_images">
                             <div class="row mb-5">
@@ -1284,7 +1289,7 @@
                         </div>
                     </div>
                 </div>
-                @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                     @if (@helper::checkaddons('whatsapp_message'))
                         @include('admin.included.whatsapp_message.admin_setting_form')
                     @endif
@@ -1292,11 +1297,11 @@
                         @include('admin.cookie_recaptcha.setting_form')
                     @endif
                 @endif
-                @if (@helper::checkaddons('email_settings'))
+                @if ($settings_show_extras && @helper::checkaddons('email_settings'))
                     @include('admin.emailsettings.email_setting')
                     @include('admin.email_template.setting_form')
                 @endif
-                @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                     @if (@helper::checkaddons('tawk_addons'))
                         @include('admin.tawk_settings.index')
                     @endif
@@ -1311,6 +1316,7 @@
                 @endif
 
                 @if (Auth::user()->type == 2 || (Auth::user()->type == 4 && Auth::user()->vendor_id != 1))
+                    @if ($settings_show_extras)
                     @if (@helper::checkaddons('subscription'))
                         @if (@helper::checkaddons('pixel'))
                             @php
@@ -1593,6 +1599,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif {{-- end $settings_show_extras vendor content --}}
                     <div id="delete_profile">
                         <div class="row mb-5">
                             <div class="col-12">
@@ -1712,7 +1719,7 @@
                     </div>
                 </div>
 
-                @if (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1))
+                @if ($settings_show_extras && (Auth::user()->type == 1 || (Auth::user()->type == 4 && Auth::user()->vendor_id == 1)))
                     <div id="notice_mode">
                         <div class="row mb-5">
                             <div class="col-12">
@@ -1786,6 +1793,7 @@
             </div>
         </div>
     </div>
+    @if ($settings_show_extras)
     {{-- EDIT THEME IMAGE MODAL --}}
     <div class="modal modal-fade-transform" id="editModal" tabindex="-1" aria-labelledby="editModallable"
         aria-hidden="true">
@@ -1812,6 +1820,7 @@
             </div>
         </div>
     </div>
+    @endif
 @endsection
 @section('scripts')
     <script>

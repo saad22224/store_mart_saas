@@ -125,7 +125,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
             width: 100%;
+            min-width: 0;
+        }
+
+        .nav-logo {
+            flex-shrink: 0;
         }
 
         .nav-logo img {
@@ -137,11 +143,14 @@
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            justify-content: center;
+            gap: 1.1rem;
+            flex: 1 1 auto;
+            min-width: 0;
         }
 
         .nav-links a {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #334155;
             text-decoration: none;
@@ -202,6 +211,225 @@
         .btn-primary:hover {
             opacity: 0.95;
             transform: translateY(-1px);
+        }
+
+        .nav-hamburger {
+            width: 2.5rem;
+            height: 2.5rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            transition: background 0.2s ease;
+        }
+
+        @media (max-width: 1279.98px) {
+            .nav-hamburger { display: inline-flex; }
+        }
+
+        @media (min-width: 1280px) {
+            .nav-hamburger { display: none !important; }
+        }
+
+        .nav-hamburger:hover {
+            background: #F1F5F9;
+        }
+
+        /* ===== Side Drawer Menu ===== */
+        .nav-drawer-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+            z-index: 9998;
+        }
+
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            inset-inline-end: 0;
+            width: min(360px, 88vw);
+            max-width: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            z-index: 9999;
+            box-shadow: -24px 0 60px rgba(15, 23, 42, 0.18);
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.42s;
+            will-change: transform;
+            overscroll-behavior: contain;
+        }
+
+        [dir="rtl"] .nav-drawer {
+            transform: translateX(-100%);
+            box-shadow: 24px 0 60px rgba(15, 23, 42, 0.18);
+        }
+
+        .nav-drawer-open .nav-drawer-backdrop {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-drawer-open .nav-drawer,
+        [dir="rtl"] .nav-drawer-open .nav-drawer {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .nav-drawer-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.1rem 1.25rem;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .nav-drawer-logo img {
+            height: 36px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-drawer-close {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 1px solid #E2E8F0;
+            background: #fff;
+            color: #0F172A;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .nav-drawer-close:hover {
+            background: #F1F5F9;
+            transform: rotate(90deg);
+        }
+
+        .nav-drawer-links {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #E2E8F0 transparent;
+            padding: 0.9rem 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .nav-drawer-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 0.95rem;
+            border-radius: 0.9rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1E293B;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            opacity: 0;
+            transform: translateX(14px);
+        }
+
+        [dir="rtl"] .nav-drawer-links a {
+            transform: translateX(-14px);
+        }
+
+        .nav-drawer-open .nav-drawer-links a {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.35s ease var(--d, 0s), transform 0.35s ease var(--d, 0s), background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-drawer-links a:nth-child(1) { --d: 0.08s; }
+        .nav-drawer-links a:nth-child(2) { --d: 0.12s; }
+        .nav-drawer-links a:nth-child(3) { --d: 0.16s; }
+        .nav-drawer-links a:nth-child(4) { --d: 0.20s; }
+        .nav-drawer-links a:nth-child(5) { --d: 0.24s; }
+        .nav-drawer-links a:nth-child(6) { --d: 0.28s; }
+        .nav-drawer-links a:nth-child(7) { --d: 0.32s; }
+        .nav-drawer-links a:nth-child(8) { --d: 0.36s; }
+
+        .nav-drawer-links a .material-symbols-outlined {
+            font-size: 1.3rem;
+            color: #64748B;
+            transition: color 0.2s ease;
+        }
+
+        .nav-drawer-links a:hover,
+        .nav-drawer-links a.active {
+            background: #ECFDF5;
+            color: #0D8D6B;
+        }
+
+        .nav-drawer-links a:hover .material-symbols-outlined,
+        .nav-drawer-links a.active .material-symbols-outlined {
+            color: #15AC82;
+        }
+
+        .nav-drawer-foot {
+            padding: 1rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+            border-top: 1px solid #F1F5F9;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            background: #F8FAFC;
+        }
+
+        .nav-drawer-lang {
+            display: flex;
+            background: #E2E8F0;
+            border-radius: 9999px;
+            padding: 0.25rem;
+            gap: 0.25rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .nav-drawer-lang a {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-drawer-lang a.is-active {
+            background: #fff;
+            color: #0D8D6B;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+        }
+
+        .nav-drawer-btn {
+            width: 100%;
+            min-height: 2.75rem;
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+
+        body.nav-drawer-open {
+            overflow: hidden;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .nav-drawer,
+            .nav-drawer-backdrop,
+            .nav-drawer-links a {
+                transition: none !important;
+            }
         }
 
         /* ===== Infinite Marquee Ticker Bar ===== */
@@ -1468,7 +1696,7 @@
                 </a>
             </div>
 
-            <div class="nav-links hidden lg:flex">
+            <div class="nav-links hidden xl:flex">
                 <a href="#" class="active">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
                 <a href="#why-us">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
                 <a href="#themes">{{ @$translations['nav']['themes'] ?? 'القوالب' }}</a>
@@ -1479,9 +1707,9 @@
                 <a href="#contact">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
             </div>
 
-            <div class="flex items-center gap-2.5">
+            <div class="flex items-center gap-2.5 shrink-0">
                 {{-- Language Switcher --}}
-                <div class="lang-switcher hidden lg:block relative">
+                <div class="lang-switcher hidden xl:block relative">
                     <button type="button" class="lang-btn px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-200 transition flex items-center gap-1.5" onclick="toggleLangMenu()">
                         <span class="material-symbols-outlined text-base">language</span>
                         <span>{{ $lang == 'ar' ? 'العربية' : 'English' }}</span>
@@ -1502,114 +1730,73 @@
                     </button>
                 </div>
 
-                <span class="material-symbols-outlined nav-hamburger text-slate-800 text-2xl lg:hidden cursor-pointer" onclick="toggleMobileMenu()">menu</span>
+                <button type="button" class="nav-hamburger xl:hidden text-slate-800 cursor-pointer bg-transparent border-0 p-0" onclick="toggleMobileMenu()" aria-controls="mobileMenu" aria-expanded="false" aria-label="Menu">
+                    <span class="material-symbols-outlined text-2xl">menu</span>
+                </button>
             </div>
         </nav>
-
-        {{-- Mobile Menu --}}
-        <div id="mobileMenu" class="mobile-menu"
-            style="
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100vw;
-            height: 100vh;
-            min-height: 100vh;
-            background: #ffffff !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            z-index: 9999;
-            padding: 6rem 2rem 2rem;
-            box-sizing: border-box;
-        ">
-            <div style="display:flex;flex-direction:column;gap:2rem;align-items:center;">
-                <a href="#" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</a>
-                <a href="#why-us" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</a>
-                <a href="#themes" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['themes'] ?? 'القوالب' }}</a>
-                <a href="#how-it-works" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['how_it_works'] ?? ($lang == 'en' ? 'How it works' : 'كيف تبدأ') }}</a>
-                <a href="#pricing" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['pricing'] ?? 'الباقات والتسعير' }}</a>
-                <a href="{{ url('/help') }}" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['support'] ?? ($lang == 'en' ? 'Support Center' : 'مركز الدعم') }}</a>
-                <a href="#faq" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</a>
-                <a href="#contact" onclick="closeMobileMenu()"
-                    style="font-size:1.25rem;font-weight:700;color:#0F172A;text-decoration:none;">{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</a>
-
-                <div
-                    style="display:flex; flex-direction:column; gap: 1rem; width: 100%; max-width: 300px; margin-top: 1rem; align-items: stretch;">
-                    {{-- Mobile Language Switcher --}}
-                    <div class="lang-switcher-mobile" style="position:relative; width: 100%;">
-                        <button type="button" class="lang-btn-mobile" onclick="toggleMobileLangMenu()"
-                            style="
-                            width: 100%;
-                            background: rgba(21, 172, 130, 0.1);
-                            border: 1px solid rgba(21, 172, 130, 0.3);
-                            border-radius: 9999px;
-                            padding: 0.8rem 1.5rem;
-                            font-weight: 700;
-                            color: #15AC82;
-                            cursor: pointer;
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                            font-family: 'Cairo', sans-serif;
-                            font-size: 1.1rem;
-                        ">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span class="material-symbols-outlined" style="font-size: 1.2rem;">language</span>
-                                <span>{{ $lang == 'ar' ? 'العربية' : 'English' }}</span>
-                            </div>
-                            <span class="material-symbols-outlined" style="font-size: 1rem;">expand_more</span>
-                        </button>
-                        <div id="mobileLangMenu"
-                            style="
-                            display: none;
-                            margin-top: 0.5rem;
-                            background: #F8FAFC;
-                            border-radius: 1rem;
-                            border: 1px solid rgba(226, 232, 240, 0.8);
-                            overflow: hidden;
-                            width: 100%;
-                        ">
-                            <a href="?lang=ar" class="lang-option {{ $lang == 'ar' ? 'active' : '' }}"
-                                style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center;">🇸🇦
-                                العربية</a>
-                            <a href="?lang=en" class="lang-option {{ $lang == 'en' ? 'active' : '' }}"
-                                style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #0F172A; font-weight: 600; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.5);">🇬🇧
-                                English</a>
-                        </div>
-                    </div>
-
-                    <button onclick="window.location.href = '{{ url('admin') }}'"
-                        style="background: rgba(21, 172, 130, 0.1); border: 1px solid rgba(21, 172, 130, 0.3); border-radius: 9999px; padding: 0.8rem 1.5rem; font-weight: 700; color: #15AC82; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1.1rem; transition: all 0.2s ease;"
-                        onmouseover="this.style.background='rgba(21, 172, 130, 0.2)'"
-                        onmouseout="this.style.background='rgba(21, 172, 130, 0.1)'">{{ @$translations['nav']['login'] ?? ($lang == 'en' ? 'Login' : 'تسجيل دخول') }}</button>
-                    <button onclick="window.location.href = '{{ url('admin/register') }}'" class="btn-primary"
-                        style="padding: 0.8rem 1.5rem; font-size: 1.1rem; width: 100%;">{{ @$translations['nav']['create_account'] ?? ($lang == 'en' ? 'Create your store free' : 'أنشئ متجرك مجاناً') }}</button>
-                </div>
-            </div>
-            <button onclick="closeMobileMenu()"
-                style="
-                position: absolute;
-                top: 1.5rem;
-                {{ $lang == 'ar' ? 'left' : 'right' }}: 1.5rem;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 0.5rem;
-            ">
-                <span class="material-symbols-outlined" style="font-size: 2rem;color:#0F172A;">close</span>
-            </button>
-        </div>
     </header>
+
+    {{-- Side Drawer Menu (mobile + tablet + small desktop) — outside .site-header because the header is transformed, which would break position:fixed --}}
+        <div id="navDrawerBackdrop" class="nav-drawer-backdrop" onclick="closeMobileMenu()" aria-hidden="true"></div>
+        <aside id="mobileMenu" class="nav-drawer" role="dialog" aria-modal="true" aria-label="{{ $lang == 'en' ? 'Main menu' : 'القائمة الرئيسية' }}">
+            <div class="nav-drawer-head">
+                <a href="{{ url('/') }}" class="nav-drawer-logo" onclick="closeMobileMenu()">
+                    <img src="{{ asset('public/images/matjarhub.png') }}" alt="MatjarHub">
+                </a>
+                <button type="button" class="nav-drawer-close" onclick="closeMobileMenu()" aria-label="{{ $lang == 'en' ? 'Close menu' : 'إغلاق القائمة' }}">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <nav class="nav-drawer-links">
+                <a href="#" onclick="closeMobileMenu()" class="active">
+                    <span class="material-symbols-outlined">home</span>
+                    <span>{{ @$translations['nav']['home'] ?? 'الرئيسية' }}</span>
+                </a>
+                <a href="#why-us" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">verified</span>
+                    <span>{{ @$translations['nav']['why_us'] ?? 'لماذا نحن' }}</span>
+                </a>
+                <a href="#themes" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span>{{ @$translations['nav']['themes'] ?? 'القوالب' }}</span>
+                </a>
+                <a href="#how-it-works" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">rocket_launch</span>
+                    <span>{{ @$translations['nav']['how_it_works'] ?? ($lang == 'en' ? 'How it works' : 'كيف تبدأ') }}</span>
+                </a>
+                <a href="#pricing" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">sell</span>
+                    <span>{{ @$translations['nav']['pricing'] ?? 'الباقات والتسعير' }}</span>
+                </a>
+                <a href="{{ url('/help') }}" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">support_agent</span>
+                    <span>{{ @$translations['nav']['support'] ?? ($lang == 'en' ? 'Support Center' : 'مركز الدعم') }}</span>
+                </a>
+                <a href="#faq" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">help</span>
+                    <span>{{ @$translations['nav']['faq'] ?? 'الأسئلة' }}</span>
+                </a>
+                <a href="#contact" onclick="closeMobileMenu()">
+                    <span class="material-symbols-outlined">mail</span>
+                    <span>{{ @$translations['nav']['contact'] ?? 'اتصل بنا' }}</span>
+                </a>
+            </nav>
+
+            <div class="nav-drawer-foot">
+                <div class="nav-drawer-lang" role="group" aria-label="Language">
+                    <a href="?lang=ar" class="{{ $lang == 'ar' ? 'is-active' : '' }}">🇸🇦 العربية</a>
+                    <a href="?lang=en" class="{{ $lang == 'en' ? 'is-active' : '' }}">🇬🇧 English</a>
+                </div>
+                <a href="{{ url('admin') }}" class="btn-nav-login nav-drawer-btn">
+                    {{ @$translations['nav']['login'] ?? ($lang == 'en' ? 'Login' : 'تسجيل دخول') }}
+                </a>
+                <a href="{{ url('admin/register') }}" class="btn-nav-cta nav-drawer-btn">
+                    {{ @$translations['nav']['create_account'] ?? ($lang == 'en' ? 'Create your store free' : 'أنشئ متجرك مجاناً') }}
+                </a>
+            </div>
+        </aside>
 
     {{-- ===== Hero Section ===== --}}
     <section class="hero-section">
@@ -2242,33 +2429,39 @@
             }
         }
 
-        // Mobile Language menu toggle
-        function toggleMobileLangMenu() {
-            const menu = document.getElementById('mobileLangMenu');
-            if (menu.style.display === 'none' || menu.style.display === '') {
-                menu.style.display = 'block';
-            } else {
-                menu.style.display = 'none';
-            }
-        }
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            if (menu.style.display === 'none' || menu.style.display === '') {
-                menu.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            } else {
-                menu.style.display = 'none';
-                document.body.style.overflow = '';
-            }
+        // Side drawer menu
+        function openMobileMenu() {
+            document.body.classList.add('nav-drawer-open');
+            const drawer = document.getElementById('mobileMenu');
+            if (drawer) drawer.setAttribute('aria-hidden', 'false');
+            const ham = document.querySelector('.nav-hamburger');
+            if (ham) ham.setAttribute('aria-expanded', 'true');
         }
 
         function closeMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.style.display = 'none';
-            document.body.style.overflow = '';
+            document.body.classList.remove('nav-drawer-open');
+            const drawer = document.getElementById('mobileMenu');
+            if (drawer) drawer.setAttribute('aria-hidden', 'true');
+            const ham = document.querySelector('.nav-hamburger');
+            if (ham) ham.setAttribute('aria-expanded', 'false');
         }
+
+        function toggleMobileMenu() {
+            if (document.body.classList.contains('nav-drawer-open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeMobileMenu();
+        });
+
+        // Close the drawer automatically when the full desktop nav becomes visible
+        window.matchMedia('(min-width: 1280px)').addEventListener('change', function(e) {
+            if (e.matches) closeMobileMenu();
+        });
 
         // Close language menu when clicking outside
         document.addEventListener('click', function(event) {

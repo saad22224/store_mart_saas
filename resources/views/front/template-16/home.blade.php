@@ -84,6 +84,23 @@
                 @endforeach
             </div>
         </div>
+        <script>
+        (function () {
+            var header = document.querySelector('.t16-header');
+            var chips = document.getElementById('t16StickyChips');
+            function syncOffset() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--t16-header-offset', header.offsetHeight + 'px');
+            }
+            if (header && chips) {
+                header.appendChild(chips);
+                chips.classList.add('t16-chips-in-header');
+            }
+            syncOffset();
+            requestAnimationFrame(syncOffset);
+            window.addEventListener('resize', syncOffset);
+        })();
+        </script>
 
         @foreach ($menuSections as $sIdx => $section)
             <section class="t16-menu-section" id="t16-cat-{{ $section['category']->id }}" data-t16-section="{{ $section['category']->id }}">
@@ -143,8 +160,32 @@
 
     var chipsWrap = document.getElementById('t16StickyChips');
     var sections = document.querySelectorAll('[data-t16-section]');
+    var header = document.querySelector('.t16-header');
+
+    // Keep chips inside the sticky header so they never float over the menu grid.
+    if (header && chipsWrap && chipsWrap.parentElement !== header) {
+        header.appendChild(chipsWrap);
+        chipsWrap.classList.add('t16-chips-in-header');
+    }
+
     var chips = document.querySelectorAll('[data-t16-chip]');
+
+    function syncHeaderOffset() {
+        var h = header ? header.offsetHeight : 72;
+        document.documentElement.style.setProperty('--t16-header-offset', h + 'px');
+        return h;
+    }
+    syncHeaderOffset();
+    window.addEventListener('resize', syncHeaderOffset);
+    if (window.ResizeObserver && header) {
+        new ResizeObserver(syncHeaderOffset).observe(header);
+    }
+
     if (!chipsWrap || !sections.length) return;
+
+    function stickyOffset() {
+        return syncHeaderOffset() + 12;
+    }
 
     chips.forEach(function (chip) {
         chip.addEventListener('click', function (e) {
@@ -153,9 +194,8 @@
             var target = document.querySelector(href);
             if (!target) return;
             e.preventDefault();
-            var offset = chipsWrap.offsetHeight + 12;
-            var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-            window.scrollTo({ top: top, behavior: 'smooth' });
+            var top = target.getBoundingClientRect().top + window.pageYOffset - stickyOffset();
+            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
         });
     });
 
@@ -176,7 +216,7 @@
                     setActive(entry.target.getAttribute('data-t16-section'));
                 }
             });
-        }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
         sections.forEach(function (s) { observer.observe(s); });
     }
 })();

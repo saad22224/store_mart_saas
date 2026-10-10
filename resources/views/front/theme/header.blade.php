@@ -752,7 +752,6 @@
                         <span class="t16-header-logo">
                             <img src="{{ helper::image_path(helper::appdata(@$storeinfo->id)->logo) }}" alt="{{ $t16StoreName }}">
                         </span>
-                        <span class="t16-header-name">{{ $t16StoreName }}</span>
                     </a>
 
                     <form class="t16-header-search" action="{{ URL::to($storeinfo->slug . '/search') }}" method="GET" role="search">
@@ -815,7 +814,7 @@
             <style>
                 :root { --t16-primary: {{ $t16Primary }}; }
                 .t16-header {
-                    background: rgba(255,255,255,.92);
+                    background: rgba(255,255,255,.96);
                     backdrop-filter: blur(12px);
                     -webkit-backdrop-filter: blur(12px);
                     padding: 12px 0 10px;
@@ -823,13 +822,17 @@
                     z-index: 1050;
                 }
                 .t16-header-container {
+                    width: 100%;
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 0 16px;
                     display: flex;
                     align-items: center;
+                    justify-content: space-between;
                     gap: 16px;
+                    direction: {{ $t16Rtl ? 'rtl' : 'ltr' }};
                 }
+                /* Logo sits at the inline-start edge (right in RTL / left in LTR) */
                 .t16-header-brand {
                     display: flex;
                     align-items: center;
@@ -838,6 +841,7 @@
                     color: inherit;
                     min-width: 0;
                     flex-shrink: 0;
+                    margin-inline-end: auto;
                 }
                 .t16-header-logo {
                     flex-shrink: 0;
@@ -853,16 +857,6 @@
                     box-shadow: 0 2px 10px rgba(0,0,0,.05);
                 }
                 .t16-header-logo img { width: 100%; height: 100%; object-fit: contain; }
-                .t16-header-name {
-                    font-size: 1.05rem;
-                    font-weight: 800;
-                    color: #1a1714;
-                    letter-spacing: -0.02em;
-                    max-width: 180px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
                 .t16-header-search {
                     flex: 1;
                     position: relative;
@@ -901,7 +895,7 @@
                     align-items: center;
                     gap: 8px;
                     flex-shrink: 0;
-                    {{ $t16Rtl ? 'margin-right: auto;' : 'margin-left: auto;' }}
+                    margin-inline-start: auto; /* cart + language at the inline-end edge (left in RTL) */
                 }
                 .t16-hdr-btn {
                     position: relative;
@@ -965,14 +959,28 @@
                         max-width: none;
                         margin: 8px 16px 0;
                     }
-                    .t16-header-name { max-width: 120px; font-size: .95rem; }
                 }
                 @media (max-width: 576px) {
                     .t16-header-logo { width: 40px; height: 40px; border-radius: 12px; }
                     .t16-hdr-btn { width: 38px; height: 38px; font-size: 15px; border-radius: 11px; }
-                    .t16-header-name { display: none; }
                 }
             </style>
+            <script>
+            (function () {
+                var header = document.querySelector('.t16-header');
+                if (!header) return;
+                // Fallback for browsers without :has() — the sticky header must not be boxed by <main>.
+                var mainWrap = document.getElementById('main-content');
+                if (mainWrap && mainWrap.contains(header)) mainWrap.style.display = 'contents';
+                function sync() {
+                    document.documentElement.style.setProperty('--t16-header-offset', header.offsetHeight + 'px');
+                }
+                sync();
+                requestAnimationFrame(sync);
+                window.addEventListener('resize', sync);
+                if (window.ResizeObserver) new ResizeObserver(sync).observe(header);
+            })();
+            </script>
         @elseif (in_array(helper::appdata(@$storeinfo->id)->template, [ 16 , 17, 18, 19, 20, 21, 22]))
             @php
                 $tpl_num = helper::appdata(@$storeinfo->id)->template;

@@ -48,7 +48,7 @@
     $isOut = ($stockMgmt == 1 && helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1);
     $onlineOrder = helper::appdata($storeinfo->id)->online_order;
     $uid = 't16_'.$item->id;
-    $desc = ! empty($item->description) ? \Illuminate\Support\Str::limit(strip_tags($item->description), 90) : '';
+    $desc = ! empty($item->description) ? \Illuminate\Support\Str::limit(strip_tags($item->description), 120) : '';
 ?>
 
 <article class="t16-card" id="t16card_<?php echo e($item->id); ?>" data-name="<?php echo e(mb_strtolower($item->item_name)); ?>"
@@ -61,7 +61,10 @@
     </a>
 
     <div class="t16-card-body">
-        <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>" class="t16-card-name"><?php echo e($item->item_name); ?></a>
+        <div class="t16-card-title-row">
+            <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>" class="t16-card-name"><?php echo e($item->item_name); ?></a>
+        </div>
+
         <?php if($desc !== ''): ?>
             <p class="t16-card-desc"><?php echo e($desc); ?></p>
         <?php endif; ?>
@@ -86,15 +89,16 @@
                 <input type="hidden" id="<?php echo e($uid); ?>_vendor" value="<?php echo e($storeinfo->id); ?>">
 
                 <?php if($item->has_variants == 1): ?>
-                    <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>" class="t16-add-btn">
+                    <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>" class="t16-add-btn" title="<?php echo e(App::getLocale() == 'ar' ? 'الخيارات' : 'Options'); ?>">
                         <i class="fa-regular fa-sliders"></i>
                         <span><?php echo e(App::getLocale() == 'ar' ? 'الخيارات' : 'Options'); ?></span>
                     </a>
                 <?php else: ?>
                     <button type="button" class="t16-add-btn" id="<?php echo e($uid); ?>_addbtn"
                         style="<?php echo e($cartQty > 0 ? 'display:none;' : ''); ?>"
-                        onclick="t16AddFirst('<?php echo e($item->id); ?>')">
-                        <i class="fa-regular fa-plus"></i>
+                        onclick="t16AddFirst('<?php echo e($item->id); ?>')"
+                        title="<?php echo e(trans('labels.add')); ?>">
+                        <i class="fa-solid fa-plus"></i>
                         <span><?php echo e(trans('labels.add')); ?></span>
                     </button>
                     <div class="t16-qty" id="<?php echo e($uid); ?>_stepper"
@@ -107,7 +111,7 @@
             <?php elseif($onlineOrder == 1 && $isOut): ?>
                 <span class="t16-out-badge"><?php echo e(trans('labels.out_of_stock')); ?></span>
             <?php else: ?>
-                <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>" class="t16-add-btn">
+                <a href="<?php echo e(URL::to($storeinfo->slug.'/detail-'.$item->slug)); ?>" class="t16-add-btn" title="<?php echo e(trans('labels.view')); ?>">
                     <i class="fa-regular fa-eye"></i>
                     <span><?php echo e(trans('labels.view')); ?></span>
                 </a>

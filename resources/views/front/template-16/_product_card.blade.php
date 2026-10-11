@@ -48,7 +48,7 @@
     $isOut = ($stockMgmt == 1 && helper::checklowqty($item->id, $storeinfo->id) == 2 && $item->has_variants != 1);
     $onlineOrder = helper::appdata($storeinfo->id)->online_order;
     $uid = 't16_'.$item->id;
-    $desc = ! empty($item->description) ? \Illuminate\Support\Str::limit(strip_tags($item->description), 90) : '';
+    $desc = ! empty($item->description) ? \Illuminate\Support\Str::limit(strip_tags($item->description), 120) : '';
 @endphp
 
 <article class="t16-card" id="t16card_{{ $item->id }}" data-name="{{ mb_strtolower($item->item_name) }}"
@@ -61,7 +61,10 @@
     </a>
 
     <div class="t16-card-body">
-        <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-card-name">{{ $item->item_name }}</a>
+        <div class="t16-card-title-row">
+            <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-card-name">{{ $item->item_name }}</a>
+        </div>
+
         @if ($desc !== '')
             <p class="t16-card-desc">{{ $desc }}</p>
         @endif
@@ -86,15 +89,16 @@
                 <input type="hidden" id="{{ $uid }}_vendor" value="{{ $storeinfo->id }}">
 
                 @if ($item->has_variants == 1)
-                    <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-add-btn">
+                    <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-add-btn" title="{{ App::getLocale() == 'ar' ? 'الخيارات' : 'Options' }}">
                         <i class="fa-regular fa-sliders"></i>
                         <span>{{ App::getLocale() == 'ar' ? 'الخيارات' : 'Options' }}</span>
                     </a>
                 @else
                     <button type="button" class="t16-add-btn" id="{{ $uid }}_addbtn"
                         style="{{ $cartQty > 0 ? 'display:none;' : '' }}"
-                        onclick="t16AddFirst('{{ $item->id }}')">
-                        <i class="fa-regular fa-plus"></i>
+                        onclick="t16AddFirst('{{ $item->id }}')"
+                        title="{{ trans('labels.add') }}">
+                        <i class="fa-solid fa-plus"></i>
                         <span>{{ trans('labels.add') }}</span>
                     </button>
                     <div class="t16-qty" id="{{ $uid }}_stepper"
@@ -107,7 +111,7 @@
             @elseif ($onlineOrder == 1 && $isOut)
                 <span class="t16-out-badge">{{ trans('labels.out_of_stock') }}</span>
             @else
-                <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-add-btn">
+                <a href="{{ URL::to($storeinfo->slug.'/detail-'.$item->slug) }}" class="t16-add-btn" title="{{ trans('labels.view') }}">
                     <i class="fa-regular fa-eye"></i>
                     <span>{{ trans('labels.view') }}</span>
                 </a>

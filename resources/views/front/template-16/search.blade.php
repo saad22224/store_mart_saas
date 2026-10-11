@@ -6,38 +6,35 @@
     $allCategories = $category ?? helper::getcategory($storeinfo->id);
     $q = request('search_input');
     $activeCat = request('category');
+    $t16Rtl = session()->get('direction') == 2;
 @endphp
 
-<div class="t16-shell" style="padding-top:18px;">
-    <a href="{{ URL::to($storeinfo->slug) }}" class="t16-back-link">
-        <i class="fa-solid {{ session()->get('direction') == 2 ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
-        {{ App::getLocale() == 'ar' ? 'القائمة الرئيسية' : 'Back to menu' }}
+<div class="t16-shell" style="padding-top:12px;">
+    <a href="{{ URL::to($storeinfo->slug) }}" class="t16-back-circle" aria-label="{{ App::getLocale() == 'ar' ? 'رجوع' : 'Back' }}">
+        <i class="fa-solid {{ $t16Rtl ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
     </a>
 
-    <div class="t16-section-head" style="margin-top:8px;">
-        <div>
-            <h1 class="t16-section-title">{{ App::getLocale() == 'ar' ? 'بحث في القائمة' : 'Search the menu' }}</h1>
-            <p class="t16-section-sub">
-                @if ($q)
-                    {{ App::getLocale() == 'ar' ? 'نتائج البحث عن' : 'Results for' }} “{{ $q }}”
-                @else
-                    {{ App::getLocale() == 'ar' ? 'ابحث عن طبق أو قسم' : 'Find a dish or category' }}
-                @endif
-            </p>
-        </div>
-    </div>
+    <h1 class="t16-section-title" style="text-transform:none;letter-spacing:-.02em;">
+        {{ App::getLocale() == 'ar' ? 'بحث في القائمة' : 'Search' }}
+    </h1>
+    @if ($q)
+        <p class="t16-section-sub">
+            {{ App::getLocale() == 'ar' ? 'نتائج البحث عن' : 'Results for' }} “{{ $q }}”
+        </p>
+    @endif
 
-    <form class="t16-search-local" action="{{ URL::to($storeinfo->slug.'/search') }}" method="GET" role="search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+    <form class="t16-search-pill" action="{{ URL::to($storeinfo->slug.'/search') }}" method="GET" role="search">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         <input type="search" name="search_input" value="{{ $q }}" autocomplete="off"
-            placeholder="{{ App::getLocale() == 'ar' ? 'ابحث عن صنف...' : 'Search for a dish...' }}">
+            placeholder="{{ App::getLocale() == 'ar' ? 'بحث' : 'Search' }}"
+            aria-label="{{ trans('labels.search') }}">
         @if ($activeCat)
             <input type="hidden" name="category" value="{{ $activeCat }}">
         @endif
     </form>
 
     @if ($allCategories->count() > 0)
-        <div class="t16-cat-chips" style="margin-bottom:14px;">
+        <div class="t16-cat-chips">
             <a href="{{ URL::to($storeinfo->slug.'/search'.($q ? '?search_input='.urlencode($q) : '')) }}"
                 class="t16-cat-chip {{ empty($activeCat) ? 'is-active' : '' }}">
                 <span class="t16-cat-chip-name">{{ App::getLocale() == 'ar' ? 'الكل' : 'All' }}</span>
@@ -45,13 +42,6 @@
             @foreach ($allCategories as $cat)
                 <a href="{{ URL::to($storeinfo->slug.'/search?category='.$cat->slug.($q ? '&search_input='.urlencode($q) : '')) }}"
                     class="t16-cat-chip {{ $activeCat == $cat->slug ? 'is-active' : '' }}">
-                    <span class="t16-cat-chip-img">
-                        @if (! empty($cat->image) && $cat->image !== 'default.png')
-                            <img src="{{ helper::image_path($cat->image) }}" alt="" loading="lazy">
-                        @else
-                            <i class="fa-solid fa-utensils"></i>
-                        @endif
-                    </span>
                     <span class="t16-cat-chip-name">{{ $cat->name }}</span>
                 </a>
             @endforeach
@@ -59,7 +49,7 @@
     @endif
 
     @if ($itemlist->count() > 0)
-        <div class="t16-menu-grid">
+        <div class="t16-menu-list">
             @foreach ($itemlist as $key => $item)
                 @include('front.template-16._product_card', [
                     'item' => $item,

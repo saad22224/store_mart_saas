@@ -6,40 +6,36 @@
     $allCategories = $category ?? helper::getcategory($storeinfo->id);
     $q = request('search_input');
     $activeCat = request('category');
+    $t16Rtl = session()->get('direction') == 2;
 ?>
 
-<div class="t16-shell" style="padding-top:18px;">
-    <a href="<?php echo e(URL::to($storeinfo->slug)); ?>" class="t16-back-link">
-        <i class="fa-solid <?php echo e(session()->get('direction') == 2 ? 'fa-arrow-right' : 'fa-arrow-left'); ?>"></i>
-        <?php echo e(App::getLocale() == 'ar' ? 'القائمة الرئيسية' : 'Back to menu'); ?>
-
+<div class="t16-shell" style="padding-top:12px;">
+    <a href="<?php echo e(URL::to($storeinfo->slug)); ?>" class="t16-back-circle" aria-label="<?php echo e(App::getLocale() == 'ar' ? 'رجوع' : 'Back'); ?>">
+        <i class="fa-solid <?php echo e($t16Rtl ? 'fa-arrow-right' : 'fa-arrow-left'); ?>"></i>
     </a>
 
-    <div class="t16-section-head" style="margin-top:8px;">
-        <div>
-            <h1 class="t16-section-title"><?php echo e(App::getLocale() == 'ar' ? 'بحث في القائمة' : 'Search the menu'); ?></h1>
-            <p class="t16-section-sub">
-                <?php if($q): ?>
-                    <?php echo e(App::getLocale() == 'ar' ? 'نتائج البحث عن' : 'Results for'); ?> “<?php echo e($q); ?>”
-                <?php else: ?>
-                    <?php echo e(App::getLocale() == 'ar' ? 'ابحث عن طبق أو قسم' : 'Find a dish or category'); ?>
+    <h1 class="t16-section-title" style="text-transform:none;letter-spacing:-.02em;">
+        <?php echo e(App::getLocale() == 'ar' ? 'بحث في القائمة' : 'Search'); ?>
 
-                <?php endif; ?>
-            </p>
-        </div>
-    </div>
+    </h1>
+    <?php if($q): ?>
+        <p class="t16-section-sub">
+            <?php echo e(App::getLocale() == 'ar' ? 'نتائج البحث عن' : 'Results for'); ?> “<?php echo e($q); ?>”
+        </p>
+    <?php endif; ?>
 
-    <form class="t16-search-local" action="<?php echo e(URL::to($storeinfo->slug.'/search')); ?>" method="GET" role="search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+    <form class="t16-search-pill" action="<?php echo e(URL::to($storeinfo->slug.'/search')); ?>" method="GET" role="search">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         <input type="search" name="search_input" value="<?php echo e($q); ?>" autocomplete="off"
-            placeholder="<?php echo e(App::getLocale() == 'ar' ? 'ابحث عن صنف...' : 'Search for a dish...'); ?>">
+            placeholder="<?php echo e(App::getLocale() == 'ar' ? 'بحث' : 'Search'); ?>"
+            aria-label="<?php echo e(trans('labels.search')); ?>">
         <?php if($activeCat): ?>
             <input type="hidden" name="category" value="<?php echo e($activeCat); ?>">
         <?php endif; ?>
     </form>
 
     <?php if($allCategories->count() > 0): ?>
-        <div class="t16-cat-chips" style="margin-bottom:14px;">
+        <div class="t16-cat-chips">
             <a href="<?php echo e(URL::to($storeinfo->slug.'/search'.($q ? '?search_input='.urlencode($q) : ''))); ?>"
                 class="t16-cat-chip <?php echo e(empty($activeCat) ? 'is-active' : ''); ?>">
                 <span class="t16-cat-chip-name"><?php echo e(App::getLocale() == 'ar' ? 'الكل' : 'All'); ?></span>
@@ -47,13 +43,6 @@
             <?php $__currentLoopData = $allCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <a href="<?php echo e(URL::to($storeinfo->slug.'/search?category='.$cat->slug.($q ? '&search_input='.urlencode($q) : ''))); ?>"
                     class="t16-cat-chip <?php echo e($activeCat == $cat->slug ? 'is-active' : ''); ?>">
-                    <span class="t16-cat-chip-img">
-                        <?php if(! empty($cat->image) && $cat->image !== 'default.png'): ?>
-                            <img src="<?php echo e(helper::image_path($cat->image)); ?>" alt="" loading="lazy">
-                        <?php else: ?>
-                            <i class="fa-solid fa-utensils"></i>
-                        <?php endif; ?>
-                    </span>
                     <span class="t16-cat-chip-name"><?php echo e($cat->name); ?></span>
                 </a>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -61,7 +50,7 @@
     <?php endif; ?>
 
     <?php if($itemlist->count() > 0): ?>
-        <div class="t16-menu-grid">
+        <div class="t16-menu-list">
             <?php $__currentLoopData = $itemlist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php echo $__env->make('front.template-16._product_card', [
                     'item' => $item,

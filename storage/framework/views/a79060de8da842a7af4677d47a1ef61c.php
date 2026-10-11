@@ -33,32 +33,32 @@
 ?>
 
 <style>
-.t16-detail { max-width: 1100px; margin: 0 auto; padding: 20px 16px 56px; }
+.t16-detail { max-width: 640px; margin: 0 auto; padding: 12px 16px 56px; }
 .t16-detail-grid {
-    display: grid; grid-template-columns: 1.05fr .95fr; gap: 28px; align-items: start;
+    display: grid; grid-template-columns: 1fr; gap: 18px; align-items: start;
 }
 .t16-detail-media {
-    background: #fff; border-radius: 22px; overflow: hidden;
-    border: 1px solid var(--t16-line); box-shadow: var(--t16-shadow);
+    background: transparent; border-radius: 22px; overflow: hidden;
+    border: 0; box-shadow: none;
 }
-.t16-detail-main-img { aspect-ratio: 1; background: #efe8e1; }
+.t16-detail-main-img { aspect-ratio: 16 / 10; background: #ece7e1; border-radius: 22px; overflow: hidden; }
 .t16-detail-main-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.t16-detail-thumbs { display: flex; gap: 8px; padding: 12px; overflow-x: auto; }
+.t16-detail-thumbs { display: flex; gap: 8px; padding: 12px 0; overflow-x: auto; }
 .t16-detail-thumbs button {
     width: 64px; height: 64px; border-radius: 12px; border: 2px solid transparent;
-    padding: 0; overflow: hidden; background: #f3ebe3; cursor: pointer; flex-shrink: 0;
+    padding: 0; overflow: hidden; background: #f3f3f3; cursor: pointer; flex-shrink: 0;
 }
 .t16-detail-thumbs button.is-active { border-color: var(--t16-primary); }
 .t16-detail-thumbs img { width: 100%; height: 100%; object-fit: cover; }
 .t16-detail-panel h1 {
-    font-size: clamp(1.35rem, 2.6vw, 1.85rem); font-weight: 800;
-    letter-spacing: -.03em; margin: 0 0 10px; line-height: 1.3;
+    font-size: clamp(1.35rem, 2.6vw, 1.75rem); font-weight: 800;
+    letter-spacing: -.02em; margin: 0 0 10px; line-height: 1.3;
 }
 .t16-detail-prices { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .t16-detail-prices .now { font-size: 1.45rem; font-weight: 800; color: var(--t16-primary); }
-.t16-detail-prices .was { font-size: .95rem; color: #9a9088; text-decoration: line-through; }
+.t16-detail-prices .was { font-size: .95rem; color: #b0b0b0; text-decoration: line-through; }
 .t16-detail-desc {
-    background: #fff; border: 1px solid var(--t16-line); border-radius: 16px;
+    background: #fafafa; border: 0; border-radius: 16px;
     padding: 14px 16px; margin-bottom: 16px; color: var(--t16-muted); line-height: 1.7; font-size: .95rem;
 }
 .t16-detail-label { font-weight: 800; color: var(--t16-ink); margin: 14px 0 8px; font-size: .92rem; }
@@ -95,10 +95,8 @@
 </style>
 
 <div class="t16-detail">
-    <a href="<?php echo e(URL::to($storeinfo->slug)); ?>" class="t16-back-link">
+    <a href="javascript:history.back()" class="t16-back-circle" aria-label="<?php echo e(App::getLocale() == 'ar' ? 'رجوع' : 'Back'); ?>">
         <i class="fa-solid <?php echo e($t16Rtl ? 'fa-arrow-right' : 'fa-arrow-left'); ?>"></i>
-        <?php echo e(App::getLocale() == 'ar' ? 'العودة للقائمة' : 'Back to menu'); ?>
-
     </a>
 
     <?php if($item_check != null): ?>
@@ -225,7 +223,7 @@
         <?php if(isset($relateditem) && $relateditem->count() > 0): ?>
             <div class="t16-related">
                 <h2><?php echo e(App::getLocale() == 'ar' ? 'قد يعجبك أيضاً' : 'You may also like'); ?></h2>
-                <div class="t16-menu-grid">
+                <div class="t16-menu-list">
                     <?php $__currentLoopData = $relateditem->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php echo $__env->make('front.template-16._product_card', [
                             'item' => $item,

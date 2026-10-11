@@ -3,48 +3,51 @@
 
 @php
     $cartdata = $cartdata ?? collect();
-    $getcategory = $getcategory ?? helper::getcategory($storeinfo->id);
+    $appdata = helper::appdata($storeinfo->id);
+    $address = trim((string) ($appdata->address ?? ''));
+    $contact = trim((string) ($appdata->contact ?? ''));
+    if ($contact === '-') {
+        $contact = '';
+    }
+    $t16Rtl = session()->get('direction') == 2;
 @endphp
 
-<div class="t16-shell" style="padding-top:18px;">
-    <a href="{{ URL::to($storeinfo->slug) }}" class="t16-back-link">
-        <i class="fa-solid {{ session()->get('direction') == 2 ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
-        {{ App::getLocale() == 'ar' ? 'القائمة الرئيسية' : 'Back to menu' }}
-    </a>
-
-    <div class="t16-section-head" style="margin-top:8px;">
-        <div>
-            <h1 class="t16-section-title">{{ $category->name }}</h1>
-            <p class="t16-section-sub">{{ App::getLocale() == 'ar' ? 'اختر أصنافك وأضفها للسلة' : 'Pick your items and add to cart' }}</p>
-        </div>
-    </div>
-
-    @if ($getcategory->count() > 0)
-        <div class="t16-cat-chips" style="margin-bottom:8px;">
-            @foreach ($getcategory as $cat)
-                <a href="{{ URL::to($storeinfo->slug.'/category/'.$cat->slug) }}"
-                    class="t16-cat-chip {{ $cat->id == $category->id ? 'is-active' : '' }}">
-                    <span class="t16-cat-chip-img">
-                        @if (! empty($cat->image) && $cat->image !== 'default.png')
-                            <img src="{{ helper::image_path($cat->image) }}" alt="" loading="lazy">
-                        @else
-                            <i class="fa-solid fa-utensils"></i>
-                        @endif
-                    </span>
-                    <span class="t16-cat-chip-name">{{ $cat->name }}</span>
+<div class="t16-shell" style="padding-top:8px;">
+    @if ($address !== '' || $contact !== '')
+        <div class="t16-cat-topmeta">
+            @if ($address !== '')
+                <a href="https://maps.google.com/?q={{ urlencode($address) }}" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>{{ $address }}</span>
                 </a>
-            @endforeach
+            @else
+                <span></span>
+            @endif
+            @if ($contact !== '')
+                <a href="tel:{{ preg_replace('/\s+/', '', $contact) }}">
+                    <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                    <span>{{ $contact }}</span>
+                </a>
+            @endif
         </div>
     @endif
 
-    <div class="t16-search-local">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="search" id="t16SearchInput" autocomplete="off"
-            placeholder="{{ App::getLocale() == 'ar' ? 'ابحث داخل هذا القسم...' : 'Search in this category...' }}">
-    </div>
+    <a href="{{ URL::to($storeinfo->slug) }}" class="t16-back-circle" aria-label="{{ App::getLocale() == 'ar' ? 'رجوع' : 'Back' }}">
+        <i class="fa-solid {{ $t16Rtl ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
+    </a>
+
+    <h1 class="t16-section-title">{{ $category->name }}</h1>
+
+    <form class="t16-search-pill" action="{{ URL::to($storeinfo->slug.'/search') }}" method="GET" role="search" style="margin-bottom:20px;">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="hidden" name="category" value="{{ $category->slug }}">
+        <input type="search" name="search_input" id="t16SearchInput" autocomplete="off"
+            placeholder="{{ App::getLocale() == 'ar' ? 'بحث' : 'Search' }}"
+            aria-label="{{ trans('labels.search') }}">
+    </form>
 
     @if ($products->count() > 0)
-        <div class="t16-menu-grid" id="t16ProductsGrid">
+        <div class="t16-menu-list" id="t16ProductsGrid">
             @foreach ($products as $key => $item)
                 @include('front.template-16._product_card', [
                     'item' => $item,
@@ -58,8 +61,8 @@
             <i class="fa-regular fa-face-meh"></i>
             {{ App::getLocale() == 'ar' ? 'لا توجد نتائج مطابقة' : 'No matching items' }}
         </div>
-        @if ($products->hasPages())
-            <div class="t16-pagination">{{ $products->links() }}</div>
+        @if (method_exists($products, 'hasPages') && $products->hasPages())
+            <div class="t16-pagination">{{ $products->withQueryString()->links() }}</div>
         @endif
     @else
         <div class="t16-empty">
@@ -80,7 +83,7 @@
         var cards = grid.querySelectorAll('.t16-card');
         var shown = 0;
         cards.forEach(function (card) {
-            var name = (card.getAttribute('data-name') || '').toLowerCase();
+            var name = card.getAttribute('data-name') || '';
             var ok = !q || name.indexOf(q) !== -1;
             card.style.display = ok ? '' : 'none';
             if (ok) shown++;
@@ -89,5 +92,6 @@
     });
 })();
 </script>
+
 @include('front.template-16._cart_scripts')
 @include('front.theme.footer')

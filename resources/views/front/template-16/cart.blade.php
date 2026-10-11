@@ -18,7 +18,7 @@
 
         <div class="t16-section-head" style="margin-top:8px;">
             <div>
-                <h1 class="t16-section-title">{{ App::getLocale() == 'ar' ? 'سلتك' : 'Your cart' }}</h1>
+                <h1 class="t16-section-title" style="text-transform:none;letter-spacing:-.02em;">{{ App::getLocale() == 'ar' ? 'سلتك' : 'Your cart' }}</h1>
                 <p class="t16-section-sub">{{ App::getLocale() == 'ar' ? 'راجع أصنافك ثم أكمل الطلب' : 'Review your dishes, then checkout' }}</p>
             </div>
         </div>

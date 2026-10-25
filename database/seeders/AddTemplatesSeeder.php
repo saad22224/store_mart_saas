@@ -49,7 +49,7 @@ class AddTemplatesSeeder extends Seeder
             ],
             [
                 'id' => 22,
-                'name' => 'Matjar Pulse / نبض المتجر',
+                'name' => 'Product Funnel Theme',
                 'identifier' => 'theme_22',
                 'image' => 'theme-22.png',
                 'preview_link' => '#',

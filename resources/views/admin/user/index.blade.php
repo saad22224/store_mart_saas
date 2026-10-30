@@ -11,7 +11,15 @@
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
         <h5 class="text-capitalize fw-600 color-changer text-dark fs-4">{{ trans('labels.users') }}</h5>
 
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <div class="position-relative" style="min-width: 250px;">
+                <input type="text" id="vendorSearchInput" class="form-control rounded-pill pe-5 ps-3"
+                    placeholder="بحث سريع (الاسم، الجوال، الإيميل)..." autocomplete="off">
+                <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
+                    <i style="transform: translateX(-200px);" class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </div>
+
             @if (@helper::checkaddons('vendor_import'))
                 <a href="{{ URL::to('admin/users/import') }}" class="btn btn-secondary px-sm-4 d-flex">
                     <i class="fa-solid fa-file-import mx-1"></i>{{ trans('labels.import') }}</a>
@@ -137,9 +145,9 @@
             </div>
         </div>
     </div> --}}
-    <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 row-cols-1 g-3 pb-3">
+    <div id="vendorCardsContainer" class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 row-cols-1 g-3 pb-3">
         @foreach ($getuserslist as $user)
-            <div class="col">
+            <div class="col vendor-col" data-search="{{ mb_strtolower($user->name . ' ' . $user->email . ' ' . $user->mobile) }}">
                 <div class="vendor_card card border bg-change rounded-4 h-100 box-shadow">
                     <div class="card-body p-3">
                         <div class="d-flex gap-3 mb-3 align-items-center border-bottom pb-2">
@@ -222,6 +230,13 @@
             </div>
         @endforeach
     </div>
+    <div id="noVendorFound" class="d-none text-center py-5">
+        <div class="card border-0 box-shadow rounded-4 p-5">
+            <i class="fa-solid fa-magnifying-glass fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted fw-bold">لا يوجد بائعون يطابقون بحثك</h5>
+            <p class="text-muted fs-7 mb-0">جرب البحث بكلمات أخرى أو برقم الجوال أو البريد الإلكتروني.</p>
+        </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="changepasswordModal" tabindex="-1" aria-labelledby="changepasswordModalLabel"
         aria-hidden="true">
@@ -270,5 +285,29 @@
             $('#modal_vendor_id').val($('#btn_password' + id).attr("data-vendor_id"));
             $('#changepasswordModal').modal('show');
         }
+
+        // Real-time vendor search
+        $(document).ready(function() {
+            $('#vendorSearchInput').on('input', function() {
+                var query = $(this).val().trim().toLowerCase();
+                var visibleCount = 0;
+
+                $('.vendor-col').each(function() {
+                    var searchData = $(this).attr('data-search') || '';
+                    if (query === '' || searchData.indexOf(query) !== -1) {
+                        $(this).removeClass('d-none');
+                        visibleCount++;
+                    } else {
+                        $(this).addClass('d-none');
+                    }
+                });
+
+                if (visibleCount === 0 && $('.vendor-col').length > 0) {
+                    $('#noVendorFound').removeClass('d-none');
+                } else {
+                    $('#noVendorFound').addClass('d-none');
+                }
+            });
+        });
     </script>
 @endsection

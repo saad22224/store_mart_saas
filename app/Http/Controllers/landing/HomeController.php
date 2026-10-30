@@ -348,9 +348,13 @@ class HomeController extends Controller
     {
         $newpath = [];
         $output = '';
-        foreach ($request->theme_id as $theme_id) {
+        $themeIds = array_values(array_filter(explode('|', \App\Helpers\helper::normalize_theme_ids($request->theme_id))));
+        foreach ($themeIds as $theme_id) {
+            $themeRecord = \App\Models\Theme::find($theme_id);
             $image = 'theme-' . $theme_id;
-            if (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image . '.png'))) {
+            if ($themeRecord && !empty($themeRecord->image) && file_exists(storage_path('app/public/admin-assets/images/theme/' . $themeRecord->image))) {
+                $path = url(env('ASSETPATHURL') . 'admin-assets/images/theme/' . $themeRecord->image);
+            } elseif (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image . '.png'))) {
                 $image = 'theme-' . $theme_id . '.png';
                 $path = url(env('ASSETPATHURL') . 'admin-assets/images/theme/' . $image);
             } elseif (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image . '.jpeg'))) {

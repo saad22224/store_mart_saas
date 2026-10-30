@@ -207,7 +207,7 @@ class PlanPricingController extends Controller
         $saveplan->bulk_import = $bulk_import;
         $saveplan->shipping_management = $shipping_management;
         $saveplan->top_deals = $top_deals;
-        $saveplan->themes_id = $request->themecheckbox != "" && $request->themecheckbox != null ? implode("|", $request->themecheckbox) : $request->themecheckbox;
+        $saveplan->themes_id = helper::normalize_theme_ids($request->themecheckbox);
         $saveplan->vendor_id = $request->vendors != "" && $request->vendors != null ? implode("|", $request->vendors) : $request->vendors;
         $saveplan->save();
         return redirect('admin/plan')->with('success', trans('messages.success'));
@@ -377,11 +377,23 @@ class PlanPricingController extends Controller
             $editplan->global_addons = $global_addons;
             $editplan->product_qa = $product_qa;
             $editplan->bulk_import = $bulk_import;
+            $normalizedThemes = helper::normalize_theme_ids($request->themecheckbox);
+            if ($normalizedThemes === '') {
+                return redirect('admin/plan/edit-' . $id)->with('error', trans('messages.theme_required'));
+            }
             $editplan->shipping_management = $shipping_management;
             $editplan->top_deals = $top_deals;
-            $editplan->themes_id = $request->themecheckbox != "" && $request->themecheckbox != null ? implode("|", $request->themecheckbox) : $request->themecheckbox;
+            $editplan->themes_id = $normalizedThemes;
             $editplan->vendor_id = $request->vendors != "" && $request->vendors != null ? implode("|", $request->vendors) : $request->vendors;
             $editplan->update();
+
+            // Sync updated themes to existing transactions & active subscribers of this plan
+            Transaction::where('plan_id', $id)->update(['themes_id' => $normalizedThemes]);
+            $subscribedVendors = User::where('plan_id', $id)->pluck('id');
+            foreach ($subscribedVendors as $subscribedVendorId) {
+                helper::sync_vendor_plan_theme((int) $subscribedVendorId, $normalizedThemes);
+            }
+
             return redirect('admin/plan')->with('success', trans('messages.success'));
         }
     }
@@ -464,7 +476,8 @@ class PlanPricingController extends Controller
             $transaction->sound_notification = $plan->sound_notification;
             $transaction->whatsapp_message = $plan->whatsapp_message;
             $transaction->telegram_message = $plan->telegram_message;
-            $transaction->themes_id = $plan->themes_id;
+            $normalizedThemes = helper::normalize_theme_ids($plan->themes_id);
+            $transaction->themes_id = $normalizedThemes;
             $transaction->pixel = $plan->pixel;
             $transaction->tax_report = $plan->tax_report;
             $transaction->reports = $plan->reports;
@@ -478,6 +491,7 @@ class PlanPricingController extends Controller
             $transaction->save();
             session()->forget('discount_data');
             User::where('id',  $vendor_id)->update(['plan_id' => $id, 'purchase_amount' => $plan->price, 'purchase_date' => Carbon::now()->toDateTimeString()]);
+            helper::sync_vendor_plan_theme((int) $vendor_id, $normalizedThemes);
             $emaildata = helper::emailconfigration(helper::appdata('')->id);
             Config::set('mail', $emaildata);
             Helper::send_subscription_email(Auth::user()->email, Auth::user()->name, $plan->name, helper::get_plan_exp_date($plan->duration, $plan->days), helper::currency_formate($plan->price, ""), "-", "-");
@@ -604,8 +618,9 @@ class PlanPricingController extends Controller
             $transaction->sound_notification = $plan->sound_notification;
             $transaction->whatsapp_message = $plan->whatsapp_message;
             $transaction->telegram_message = $plan->telegram_message;
+            $normalizedThemes = helper::normalize_theme_ids($plan->themes_id);
             $transaction->status = "2";
-            $transaction->themes_id = $plan->themes_id;
+            $transaction->themes_id = $normalizedThemes;
             $transaction->pixel = $plan->pixel;
             $transaction->tax_report = $plan->tax_report;
             $transaction->global_addons = $plan->global_addons;
@@ -617,6 +632,7 @@ class PlanPricingController extends Controller
             $transaction->features = $plan->features;
             $transaction->transaction_number = Str::upper(Str::random(8));
             $transaction->save();
+            helper::sync_vendor_plan_theme((int) $vendor_id, $normalizedThemes);
             Helper::send_subscription_email(Auth::user()->email, Auth::user()->name, $plan->name, helper::get_plan_exp_date($plan->duration, $plan->days), helper::currency_formate($plan->price, ""), $request->payment_type, @$paymentid);
             $emaildata = helper::emailconfigration(helper::appdata('')->id);
             Config::set('mail', $emaildata);
@@ -706,7 +722,8 @@ class PlanPricingController extends Controller
             $transaction->expire_date = helper::get_plan_exp_date($plan->duration, $plan->days);
             $transaction->duration = $plan->duration;
             $transaction->days = $plan->days;
-            $transaction->themes_id = $plan->themes_id;
+            $normalizedThemes = helper::normalize_theme_ids($plan->themes_id);
+            $transaction->themes_id = $normalizedThemes;
             $transaction->custom_domain = $plan->custom_domain;
             $transaction->google_analytics = $plan->google_analytics;
             $transaction->pos = $plan->pos;
@@ -732,6 +749,9 @@ class PlanPricingController extends Controller
             $transaction->features = $plan->features;
             $transaction->transaction_number = Str::upper(Str::random(8));
             $transaction->save();
+            if ($status == 2) {
+                helper::sync_vendor_plan_theme((int) $vendor_id, $normalizedThemes);
+            }
             session()->forget('discount_data');
             $emaildata = helper::emailconfigration(helper::appdata('')->id);
             Config::set('mail', $emaildata);
@@ -856,9 +876,13 @@ class PlanPricingController extends Controller
     {
         $newpath = [];
         $output = '';
-        foreach ($request->theme_id as $theme_id) {
+        $themeIds = array_values(array_filter(explode('|', helper::normalize_theme_ids($request->theme_id))));
+        foreach ($themeIds as $theme_id) {
+            $themeRecord = \App\Models\Theme::find($theme_id);
             $image = 'theme-' . $theme_id;
-            if (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image . '.png'))) {
+            if ($themeRecord && !empty($themeRecord->image) && file_exists(storage_path('app/public/admin-assets/images/theme/' . $themeRecord->image))) {
+                $path = url(env('ASSETPATHURL') . 'admin-assets/images/theme/' . $themeRecord->image);
+            } elseif (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image . '.png'))) {
                 $image = 'theme-' . $theme_id . '.png';
                 $path = url(env('ASSETPATHURL') . 'admin-assets/images/theme/' . $image);
             } elseif (file_exists(storage_path('app/public/admin-assets/images/theme/' . $image . '.jpeg'))) {

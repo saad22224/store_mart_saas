@@ -49,6 +49,9 @@ class TransactionController extends Controller
       }
       $transaction->status = $request->status;
       $transaction->save();
+      if ($request->status == 2) {
+        helper::sync_vendor_plan_theme((int) $transaction->vendor_id, $transaction->themes_id);
+      }
       $vendorinfo = User::where('id', $transaction->vendor_id)->first();
       if ($request->status == 2) {
         $emaildata = helper::emailconfigration(helper::appdata('')->id);

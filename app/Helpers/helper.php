@@ -2219,6 +2219,72 @@ class helper
     }
 
     /**
+     * Normalize theme IDs from an array or pipe-delimited string (handles accidental JSON model strings).
+     */
+    public static function normalize_theme_ids($themesInput): string
+    {
+        if (empty($themesInput)) {
+            return '';
+        }
+
+        $items = is_array($themesInput) ? $themesInput : explode('|', (string) $themesInput);
+        $ids = [];
+
+        foreach ($items as $item) {
+            if (is_object($item) && isset($item->id)) {
+                $ids[] = (string) $item->id;
+                continue;
+            }
+            if (is_array($item) && isset($item['id'])) {
+                $ids[] = (string) $item['id'];
+                continue;
+            }
+
+            $raw = trim((string) $item);
+            if ($raw === '' || $raw === '0') {
+                continue;
+            }
+
+            if (str_starts_with($raw, '{')) {
+                $decoded = json_decode($raw, true);
+                if (is_array($decoded) && ! empty($decoded['id'])) {
+                    $ids[] = (string) $decoded['id'];
+                }
+                continue;
+            }
+
+            if (ctype_digit($raw)) {
+                $ids[] = $raw;
+            }
+        }
+
+        return implode('|', array_values(array_unique($ids)));
+    }
+
+    /**
+     * Ensure a vendor's active store template belongs to the allowed themes of their plan.
+     */
+    public static function sync_vendor_plan_theme(int $vendor_id, $themesInput, bool $forceFirst = false): void
+    {
+        $normalized = self::normalize_theme_ids($themesInput);
+        $allowed = array_values(array_filter(explode('|', $normalized)));
+
+        if (empty($allowed)) {
+            return;
+        }
+
+        $setting = Settings::where('vendor_id', $vendor_id)->first();
+        if (! $setting) {
+            return;
+        }
+
+        if ($forceFirst || ! in_array((string) $setting->template, $allowed, true)) {
+            $setting->template = (int) $allowed[0];
+            $setting->save();
+        }
+    }
+
+    /**
      * Whether the vendor's latest plan entitles them to theme template ID.
      * Extensible for future feature flags without rewriting callers.
      */
@@ -2238,7 +2304,8 @@ class helper
         if (! $plan || empty($plan->themes_id)) {
             return false;
         }
-        $allowed = array_filter(explode('|', (string) $plan->themes_id), function ($id) {
+        $normalized = self::normalize_theme_ids($plan->themes_id);
+        $allowed = array_filter(explode('|', $normalized), function ($id) {
             return $id !== '' && $id !== null;
         });
 

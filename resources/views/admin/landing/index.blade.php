@@ -307,7 +307,8 @@
                                                             if (empty($theme)) {
                                                                 $themes = [$settingdata->template];
                                                             } else {
-                                                                $themes = explode('|', @$theme->themes_id);
+                                                                $normalizedVendorThemes = \App\Helpers\helper::normalize_theme_ids(@$theme->themes_id);
+                                                                $themes = $normalizedVendorThemes !== '' ? explode('|', $normalizedVendorThemes) : [$settingdata->template];
                                                             }
                                                         } else {
                                                             foreach ($checktheme as $ttlthemes) {
@@ -334,6 +335,10 @@
                                                         <ul
                                                             class="theme-selection g-3 row row-cols-xl-6 row-cols-lg-4 row-cols-md-4 row-cols-sm-3 row-cols-2">
                                                             @foreach ($themes as $item)
+                                                                @php
+                                                                    $themeRecord = \App\Models\Theme::find($item);
+                                                                    $themeImgName = ($themeRecord && !empty($themeRecord->image)) ? $themeRecord->image : ('theme-' . $item . '.png');
+                                                                @endphp
                                                                 <li class="col">
                                                                     <input type="radio" name="template"
                                                                         id="template{{ $item }}"
@@ -342,7 +347,7 @@
                                                                     <label for="template{{ $item }}"
                                                                         class="p-0">
                                                                         <img
-                                                                            src="{{ helper::image_path('theme-' . $item . '.png') }}">
+                                                                            src="{{ helper::image_path($themeImgName) }}">
                                                                     </label>
                                                                 </li>
                                                             @endforeach

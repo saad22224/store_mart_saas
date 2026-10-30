@@ -467,7 +467,9 @@
                                     @if (env('Environment') == 'sendbox')
                                         <span class="badge badge bg-danger ms-2">{{ trans('labels.addon') }}</span>
                                     @endif
-                                    @php $planthemes = explode('|', $editplan->themes_id); @endphp
+                                    @php
+                                        $planthemes = array_values(array_filter(explode('|', \App\Helpers\helper::normalize_theme_ids($editplan->themes_id))));
+                                    @endphp
                                     @php
                                         // $checktheme = @helper::checkthemeaddons('theme_');
                                         // $themes = [];
@@ -484,8 +486,8 @@
                                         <div class="col">
                                             <li class="m-0 w-100">
                                                 <input type="checkbox" name="themecheckbox[]"
-                                                    id="template{{ $item->id }}" value="{{ $item }}"
-                                                    {{ in_array($item->id, $planthemes) ? 'checked' : '' }}>
+                                                    id="template{{ $item->id }}" value="{{ $item->id }}"
+                                                    {{ in_array((string) $item->id, $planthemes, true) ? 'checked' : '' }}>
                                                 <label for="template{{ $item->id }}">
                                                      <img loading="lazy" src="{{ asset('storage/app/public/admin-assets/images/theme/' .  $item->image) }}">
                                                 </label>

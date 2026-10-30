@@ -109,96 +109,100 @@ class VendorController extends Controller
             $edit_image->move(storage_path('app/public/admin-assets/images/profile/'), $profileImage);
             $edituser->image = $profileImage;
         }
-        $userplan =  Transaction::where('vendor_id', $edituser->id)->first() ?? null;
+        $userplan = Transaction::where('vendor_id', $edituser->id)->orderByDesc('id')->first() ?? null;
 
         if (!isset($request->allow_store_subscription)) {
             if (
-                $request->plan != null && !empty($request->plan) && $request->plan
-                != $userplan?->plan_id
+                $request->plan != null && !empty($request->plan) &&
+                (isset($request->plan_checkbox) || $request->plan != $edituser->plan_id || $request->plan != $userplan?->plan_id)
             ) {
-                $userplan?->delete();
                 $plan = PricingPlan::where('id', $request->plan)->first();
-                $usersetting = Settings::where('vendor_id', $edituser->id)->first();
-                // dd($plan->themes_id[0]);
-                $firstTheme = explode('|', $plan->themes_id)[0];
-                // Fallback to template 1 if themes_id is "0", empty, or invalid
-                if (empty($firstTheme) || $firstTheme === '0') {
-                    $firstTheme = 1;
-                }
+                if ($plan) {
+                    $userplan?->delete();
+                    $normalizedThemes = helper::normalize_theme_ids($plan->themes_id);
+                    $firstTheme = explode('|', $normalizedThemes)[0] ?? '';
+                    // Fallback to template 1 if themes_id is "0", empty, or invalid
+                    if (empty($firstTheme) || $firstTheme === '0') {
+                        $firstTheme = 1;
+                    }
 
-                $usersetting->template = $firstTheme;
-                $usersetting->save();
-                $edituser->plan_id = $plan->id;
-                $edituser->purchase_amount = $plan->price;
-                $edituser->purchase_date = date("Y-m-d h:i:sa");
+                    $usersetting = Settings::where('vendor_id', $edituser->id)->first();
+                    if ($usersetting) {
+                        $usersetting->template = (int) $firstTheme;
+                        $usersetting->save();
+                    }
+                    $edituser->plan_id = $plan->id;
+                    $edituser->purchase_amount = $plan->price;
+                    $edituser->purchase_date = date("Y-m-d h:i:sa");
 
-                $transaction = new Transaction();
-                $transaction->vendor_id = $edituser->id;
-                $transaction->plan_id = $plan->id;
-                $transaction->plan_name = $plan->name;
-                $transaction->payment_type = "0";
-                $transaction->transaction_number = Str::upper(Str::random(8));
-                $transaction->payment_id = "";
-                $transaction->amount = $plan->price;
-                $tax_amount = [];
-                $tax_name = [];
-                $totaltax = 0;
+                    $transaction = new Transaction();
+                    $transaction->vendor_id = $edituser->id;
+                    $transaction->plan_id = $plan->id;
+                    $transaction->plan_name = $plan->name;
+                    $transaction->payment_type = "0";
+                    $transaction->transaction_number = Str::upper(Str::random(8));
+                    $transaction->payment_id = "";
+                    $transaction->amount = $plan->price;
+                    $tax_amount = [];
+                    $tax_name = [];
+                    $totaltax = 0;
 
-                if ($plan->tax != null && $plan->tax != "") {
-                    $tax_detail = helper::gettax($plan->tax);
+                    if ($plan->tax != null && $plan->tax != "") {
+                        $tax_detail = helper::gettax($plan->tax);
 
-                    foreach ($tax_detail as $tax) {
-                        if ($tax->type == 1) {
-                            $tax_amount[] = $tax->tax;
-                        } else {
-                            $tax_amount[] = ($tax->tax / 100) * $plan->price;
+                        foreach ($tax_detail as $tax) {
+                            if ($tax->type == 1) {
+                                $tax_amount[] = $tax->tax;
+                            } else {
+                                $tax_amount[] = ($tax->tax / 100) * $plan->price;
+                            }
+
+                            $tax_name[] = $tax->name;
                         }
 
-                        $tax_name[] = $tax->name;
+                        foreach ($tax_amount as $item) {
+                            $totaltax += (float)$item;
+                        }
                     }
 
-                    foreach ($tax_amount as $item) {
-                        $totaltax += (float)$item;
+                    // Use implode safely with initialized arrays
+                    $transaction->tax = implode('|', $tax_amount);
+                    $transaction->tax_name = implode('|', $tax_name);
+                    $transaction->grand_total = $plan->price == 0 ? 0 : ($plan->price) +  $totaltax;
+                    $transaction->service_limit = $plan->order_limit;
+                    $transaction->appoinment_limit = $plan->appointment_limit;
+                    $transaction->status = 2;
+                    $transaction->purchase_date = date("Y-m-d h:i:sa");
+                    $transaction->expire_date = helper::get_plan_exp_date($plan->duration, $plan->days);
+                    $transaction->duration = $plan->duration;
+                    $transaction->days = $plan->days;
+                    $transaction->custom_domain = $plan->custom_domain;
+                    $transaction->themes_id = $normalizedThemes;
+
+
+                    $transaction->google_analytics = $plan->google_analytics;
+                    $transaction->pos = $plan->pos;
+                    $transaction->vendor_app = $plan->vendor_app;
+                    $transaction->customer_app = $plan->customer_app;
+                    $transaction->role_management = $plan->role_management;
+                    $transaction->pwa = $plan->pwa;
+                    $transaction->coupons = $plan->coupons;
+                    $transaction->blogs = $plan->blogs;
+                    $transaction->google_login = $plan->google_login;
+                    $transaction->facebook_login = $plan->facebook_login;
+                    $transaction->sound_notification = $plan->sound_notification;
+                    $transaction->whatsapp_message = $plan->whatsapp_message;
+                    $transaction->telegram_message = $plan->telegram_message;
+                    $transaction->features = $plan->features;
+                    $transaction->save();
+                    if ($plan->custom_domain == "2") {
+                        User::where('vendor_id', Auth::user()->id)->update(['custom_domain' => "-"]);
                     }
-                }
-
-                // Use implode safely with initialized arrays
-                $transaction->tax = implode('|', $tax_amount);
-                $transaction->tax_name = implode('|', $tax_name);
-                $transaction->grand_total = $plan->price == 0 ? 0 : ($plan->price) +  $totaltax;
-                $transaction->service_limit = $plan->order_limit;
-                $transaction->appoinment_limit = $plan->appointment_limit;
-                $transaction->status = 2;
-                $transaction->purchase_date = date("Y-m-d h:i:sa");
-                $transaction->expire_date = helper::get_plan_exp_date($plan->duration, $plan->days);
-                $transaction->duration = $plan->duration;
-                $transaction->days = $plan->days;
-                $transaction->custom_domain = $plan->custom_domain;
-                $transaction->themes_id = $plan->themes_id;
-
-
-                $transaction->google_analytics = $plan->google_analytics;
-                $transaction->pos = $plan->pos;
-                $transaction->vendor_app = $plan->vendor_app;
-                $transaction->customer_app = $plan->customer_app;
-                $transaction->role_management = $plan->role_management;
-                $transaction->pwa = $plan->pwa;
-                $transaction->coupons = $plan->coupons;
-                $transaction->blogs = $plan->blogs;
-                $transaction->google_login = $plan->google_login;
-                $transaction->facebook_login = $plan->facebook_login;
-                $transaction->sound_notification = $plan->sound_notification;
-                $transaction->whatsapp_message = $plan->whatsapp_message;
-                $transaction->telegram_message = $plan->telegram_message;
-                $transaction->features = $plan->features;
-                $transaction->save();
-                if ($plan->custom_domain == "2") {
-                    User::where('vendor_id', Auth::user()->id)->update(['custom_domain' => "-"]);
-                }
-                if ($plan->custom_domain == "1") {
-                    $checkdomain = CustomDomain::where('vendor_id', Auth::user()->id)->first();
-                    if (@$checkdomain->status == 2) {
-                        User::where('vendor_id', Auth::user()->id)->update(['custom_domain' => $checkdomain->current_domain]);
+                    if ($plan->custom_domain == "1") {
+                        $checkdomain = CustomDomain::where('vendor_id', Auth::user()->id)->first();
+                        if (@$checkdomain->status == 2) {
+                            User::where('vendor_id', Auth::user()->id)->update(['custom_domain' => $checkdomain->current_domain]);
+                        }
                     }
                 }
             }
